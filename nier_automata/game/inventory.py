@@ -13,7 +13,8 @@ from typing import Optional
 from .memory import Memory
 
 EMPTY = 0xFFFFFFFF
-ACTIVE_STATUS = 0x00070000
+# Statut observe en memoire v1.04 sur les objets existants (0x00070000 = valeur dans le fichier de save).
+ACTIVE_STATUS = 0xFFFFFFFF
 ITEM_SLOT_SIZE = 12
 WEAPON_SLOT_SIZE = 0x14
 # Bornes nierhook v1.02 (meme taille en v1.04).
