@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import json
 import os
+import re
 import tempfile
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -11,7 +12,9 @@ from typing import Optional
 
 def state_path(seed: str, slot: int) -> Path:
     root = Path(os.environ.get("LOCALAPPDATA", Path.home())) / "NierAutomataAP"
-    return root / f"{seed}_{slot}.json"
+    # Le seed vient du serveur AP : ne garder que des caracteres surs.
+    safe = re.sub(r"[^A-Za-z0-9_-]", "_", str(seed))[:64] or "seed"
+    return root / f"{safe}_{int(slot)}.json"
 
 
 @dataclass

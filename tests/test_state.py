@@ -43,3 +43,10 @@ def test_state_path_uses_seed_and_slot(tmp_path, monkeypatch):
     p = state_mod.state_path("ABC", 3)
     assert p.parent == tmp_path / "NierAutomataAP"
     assert p.name == "ABC_3.json"
+
+
+def test_state_path_rejects_traversal(tmp_path, monkeypatch):
+    monkeypatch.setenv("LOCALAPPDATA", str(tmp_path))
+    p = state_mod.state_path("../../evil", 1)
+    assert p.parent == tmp_path / "NierAutomataAP"
+    assert ".." not in p.name and "/" not in p.name and "\\" not in p.name
