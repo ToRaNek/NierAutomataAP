@@ -1,0 +1,43 @@
+"""Detection des checks : armes trouvees (compteur) et phases d'histoire."""
+from __future__ import annotations
+
+from typing import Iterable, Optional
+
+from .state import ClientState
+
+
+class WeaponTracker:
+    def __init__(self, state: ClientState, max_found: int):
+        self.state = state
+        self.max_found = max_found
+
+    def scan(self, owned_weapon_ids: set[int]) -> tuple[list[int], Optional[int]]:
+        """Renvoie (armes a retirer, numero de "Weapon Found #n" nouvellement obtenu ou None).
+
+        Une seule arme naturelle est traitee par appel : le client rappelle scan a chaque tour.
+        """
+        natural = sorted(owned_weapon_ids - self.state.ap_weapons)
+        if not natural:
+            return [], None
+        weapon = natural[0]
+        if self.state.weapons_found >= self.max_found:
+            return [weapon], None
+        self.state.weapons_found += 1
+        return [weapon], self.state.weapons_found
+
+
+class PhaseTracker:
+    def __init__(self, phases: list[tuple[str, str]], already_sent: Iterable[str] = ()):
+        self.phases = phases
+        self.sent = set(already_sent)
+
+    def check(self, phase: str) -> list[str]:
+        if not phase or phase == "START":
+            return []
+        hits = [name for name, prefix in self.phases
+                if phase.startswith(prefix) and name not in self.sent]
+        self.sent.update(hits)
+        return hits
+
+    def is_goal(self, phase: str) -> bool:
+        return bool(phase) and phase.startswith(self.phases[-1][1])
