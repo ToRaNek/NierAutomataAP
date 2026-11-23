@@ -8,6 +8,7 @@ from CommonClient import CommonContext, get_base_parser, gui_enabled, logger, se
 from NetUtils import ClientStatus
 
 from .data.phases import GOAL_PHASE_PREFIX
+from .game.abilities import AbilityLock
 from .game.deathlink import DeathTracker
 from .game.game import NierGame, backup_saves
 from .game.loop import due_locations, make_trackers, new_state, tick
@@ -29,6 +30,8 @@ class NierContext(CommonContext):
         self.goal = 1
         self.deaths = DeathTracker()
         self.saved_json = ""
+        self.randomized_abilities: set[str] = set()
+        self.ability_lock = None
         self.death_link_on = False
         self.backed_up = False
         self.goal_sent = False
@@ -55,6 +58,8 @@ class NierContext(CommonContext):
             self.goal_prefix = sd.get("goal_phase_prefix", GOAL_PHASE_PREFIX)
             self.goal = sd.get("goal", 1)
             self.death_link_on = bool(sd.get("death_link", False))
+            self.randomized_abilities = set(sd.get("randomized_abilities", []))
+            self.ability_lock = None
             if self.death_link_on:
                 asyncio.create_task(self.update_death_link(True))
             logger.info("Connecte. Etat local : %s", path)
@@ -65,7 +70,17 @@ class NierContext(CommonContext):
             if missing:
                 asyncio.create_task(self.send_msgs([{"cmd": "LocationChecks", "locations": sorted(missing)}]))
 
+    def release_abilities(self):
+        lock = getattr(self, "ability_lock", None)
+        if lock is not None:
+            try:
+                lock.unlock_all()
+            except Exception:
+                pass
+        self.ability_lock = None
+
     async def connection_closed(self):
+        self.release_abilities()
         await super().connection_closed()
         self.state = None
         self.trackers = None
@@ -134,6 +149,10 @@ async def game_iteration(ctx: NierContext):
     if current != ctx.saved_json:  # compare au dernier etat ECRIT : une erreur ne bloque pas la sauvegarde
         ctx.state.save(ctx.state_file)
         ctx.saved_json = current
+    if ctx.randomized_abilities:
+        if ctx.ability_lock is None or ctx.ability_lock.mem is not ctx.nier.mem:
+            ctx.ability_lock = AbilityLock(ctx.nier.mem, ctx.randomized_abilities)
+        ctx.ability_lock.sync(set(received))
     if ctx.death_link_on and ctx.deaths.update(ctx.nier.hp(), ctx.nier.entity()):
         await ctx.send_death(f"{ctx.player_names.get(ctx.slot, '2B')} est mort(e) dans NieR:Automata")
 
@@ -150,6 +169,7 @@ def launch(*launch_args):
         await ctx.exit_event.wait()
         ctx.server_address = None
         watcher.cancel()
+        ctx.release_abilities()
         await ctx.shutdown()
 
     import colorama

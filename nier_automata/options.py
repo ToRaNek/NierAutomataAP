@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from Options import Choice, DeathLink, DefaultOnToggle, PerGameCommonOptions, Range
+from Options import Choice, DeathLink, DefaultOnToggle, OptionSet, PerGameCommonOptions, Range
 
 from .data.tables import MAX_CHEST_CHECKS, MAX_STORY, MAX_WEAPON_CHECKS
 
@@ -29,6 +29,13 @@ class ChestChecks(Range):
     range_start = 0
     range_end = MAX_CHEST_CHECKS
     default = 15
+
+
+class RandomizedAbilities(OptionSet):
+    """Capacites de 2B bloquees au depart et debloquees par un objet AP (trouve par un autre joueur)."""
+    display_name = "Randomized Abilities"
+    valid_keys = {"Double Jump", "Air Dash"}
+    default = frozenset({"Double Jump", "Air Dash"})
 
 
 class TrapPercentage(Range):
@@ -62,5 +69,6 @@ class NierAutomataOptions(PerGameCommonOptions):
     item_checks: ItemChecks
     chest_checks: ChestChecks
     trap_percentage: TrapPercentage
+    randomized_abilities: RandomizedAbilities
     goal: Goal
     death_link: DeathLink

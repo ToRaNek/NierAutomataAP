@@ -152,6 +152,19 @@ class ProcessMemory:
         if not self._k.WriteProcessMemory(self.handle, ctypes.c_void_p(addr), data, len(data), ctypes.byref(n)):
             raise OSError(ctypes.get_last_error(), f"WriteProcessMemory 0x{addr:X}")
 
+    def write_code(self, addr: int, data: bytes) -> None:
+        """Ecrit dans le code du jeu (page .text en lecture/execution) : deprotege puis restaure."""
+        k = self._k
+        k.VirtualProtectEx.argtypes = [wintypes.HANDLE, ctypes.c_void_p, ctypes.c_size_t,
+                                       wintypes.DWORD, ctypes.POINTER(wintypes.DWORD)]
+        old = wintypes.DWORD()
+        if not k.VirtualProtectEx(self.handle, ctypes.c_void_p(addr), len(data), 0x40, ctypes.byref(old)):
+            raise OSError(ctypes.get_last_error(), f"VirtualProtectEx 0x{addr:X}")
+        try:
+            self.write(addr, data)
+        finally:
+            k.VirtualProtectEx(self.handle, ctypes.c_void_p(addr), len(data), old.value, ctypes.byref(old))
+
     def is_alive(self) -> bool:
         code = wintypes.DWORD(0)
         if not self._k.GetExitCodeProcess(self.handle, ctypes.byref(code)):

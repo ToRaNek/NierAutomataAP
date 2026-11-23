@@ -69,7 +69,7 @@ class NierAutomataWorld(World):
         self.multiworld.regions.append(menu)
 
     def create_item(self, name: str) -> NierItem:
-        if name in WEAPONS:
+        if name in WEAPONS or name in self.options.randomized_abilities.value:
             cls = ItemClassification.useful
         elif name in TRAP_ITEMS:
             cls = ItemClassification.trap
@@ -84,9 +84,10 @@ class NierAutomataWorld(World):
         count = len(self._location_names())
         candidates = sorted(set(WEAPONS) - STARTING_WEAPONS)
         open_locs = self.options.story_checks.value + self.options.chest_checks.value
-        n = pool_weapon_count(open_locs, count, len(candidates))
+        abilities = sorted(self.options.randomized_abilities.value)
+        n = pool_weapon_count(max(0, open_locs - len(abilities)), count, len(candidates))
         weapons = self.random.sample(candidates, n)
-        pool = [self.create_item(w) for w in weapons]
+        pool = [self.create_item(a) for a in abilities] + [self.create_item(w) for w in weapons]
         traps = list(TRAP_ITEMS)
         for _ in range(count - len(pool)):
             if self.random.randint(1, 100) <= self.options.trap_percentage.value:
@@ -104,6 +105,7 @@ class NierAutomataWorld(World):
             "weapon_checks": self.options.weapon_checks.value,
             "item_checks": bool(self.options.item_checks),
             "chest_checks": self.options.chest_checks.value,
+            "randomized_abilities": sorted(self.options.randomized_abilities.value),
             "goal": self.options.goal.value,
             "death_link": bool(self.options.death_link),
             "goal_phase_prefix": GOAL_PHASE_PREFIX,
