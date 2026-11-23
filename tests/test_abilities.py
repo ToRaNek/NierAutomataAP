@@ -64,3 +64,32 @@ def test_evade_patch_verified_in_game_v104():
     ev, = ABILITY_PATCHES["Evade"]
     # debut du bloc "passer en etat esquive 0x12" -> jmp vers "aucune action" (bloque esquive sol/air + sprint)
     assert (ev.rva, ev.original, ev.locked) == (0x47E6BB, bytes.fromhex("488b"), bytes.fromhex("eb2e"))
+
+
+def mem_with_evade():
+    m = mem_with_originals()
+    return m
+
+
+def test_ground_evade_locked_only_on_ground():
+    m = mem_with_evade()
+    ev, = ABILITY_PATCHES["Evade"]
+    lock = AbilityLock(m, randomized={"Ground Evade"})
+    lock.sync(received=set(), grounded=True)
+    assert m.read(m.base + ev.rva, 2) == ev.locked
+    lock.sync(received=set(), grounded=False)   # en l'air : l'esquive aerienne reste possible
+    assert m.read(m.base + ev.rva, 2) == ev.original
+
+
+def test_ground_evade_received_never_locked():
+    m = mem_with_evade()
+    ev, = ABILITY_PATCHES["Evade"]
+    AbilityLock(m, randomized={"Ground Evade"}).sync(received={"Ground Evade"}, grounded=True)
+    assert m.read(m.base + ev.rva, 2) == ev.original
+
+
+def test_ground_evade_unknown_grounding_leaves_unlocked():
+    m = mem_with_evade()
+    ev, = ABILITY_PATCHES["Evade"]
+    AbilityLock(m, randomized={"Ground Evade"}).sync(received=set(), grounded=None)
+    assert m.read(m.base + ev.rva, 2) == ev.original

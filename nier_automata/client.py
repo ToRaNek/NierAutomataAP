@@ -30,6 +30,7 @@ class NierContext(CommonContext):
         self.goal = 1
         self.deaths = DeathTracker()
         self.saved_json = ""
+        self.received_names: set[str] = set()
         self.randomized_abilities: set[str] = set()
         self.ability_lock = None
         self.death_link_on = False
@@ -121,6 +122,20 @@ async def game_loop(ctx: NierContext):
             logger.warning("Erreur pendant le tour de jeu (%s), nouvel essai...", e)
 
 
+async def ability_loop(ctx: NierContext):
+    """Boucle rapide (15 ms) : les capacites conditionnelles (esquive au sol) suivent l'etat de 2B."""
+    while not ctx.exit_event.is_set():
+        await asyncio.sleep(0.015)
+        try:
+            if not ctx.randomized_abilities or ctx.state is None or ctx.nier.mem is None:
+                continue
+            if ctx.ability_lock is None or ctx.ability_lock.mem is not ctx.nier.mem:
+                ctx.ability_lock = AbilityLock(ctx.nier.mem, ctx.randomized_abilities)
+            ctx.ability_lock.sync(ctx.received_names, ctx.nier.grounded())
+        except Exception:
+            pass
+
+
 async def game_iteration(ctx: NierContext):
     if ctx.state is None or ctx.trackers is None:
         return
@@ -149,10 +164,7 @@ async def game_iteration(ctx: NierContext):
     if current != ctx.saved_json:  # compare au dernier etat ECRIT : une erreur ne bloque pas la sauvegarde
         ctx.state.save(ctx.state_file)
         ctx.saved_json = current
-    if ctx.randomized_abilities:
-        if ctx.ability_lock is None or ctx.ability_lock.mem is not ctx.nier.mem:
-            ctx.ability_lock = AbilityLock(ctx.nier.mem, ctx.randomized_abilities)
-        ctx.ability_lock.sync(set(received))
+    ctx.received_names = set(received)
     if ctx.death_link_on and ctx.deaths.update(ctx.nier.hp(), ctx.nier.entity()):
         await ctx.send_death(f"{ctx.player_names.get(ctx.slot, '2B')} est mort(e) dans NieR:Automata")
 
@@ -166,9 +178,11 @@ def launch(*launch_args):
             ctx.run_gui()
         ctx.run_cli()
         watcher = asyncio.create_task(game_loop(ctx), name="NierGameLoop")
+        abilities = asyncio.create_task(ability_loop(ctx), name="NierAbilityLoop")
         await ctx.exit_event.wait()
         ctx.server_address = None
         watcher.cancel()
+        abilities.cancel()
         ctx.release_abilities()
         await ctx.shutdown()
 

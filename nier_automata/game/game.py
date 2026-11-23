@@ -150,3 +150,13 @@ class NierGame:
         except OSError:
             return False
         return True
+
+    def grounded(self) -> Optional[bool]:
+        """2B au sol = compteur de sauts (+0x14A8) a 0. None si illisible."""
+        p = self.entity()
+        if p is None:
+            return None
+        try:
+            return struct.unpack("<I", self.mem.read(p + 0x14A8, 4))[0] == 0
+        except OSError:
+            return None

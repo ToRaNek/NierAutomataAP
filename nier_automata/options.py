@@ -34,8 +34,8 @@ class ChestChecks(Range):
 class RandomizedAbilities(OptionSet):
     """Capacites de 2B bloquees au depart et debloquees par un objet AP (trouve par un autre joueur)."""
     display_name = "Randomized Abilities"
-    valid_keys = {"Double Jump", "Air Dash", "Evade"}
-    default = frozenset({"Double Jump", "Air Dash"})
+    valid_keys = {"Double Jump", "Air Dash", "Ground Evade"}
+    default = frozenset({"Double Jump", "Air Dash", "Ground Evade"})
 
 
 class TrapPercentage(Range):

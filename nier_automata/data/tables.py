@@ -40,6 +40,7 @@ def item_name_to_id() -> dict[str, int]:
         ids[name] = BASE_CODE + 0x300 + i
     for i, name in enumerate(ABILITY_PATCHES):
         ids[name] = BASE_CODE + 0x400 + i
+    ids["Ground Evade"] = BASE_CODE + 0x480
     return ids
 
 
