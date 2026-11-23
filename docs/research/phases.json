@@ -1,0 +1,6189 @@
+{
+ "phase_info": [
+  {
+   "phase": "p000",
+   "subphases": [
+    "start"
+   ]
+  },
+  {
+   "phase": "p001",
+   "subphases": [
+    "START",
+    "ColTest",
+    "Taura_TestRoom",
+    "STG_test",
+    "STG_BOSS_test_1",
+    "STG_BOSS_test_1_2",
+    "STG_BOSS_test_2",
+    "STG_BOSS_test_2_2",
+    "Opera_Boss_Test",
+    "STG_looptest",
+    "STG_test_2",
+    "STG_BOSS_test_1(Free Flight)",
+    "STG_BOSS_test_2(Free Flight)"
+   ]
+  },
+  {
+   "phase": "p002",
+   "subphases": [
+    "START"
+   ]
+  },
+  {
+   "phase": "p003",
+   "subphases": [
+    "start",
+    "00_sato-k",
+    "01_marius",
+    "02_nakazono",
+    "03_miyata-m"
+   ]
+  },
+  {
+   "phase": "p004",
+   "subphases": [
+    "start",
+    "next",
+    "VFX"
+   ]
+  },
+  {
+   "phase": "p005",
+   "subphases": [
+    "START"
+   ]
+  },
+  {
+   "phase": "p006",
+   "subphases": [
+    "START",
+    "SAMPLE_1",
+    "SAMPLE_2",
+    "SAMPLE_3"
+   ]
+  },
+  {
+   "phase": "p007",
+   "subphases": [
+    "Main",
+    "Ccpy_City",
+    "Sand_Temple",
+    "Robbot_Village",
+    "Shopping_Mall",
+    "Robbot_Mt",
+    "Resistance_Camp",
+    "Water_City",
+    "Tower",
+    "Tower_01",
+    "Tower_02",
+    "Tower_03",
+    "Tower_04",
+    "Tower_05",
+    "Tower_06"
+   ]
+  },
+  {
+   "phase": "p008",
+   "subphases": [
+    "CameraTestRoom",
+    "START_2",
+    "Em_Test_Room",
+    "naka_test"
+   ]
+  },
+  {
+   "phase": "p009",
+   "subphases": [
+    "START_1",
+    "START_2",
+    "START_3"
+   ]
+  },
+  {
+   "phase": "p00a",
+   "subphases": [
+    "WetShaderTest",
+    "SpotLightTest",
+    "shader test",
+    "LayerNumberTest",
+    "g05005",
+    "g05001",
+    "g5ac00"
+   ]
+  },
+  {
+   "phase": "p00b",
+   "subphases": [
+    "NEGI",
+    "HASE",
+    "KURO",
+    "TAKA",
+    "CHIBA"
+   ]
+  },
+  {
+   "phase": "p00c",
+   "subphases": [
+    "TEST1",
+    "TEST2"
+   ]
+  },
+  {
+   "phase": "p00d",
+   "subphases": [
+    "test"
+   ]
+  },
+  {
+   "phase": "p00e",
+   "subphases": [
+    "takada-tesut"
+   ]
+  },
+  {
+   "phase": "p00f",
+   "subphases": [
+    "start",
+    "danchi_test",
+    "colosseum test",
+    "colosseum_forest",
+    "colosseum_submarge"
+   ]
+  },
+  {
+   "phase": "p010",
+   "subphases": [
+    "WAIT_START_EVENT",
+    "P010_START",
+    "P010_BOSS_1",
+    "P010_1st_Area",
+    "P010_2nd_Area",
+    "P010_3rd_Area",
+    "P010_BOSS_2_1",
+    "P010_BOSS_2_2",
+    "P010_BOSS_3",
+    "P010_BOSS_4_1",
+    "P010_BOSS_4_2",
+    "ToCity"
+   ]
+  },
+  {
+   "phase": "p011",
+   "subphases": [
+    "START"
+   ]
+  },
+  {
+   "phase": "p012",
+   "subphases": [
+    "TEST_00",
+    "TEST_01",
+    "TEST_02",
+    "..M1020_S0010_GM"
+   ]
+  },
+  {
+   "phase": "p013",
+   "subphases": [
+    "TEST_00",
+    "TEST_01",
+    "TEST_02"
+   ]
+  },
+  {
+   "phase": "p014",
+   "subphases": [
+    "TEST_00",
+    "TEST_01",
+    "SHORTCUT_forest",
+    "SHORTCUT_robot"
+   ]
+  },
+  {
+   "phase": "p015",
+   "subphases": [
+    "TEST_00",
+    "..M1010_S0055_SD"
+   ]
+  },
+  {
+   "phase": "p016",
+   "subphases": [
+    "TEST_00"
+   ]
+  },
+  {
+   "phase": "p017",
+   "subphases": [
+    "TEST_00"
+   ]
+  },
+  {
+   "phase": "p018",
+   "subphases": [
+    "TEST_00_K",
+    "TEST_00_H",
+    "TEST_00_K_shooting"
+   ]
+  },
+  {
+   "phase": "p019",
+   "subphases": [
+    "TEST_00",
+    "TEST_01",
+    "TEST_02",
+    "TEST_03",
+    "TEST_04",
+    "TEST_05",
+    "TEST_06",
+    "TEST_07",
+    "TEST_08",
+    "TEST_09",
+    "TEST_10",
+    "TEST_11",
+    "TEST_12",
+    "TEST_13",
+    "TEST_14",
+    "TEST_15",
+    "TEST_16",
+    "TEST_17",
+    "TEST_18"
+   ]
+  },
+  {
+   "phase": "p01a",
+   "subphases": [
+    "HAKO"
+   ]
+  },
+  {
+   "phase": "p01b",
+   "subphases": [
+    "Main"
+   ]
+  },
+  {
+   "phase": "p01c",
+   "subphases": [
+    "LightVFXTest"
+   ]
+  },
+  {
+   "phase": "p01d",
+   "subphases": [
+    "kaji_test"
+   ]
+  },
+  {
+   "phase": "p01e",
+   "subphases": [
+    "communication"
+   ]
+  },
+  {
+   "phase": "p01f",
+   "subphases": [
+    "test"
+   ]
+  },
+  {
+   "phase": "p020",
+   "subphases": [
+    "START",
+    "ToCity",
+    "ToForest",
+    "ToForest_ShortCut"
+   ]
+  },
+  {
+   "phase": "p021",
+   "subphases": [
+    "Start_Before",
+    "Start_After",
+    "Sand_Temple_Before",
+    "Sand_Temple_After",
+    "Robbot_Village_Before",
+    "Robbot_Village_After",
+    "Shopping_Mall_Before",
+    "Shopping_Mall_After",
+    "Robbot_Mt_Before",
+    "Robbot_Mt_After",
+    "Resistance_Camp_Before",
+    "Resistance_Camp_After",
+    "Water_City",
+    "Ccpy_City",
+    "Tower",
+    "HackingTest01",
+    "HackingTest02",
+    "HackingTest03",
+    "..M1010_S0050_GM"
+   ]
+  },
+  {
+   "phase": "p022",
+   "subphases": [
+    "START"
+   ]
+  },
+  {
+   "phase": "p023",
+   "subphases": [
+    "check",
+    "check2"
+   ]
+  },
+  {
+   "phase": "p030",
+   "subphases": [
+    "TEST_00",
+    "TEST_01",
+    "TEST_02",
+    "TEST_03",
+    "TEST_04",
+    "TEST_05"
+   ]
+  },
+  {
+   "phase": "p031",
+   "subphases": [
+    "test00",
+    "test01",
+    "test02",
+    "test03",
+    "test04",
+    "test05"
+   ]
+  },
+  {
+   "phase": "p032",
+   "subphases": [
+    "HackingGame_1_1",
+    "HackingGame_1_2",
+    "HackingGame_1_3",
+    "HackingGame_1_4",
+    "HackingGame_1_5"
+   ]
+  },
+  {
+   "phase": "p033",
+   "subphases": [
+    "HackingLobby",
+    "Hack_1_0_1_0",
+    "Hack_1_0_2_0",
+    "Hack_1_0_3_0",
+    "Hack_1_0_4_0",
+    "Hack_1_0_5_0",
+    "Hack_1_1_1_0",
+    "Hack_1_1_2_0",
+    "Hack_1_1_3_0",
+    "Hack_1_1_4_0",
+    "Hack_1_2_1_0",
+    "Hack_1_2_2_0",
+    "Hack_1_2_4_0",
+    "Hack_1_2_5_0",
+    "Hack_1_4_1_0",
+    "Hack_1_3_1_0",
+    "Hack_1_3_2_0",
+    "Hack_1_3_3_0",
+    "Hack_1_3_4_0",
+    "Hack_1_3_5_0",
+    "Hack_1_2_3_0",
+    "Hack_1_5_1_0",
+    "Hack_1_5_2_0",
+    "Hack_1_5_3_0",
+    "Hack_1_5_4_0",
+    "Hack_1_5_5_0",
+    "Hack_1_0_4_1",
+    "Hack_1_0_4_2",
+    "Hack_1_0_4_3"
+   ]
+  },
+  {
+   "phase": "p034",
+   "subphases": [
+    "main"
+   ]
+  },
+  {
+   "phase": "p040",
+   "subphases": [
+    "test2",
+    "test",
+    "BattleMatching_p2",
+    "BattleMatching_p4",
+    "movie_test"
+   ]
+  },
+  {
+   "phase": "p046",
+   "subphases": [
+    "Online",
+    "Animal"
+   ]
+  },
+  {
+   "phase": "p050",
+   "subphases": [
+    "test00",
+    "test01"
+   ]
+  },
+  {
+   "phase": "p051",
+   "subphases": [
+    "test00",
+    "test01"
+   ]
+  },
+  {
+   "phase": "p052",
+   "subphases": [
+    "test_000"
+   ]
+  },
+  {
+   "phase": "p060",
+   "subphases": [
+    "START"
+   ]
+  },
+  {
+   "phase": "p061",
+   "subphases": []
+  },
+  {
+   "phase": "p062",
+   "subphases": [
+    "start"
+   ]
+  },
+  {
+   "phase": "p070",
+   "subphases": [
+    "start"
+   ]
+  },
+  {
+   "phase": "p071",
+   "subphases": [
+    "START"
+   ]
+  },
+  {
+   "phase": "p080",
+   "subphases": [
+    "START"
+   ]
+  },
+  {
+   "phase": "p081",
+   "subphases": [
+    "test",
+    "test2",
+    "tets3",
+    "test4"
+   ]
+  },
+  {
+   "phase": "p082",
+   "subphases": [
+    "test_subphase_test1",
+    "test_subphase1",
+    "test_subphase",
+    "test2",
+    "test2-2"
+   ]
+  },
+  {
+   "phase": "p083",
+   "subphases": [
+    "001",
+    "002",
+    "003"
+   ]
+  },
+  {
+   "phase": "p084",
+   "subphases": [
+    "test",
+    "col_test_2"
+   ]
+  },
+  {
+   "phase": "p090",
+   "subphases": [
+    "test0",
+    "test1",
+    "test2",
+    "test3",
+    "test4",
+    "test5",
+    "test6",
+    "test7",
+    "test8",
+    "test9",
+    "test10",
+    "test11",
+    "test12",
+    "test13",
+    "test14",
+    "test15",
+    "test16",
+    "test17",
+    "test18"
+   ]
+  },
+  {
+   "phase": "p0a0",
+   "subphases": [
+    "BGM エミールテスト",
+    "SE",
+    "BGM レイヤーテスト"
+   ]
+  },
+  {
+   "phase": "p0b0",
+   "subphases": [
+    "TEST"
+   ]
+  },
+  {
+   "phase": "p0b1",
+   "subphases": [
+    "TEST",
+    "ItemTest",
+    "kawamuratest",
+    "SupportMessage",
+    "bugTest",
+    "DataDelete"
+   ]
+  },
+  {
+   "phase": "p0b2",
+   "subphases": [
+    "TEST"
+   ]
+  },
+  {
+   "phase": "p0b3",
+   "subphases": [
+    "subquest_single",
+    "subquest_multi",
+    "hackingcard",
+    "hackingdirection",
+    "tutorial",
+    "hud_tutorial",
+    "tutorial_mes",
+    "staffroll"
+   ]
+  },
+  {
+   "phase": "p0b4",
+   "subphases": [
+    "スクショ撮影部屋"
+   ]
+  },
+  {
+   "phase": "p0fe",
+   "subphases": [
+    "P0FE_TEST",
+    "P0FE_TEST_PHASE_JUMP",
+    "P0FE_TEST_PHASE_JUMP_ALL",
+    "P0FE_TEST_CHECK_SEQUENCE_ERROR",
+    "TEST_EVENT",
+    "P0FE_TEST_CHECK_MEM_LEAK",
+    "P0FE_TEST_PERFORMANCE_CHECK"
+   ]
+  },
+  {
+   "phase": "p100",
+   "subphases": [
+    "00_00_B_RobotM_Pro_RobotBrother",
+    "00_02_B_RobotM_Pro_9S_appearanc",
+    "00_05_B_RobotM_Pro_9S_STG1",
+    "00_10_B_RobotM_Pro_9S_STG2",
+    "00_15_B_RobotM_Pro_9S_STG3",
+    "00_30_A_RobotM_Prologue_STG1",
+    "00_40_A_RobotM_Prologue_STG2",
+    "00_50_A_RobotM_Prologue_STG3",
+    "00_55_A_RobotM_Prologue_EV",
+    "00_60_A_RobotM_Pro_Tutorial",
+    "00_70_A_RobotM_Pro_ArmBoss_1st",
+    "00_80_A_RobotM_Pro_1stArea",
+    "00_80_B_RobotM_Pro_BossArea",
+    "00_82_B_RobotM_Pro_9S_STG4",
+    "00_83_B_RobotM_Pro_9S_STG5",
+    "00_85_A_RobotM_Pro_2ndArea",
+    "00_90_A_RobotM_Pro_3rdArea",
+    "00_95_A_RobotM_Pro_lastArea",
+    "05_00_A_RobotM_Pro_ArmBoss_2nd",
+    "05_10_A_RobotM_ProBoss_phase1",
+    "05_10_B_RobotM_ProBoss_phase1",
+    "05_20_A_RobotM_ProBoss_phase2",
+    "05_20_B_RobotM_ProBoss_phase2",
+    "05_30_A_RobotM_ProBoss_phase3",
+    "05_30_B_RobotM_ProBoss_phase3",
+    "05_40_A_RobotM_ProBoss_phase4",
+    "05_40_B_RobotM_ProBoss_phase4",
+    "10_A_bunker_Robot_Battle",
+    "11_A_bunker_monitorHD",
+    "13_A_bunker_Setup",
+    "13_B_bunker_Setup",
+    "16_AB_bunker_Order",
+    "20_AB_buker_Aerial_battle",
+    "30_AB_Ruined_City_ForcedLanding",
+    "40_AB_Resistance_Camp_Leader",
+    "50_AB_Desert_temple",
+    "51_AB_MainDesert",
+    "51_10_AB_Danchi_EV",
+    "52_AB_Danchi_Haikyo",
+    "55_AB_Danchi_Boss_1",
+    "56_AB_Danchi_Boss_EV1",
+    "56_10_AB_Danchi_Boss_Battle",
+    "56_50_AB_Danchi_Boss_EV2",
+    "58_AB_BossArea_Fall",
+    "58_50_AB_Goto_AmusementPark",
+    "58_60_B_Pod_Talk",
+    "70_AB_Amusement_Park",
+    "70_01_AB_Amusement_Park_TEST",
+    "70_10_AB_Park_Tank",
+    "70_20_AB_Park_RollerCoaster",
+    "76_AB_Amusement_Park_Boss",
+    "76_10_AB_Amusement_Park_Boss",
+    "76_20_AB_Amusement_Park_Boss",
+    "77_AB_Amusement_Park_Boss",
+    "77_10_AB_Amusement_Park_Boss",
+    "78_AB_Amusement_Park_Boss",
+    "78_10_AB_Amusement_Park_Boss",
+    "79_50_AB_Goto_Pascal_Village",
+    "79_90_AB_GuideTo_Pascal_Village",
+    "79_95_B_Ruined_City_diningtable",
+    "80_00_AB_Pascal_Village",
+    "80_10_AB_Pascal_Village",
+    "90_00_AB_Ruined_City",
+    "90_10_AB_Ruined_City_AerialBTL",
+    "100_A_PlayGoNovel",
+    "00_80_A_TEST",
+    "00_80_B_TEST",
+    "00_80_C_TEST",
+    "50_00_A_City",
+    "51_00_A_Desert",
+    "60_00_TEST_SubmergeCity"
+   ]
+  },
+  {
+   "phase": "p200",
+   "subphases": [
+    "00_AB_Ruined_City",
+    "10_AB_Alien_Ship",
+    "10_10_AB_Alien_Ship_Start",
+    "10_20_AB_Alien_Ship_Battle",
+    "10_30_AB_Alien_Ship_End",
+    "15_AB_Transfer_device",
+    "20_AB_Bunker",
+    "30_AB_Pascal_Village",
+    "40_00_AB_ShopM_EmilQuest_Start",
+    "40_30_AB_ShopM_EQ_EmilAppear",
+    "40_70_AB_ShopM_EmilQuest_End",
+    "60_05_AB_Forest_Castle",
+    "60_00_B_King_of_the_forest_ev1",
+    "60_06_B_Forest_Castle2",
+    "60_07_B_King_of_the_forest_ev2",
+    "60_08_B_Forest_Castle3",
+    "60_10_AB_Forest_Castle_Castle",
+    "60_15_B_King_of_the_forest_ev3",
+    "60_16_B_Forest_Castle_Castle2",
+    "60_20_AB_Forest_Castle_Throne",
+    "70_AB_Resistance_Camp",
+    "80_00_AB_Pascal_Village",
+    "80_10_AB_Resistance_Camp",
+    "80_20_AB_Submerge_City",
+    "95_00_B_Ruined_City_diningtable",
+    "80_30_AB_Submerge_City",
+    "90_AB_Battle_Submerge_City",
+    "91_AB_Battle_Submerge_City_2",
+    "92_AB_Battle_Submerge_City_3",
+    "94_00_AB_Kaiju_Start_EV",
+    "94_10_AB_Kaiju_Battle_Head",
+    "94_15_AB_Kaiju_Battle_Head_EV",
+    "94_30_AB_Kaiju_Battle_Sniping",
+    "94_40_AB_Kaiju_EV",
+    "94_43_AB_Kaiju_Battle_Escape",
+    "94_46_AB_Kaiju_Battle_Pascal",
+    "94_50_A_Kaiju_Battle_Body",
+    "94_60_B_Kaiju_Shooting",
+    "94_70_B_Kaiju_Missile",
+    "94_80_AB_Kaiju_End_EV",
+    "96_B_Pod_Talk",
+    "100_A_Submerge_City_2B",
+    "100_A_Submerge_City_2B_TEST",
+    "110_00_A_Copy_City",
+    "110_00_B_Copy_City",
+    "115_AB_Copy_City_AdamDie",
+    "115_B_Copy_City_AdamDie",
+    "120_AB_Bunker",
+    "130_00_A_Resistance_Camp",
+    "140_00_A_RobotM_CrazyReligion",
+    "140_B_Banker_9S",
+    "140_20_A_RobotM_CR_GuruRoom",
+    "140_20_B_RobotM_CR_HackingStart",
+    "140_30_A_RobotM_CR_GuruBattle",
+    "140_30_B_RobotM_CR_UF_Rescue",
+    "140_35_B_RobotM_CR_UF_Rescue2",
+    "140_40_A_RobotM_CR_UnderFactory",
+    "140_40_B_RobotM_CR_UF_Hacking",
+    "140_60_A_RobotM_CR_UF_Middle",
+    "140_80_A_RobotM_CR_UF_BossArea",
+    "140_80_B_RobotM_CR_CoreHacking",
+    "140_90_A_RobotM_CR_UF_Exit",
+    "140_90_B_Banker_9S",
+    "145_AB_Ruined_City_diningtable",
+    "150_B_Banker_9S",
+    "160_A_Ruined_City_2B",
+    "160_B_Ruined_City_ArealBTL_9S",
+    "170_00_A_Resistance_Camp_2B",
+    "170_10_A_Resistance_Camp_2B",
+    "170_20_A_Resistance_Camp_2B",
+    "170_30_A_Resistance_Camp_2B",
+    "170_40_A_Resistance_Camp_2B",
+    "180_AB_Ruined_Front_Of_Camp",
+    "190_AB_Pascal_Village",
+    "195_AB_Pascal_Village_toEve",
+    "200_00_AB_Ruined_City_Eve_EV",
+    "200_10_AB_Ruined_City_EveBattle",
+    "200_20_AB_Ruined_City_EveBattle",
+    "200_30_AB_Ruined_City_Eve_EV",
+    "200_40_AB_Ruined_City_EveBattle",
+    "200_50_AB_Ruined_City_EveBattle",
+    "200_60_AB_Ruined_City_Eve_EV",
+    "200_70_AB_Ruined_City_end",
+    "200_80_AB_Ruined_City_end"
+   ]
+  },
+  {
+   "phase": "p300",
+   "subphases": [
+    "00_CD_Bunker_2B",
+    "00_10_CD_Bunker_Hangar_2B",
+    "10_CD_Ruined_City_9S",
+    "10_10_CD_Ruined_City_SPEnemy_9S",
+    "15_CD_Ruined_City_9S",
+    "17_CD_Bunker_Aerial_battle_2B",
+    "20_CD_Ruined_City_2B",
+    "21_CD_Ruined_City_2B",
+    "22_CD_Ruined_City_2B",
+    "23_CD_Ruined_City_2B",
+    "25_CD_Ruined_City_2B",
+    "26_CD_Ruined_City_9S",
+    "26_10_CD_Ruined_City_9S",
+    "27_CD_Ruined_City_2B",
+    "28_CD_Ruined_City_9S",
+    "30_00_CD_Bunker_2B",
+    "30_10_CD_Bunker_Battle_2B",
+    "40_CD_Bunker_Shooting_2B",
+    "50_CD_Submerge_City_2B",
+    "50_10_CD_Ruined_City_A2Come_2B",
+    "50_20_CD_Ruined_City_2BDead_9S",
+    "60_CD_POD",
+    "70_00_CD_1_Ruined_City",
+    "70_10_CD_1_Ruined_City",
+    "70_20_CD_1_Ruined_City",
+    "70_CD_1_Ruined_City_A2",
+    "80_CD_1_Desert_A2",
+    "81_CD_1_DesertBoss_HD_A2",
+    "82_CD_1_DesertBoss_1_A2",
+    "83_CD_1_DesertBoss_HD_2_A2",
+    "84_CD_1_DesertBoss_HK_A2",
+    "85_CD_1_DesertBoss_HK_HD_A2",
+    "90_CD_2_Pascal_Village_A2_SQ",
+    "91_00_CD_2_Pascal_Village_A2_SQ",
+    "91_10_CD_2_Pascal_Village_A2_SQ",
+    "91_20_CD_2_Pascal_Village_A2_SQ",
+    "95_CD_2_Pascal_Village_A2",
+    "100_CD_2_Desert_A2",
+    "110_CD_2_Pascal_Village_A2",
+    "120_00_CD_2_RobotM_Shelter_A2",
+    "120_30_CD_2_RobotM_TankBoss_A2",
+    "120_50_CD_2_RobotM_Operate1_A2",
+    "120_70_CD_2_RobotM_Operate2_A2",
+    "120_90_CD_2_RobotM_Pascal_A2",
+    "120_95_CD_2_Branch_A2_9S",
+    "130_00_CD_Pod_Talk",
+    "140_CD_1_Resistance_Camp_9S",
+    "150_CD_Ruined_City_9S",
+    "160_00_CD_1_Forest_Castle_9S",
+    "160_10_CD_1_Forest_Castle_9S",
+    "160_20_CD_1_Forest_Castle_9S",
+    "165_00_CD_1_Forest_Castle_9S",
+    "170_00_CD_2_Forest_Castle_9S",
+    "170_10_CD_2_Pod_Talk",
+    "180_00_CD_2_Forest_Castle_9S_2",
+    "180_10_CD_2_Submerge_City_9S",
+    "180_20_CD_2_Submerge_City_9S",
+    "180_30_CD_2_Pod_Talk",
+    "190_CD_2_Hack_Game_9S",
+    "200_CD_Robot_Mountain_A2",
+    "210_CD_Amusement_Park_A2",
+    "220_CD_Submerge_City_9S",
+    "220_10_CD_GotoCamp_Yoroyoro_9S",
+    "220_20_CD_ResiCamp_DeboPopo_HD",
+    "220_30_CD_ResiCamp_Recover_9S",
+    "230_CD_Resistance_Camp_9S",
+    "240_CD_Amusement_Park",
+    "240_10_CD_Amusement_Park_9S",
+    "240_20_CD_Amusement_Park_9S",
+    "240_30_CD_Amusement_Park_9S",
+    "240_40_CD_Amusement_Park_9S",
+    "240_50_CD_Amusement_Park_A2",
+    "240_60_CD_Amusement_Park_A2",
+    "240_70_CD_Amusement_Park_A2",
+    "240_80_CD_Amusement_Park_A2",
+    "250_CD_Unknown_9S",
+    "260_00_CD_Ruined_City_9S",
+    "270_CD_Tower_9S",
+    "275_CD_Tower_walk_9S",
+    "277_CD_Tower_2Bbtl_9S",
+    "280_CD_Ruined_City_A2",
+    "290_CD_Tower_A2",
+    "293_CD_Tower_LibraryHack_A2",
+    "295_CD_Tower_SelfHack_9S",
+    "295_10_CD_Tower_RedGirl_9S",
+    "295_20_CD_Tower_Yoruha_9S",
+    "297_CD_Tower_Library_A2",
+    "298_CD_Tower_RedGirl_A2",
+    "300_00_CD_Tower_Elevator_A2",
+    "310_00_CD_Shooting_9S",
+    "300_10_CD_Tower_Elevator_A2",
+    "310_10_CD_Shooting_9S",
+    "300_20_CD_Tower_Elevator_A2",
+    "310_20_CD_Shooting_9S",
+    "300_30_CD_Tower_Elevator_A2",
+    "310_30_CD_Shooting_9S",
+    "300_40_CD_Tower_Elevator_A2",
+    "310_50_CD_Shooting_3Dbattle_9S",
+    "315_CD_Tower_Unite",
+    "320_CD_Tower_Summit",
+    "330_CD_Tower_Versus",
+    "332_CD_Tower_Talk",
+    "335_CD_Tower_sele9S",
+    "335_CD_Tower_seleA2",
+    "340_C_Tower_9Swin",
+    "340_D_Tower_A2win",
+    "345_D_Tower_A2win_9Shack",
+    "350_CD_TrueEnd_STG",
+    "360_CD_TrueEnd_FIN",
+    "bugTest"
+   ]
+  },
+  {
+   "phase": "p400",
+   "subphases": [
+    "10_00_firstChoice",
+    "20_00_LoadNovel_1_1",
+    "20_10_Plato_BootUp",
+    "20_20_ExerciseTest",
+    "20_30_LoadNovel_1_2",
+    "30_00_SecondChoice",
+    "30_10_SecondChoice",
+    "40_00_Plato_Hacking",
+    "40_10_BattleTest1",
+    "40_20_BattleTest2",
+    "40_30_BattleTest3",
+    "40_40_BattleTest4",
+    "40_50_BattleTest5",
+    "40_90_LoadNovel_2",
+    "50_00_ThirdChoice",
+    "50_10_ThirdChoice",
+    "60_00_OrganizePapers",
+    "80_00_FIN"
+   ]
+  },
+  {
+   "phase": "pa00",
+   "subphases": [
+    "test"
+   ]
+  },
+  {
+   "phase": "pb00",
+   "subphases": []
+  },
+  {
+   "phase": "pc00",
+   "subphases": [
+    "test"
+   ]
+  },
+  {
+   "phase": "pd00",
+   "subphases": [
+    "test"
+   ]
+  },
+  {
+   "phase": "pe00",
+   "subphases": [
+    "test"
+   ]
+  },
+  {
+   "phase": "pe01",
+   "subphases": [
+    "Nothing",
+    "free",
+    "0000",
+    "0330",
+    "0330_after",
+    "0630",
+    "0650",
+    "0760",
+    "e001",
+    "e002"
+   ]
+  },
+  {
+   "phase": "pe02",
+   "subphases": [
+    "test"
+   ]
+  },
+  {
+   "phase": "pe03",
+   "subphases": [
+    "000",
+    "001",
+    "002",
+    "003",
+    "004",
+    "005",
+    "006",
+    "007",
+    "008",
+    "009",
+    "010",
+    "011",
+    "012",
+    "013",
+    "014",
+    "015",
+    "016",
+    "017",
+    "018",
+    "019",
+    "020",
+    "021",
+    "022",
+    "023",
+    "024",
+    "025",
+    "026",
+    "027",
+    "028",
+    "029",
+    "030",
+    "031",
+    "032",
+    "033",
+    "034",
+    "035",
+    "036",
+    "037",
+    "038",
+    "039",
+    "040",
+    "041",
+    "042",
+    "043",
+    "044",
+    "045",
+    "046",
+    "047",
+    "048",
+    "049",
+    "050",
+    "051",
+    "052",
+    "053",
+    "054",
+    "055",
+    "056",
+    "057",
+    "058",
+    "059",
+    "060",
+    "061",
+    "062",
+    "063",
+    "064",
+    "065",
+    "066",
+    "067",
+    "068",
+    "069",
+    "070",
+    "071",
+    "072",
+    "073",
+    "074",
+    "075",
+    "076",
+    "077",
+    "078",
+    "079",
+    "080",
+    "081",
+    "082",
+    "083",
+    "084",
+    "085",
+    "086",
+    "087",
+    "088",
+    "089",
+    "090",
+    "091",
+    "092",
+    "093",
+    "094",
+    "095",
+    "096",
+    "097",
+    "098",
+    "099"
+   ]
+  },
+  {
+   "phase": "pf00",
+   "subphases": [
+    "SIGNIN",
+    "START"
+   ]
+  },
+  {
+   "phase": "pf10",
+   "subphases": [
+    "EndRoll_A",
+    "BackTitle_A",
+    "BackTitle_B",
+    "EndRoll_CD",
+    "BackTitle_CD",
+    "BackTitle_True",
+    "BackTitle_FIN"
+   ]
+  },
+  {
+   "phase": "pf20",
+   "subphases": [
+    "START"
+   ]
+  },
+  {
+   "phase": "pf30",
+   "subphases": [
+    "Ending_E",
+    "Ending_F",
+    "Ending_G",
+    "Ending_H",
+    "Ending_I",
+    "Ending_J",
+    "Ending_K",
+    "Ending_L",
+    "Ending_M",
+    "Ending_N",
+    "Ending_O",
+    "Ending_P",
+    "Ending_Q",
+    "Ending_R",
+    "Ending_S",
+    "Ending_T",
+    "Ending_U",
+    "Ending_V",
+    "Ending_W",
+    "Ending_X",
+    "Ending_Y",
+    "Ending_Z"
+   ]
+  },
+  {
+   "phase": "pf31",
+   "subphases": [
+    "start",
+    "endroll1",
+    "endroll2",
+    "shooting",
+    "clear"
+   ]
+  },
+  {
+   "phase": "pf40",
+   "subphases": [
+    "save_p100_10",
+    "save_sub900"
+   ]
+  },
+  {
+   "phase": "pf50",
+   "subphases": [
+    "trial_end"
+   ]
+  },
+  {
+   "phase": "pf60",
+   "subphases": [
+    "EndRoll_DLC"
+   ]
+  },
+  {
+   "phase": "pfa0",
+   "subphases": [
+    "START"
+   ]
+  }
+ ],
+ "sub_phase_files": {
+  "p100": [
+   {
+    "order": 0,
+    "Name": "00_00_B_RobotM_Pro_RobotBrother",
+    "Comment": "済_ロボット山_Bルート_ロボット兄弟_Bルート開始",
+    "RoomNo": "r001",
+    "PlayerPos": "-608.35 14.24 392.55",
+    "isRestartPoint": "YES"
+   },
+   {
+    "order": 1,
+    "Name": "00_02_B_RobotM_Pro_9S_appearanc",
+    "Comment": "済_ロボット山_Bルート_9S操作開始",
+    "RoomNo": "r001",
+    "PlayerPos": "-608.35 14.24 392.55",
+    "isRestartPoint": "YES"
+   },
+   {
+    "order": 2,
+    "Name": "00_05_B_RobotM_Pro_9S_STG1",
+    "Comment": "済_ロボット山_Bルート_9S_STG坑道エリア1",
+    "RoomNo": "r001",
+    "PlayerPos": "-602 6 387 -40",
+    "isRestartPoint": "YES"
+   },
+   {
+    "order": 3,
+    "Name": "00_10_B_RobotM_Pro_9S_STG2",
+    "Comment": "済_ロボット山_Bルート_9S_STG坑道エリア2",
+    "RoomNo": "r001",
+    "PlayerPos": "1200.89 -1171.30 477.96 0",
+    "isRestartPoint": "YES",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 4,
+    "Name": "00_15_B_RobotM_Pro_9S_STG3",
+    "Comment": "済_ロボット山_Bルート_9S_STG坑道エリア3",
+    "RoomNo": "r001",
+    "PlayerPos": "0.0 0.0 0.0 0.0",
+    "isRestartPoint": "YES"
+   },
+   {
+    "order": 5,
+    "Name": "00_30_A_RobotM_Prologue_STG1",
+    "Comment": "済_ロボット山_Aルート_STGロボット山突入1",
+    "RoomNo": "r001",
+    "PlayerPos": "0.0 0.0 0.0 0.0",
+    "isRestartPoint": "YES",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 6,
+    "Name": "00_40_A_RobotM_Prologue_STG2",
+    "Comment": "済_ロボット山_Aルート_STGロボット山突入2",
+    "RoomNo": "r001",
+    "PlayerPos": "0.0 0.0 0.0 0.0",
+    "isRestartPoint": "YES",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 7,
+    "Name": "00_50_A_RobotM_Prologue_STG3",
+    "Comment": "済_ロボット山_Aルート_STGロボット山突入3",
+    "RoomNo": "r001",
+    "PlayerPos": "0.0 0.0 0.0 0.0",
+    "isRestartPoint": "YES",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 8,
+    "Name": "00_55_A_RobotM_Prologue_EV",
+    "Comment": "済_ロボット山_Aルート_突入HDイベント",
+    "RoomNo": "r001",
+    "PlayerPos": "-648.15 0.06 451.25 0",
+    "isRestartPoint": "YES"
+   },
+   {
+    "order": 9,
+    "Name": "00_60_A_RobotM_Pro_Tutorial",
+    "Comment": "済_ロボット山_Aルート_最初の部屋_2B操作開始",
+    "RoomNo": "r001",
+    "PlayerPos": "-648.15 0.06 451.25 0",
+    "isRestartPoint": "NO"
+   },
+   {
+    "order": 10,
+    "Name": "00_70_A_RobotM_Pro_ArmBoss_1st",
+    "Comment": "済_ロボット山_Aルート_腕ボス1戦目",
+    "RoomNo": "r001",
+    "PlayerPos": "-648 1.4 470 180",
+    "isRestartPoint": "NO"
+   },
+   {
+    "order": 11,
+    "Name": "00_80_A_RobotM_Pro_1stArea",
+    "Comment": "済_ロボット山_Aルート_9S合流〜工場内入口",
+    "RoomNo": "r001",
+    "PlayerPos": "-648.117371 0.02 446.91098 178",
+    "isRestartPoint": "YES"
+   },
+   {
+    "order": 12,
+    "Name": "00_80_B_RobotM_Pro_BossArea",
+    "Comment": "済_ロボット山_Bルート_2B合流",
+    "RoomNo": "r001",
+    "PlayerPos": "-552 31.88 477.10 0",
+    "isRestartPoint": "NO"
+   },
+   {
+    "order": 13,
+    "Name": "00_82_B_RobotM_Pro_9S_STG4",
+    "Comment": "済_ロボット山_Bルート_工場内STG",
+    "RoomNo": "r001",
+    "PlayerPos": "-643 1.4 425 0",
+    "isRestartPoint": "NO"
+   },
+   {
+    "order": 14,
+    "Name": "00_83_B_RobotM_Pro_9S_STG5",
+    "Comment": "※未使用です。",
+    "RoomNo": "r001",
+    "PlayerPos": "-455.95 53.87 313.52 0.0",
+    "isRestartPoint": "NO"
+   },
+   {
+    "order": 15,
+    "Name": "00_85_A_RobotM_Pro_2ndArea",
+    "Comment": "済_ロボット山_Aルート_工場内入口〜工場内出口",
+    "RoomNo": "r001",
+    "PlayerPos": "-553.56 38.39 367.42 180",
+    "isRestartPoint": "YES"
+   },
+   {
+    "order": 16,
+    "Name": "00_90_A_RobotM_Pro_3rdArea",
+    "Comment": "済_ロボット山_Aルート_最後の部屋",
+    "RoomNo": "r001",
+    "PlayerPos": "-451.48 23.2 430.7 0",
+    "isRestartPoint": "YES"
+   },
+   {
+    "order": 17,
+    "Name": "00_95_A_RobotM_Pro_lastArea",
+    "Comment": "済_ロボット山_Aルート_ロボット山入口-ボス戦前",
+    "RoomNo": "r001",
+    "PlayerPos": "-464.46 12.97 517.09 0",
+    "isRestartPoint": "YES"
+   },
+   {
+    "order": 18,
+    "Name": "05_00_A_RobotM_Pro_ArmBoss_2nd",
+    "Comment": "済_ロボット山_Aルート_腕ボス2戦目",
+    "RoomNo": "r001",
+    "PlayerPos": "-450.88 -4.66 785.94 0",
+    "isRestartPoint": "NO"
+   },
+   {
+    "order": 19,
+    "Name": "05_10_A_RobotM_ProBoss_phase1",
+    "Comment": "済_ロボット山_Aルート_合体ボス１(対面バトル)",
+    "RoomNo": "r001",
+    "PlayerPos": "-451.86 -4.53 922.94 -180",
+    "isRestartPoint": "YES"
+   },
+   {
+    "order": 20,
+    "Name": "05_10_B_RobotM_ProBoss_phase1",
+    "Comment": "ロボット山_Bルート_合体ボス１(空中戦)",
+    "RoomNo": "r001",
+    "PlayerPos": "-451.86 -4.53 922.94 -180",
+    "isRestartPoint": "YES"
+   },
+   {
+    "order": 21,
+    "Name": "05_20_A_RobotM_ProBoss_phase2",
+    "Comment": "ロボット山_Aルート_合体ボス２(ボスの身体に乗るバトル)",
+    "RoomNo": "r001",
+    "PlayerPos": "-456.81 -4.71 1071.85 -180",
+    "isRestartPoint": "YES"
+   },
+   {
+    "order": 22,
+    "Name": "05_20_B_RobotM_ProBoss_phase2",
+    "Comment": "※未使用です。",
+    "RoomNo": "r001",
+    "PlayerPos": "-452.27 36.3 980.33 0",
+    "isRestartPoint": "NO"
+   },
+   {
+    "order": 23,
+    "Name": "05_30_A_RobotM_ProBoss_phase3",
+    "Comment": "ロボット山_Aルート_合体ボス３(飛行ユニット戦１)",
+    "RoomNo": "r001",
+    "PlayerPos": "-451.71 5.81 1089.92 -180",
+    "isRestartPoint": "YES"
+   },
+   {
+    "order": 24,
+    "Name": "05_30_B_RobotM_ProBoss_phase3",
+    "Comment": "ロボット山_Bルート_合体ボス3(ポッド操作1〜ハッキング)",
+    "RoomNo": "r001",
+    "PlayerPos": "-452.27 36.3 980.33 0",
+    "isRestartPoint": "YES"
+   },
+   {
+    "order": 25,
+    "Name": "05_40_A_RobotM_ProBoss_phase4",
+    "Comment": "ロボット山_Aルート_合体ボス４(飛行ユニット戦２)",
+    "RoomNo": "r001",
+    "PlayerPos": "-451.71 5.81 1089.92 -180",
+    "isRestartPoint": "NO"
+   },
+   {
+    "order": 26,
+    "Name": "05_40_B_RobotM_ProBoss_phase4",
+    "Comment": "ロボット山_Bルート_合体ボス4(ポッド操作2:トップビュ-)",
+    "RoomNo": "r001",
+    "PlayerPos": "-452.27 36.3 980.33 0",
+    "isRestartPoint": "NO"
+   },
+   {
+    "order": 27,
+    "Name": "10_A_bunker_Robot_Battle",
+    "Comment": "済_バンカー_巨大ロボ戦後",
+    "RoomNo": "r001",
+    "PlayerPos": "-451 16 675 180",
+    "isRestartPoint": "YES",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 28,
+    "Name": "11_A_bunker_monitorHD",
+    "Comment": "済_バンカー_世界の情勢",
+    "RoomNo": "r001",
+    "PlayerPos": "-451 16 675 180",
+    "isRestartPoint": "YES",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 29,
+    "Name": "13_A_bunker_Setup",
+    "Comment": "済_バンカー_２Bセットアップ_Aルート専用",
+    "RoomNo": "r001",
+    "PlayerPos": "10678.4 28.2 798.1 0.0",
+    "isRestartPoint": "NO",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 30,
+    "Name": "13_B_bunker_Setup",
+    "Comment": "済_バンカー_２Bセットアップ_Bルート専用",
+    "RoomNo": "r001",
+    "PlayerPos": "10678.4 28.2 798.1 0.0",
+    "isRestartPoint": "NO",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 31,
+    "Name": "16_AB_bunker_Order",
+    "Comment": "済_バンカー_任務受注",
+    "RoomNo": "r001",
+    "PlayerPos": "0.0 0.0 0.0 0.0",
+    "isRestartPoint": "YES",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 32,
+    "Name": "20_AB_buker_Aerial_battle",
+    "Comment": "済_バンカー_空中戦闘",
+    "RoomNo": "r001",
+    "PlayerPos": "10678.47168 28.258202 798.168701 0.0",
+    "isRestartPoint": "YES",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 33,
+    "Name": "30_AB_Ruined_City_ForcedLanding",
+    "Comment": "大廃墟都市_空から不時着",
+    "RoomNo": "r001",
+    "PlayerPos": "-141 85 683 140",
+    "isRestartPoint": "YES"
+   },
+   {
+    "order": 34,
+    "Name": "40_AB_Resistance_Camp_Leader",
+    "Comment": "済_レジスタンスキャンプ_リーダーに挨拶",
+    "RoomNo": "r001",
+    "PlayerPos": "229 9.5 630 40",
+    "isRestartPoint": "NO"
+   },
+   {
+    "order": 35,
+    "Name": "50_AB_Desert_temple",
+    "Comment": "済_砂漠に向かう",
+    "RoomNo": "r001",
+    "PlayerPos": "240 11 647 37",
+    "isRestartPoint": "YES"
+   },
+   {
+    "order": 36,
+    "Name": "51_AB_MainDesert",
+    "Comment": "砂漠_大砂漠_五人衆",
+    "RoomNo": "r001",
+    "PlayerPos": "-596.9 -0.11 -218.43 -128.43",
+    "isRestartPoint": "YES"
+   },
+   {
+    "order": 37,
+    "Name": "51_10_AB_Danchi_EV",
+    "Comment": "砂漠_団地紹介イベント",
+    "RoomNo": "r001",
+    "PlayerPos": "-569 -10 -613 110",
+    "isRestartPoint": "YES"
+   },
+   {
+    "order": 38,
+    "Name": "52_AB_Danchi_Haikyo",
+    "Comment": "砂漠_団地廃墟",
+    "RoomNo": "r001",
+    "PlayerPos": "-420.3 -3.4 -657.1 110",
+    "isRestartPoint": "YES"
+   },
+   {
+    "order": 39,
+    "Name": "55_AB_Danchi_Boss_1",
+    "Comment": "砂漠_ボスエリア",
+    "RoomNo": "r001",
+    "PlayerPos": "119.39 -83.94 -564.66 -17.21",
+    "isRestartPoint": "YES"
+   },
+   {
+    "order": 40,
+    "Name": "56_AB_Danchi_Boss_EV1",
+    "Comment": "砂漠_アダム戦_開始イベント（M1020_S0050_HD）",
+    "RoomNo": "r001",
+    "PlayerPos": "39.48 -141.31 -527.40 -75.13",
+    "isRestartPoint": "YES"
+   },
+   {
+    "order": 41,
+    "Name": "56_10_AB_Danchi_Boss_Battle",
+    "Comment": "砂漠_アダム戦",
+    "RoomNo": "r001",
+    "PlayerPos": "39.48 -141.31 -527.40 -75.13",
+    "isRestartPoint": "YES"
+   },
+   {
+    "order": 42,
+    "Name": "56_50_AB_Danchi_Boss_EV2",
+    "Comment": "砂漠_アダム戦_終了イベント（M1020_S0900_HD）",
+    "RoomNo": "r001",
+    "PlayerPos": "39.48 -141.31 -527.40 -75.13",
+    "isRestartPoint": "YES"
+   },
+   {
+    "order": 43,
+    "Name": "58_AB_BossArea_Fall",
+    "Comment": "砂漠_ボスエリア崩落",
+    "RoomNo": "r001",
+    "PlayerPos": "28.96 -141.38 -531.71 -12.46",
+    "isRestartPoint": "YES"
+   },
+   {
+    "order": 44,
+    "Name": "58_50_AB_Goto_AmusementPark",
+    "Comment": "砂漠から遊園地へ",
+    "RoomNo": "r001",
+    "PlayerPos": "-58.90 -100.70 -505 -110.27",
+    "isRestartPoint": "YES"
+   },
+   {
+    "order": 45,
+    "Name": "58_60_B_Pod_Talk",
+    "Comment": "ポッド達の会話",
+    "RoomNo": "r001",
+    "PlayerPos": "-91 268 -3917 0",
+    "isRestartPoint": "YES"
+   },
+   {
+    "order": 46,
+    "Name": "70_AB_Amusement_Park",
+    "Comment": "遊園地",
+    "RoomNo": "r001",
+    "PlayerPos": "316.05 0.33 346.13 126.76",
+    "isRestartPoint": "YES"
+   },
+   {
+    "order": 47,
+    "Name": "70_01_AB_Amusement_Park_TEST",
+    "Comment": "済_処理負荷計測テストフェーズ",
+    "RoomNo": "r001",
+    "PlayerPos": "528 1 295 -92",
+    "isRestartPoint": "NO"
+   },
+   {
+    "order": 48,
+    "Name": "70_10_AB_Park_Tank",
+    "Comment": "済_戦車戦",
+    "RoomNo": "r001",
+    "PlayerPos": "689.75 13.30 416.21 76.08",
+    "isRestartPoint": "YES"
+   },
+   {
+    "order": 49,
+    "Name": "70_20_AB_Park_RollerCoaster",
+    "Comment": "済_遊園地_ジェットコースター",
+    "RoomNo": "r001",
+    "PlayerPos": "753.06 28.46 412.04 77.29",
+    "isRestartPoint": "YES"
+   },
+   {
+    "order": 50,
+    "Name": "76_AB_Amusement_Park_Boss",
+    "Comment": "済_オペラボス戦直前の劇場の小部屋",
+    "RoomNo": "r001",
+    "PlayerPos": "862.0 61.0 298.7 -44",
+    "isRestartPoint": "YES"
+   },
+   {
+    "order": 51,
+    "Name": "76_10_AB_Amusement_Park_Boss",
+    "Comment": "済_オペラボス_M1030_S0300_HD_ev0300_ボス登場",
+    "RoomNo": "r001",
+    "PlayerPos": "855.31 20.86 294.53 90",
+    "isRestartPoint": "YES"
+   },
+   {
+    "order": 52,
+    "Name": "76_20_AB_Amusement_Park_Boss",
+    "Comment": "済_オペラボス_ソロ〜強制ハッキング",
+    "RoomNo": "r001",
+    "PlayerPos": "855.31 20.86 294.53 90",
+    "isRestartPoint": "YES"
+   },
+   {
+    "order": 53,
+    "Name": "77_AB_Amusement_Park_Boss",
+    "Comment": "済_オペラボス_M1030_S0220_HD_ev0310_コーラス登場",
+    "RoomNo": "r001",
+    "PlayerPos": "855.31 20.86 294.53 90",
+    "isRestartPoint": "YES"
+   },
+   {
+    "order": 54,
+    "Name": "77_10_AB_Amusement_Park_Boss",
+    "Comment": "済_オペラボス_アンサンブル",
+    "RoomNo": "r001",
+    "PlayerPos": "855.31 20.86 294.53 -90",
+    "isRestartPoint": "YES"
+   },
+   {
+    "order": 55,
+    "Name": "78_AB_Amusement_Park_Boss",
+    "Comment": "済_オペラボス_フィナーレ〜アンコール",
+    "RoomNo": "r001",
+    "PlayerPos": "855.31 20.86 294.53 90",
+    "isRestartPoint": "YES"
+   },
+   {
+    "order": 56,
+    "Name": "78_10_AB_Amusement_Park_Boss",
+    "Comment": "済_オペラボス_M1030_S0300_HD_ev032_ボス撃破",
+    "RoomNo": "r001",
+    "PlayerPos": "855.31 20.86 294.53 90",
+    "isRestartPoint": "YES"
+   },
+   {
+    "order": 57,
+    "Name": "79_50_AB_Goto_Pascal_Village",
+    "Comment": "済_遊園地からパスカル村へ",
+    "RoomNo": "r001",
+    "PlayerPos": "855.31 20.86 294.53 90",
+    "isRestartPoint": "YES"
+   },
+   {
+    "order": 58,
+    "Name": "79_90_AB_GuideTo_Pascal_Village",
+    "Comment": "済_パスカル村へ案内するロボ",
+    "RoomNo": "r001",
+    "PlayerPos": "685.5 13.6 294.5 -90",
+    "isRestartPoint": "YES"
+   },
+   {
+    "order": 59,
+    "Name": "79_95_B_Ruined_City_diningtable",
+    "Comment": "済_大廃墟都市_アダムとイヴの食卓：1回目",
+    "RoomNo": "r001",
+    "PlayerPos": "-25.88 55.43 677.72 0",
+    "isRestartPoint": "YES"
+   },
+   {
+    "order": 60,
+    "Name": "80_00_AB_Pascal_Village",
+    "Comment": "済_パスカルの村_初回来訪",
+    "RoomNo": "r001",
+    "PlayerPos": "430 10.87 -35 130",
+    "isRestartPoint": "YES"
+   },
+   {
+    "order": 61,
+    "Name": "80_10_AB_Pascal_Village",
+    "Comment": "済_パスカルの村_初回来訪",
+    "RoomNo": "r001",
+    "PlayerPos": "430 10.87 -35 130",
+    "isRestartPoint": "NO"
+   },
+   {
+    "order": 62,
+    "Name": "90_00_AB_Ruined_City",
+    "Comment": "済_大廃墟都市_巨大ロボ来襲",
+    "RoomNo": "r001",
+    "PlayerPos": "465.3 12.77 -51.53 -90",
+    "isRestartPoint": "YES"
+   },
+   {
+    "order": 63,
+    "Name": "90_10_AB_Ruined_City_AerialBTL",
+    "Comment": "大廃墟都市_巨大ロボ空中戦闘",
+    "RoomNo": "r001",
+    "PlayerPos": "-71 60 667 0",
+    "isRestartPoint": "NO"
+   },
+   {
+    "order": 64,
+    "Name": "100_A_PlayGoNovel",
+    "Comment": "PlayGo用ノベル",
+    "RoomNo": "r001",
+    "PlayerPos": "-451.71 5.81 1089.92 -180",
+    "isRestartPoint": "NO",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 65,
+    "Name": "00_80_A_TEST",
+    "Comment": "e3_battle_5min",
+    "RoomNo": "r001",
+    "PlayerPos": "-648.30 0 464.05 180",
+    "isRestartPoint": "NO"
+   },
+   {
+    "order": 66,
+    "Name": "00_80_B_TEST",
+    "Comment": "e3_battle_4min",
+    "RoomNo": "r001",
+    "PlayerPos": "-648.30 0 464.05 180",
+    "isRestartPoint": "NO"
+   },
+   {
+    "order": 67,
+    "Name": "00_80_C_TEST",
+    "Comment": "e3_battle_3min",
+    "RoomNo": "r001",
+    "PlayerPos": "-648.30 0 464.05 180",
+    "isRestartPoint": "NO"
+   },
+   {
+    "order": 68,
+    "Name": "50_00_A_City",
+    "Comment": "e3_キャンプ_廃墟都市",
+    "RoomNo": "r001",
+    "PlayerPos": "223.85 9.91 591.26 37.35",
+    "isRestartPoint": "NO"
+   },
+   {
+    "order": 69,
+    "Name": "51_00_A_Desert",
+    "Comment": "e3_砂漠",
+    "RoomNo": "r001",
+    "PlayerPos": "-373.72 11.65 -83.52 -124.57",
+    "isRestartPoint": "NO"
+   },
+   {
+    "order": 70,
+    "Name": "60_00_TEST_SubmergeCity",
+    "Comment": "コメント欄",
+    "RoomNo": "r001",
+    "PlayerPos": "429 -80 907 190",
+    "isRestartPoint": "NO"
+   }
+  ],
+  "p200": [
+   {
+    "order": 0,
+    "Name": "00_AB_Ruined_City",
+    "Comment": "ハイキョ都市_陥没直後",
+    "RoomNo": "r001",
+    "PlayerPos": "-3 5 343 80",
+    "isRestartPoint": "YES"
+   },
+   {
+    "order": 1,
+    "Name": "10_AB_Alien_Ship",
+    "Comment": "済_エイリアンシップ",
+    "RoomNo": "r001",
+    "PlayerPos": "225.09 -105.03 345.64 85.04",
+    "isRestartPoint": "YES"
+   },
+   {
+    "order": 2,
+    "Name": "10_10_AB_Alien_Ship_Start",
+    "Comment": "済_エイリアンシップ_アダム/イヴ戦開始イベント(M1040_S0560_HD)",
+    "RoomNo": "r001",
+    "PlayerPos": "470.267944 -91.572861 348.998566 92.27",
+    "isRestartPoint": "YES"
+   },
+   {
+    "order": 3,
+    "Name": "10_20_AB_Alien_Ship_Battle",
+    "Comment": "済_エイリアンシップ_アダム/イヴ戦（サイドビュー）",
+    "RoomNo": "r001",
+    "PlayerPos": "494.28 -98.72 350.26 166.77",
+    "isRestartPoint": "YES"
+   },
+   {
+    "order": 4,
+    "Name": "10_30_AB_Alien_Ship_End",
+    "Comment": "済_エイリアンシップ_アダムイブ戦後イベント(M1040_S0580_HD)",
+    "RoomNo": "r001",
+    "PlayerPos": "497 -98.69 348 -90",
+    "isRestartPoint": "YES"
+   },
+   {
+    "order": 5,
+    "Name": "15_AB_Transfer_device",
+    "Comment": "済_大廃墟都市_転送装置でバンカーに移動",
+    "RoomNo": "r001",
+    "PlayerPos": "470 -91.57 349.5 -90",
+    "isRestartPoint": "YES"
+   },
+   {
+    "order": 6,
+    "Name": "20_AB_Bunker",
+    "Comment": "済_バンカー_エイリアンの報告",
+    "RoomNo": "r001",
+    "PlayerPos": "0.0 0.0 0.0 0.0",
+    "isRestartPoint": "NO",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 7,
+    "Name": "30_AB_Pascal_Village",
+    "Comment": "済_パスカル村_パスカルと接触命令",
+    "RoomNo": "r001",
+    "PlayerPos": "430 20 -35 130",
+    "isRestartPoint": "NO"
+   },
+   {
+    "order": 8,
+    "Name": "40_00_AB_ShopM_EmilQuest_Start",
+    "Comment": "ショッピングモール_エミールクエスト開始",
+    "RoomNo": "r001",
+    "PlayerPos": "369.31 0.05 -52.41 -85",
+    "isRestartPoint": "YES"
+   },
+   {
+    "order": 9,
+    "Name": "40_30_AB_ShopM_EQ_EmilAppear",
+    "Comment": "ショッピングモール_EQ_エミール登場",
+    "RoomNo": "r001",
+    "PlayerPos": "125.21  1.28  -158.63 -125",
+    "isRestartPoint": "YES"
+   },
+   {
+    "order": 10,
+    "Name": "40_70_AB_ShopM_EmilQuest_End",
+    "Comment": "ショッピングモール_EQ_エミールクエスト終了",
+    "RoomNo": "r001",
+    "PlayerPos": "143 3 -148 -115",
+    "isRestartPoint": "YES"
+   },
+   {
+    "order": 11,
+    "Name": "60_05_AB_Forest_Castle",
+    "Comment": "森の城",
+    "RoomNo": "r001",
+    "PlayerPos": "164.01 13.19 -319.23 75",
+    "isRestartPoint": "YES"
+   },
+   {
+    "order": 12,
+    "Name": "60_00_B_King_of_the_forest_ev1",
+    "Comment": "森の城の歴史EV1_Bルート",
+    "RoomNo": "r001",
+    "PlayerPos": "1233.68 -33.72 -492.20 0",
+    "isRestartPoint": "NO"
+   },
+   {
+    "order": 13,
+    "Name": "60_06_B_Forest_Castle2",
+    "Comment": "森の城_続き1_Bルート",
+    "RoomNo": "r001",
+    "PlayerPos": "194.64505 4.487639 -363.361633 150",
+    "isRestartPoint": "NO"
+   },
+   {
+    "order": 14,
+    "Name": "60_07_B_King_of_the_forest_ev2",
+    "Comment": "森の城の歴史EV2_Bルート",
+    "RoomNo": "r001",
+    "PlayerPos": "1233.68 -33.72 -492.20 0",
+    "isRestartPoint": "NO"
+   },
+   {
+    "order": 15,
+    "Name": "60_08_B_Forest_Castle3",
+    "Comment": "森の城_続き2_Bルート",
+    "RoomNo": "r001",
+    "PlayerPos": "581.9 -45.51 -211.24 55",
+    "isRestartPoint": "NO"
+   },
+   {
+    "order": 16,
+    "Name": "60_10_AB_Forest_Castle_Castle",
+    "Comment": "森の城_城内部",
+    "RoomNo": "r001",
+    "PlayerPos": "832.38 -21.32 -223 155",
+    "isRestartPoint": "YES"
+   },
+   {
+    "order": 17,
+    "Name": "60_15_B_King_of_the_forest_ev3",
+    "Comment": "森の城の歴史EV3_Bルート",
+    "RoomNo": "r001",
+    "PlayerPos": "888.19 27.52 -313.63 -100",
+    "isRestartPoint": "NO"
+   },
+   {
+    "order": 18,
+    "Name": "60_16_B_Forest_Castle_Castle2",
+    "Comment": "森の城_城内部_続き1_Bルート",
+    "RoomNo": "r001",
+    "PlayerPos": "1108.9 -3.8 -440.3 30",
+    "isRestartPoint": "NO"
+   },
+   {
+    "order": 19,
+    "Name": "60_20_AB_Forest_Castle_Throne",
+    "Comment": "森の城_玉座前",
+    "RoomNo": "r001",
+    "PlayerPos": "1003.30 10.89 -379.47 -60",
+    "isRestartPoint": "YES"
+   },
+   {
+    "order": 20,
+    "Name": "70_AB_Resistance_Camp",
+    "Comment": "未使用",
+    "RoomNo": "r001",
+    "PlayerPos": "240 11 647 40",
+    "isRestartPoint": "NO"
+   },
+   {
+    "order": 21,
+    "Name": "80_00_AB_Pascal_Village",
+    "Comment": "済_パスカル村でA2の情報を聞く",
+    "RoomNo": "r001",
+    "PlayerPos": "430 11.05 -35 130",
+    "isRestartPoint": "YES"
+   },
+   {
+    "order": 22,
+    "Name": "80_10_AB_Resistance_Camp",
+    "Comment": "パスカル村からレジキャンに行くまで",
+    "RoomNo": "r001",
+    "PlayerPos": "430 11.05 -35 130",
+    "isRestartPoint": "YES"
+   },
+   {
+    "order": 23,
+    "Name": "80_20_AB_Submerge_City",
+    "Comment": "レジキャンから水没都市に行くまで",
+    "RoomNo": "r001",
+    "PlayerPos": "276.6 9.48 654 120",
+    "isRestartPoint": "YES"
+   },
+   {
+    "order": 24,
+    "Name": "95_00_B_Ruined_City_diningtable",
+    "Comment": "済_大廃墟都市_アダムとイヴの食卓：2回目",
+    "RoomNo": "r001",
+    "PlayerPos": "-25.88 55.43 677.72 0",
+    "isRestartPoint": "YES"
+   },
+   {
+    "order": 25,
+    "Name": "80_30_AB_Submerge_City",
+    "Comment": "水没都市からミサイルまで",
+    "RoomNo": "r001",
+    "PlayerPos": "483 -66.26 636 30",
+    "isRestartPoint": "YES"
+   },
+   {
+    "order": 26,
+    "Name": "90_AB_Battle_Submerge_City",
+    "Comment": "水没都市_飛行ユニットに乗り込む",
+    "RoomNo": "r001",
+    "PlayerPos": "396.65 -74.74 843.62 8.15",
+    "isRestartPoint": "YES"
+   },
+   {
+    "order": 27,
+    "Name": "91_AB_Battle_Submerge_City_2",
+    "Comment": "済_水没都市_STG（空母へ向かう）",
+    "RoomNo": "r001",
+    "PlayerPos": "0.0 0.0 0.0 0.0",
+    "isRestartPoint": "YES",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 28,
+    "Name": "92_AB_Battle_Submerge_City_3",
+    "Comment": "済_水没都市_空母上空戦",
+    "RoomNo": "r001",
+    "PlayerPos": "-3807.56 150 -270.82 -7.29",
+    "isRestartPoint": "YES",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 29,
+    "Name": "94_00_AB_Kaiju_Start_EV",
+    "Comment": "済_水没都市_怪獣_開始イベント",
+    "RoomNo": "r001",
+    "PlayerPos": "-3847 50 -27 180",
+    "isRestartPoint": "YES",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 30,
+    "Name": "94_10_AB_Kaiju_Battle_Head",
+    "Comment": "済_水没都市_怪獣_頭部戦",
+    "RoomNo": "r001",
+    "PlayerPos": "-3847 135 -27 0",
+    "isRestartPoint": "YES",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 31,
+    "Name": "94_15_AB_Kaiju_Battle_Head_EV",
+    "Comment": "水没都市_怪獣_頭部戦_HD_衛星レーザー ※このフェーズから開始せず、直前のフェーズから開始してください。",
+    "RoomNo": "r001",
+    "PlayerPos": "-3847 50 -27 0",
+    "isRestartPoint": "NO",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 32,
+    "Name": "94_30_AB_Kaiju_Battle_Sniping",
+    "Comment": "済_水没都市_怪獣_迎撃砲",
+    "RoomNo": "r001",
+    "PlayerPos": "-3832.42 14.78 1678.17 180",
+    "isRestartPoint": "YES",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 33,
+    "Name": "94_40_AB_Kaiju_EV",
+    "Comment": "済_水没都市_怪獣_全身登場イベント",
+    "RoomNo": "r001",
+    "PlayerPos": "-3832.47 14.85 1642.89 180",
+    "isRestartPoint": "NO",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 34,
+    "Name": "94_43_AB_Kaiju_Battle_Escape",
+    "Comment": "済_水没都市_怪獣_迎撃砲→飛行ユニット",
+    "RoomNo": "r001",
+    "PlayerPos": "-3817.91 14.78 -858.56 0",
+    "isRestartPoint": "YES",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 35,
+    "Name": "94_46_AB_Kaiju_Battle_Pascal",
+    "Comment": "済_水没都市_怪獣_HD_パスカル登場EV",
+    "RoomNo": "r001",
+    "PlayerPos": "-3821.84 174.83 -1123.42 0",
+    "isRestartPoint": "YES",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 36,
+    "Name": "94_50_A_Kaiju_Battle_Body",
+    "Comment": "済_水没都市_怪獣_全身戦",
+    "RoomNo": "r001",
+    "PlayerPos": "-3821.84 174.83 -1123.42 0",
+    "isRestartPoint": "NO",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 37,
+    "Name": "94_60_B_Kaiju_Shooting",
+    "Comment": "済_水没都市_怪獣_ミサイルを取りに戻るSTG",
+    "RoomNo": "r001",
+    "PlayerPos": "-3821.84 174.83 -1123.42 0",
+    "isRestartPoint": "YES",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 38,
+    "Name": "94_70_B_Kaiju_Missile",
+    "Comment": "済_水没都市_怪獣_ミサイルゲーム",
+    "RoomNo": "r001",
+    "PlayerPos": "-3821.84 174.83 -1123.42 0",
+    "isRestartPoint": "NO",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 39,
+    "Name": "94_80_AB_Kaiju_End_EV",
+    "Comment": "済_水没都市_怪獣_終了イベント",
+    "RoomNo": "r001",
+    "PlayerPos": "-3821.84 174.83 -1123.42 0",
+    "isRestartPoint": "NO",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 40,
+    "Name": "96_B_Pod_Talk",
+    "Comment": "済_水没都市_ポッド会話",
+    "RoomNo": "r001",
+    "PlayerPos": "-91 268 -3917 0",
+    "isRestartPoint": "YES",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 41,
+    "Name": "100_A_Submerge_City_2B",
+    "Comment": "済_水没都市",
+    "RoomNo": "r001",
+    "PlayerPos": "429 -80 907 0",
+    "isRestartPoint": "YES"
+   },
+   {
+    "order": 42,
+    "Name": "100_A_Submerge_City_2B_TEST",
+    "Comment": "済_処理負荷テスト用",
+    "RoomNo": "r001",
+    "PlayerPos": "429 -80 907 190",
+    "isRestartPoint": "NO"
+   },
+   {
+    "order": 43,
+    "Name": "110_00_A_Copy_City",
+    "Comment": "済_コピー都市_Aルート",
+    "RoomNo": "g50100",
+    "PlayerPos": "318 -115 406 0",
+    "isRestartPoint": "YES",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 44,
+    "Name": "110_00_B_Copy_City",
+    "Comment": "コピー都市_Bルート",
+    "RoomNo": "g50100",
+    "PlayerPos": "318 -115 406 -90",
+    "isRestartPoint": "YES",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 45,
+    "Name": "115_AB_Copy_City_AdamDie",
+    "Comment": "済_コピー都市_アダム死亡",
+    "RoomNo": "g50100",
+    "PlayerPos": "271 -111 629 0",
+    "isRestartPoint": "YES",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 46,
+    "Name": "115_B_Copy_City_AdamDie",
+    "Comment": "削除予定",
+    "RoomNo": "g50100",
+    "PlayerPos": "271 -111 629 0",
+    "isRestartPoint": "YES"
+   },
+   {
+    "order": 47,
+    "Name": "120_AB_Bunker",
+    "Comment": "済_バンカー（Bルート専用）",
+    "RoomNo": "r001",
+    "PlayerPos": "0.0 0.0 0.0 0.0",
+    "isRestartPoint": "NO",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 48,
+    "Name": "130_00_A_Resistance_Camp",
+    "Comment": "済_レジスタンスキャンプ_和睦の為ロボット山へ",
+    "RoomNo": "r001",
+    "PlayerPos": "276.6 9.48 654 120",
+    "isRestartPoint": "YES"
+   },
+   {
+    "order": 49,
+    "Name": "140_00_A_RobotM_CrazyReligion",
+    "Comment": "済_ロボット山_狂った宗教_司祭達の案内",
+    "RoomNo": "r001",
+    "PlayerPos": "-451.10 13.01 619.22 -180",
+    "isRestartPoint": "YES"
+   },
+   {
+    "order": 50,
+    "Name": "140_B_Banker_9S",
+    "Comment": "済_バンカ-_9S_遠距離ハッキング開始",
+    "RoomNo": "r001",
+    "PlayerPos": "0.0 0.0 0.0 0.0",
+    "isRestartPoint": "YES",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 51,
+    "Name": "140_20_A_RobotM_CR_GuruRoom",
+    "Comment": "済_ロボット山_狂った宗教_教祖の部屋",
+    "RoomNo": "g52001",
+    "PlayerPos": "-424.03 1.08 437.26 -90",
+    "isRestartPoint": "YES",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 52,
+    "Name": "140_20_B_RobotM_CR_HackingStart",
+    "Comment": "済_ロボット山_狂った宗教_ハッキング開始",
+    "RoomNo": "g52001",
+    "PlayerPos": "-474.08 -162.05 314.73 0",
+    "isRestartPoint": "NO",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 53,
+    "Name": "140_30_A_RobotM_CR_GuruBattle",
+    "Comment": "済_ロボット山_狂った宗教_教祖の部屋での戦闘",
+    "RoomNo": "g52001",
+    "PlayerPos": "-523 1 438.06 -90",
+    "isRestartPoint": "NO",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 54,
+    "Name": "140_30_B_RobotM_CR_UF_Rescue",
+    "Comment": "済_ロボット山_狂った宗教_2Bの救出",
+    "RoomNo": "g52001",
+    "PlayerPos": "-474.08 -162.05 314.73 0",
+    "isRestartPoint": "YES",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 55,
+    "Name": "140_35_B_RobotM_CR_UF_Rescue2",
+    "Comment": "済_ロボット山_狂った宗教_2Bの救出中間",
+    "RoomNo": "g52001",
+    "PlayerPos": "-305.43 -250.48 492.58 -150",
+    "isRestartPoint": "NO",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 56,
+    "Name": "140_40_A_RobotM_CR_UnderFactory",
+    "Comment": "済_ロボット山_狂った宗教_地下工場",
+    "RoomNo": "g52001",
+    "PlayerPos": "-480.13 -298.72 817.10 90",
+    "isRestartPoint": "NO",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 57,
+    "Name": "140_40_B_RobotM_CR_UF_Hacking",
+    "Comment": "済_ロボット山_狂った宗教_工場ハッキング",
+    "RoomNo": "g52001",
+    "PlayerPos": "-504.76 -298.72 487.32 90",
+    "isRestartPoint": "NO",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 58,
+    "Name": "140_60_A_RobotM_CR_UF_Middle",
+    "Comment": "済_ロボット山_狂った宗教_地下工場中間",
+    "RoomNo": "g52001",
+    "PlayerPos": "-466.8 -207 487 -90",
+    "isRestartPoint": "NO",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 59,
+    "Name": "140_80_A_RobotM_CR_UF_BossArea",
+    "Comment": "済_ロボット山_狂った宗教_地下_ボス部屋",
+    "RoomNo": "g52001",
+    "PlayerPos": "-599.8 49.8 212.3 90",
+    "isRestartPoint": "YES",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 60,
+    "Name": "140_80_B_RobotM_CR_CoreHacking",
+    "Comment": "済_ロボット山_狂った宗教_工場コア破壊",
+    "RoomNo": "r001",
+    "PlayerPos": "0.0 0.0 0.0 0.0",
+    "isRestartPoint": "NO",
+    "CorspeFunction": null,
+    "ManualMap": "YES"
+   },
+   {
+    "order": 61,
+    "Name": "140_90_A_RobotM_CR_UF_Exit",
+    "Comment": "済_ロボット山_狂った宗教_地下工場出口",
+    "RoomNo": "g52001",
+    "PlayerPos": "-459 48 212 90",
+    "isRestartPoint": "YES",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 62,
+    "Name": "140_90_B_Banker_9S",
+    "Comment": "済_バンカ-_9S_司令官を問い詰める",
+    "RoomNo": "r001",
+    "PlayerPos": "0.0 0.0 0.0 0.0",
+    "isRestartPoint": "YES",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 63,
+    "Name": "145_AB_Ruined_City_diningtable",
+    "Comment": "済_大廃墟都市_アダムとイヴの食卓：3回目",
+    "RoomNo": "r001",
+    "PlayerPos": "-37.51 116.06 708.58 0",
+    "isRestartPoint": "YES"
+   },
+   {
+    "order": 64,
+    "Name": "150_B_Banker_9S",
+    "Comment": "済_バンカー_9S",
+    "RoomNo": "r001",
+    "PlayerPos": "-103 154 -10",
+    "isRestartPoint": "YES",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 65,
+    "Name": "160_A_Ruined_City_2B",
+    "Comment": "済_大廃墟都市_レジスタンスキャンプへ向かう",
+    "RoomNo": "r001",
+    "PlayerPos": "-450 13 515 0",
+    "isRestartPoint": "YES"
+   },
+   {
+    "order": 66,
+    "Name": "160_B_Ruined_City_ArealBTL_9S",
+    "Comment": "空中戦_大廃墟都市",
+    "RoomNo": "r001",
+    "PlayerPos": "0 0 0 0",
+    "isRestartPoint": "NO",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 67,
+    "Name": "170_00_A_Resistance_Camp_2B",
+    "Comment": "レジスタンスキャンプ_食われるイベント",
+    "RoomNo": "r001",
+    "PlayerPos": "238 9.5 645 30",
+    "isRestartPoint": "YES"
+   },
+   {
+    "order": 68,
+    "Name": "170_10_A_Resistance_Camp_2B",
+    "Comment": "レジスタンスキャンプ_戦闘",
+    "RoomNo": "r001",
+    "PlayerPos": "246 10 654 90",
+    "isRestartPoint": "YES"
+   },
+   {
+    "order": 69,
+    "Name": "170_20_A_Resistance_Camp_2B",
+    "Comment": "レジスタンスキャンプ_爆発",
+    "RoomNo": "r001",
+    "PlayerPos": "278 10 658 170",
+    "isRestartPoint": "YES"
+   },
+   {
+    "order": 70,
+    "Name": "170_30_A_Resistance_Camp_2B",
+    "Comment": "レジスタンスキャンプ_クモボス戦闘",
+    "RoomNo": "r001",
+    "PlayerPos": "223.5 10.13 593 -160",
+    "isRestartPoint": "YES"
+   },
+   {
+    "order": 71,
+    "Name": "170_40_A_Resistance_Camp_2B",
+    "Comment": "レジスタンスキャンプ_9Sイベント（削除予定）",
+    "RoomNo": "r001",
+    "PlayerPos": "220 0 546.5 -120",
+    "isRestartPoint": "NO"
+   },
+   {
+    "order": 72,
+    "Name": "180_AB_Ruined_Front_Of_Camp",
+    "Comment": "大廃墟都市_キャンプ前",
+    "RoomNo": "r001",
+    "PlayerPos": "205 0 545 -135",
+    "isRestartPoint": "YES"
+   },
+   {
+    "order": 73,
+    "Name": "190_AB_Pascal_Village",
+    "Comment": "パスカルの村",
+    "RoomNo": "r001",
+    "PlayerPos": "248 3.7 71 -180",
+    "isRestartPoint": "YES"
+   },
+   {
+    "order": 74,
+    "Name": "195_AB_Pascal_Village_toEve",
+    "Comment": "パスカル村_イヴの元へ向かう",
+    "RoomNo": "r001",
+    "PlayerPos": "255 0.14 25.5 0",
+    "isRestartPoint": "YES"
+   },
+   {
+    "order": 75,
+    "Name": "200_00_AB_Ruined_City_Eve_EV",
+    "Comment": "大廃墟都市_イヴ戦_開始イベント（M1090_S0250_HD）",
+    "RoomNo": "r001",
+    "PlayerPos": "145.54 -67.36 365.25 -99.46",
+    "isRestartPoint": "YES"
+   },
+   {
+    "order": 76,
+    "Name": "200_10_AB_Ruined_City_EveBattle",
+    "Comment": "大廃墟都市_イヴ戦_1_無敵イヴとの戦い",
+    "RoomNo": "r001",
+    "PlayerPos": "145.54 -67.36 365.25 -99.46",
+    "isRestartPoint": "YES"
+   },
+   {
+    "order": 77,
+    "Name": "200_20_AB_Ruined_City_EveBattle",
+    "Comment": "大廃墟都市_イヴ戦_2_9Sを守る戦い",
+    "RoomNo": "r001",
+    "PlayerPos": "131.84 -66 365.52 155.49",
+    "isRestartPoint": "YES"
+   },
+   {
+    "order": 78,
+    "Name": "200_30_AB_Ruined_City_Eve_EV",
+    "Comment": "大廃墟都市_イヴ戦_中間イベント（M1090_S0290_HD）",
+    "RoomNo": "r001",
+    "PlayerPos": "131.84 -66 365.52 155.49",
+    "isRestartPoint": "YES"
+   },
+   {
+    "order": 79,
+    "Name": "200_40_AB_Ruined_City_EveBattle",
+    "Comment": "大廃墟都市_イヴ戦_3_最終形態（前半）",
+    "RoomNo": "r001",
+    "PlayerPos": "131.84 -66 365.52 155.49",
+    "isRestartPoint": "YES"
+   },
+   {
+    "order": 80,
+    "Name": "200_50_AB_Ruined_City_EveBattle",
+    "Comment": "大廃墟都市_イヴ戦_4_最終形態（削除予定→復活予定）",
+    "RoomNo": "r001",
+    "PlayerPos": "131.84 -66 365.52 155.49",
+    "isRestartPoint": "NO"
+   },
+   {
+    "order": 81,
+    "Name": "200_60_AB_Ruined_City_Eve_EV",
+    "Comment": "大廃墟都市_イヴ戦_終了イベント（M1090_S0310_HD）",
+    "RoomNo": "r001",
+    "PlayerPos": "131.84 -66 365.52 155.49",
+    "isRestartPoint": "NO"
+   },
+   {
+    "order": 82,
+    "Name": "200_70_AB_Ruined_City_end",
+    "Comment": "大廃墟都市_9Sの破壊",
+    "RoomNo": "r001",
+    "PlayerPos": "130 -67.58 367.89 137.58",
+    "isRestartPoint": "YES"
+   },
+   {
+    "order": 83,
+    "Name": "200_80_AB_Ruined_City_end",
+    "Comment": "大廃墟都市_HDイベント",
+    "RoomNo": "r001",
+    "PlayerPos": "130 -67.58 367.89 137.58",
+    "isRestartPoint": "YES"
+   }
+  ],
+  "p300": [
+   {
+    "order": 0,
+    "Name": "00_CD_Bunker_2B",
+    "Comment": "済_バンカー_自室へ移動",
+    "RoomNo": "r001",
+    "PlayerPos": "226  11 630 -135",
+    "isRestartPoint": "YES",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 1,
+    "Name": "00_10_CD_Bunker_Hangar_2B",
+    "Comment": "済_バンカー_格納庫へ移動",
+    "RoomNo": "r001",
+    "PlayerPos": "226  11 630 -135",
+    "isRestartPoint": "YES",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 2,
+    "Name": "10_CD_Ruined_City_9S",
+    "Comment": "大廃墟都市_防空システムハッキング",
+    "RoomNo": "r001",
+    "PlayerPos": "-89.21 61.44 641.9",
+    "isRestartPoint": "YES"
+   },
+   {
+    "order": 3,
+    "Name": "10_10_CD_Ruined_City_SPEnemy_9S",
+    "Comment": "大廃墟都市_特殊敵出現",
+    "RoomNo": "r001",
+    "PlayerPos": "172 1.2 37 -180",
+    "isRestartPoint": "YES"
+   },
+   {
+    "order": 4,
+    "Name": "15_CD_Ruined_City_9S",
+    "Comment": "大廃墟都市_ヨルハ降下開始",
+    "RoomNo": "r001",
+    "PlayerPos": "0.0 0.0 0.0 0.0",
+    "isRestartPoint": "NO"
+   },
+   {
+    "order": 5,
+    "Name": "17_CD_Bunker_Aerial_battle_2B",
+    "Comment": "済_バンカーから大廃墟都市へのＳＴＧ（２Ｂ操作）",
+    "RoomNo": "r001",
+    "PlayerPos": "0.0 0.0 0.0 0.0",
+    "isRestartPoint": "NO",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 6,
+    "Name": "20_CD_Ruined_City_2B",
+    "Comment": "大廃墟都市_大乱戦",
+    "RoomNo": "r001",
+    "PlayerPos": "-32.27 15.49 501.27",
+    "isRestartPoint": "YES"
+   },
+   {
+    "order": 7,
+    "Name": "21_CD_Ruined_City_2B",
+    "Comment": "大廃墟都市_大乱戦_煙すこし",
+    "RoomNo": "r001",
+    "PlayerPos": "209 31 265 180",
+    "isRestartPoint": "NO"
+   },
+   {
+    "order": 8,
+    "Name": "22_CD_Ruined_City_2B",
+    "Comment": "大廃墟都市_大乱戦_煙そこそこ",
+    "RoomNo": "r001",
+    "PlayerPos": "209 31 265 180",
+    "isRestartPoint": "NO"
+   },
+   {
+    "order": 9,
+    "Name": "23_CD_Ruined_City_2B",
+    "Comment": "大廃墟都市_大乱戦_煙最大",
+    "RoomNo": "r001",
+    "PlayerPos": "209 31 265 180",
+    "isRestartPoint": "NO"
+   },
+   {
+    "order": 10,
+    "Name": "25_CD_Ruined_City_2B",
+    "Comment": "大廃墟都市_最後の合流地点に向かう",
+    "RoomNo": "r001",
+    "PlayerPos": "150.50 -67.44 345.24 100",
+    "isRestartPoint": "YES"
+   },
+   {
+    "order": 11,
+    "Name": "26_CD_Ruined_City_9S",
+    "Comment": "大廃墟都市_EMP攻撃",
+    "RoomNo": "r001",
+    "PlayerPos": "-90.5 61.39 644 130",
+    "isRestartPoint": "YES"
+   },
+   {
+    "order": 12,
+    "Name": "26_10_CD_Ruined_City_9S",
+    "Comment": "大廃墟都市_ヨルハ汚染",
+    "RoomNo": "r001",
+    "PlayerPos": "-63.5 0.13 613.5 0",
+    "isRestartPoint": "YES"
+   },
+   {
+    "order": 13,
+    "Name": "27_CD_Ruined_City_2B",
+    "Comment": "大廃墟都市_ジャミング敵破壊・９S護衛バトル",
+    "RoomNo": "r001",
+    "PlayerPos": "-74.36 1.35 631.72 100",
+    "isRestartPoint": "NO"
+   },
+   {
+    "order": 14,
+    "Name": "28_CD_Ruined_City_9S",
+    "Comment": "未使用",
+    "RoomNo": "r001",
+    "PlayerPos": "155 -33 352 20",
+    "isRestartPoint": "NO"
+   },
+   {
+    "order": 15,
+    "Name": "30_00_CD_Bunker_2B",
+    "Comment": "済_バンカー",
+    "RoomNo": "r001",
+    "PlayerPos": "-70 142 0.4 90",
+    "isRestartPoint": "YES",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 16,
+    "Name": "30_10_CD_Bunker_Battle_2B",
+    "Comment": "済_バンカー_汚染ヨルハ戦",
+    "RoomNo": "r001",
+    "PlayerPos": "-112 133.61 0 -90",
+    "isRestartPoint": "YES",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 17,
+    "Name": "40_CD_Bunker_Shooting_2B",
+    "Comment": "済_バンカー降下シューティング",
+    "RoomNo": "r001",
+    "PlayerPos": "0.0 0.0 0.0 0.0",
+    "isRestartPoint": "NO",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 18,
+    "Name": "50_CD_Submerge_City_2B",
+    "Comment": "済_水没都市_バンカーから２B不時着",
+    "RoomNo": "r001",
+    "PlayerPos": "568.60 -70.58 779.78 -140",
+    "isRestartPoint": "YES"
+   },
+   {
+    "order": 19,
+    "Name": "50_10_CD_Ruined_City_A2Come_2B",
+    "Comment": "廃墟都市_A2と合流",
+    "RoomNo": "r001",
+    "PlayerPos": "155 -5.42 -63 -160",
+    "isRestartPoint": "NO"
+   },
+   {
+    "order": 20,
+    "Name": "50_20_CD_Ruined_City_2BDead_9S",
+    "Comment": "廃墟都市_2B死亡を目撃",
+    "RoomNo": "r001",
+    "PlayerPos": "211 22.91 220 180",
+    "isRestartPoint": "YES"
+   },
+   {
+    "order": 21,
+    "Name": "60_CD_POD",
+    "Comment": "POD??",
+    "RoomNo": "r001",
+    "PlayerPos": "-91 268 -3917 0",
+    "isRestartPoint": "YES",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 22,
+    "Name": "70_00_CD_1_Ruined_City",
+    "Comment": "A2-1/廃墟都市_ショッピングモール前で目が覚めるA2_00",
+    "RoomNo": "r001",
+    "PlayerPos": "159.97 1.34 -104.00",
+    "isRestartPoint": "YES"
+   },
+   {
+    "order": 23,
+    "Name": "70_10_CD_1_Ruined_City",
+    "Comment": "A2-1/廃墟都市_ショッピングモール前で目が覚めるA2_10",
+    "RoomNo": "r001",
+    "PlayerPos": "159.97 1.34 -104.00",
+    "isRestartPoint": "YES"
+   },
+   {
+    "order": 24,
+    "Name": "70_20_CD_1_Ruined_City",
+    "Comment": "A2-1/廃墟都市_ショッピングモール前で目が覚めるA2_20",
+    "RoomNo": "r001",
+    "PlayerPos": "159.97 1.34 -104.00",
+    "isRestartPoint": "YES"
+   },
+   {
+    "order": 25,
+    "Name": "70_CD_1_Ruined_City_A2",
+    "Comment": "A2-1/廃墟都市_ショッピングモール前で目が覚めるA2（削除予定）",
+    "RoomNo": "r001",
+    "PlayerPos": "159.97 1.34 -104.00",
+    "isRestartPoint": "NO"
+   },
+   {
+    "order": 26,
+    "Name": "80_CD_1_Desert_A2",
+    "Comment": "A2-1/砂漠_砂漠ボスエリアまで",
+    "RoomNo": "r001",
+    "PlayerPos": "-595 1 -217 -80",
+    "isRestartPoint": "YES"
+   },
+   {
+    "order": 27,
+    "Name": "81_CD_1_DesertBoss_HD_A2",
+    "Comment": "A2-1/砂漠_砂漠ボスHD",
+    "RoomNo": "r001",
+    "PlayerPos": "-1152.01 -32.92 -533.77 0",
+    "isRestartPoint": "YES"
+   },
+   {
+    "order": 28,
+    "Name": "82_CD_1_DesertBoss_1_A2",
+    "Comment": "A2-1/砂漠_砂漠ボス戦_1",
+    "RoomNo": "r001",
+    "PlayerPos": "-1152.01 -32.92 -533.77 0 0.0",
+    "isRestartPoint": "YES"
+   },
+   {
+    "order": 29,
+    "Name": "83_CD_1_DesertBoss_HD_2_A2",
+    "Comment": "A2-1/砂漠_砂漠ボスHD_2",
+    "RoomNo": "r001",
+    "PlayerPos": "-1152.01 -32.92 -533.77 0 0.0",
+    "isRestartPoint": "NO"
+   },
+   {
+    "order": 30,
+    "Name": "84_CD_1_DesertBoss_HK_A2",
+    "Comment": "A2-1/砂漠_砂漠ボスハッキング",
+    "RoomNo": "r001",
+    "PlayerPos": "-1152.01 -32.92 -533.77 0 0.0",
+    "isRestartPoint": "YES"
+   },
+   {
+    "order": 31,
+    "Name": "85_CD_1_DesertBoss_HK_HD_A2",
+    "Comment": "A2-1/砂漠_砂漠ボスハッキングHD",
+    "RoomNo": "r001",
+    "PlayerPos": "-1152.01 -32.92 -533.77 0 0.0",
+    "isRestartPoint": "YES"
+   },
+   {
+    "order": 32,
+    "Name": "90_CD_2_Pascal_Village_A2_SQ",
+    "Comment": "A2-2/砂漠からレジキャンへ（A2操作）",
+    "RoomNo": "r001",
+    "PlayerPos": "-1149.90 -33.01 -537.32 100",
+    "isRestartPoint": "YES"
+   },
+   {
+    "order": 33,
+    "Name": "91_00_CD_2_Pascal_Village_A2_SQ",
+    "Comment": "A2-2/パスカル村_フィルターの素材集め（A2操作）",
+    "RoomNo": "r001",
+    "PlayerPos": "399.71 0.65 -38.21 51.85",
+    "isRestartPoint": "YES"
+   },
+   {
+    "order": 34,
+    "Name": "91_10_CD_2_Pascal_Village_A2_SQ",
+    "Comment": "A2-2/パスカル村_遊び場の敵退治（A2操作）",
+    "RoomNo": "r001",
+    "PlayerPos": "399.71 0.65 -38.21 51.85",
+    "isRestartPoint": "YES"
+   },
+   {
+    "order": 35,
+    "Name": "91_20_CD_2_Pascal_Village_A2_SQ",
+    "Comment": "A2-2/パスカル村_レジキャンへ（A2操作）",
+    "RoomNo": "r001",
+    "PlayerPos": "399.71 0.65 -38.21 51.85",
+    "isRestartPoint": "YES"
+   },
+   {
+    "order": 36,
+    "Name": "95_CD_2_Pascal_Village_A2",
+    "Comment": "済_A2-2/パスカルの村（パスカル操作）",
+    "RoomNo": "r001",
+    "PlayerPos": "600 20 -43 0",
+    "isRestartPoint": "YES"
+   },
+   {
+    "order": 37,
+    "Name": "100_CD_2_Desert_A2",
+    "Comment": "A2-2/パスカル村のサブクエ後（A2操作）",
+    "RoomNo": "r001",
+    "PlayerPos": "263.13 9.48 659.33 -104.62",
+    "isRestartPoint": "YES"
+   },
+   {
+    "order": 38,
+    "Name": "110_CD_2_Pascal_Village_A2",
+    "Comment": "済_A2-2/パスカルの村",
+    "RoomNo": "r001",
+    "PlayerPos": "399.71 0.65 -38.21 51.85",
+    "isRestartPoint": "YES"
+   },
+   {
+    "order": 39,
+    "Name": "120_00_CD_2_RobotM_Shelter_A2",
+    "Comment": "済_A2-2/ロボット山_パスカルの絶望_避難所",
+    "RoomNo": "r001",
+    "PlayerPos": "-451 1.77 675 180",
+    "isRestartPoint": "YES"
+   },
+   {
+    "order": 40,
+    "Name": "120_30_CD_2_RobotM_TankBoss_A2",
+    "Comment": "済_A2-2/ロボット山_パスカルの絶望_戦車戦",
+    "RoomNo": "r001",
+    "PlayerPos": "-451.15 13 512.56 0",
+    "isRestartPoint": "NO"
+   },
+   {
+    "order": 41,
+    "Name": "120_50_CD_2_RobotM_Operate1_A2",
+    "Comment": "済_A2-2/ロボット山_巨大ロボ操作開始",
+    "RoomNo": "r001",
+    "PlayerPos": "-451.15 13 512.56 0",
+    "isRestartPoint": "YES"
+   },
+   {
+    "order": 42,
+    "Name": "120_70_CD_2_RobotM_Operate2_A2",
+    "Comment": "済_A2-2/ロボット山_巨大ロボVS巨大ロボ",
+    "RoomNo": "r001",
+    "PlayerPos": "-451.15 13 512.56 0",
+    "isRestartPoint": "YES"
+   },
+   {
+    "order": 43,
+    "Name": "120_90_CD_2_RobotM_Pascal_A2",
+    "Comment": "済_A2-2/ロボット山_パスカルの最後の選択",
+    "RoomNo": "r001",
+    "PlayerPos": "-451.15 13 597.77 0",
+    "isRestartPoint": "YES"
+   },
+   {
+    "order": 44,
+    "Name": "120_95_CD_2_Branch_A2_9S",
+    "Comment": "ポッド会話_A2（２回目）終了",
+    "RoomNo": "r001",
+    "PlayerPos": "-91 268 -3917 0",
+    "isRestartPoint": "NO",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 45,
+    "Name": "130_00_CD_Pod_Talk",
+    "Comment": "ポッド会話_A2（１回目）終了",
+    "RoomNo": "r001",
+    "PlayerPos": "-91 268 -3917 0",
+    "isRestartPoint": "NO",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 46,
+    "Name": "140_CD_1_Resistance_Camp_9S",
+    "Comment": "済_9S-1/レジスタンスキャンプ",
+    "RoomNo": "r001",
+    "PlayerPos": "268.77 -10 676.35 130.00",
+    "isRestartPoint": "YES"
+   },
+   {
+    "order": 47,
+    "Name": "150_CD_Ruined_City_9S",
+    "Comment": "9S-1/大廃墟都市",
+    "RoomNo": "r001",
+    "PlayerPos": "117.029877 -67.675865 350.16922 85.88",
+    "isRestartPoint": "YES"
+   },
+   {
+    "order": 48,
+    "Name": "160_00_CD_1_Forest_Castle_9S",
+    "Comment": "9S-1/森の城_資源回収ユニットへ移動",
+    "RoomNo": "r001",
+    "PlayerPos": "126.381508 1.208 -155.002518 -127.81",
+    "isRestartPoint": "YES"
+   },
+   {
+    "order": 49,
+    "Name": "160_10_CD_1_Forest_Castle_9S",
+    "Comment": "9S-1/森の城_資源回収ユニットの前",
+    "RoomNo": "r001",
+    "PlayerPos": "553.995422 -10.81904 -505.24231 90.23",
+    "isRestartPoint": "YES"
+   },
+   {
+    "order": 50,
+    "Name": "160_20_CD_1_Forest_Castle_9S",
+    "Comment": "済_9S-1/森の城_資源回収ユニット内部",
+    "RoomNo": "g5a000",
+    "PlayerPos": "687 139 -344 1",
+    "isRestartPoint": "YES",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 51,
+    "Name": "165_00_CD_1_Forest_Castle_9S",
+    "Comment": "9S-1/森の城_未使用予定",
+    "RoomNo": "g5a000",
+    "PlayerPos": "711.68 -26.39 -330.87 -121",
+    "isRestartPoint": "NO",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 52,
+    "Name": "170_00_CD_2_Forest_Castle_9S",
+    "Comment": "9S-2/森の城_資源回収ユニットの外",
+    "RoomNo": "r001",
+    "PlayerPos": "650 -61 -343 180",
+    "isRestartPoint": "NO"
+   },
+   {
+    "order": 53,
+    "Name": "170_10_CD_2_Pod_Talk",
+    "Comment": "ポッド会話_9S（１回目）終了",
+    "RoomNo": "r001",
+    "PlayerPos": "-91 268 -3917 0",
+    "isRestartPoint": "NO",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 54,
+    "Name": "180_00_CD_2_Forest_Castle_9S_2",
+    "Comment": "9S-2/森の城（ロボット殺した後から開始）",
+    "RoomNo": "r001",
+    "PlayerPos": "651.17 -66.20 -342.00 -2.05",
+    "isRestartPoint": "YES",
+    "ManualMap": "NO"
+   },
+   {
+    "order": 55,
+    "Name": "180_10_CD_2_Submerge_City_9S",
+    "Comment": "済_9S-2/水没都市_塔前〜屋上",
+    "RoomNo": "r001",
+    "PlayerPos": "477.5 -63.77 615.5 30",
+    "isRestartPoint": "YES",
+    "ManuaMap": "YES"
+   },
+   {
+    "order": 56,
+    "Name": "180_20_CD_2_Submerge_City_9S",
+    "Comment": "済_9S-2/水没都市",
+    "RoomNo": "g5a100",
+    "PlayerPos": "0 0 -122 0",
+    "isRestartPoint": "NO",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 57,
+    "Name": "180_30_CD_2_Pod_Talk",
+    "Comment": "ポッド会話_9S（２回目）終了",
+    "RoomNo": "g5a001",
+    "PlayerPos": "-91 268 -3917 0",
+    "isRestartPoint": "NO",
+    "ManuaMap": "YES"
+   },
+   {
+    "order": 58,
+    "Name": "190_CD_2_Hack_Game_9S",
+    "Comment": "9S-2/ハッキングゲーム",
+    "RoomNo": "r001",
+    "PlayerPos": "0.0 0.0 0.0 0.0",
+    "isRestartPoint": "NO"
+   },
+   {
+    "order": 59,
+    "Name": "200_CD_Robot_Mountain_A2",
+    "Comment": "済_ロボット山終了後_遊園地へ",
+    "RoomNo": "r001",
+    "PlayerPos": "-452.51 13.01 621.63 -1.28",
+    "isRestartPoint": "NO"
+   },
+   {
+    "order": 60,
+    "Name": "210_CD_Amusement_Park_A2",
+    "Comment": "遊園地　未使用",
+    "RoomNo": "r001",
+    "PlayerPos": "383 5 295 90",
+    "isRestartPoint": "NO"
+   },
+   {
+    "order": 61,
+    "Name": "220_CD_Submerge_City_9S",
+    "Comment": "ポッド会話（合流）",
+    "RoomNo": "r001",
+    "PlayerPos": "-91 268 -3917 0",
+    "isRestartPoint": "NO",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 62,
+    "Name": "220_10_CD_GotoCamp_Yoroyoro_9S",
+    "Comment": "済_ヨロヨロしながらレジキャンへ行く9S",
+    "RoomNo": "r001",
+    "PlayerPos": "589.067322 -73.610138 837.040894 -160",
+    "isRestartPoint": "YES"
+   },
+   {
+    "order": 63,
+    "Name": "220_20_CD_ResiCamp_DeboPopo_HD",
+    "Comment": "済_デボポポ立ち上がりHD",
+    "RoomNo": "r001",
+    "PlayerPos": "268.72 9.49 661.22 35.19",
+    "isRestartPoint": "YES"
+   },
+   {
+    "order": 64,
+    "Name": "220_30_CD_ResiCamp_Recover_9S",
+    "Comment": "済_デボポポに修復してもらう９S",
+    "RoomNo": "r001",
+    "PlayerPos": "268.72 9.49 661.22 35.19",
+    "isRestartPoint": "YES"
+   },
+   {
+    "order": 65,
+    "Name": "230_CD_Resistance_Camp_9S",
+    "Comment": "済_レジキャンから遊園地の資源回収ユニットへ移動",
+    "RoomNo": "r001",
+    "PlayerPos": "268.805878 9.48248 664.255798 0.649174",
+    "isRestartPoint": "YES"
+   },
+   {
+    "order": 66,
+    "Name": "240_CD_Amusement_Park",
+    "Comment": "削除予定　遊園地_資源回収ユニット前",
+    "RoomNo": "r001",
+    "PlayerPos": "-450 25 619 0",
+    "isRestartPoint": "NO"
+   },
+   {
+    "order": 67,
+    "Name": "240_10_CD_Amusement_Park_9S",
+    "Comment": "済_遊園地_資源回収ユニット１F_9S",
+    "RoomNo": "g5a200",
+    "PlayerPos": "738.056335 31.3571 295.349792 158.50",
+    "isRestartPoint": "YES",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 68,
+    "Name": "240_20_CD_Amusement_Park_9S",
+    "Comment": "済_遊園地_資源回収ユニット3F_9S",
+    "RoomNo": "g5a200",
+    "PlayerPos": "790 190 313 -132",
+    "isRestartPoint": "YES",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 69,
+    "Name": "240_30_CD_Amusement_Park_9S",
+    "Comment": "済_遊園地_資ユニ_汚染ヨルハHD_9S",
+    "RoomNo": "g5a200",
+    "PlayerPos": "739.706543 218.367477 279.340515 58.99",
+    "isRestartPoint": "YES",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 70,
+    "Name": "240_40_CD_Amusement_Park_9S",
+    "Comment": "済_遊園地_資ユニ_汚染ヨルハ戦_9S",
+    "RoomNo": "g5a200",
+    "PlayerPos": "746 218 284 46",
+    "isRestartPoint": "YES",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 71,
+    "Name": "240_50_CD_Amusement_Park_A2",
+    "Comment": "済_遊園地_資ユニ_腕ボスHD_A2",
+    "RoomNo": "g5a200",
+    "PlayerPos": "746 218 284 46",
+    "isRestartPoint": "YES",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 72,
+    "Name": "240_60_CD_Amusement_Park_A2",
+    "Comment": "済_遊園地_資ユニ_腕ボス戦_A2",
+    "RoomNo": "g5a200",
+    "PlayerPos": "746 218 284 46",
+    "isRestartPoint": "NO",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 73,
+    "Name": "240_70_CD_Amusement_Park_A2",
+    "Comment": "済_遊園地_資ユニ_腕ボスHD2_A2",
+    "RoomNo": "g5a200",
+    "PlayerPos": "746 218 284 46",
+    "isRestartPoint": "YES",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 74,
+    "Name": "240_80_CD_Amusement_Park_A2",
+    "Comment": "済_遊園地_資ユニ_兄弟_A2",
+    "RoomNo": "g5a200",
+    "PlayerPos": "746 218 284 46",
+    "isRestartPoint": "YES",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 75,
+    "Name": "250_CD_Unknown_9S",
+    "Comment": "遊園地_塔へ向かう９S",
+    "RoomNo": "r001",
+    "PlayerPos": "414.75 -0.18 294.55 -87.99",
+    "isRestartPoint": "YES"
+   },
+   {
+    "order": 76,
+    "Name": "260_00_CD_Ruined_City_9S",
+    "Comment": "大廃墟都市_塔をハッキング",
+    "RoomNo": "r001",
+    "PlayerPos": "137 -67 345 98",
+    "isRestartPoint": "YES"
+   },
+   {
+    "order": 77,
+    "Name": "270_CD_Tower_9S",
+    "Comment": "塔_9S初回_サウンドノベル",
+    "RoomNo": "r001",
+    "PlayerPos": "172 -66 351 -90",
+    "isRestartPoint": "NO"
+   },
+   {
+    "order": 78,
+    "Name": "275_CD_Tower_walk_9S",
+    "Comment": "済_塔_9S初回_廊下",
+    "RoomNo": "g50001",
+    "PlayerPos": "148 -58 352 -97",
+    "isRestartPoint": "YES",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 79,
+    "Name": "277_CD_Tower_2Bbtl_9S",
+    "Comment": "塔_9S初回_汚染２B登場",
+    "RoomNo": "g50001",
+    "PlayerPos": "-1.04 -28.50 338.35 0",
+    "isRestartPoint": "YES",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 80,
+    "Name": "280_CD_Ruined_City_A2",
+    "Comment": "大虚構都市_A2が塔へ向かう",
+    "RoomNo": "r001",
+    "PlayerPos": "311.279114 0.07279 272.049011 -111.68",
+    "isRestartPoint": "YES"
+   },
+   {
+    "order": 81,
+    "Name": "290_CD_Tower_A2",
+    "Comment": "塔_塔へ入るA2",
+    "RoomNo": "g50001",
+    "PlayerPos": "153 -58 353 -90",
+    "isRestartPoint": "YES",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 82,
+    "Name": "293_CD_Tower_LibraryHack_A2",
+    "Comment": "塔_図書館探索",
+    "RoomNo": "g50001",
+    "PlayerPos": "136.72 -10.57 450 90",
+    "isRestartPoint": "YES",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 83,
+    "Name": "295_CD_Tower_SelfHack_9S",
+    "Comment": "塔_崩落_９Sセルフハッキング",
+    "RoomNo": "g50001",
+    "PlayerPos": "0 -92 352",
+    "isRestartPoint": "YES",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 84,
+    "Name": "295_10_CD_Tower_RedGirl_9S",
+    "Comment": "塔_９S赤い少女戦",
+    "RoomNo": "g50001",
+    "PlayerPos": "-70 -92 350",
+    "isRestartPoint": "YES",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 85,
+    "Name": "295_20_CD_Tower_Yoruha_9S",
+    "Comment": "塔_汚染ヨルハ再戦",
+    "RoomNo": "g50001",
+    "PlayerPos": "-110 -92 353",
+    "isRestartPoint": "YES",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 86,
+    "Name": "297_CD_Tower_Library_A2",
+    "Comment": "塔_図書館_A2",
+    "RoomNo": "g50001",
+    "PlayerPos": "135 -9 450 90",
+    "isRestartPoint": "NO",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 87,
+    "Name": "298_CD_Tower_RedGirl_A2",
+    "Comment": "塔_A2赤い少女戦",
+    "RoomNo": "g5a400",
+    "PlayerPos": "16.7 0 -114.4",
+    "isRestartPoint": "NO",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 88,
+    "Name": "300_00_CD_Tower_Elevator_A2",
+    "Comment": "塔_エレベーター_1（クモ戦1）",
+    "RoomNo": "g50001",
+    "PlayerPos": "210 -15 412 180",
+    "isRestartPoint": "YES",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 89,
+    "Name": "310_00_CD_Shooting_9S",
+    "Comment": "塔　９Ｓ　ＳＴＧ１",
+    "RoomNo": "g50001",
+    "PlayerPos": "-103 -79 223 -1.38",
+    "isRestartPoint": "NO",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 90,
+    "Name": "300_10_CD_Tower_Elevator_A2",
+    "Comment": "塔_エレベーター_2（ザコ戦1）",
+    "RoomNo": "g50001",
+    "PlayerPos": "215 -15.43 442 180",
+    "isRestartPoint": "NO",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 91,
+    "Name": "310_10_CD_Shooting_9S",
+    "Comment": "塔　９Ｓ　ＳＴＧ２",
+    "RoomNo": "g50001",
+    "PlayerPos": "-103 -79 223 -1.38",
+    "isRestartPoint": "NO",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 92,
+    "Name": "300_20_CD_Tower_Elevator_A2",
+    "Comment": "塔_エレベーター_3（ザコ戦２）",
+    "RoomNo": "g50001",
+    "PlayerPos": "215 -15.43 442 180",
+    "isRestartPoint": "NO",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 93,
+    "Name": "310_20_CD_Shooting_9S",
+    "Comment": "塔　９Ｓ　ＳＴＧ３",
+    "RoomNo": "g50001",
+    "PlayerPos": "-103 -79 223 -1.38",
+    "isRestartPoint": "NO",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 94,
+    "Name": "300_30_CD_Tower_Elevator_A2",
+    "Comment": "塔_エレベーター_4（クモ戦2）",
+    "RoomNo": "g50001",
+    "PlayerPos": "215 -15.43 442 180",
+    "isRestartPoint": "NO",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 95,
+    "Name": "310_30_CD_Shooting_9S",
+    "Comment": "塔　９Ｓ　ＳＴＧ４（3D STG）",
+    "RoomNo": "g50001",
+    "PlayerPos": "-103 3 223 -1.38",
+    "isRestartPoint": "NO",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 96,
+    "Name": "300_40_CD_Tower_Elevator_A2",
+    "Comment": "塔_エレベーター_5（9Sと切り替え戦闘中）",
+    "RoomNo": "g50001",
+    "PlayerPos": "215 -15.43 442 180",
+    "isRestartPoint": "NO",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 97,
+    "Name": "310_50_CD_Shooting_3Dbattle_9S",
+    "Comment": "※未使用です",
+    "RoomNo": "g50001",
+    "PlayerPos": "0 0 0 0",
+    "isRestartPoint": "YES",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 98,
+    "Name": "315_CD_Tower_Unite",
+    "Comment": "塔_クモボス合体",
+    "RoomNo": "g50001",
+    "PlayerPos": "172 2213 277 -180",
+    "isRestartPoint": "YES",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 99,
+    "Name": "320_CD_Tower_Summit",
+    "Comment": "塔_頂上",
+    "RoomNo": "g50001",
+    "PlayerPos": "211 5244 370 -180",
+    "isRestartPoint": "YES",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 100,
+    "Name": "330_CD_Tower_Versus",
+    "Comment": "塔_決着",
+    "RoomNo": "g50001",
+    "PlayerPos": "172 2213 277 -180",
+    "isRestartPoint": "YES",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 101,
+    "Name": "332_CD_Tower_Talk",
+    "Comment": "塔_口論",
+    "RoomNo": "g50001",
+    "PlayerPos": "172 2213 277 -180",
+    "isRestartPoint": "YES",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 102,
+    "Name": "335_CD_Tower_sele9S",
+    "Comment": "塔_９S選択",
+    "RoomNo": "g50001",
+    "PlayerPos": "218 5243 361 80",
+    "isRestartPoint": "YES",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 103,
+    "Name": "335_CD_Tower_seleA2",
+    "Comment": "塔_A2選択",
+    "RoomNo": "g50001",
+    "PlayerPos": "172 2213 277 -180",
+    "isRestartPoint": "YES",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 104,
+    "Name": "340_C_Tower_9Swin",
+    "Comment": "塔_９S勝利",
+    "RoomNo": "g50001",
+    "PlayerPos": "172 2213 277 -180",
+    "isRestartPoint": "NO",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 105,
+    "Name": "340_D_Tower_A2win",
+    "Comment": "塔_A2勝利",
+    "RoomNo": "g50001",
+    "PlayerPos": "172 2213 277 -180",
+    "isRestartPoint": "NO",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 106,
+    "Name": "345_D_Tower_A2win_9Shack",
+    "Comment": "塔_A2勝利_9Sの内面",
+    "RoomNo": "g50001",
+    "PlayerPos": "172 2213 277 -180",
+    "isRestartPoint": "NO",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 107,
+    "Name": "350_CD_TrueEnd_STG",
+    "Comment": "最終エンディング_STG",
+    "RoomNo": "r000",
+    "PlayerPos": "0 0 0 0",
+    "isRestartPoint": "YES",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 108,
+    "Name": "360_CD_TrueEnd_FIN",
+    "Comment": "最終エンディング_終幕",
+    "RoomNo": "r000",
+    "PlayerPos": "0 0 0 0",
+    "isRestartPoint": "NO",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 109,
+    "Name": "bugTest",
+    "Comment": "バグテスト用",
+    "RoomNo": "r001",
+    "PlayerPos": "0.0 0.0 0.0 0.0",
+    "isRestartPoint": "NO"
+   }
+  ],
+  "p400": [
+   {
+    "order": 0,
+    "Name": "10_00_firstChoice",
+    "Comment": "初めて遊園地地下でテレビにアクセス",
+    "RoomNo": "g5ac00",
+    "PlayerPos": "914.14 -3.65 309.11 90",
+    "isRestartPoint": "YES",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 1,
+    "Name": "20_00_LoadNovel_1_1",
+    "Comment": "プラトン起動のロードノベル",
+    "RoomNo": "g5ac00",
+    "PlayerPos": "-476.30 -259.96 159.58 90",
+    "isRestartPoint": "NO",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 2,
+    "Name": "20_10_Plato_BootUp",
+    "Comment": "プラトン操作開始",
+    "RoomNo": "g5ac00",
+    "PlayerPos": "-476.30 -259.96 159.58 90",
+    "isRestartPoint": "YES",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 3,
+    "Name": "20_20_ExerciseTest",
+    "Comment": "プラトン＿運動試験開始",
+    "RoomNo": "g5ac00",
+    "PlayerPos": "-339.67 -280.67 323.80",
+    "isRestartPoint": "NO",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 4,
+    "Name": "20_30_LoadNovel_1_2",
+    "Comment": "運動試験後のロードノベル",
+    "RoomNo": "g5ac00",
+    "PlayerPos": "-331.38 -280.71 323.40 90",
+    "isRestartPoint": "NO",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 5,
+    "Name": "30_00_SecondChoice",
+    "Comment": "テレビにアクセス-2回目（初期位置テレビ付近）",
+    "RoomNo": "g5ac00",
+    "PlayerPos": "942.2 -3.22 312.84 136",
+    "isRestartPoint": "YES",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 6,
+    "Name": "30_10_SecondChoice",
+    "Comment": "テレビにアクセス-2回目（初期位置エレベーター付近）",
+    "RoomNo": "g5ac00",
+    "PlayerPos": "936.69 -3.65 309.11 90",
+    "isRestartPoint": "NO",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 7,
+    "Name": "40_00_Plato_Hacking",
+    "Comment": "ロードノベル後のハッキング空間",
+    "RoomNo": "g5ac00",
+    "PlayerPos": "-479.98 -284.65 314.50 0",
+    "isRestartPoint": "NO",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 8,
+    "Name": "40_10_BattleTest1",
+    "Comment": "訓練部屋＿第1戦",
+    "RoomNo": "g5ac00",
+    "PlayerPos": "-479.98 -284.65 314.50 0",
+    "isRestartPoint": "YES",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 9,
+    "Name": "40_20_BattleTest2",
+    "Comment": "訓練部屋＿第2戦",
+    "RoomNo": "g5ac00",
+    "PlayerPos": "-479.98 -284.65 314.50 0",
+    "isRestartPoint": "NO",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 10,
+    "Name": "40_30_BattleTest3",
+    "Comment": "訓練部屋＿第3戦",
+    "RoomNo": "g5ac00",
+    "PlayerPos": "-479.98 -284.65 314.50 0",
+    "isRestartPoint": "NO",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 11,
+    "Name": "40_40_BattleTest4",
+    "Comment": "訓練部屋＿第4戦",
+    "RoomNo": "g5ac00",
+    "PlayerPos": "-479.98 -284.65 314.50 0",
+    "isRestartPoint": "NO",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 12,
+    "Name": "40_50_BattleTest5",
+    "Comment": "訓練部屋＿第5戦(必ず負ける)",
+    "RoomNo": "g5ac00",
+    "PlayerPos": "-479.98 -284.65 314.50 0",
+    "isRestartPoint": "NO",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 13,
+    "Name": "40_90_LoadNovel_2",
+    "Comment": "戦闘訓練後のロードノベル",
+    "RoomNo": "g5ac00",
+    "PlayerPos": "-479.98 -284.65 314.50 0",
+    "isRestartPoint": "NO",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 14,
+    "Name": "50_00_ThirdChoice",
+    "Comment": "テレビにアクセス-3回目（初期位置テレビ付近）",
+    "RoomNo": "g5ac00",
+    "PlayerPos": "942.2 -3.22 312.84 136",
+    "isRestartPoint": "YES",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 15,
+    "Name": "50_10_ThirdChoice",
+    "Comment": "テレビにアクセス-3回目（初期位置エレベーター付近）",
+    "RoomNo": "g5ac00",
+    "PlayerPos": "936.69 -3.65 309.11 90",
+    "isRestartPoint": "NO",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 16,
+    "Name": "60_00_OrganizePapers",
+    "Comment": "小型ゼンマイ操作開始",
+    "RoomNo": "g5ac00",
+    "PlayerPos": "-476.30 -259.96 159.58 90",
+    "isRestartPoint": "YES",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 17,
+    "Name": "80_00_FIN",
+    "Comment": "クエストクリア後",
+    "RoomNo": "g5ac00",
+    "PlayerPos": "914.14 -3.65 309.11 90",
+    "isRestartPoint": "NO",
+    "ManualMap": "YES"
+   }
+  ],
+  "pf00": [
+   {
+    "order": 0,
+    "Name": "SIGNIN",
+    "RoomNo": "rf00",
+    "PlayerPos": "0.0 0.0 0.0 0.0",
+    "isRestartPoint": "NO"
+   },
+   {
+    "order": 1,
+    "Name": "START",
+    "RoomNo": "rf00",
+    "PlayerPos": "0.0 0.0 0.0 0.0",
+    "isRestartPoint": "NO",
+    "BgmStart": null,
+    "BgmThrough": null,
+    "ManualMap": "YES"
+   }
+  ],
+  "pf10": [
+   {
+    "order": 0,
+    "Name": "EndRoll_A",
+    "Comment": "Aルートエンドロール",
+    "RoomNo": "r001 g5f0001",
+    "PlayerPos": "0.0 0.0 0.0 0.0",
+    "isRestartPoint": "NO",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 1,
+    "Name": "BackTitle_A",
+    "Comment": "Aルート後、タイトル画面へ遷移",
+    "RoomNo": "r001 g5f0001",
+    "PlayerPos": "0.0 0.0 0.0 0.0",
+    "isRestartPoint": "NO",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 2,
+    "Name": "BackTitle_B",
+    "Comment": "Bルート後、タイトル画面へ遷移",
+    "RoomNo": "r001 g5f0001",
+    "PlayerPos": "0.0 0.0 0.0 0.0",
+    "isRestartPoint": "NO",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 3,
+    "Name": "EndRoll_CD",
+    "Comment": "CDルートエンドロール",
+    "RoomNo": "r001 g5f0001",
+    "PlayerPos": "0.0 0.0 0.0 0.0",
+    "isRestartPoint": "NO",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 4,
+    "Name": "BackTitle_CD",
+    "Comment": "C/Dルート後、タイトル画面へ遷移",
+    "RoomNo": "r001 g5f0001",
+    "PlayerPos": "0.0 0.0 0.0 0.0",
+    "isRestartPoint": "NO",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 5,
+    "Name": "BackTitle_True",
+    "Comment": "最終ルート後、タイトル画面へ遷移",
+    "RoomNo": "r001 g5f0001",
+    "PlayerPos": "0.0 0.0 0.0 0.0",
+    "isRestartPoint": "NO",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 6,
+    "Name": "BackTitle_FIN",
+    "Comment": "オンライン名前登録",
+    "RoomNo": "r001 g5f0001",
+    "PlayerPos": "0.0 0.0 0.0 0.0",
+    "isRestartPoint": "NO",
+    "ManualMap": "YES"
+   }
+  ],
+  "pf20": [
+   {
+    "order": 0,
+    "Name": "START",
+    "Comment": "コメント欄",
+    "RoomNo": "r001",
+    "PlayerPos": "0.0 0.0 0.0 0.0",
+    "isRestartPoint": "NO"
+   }
+  ],
+  "pf30": [
+   {
+    "order": 0,
+    "Name": "Ending_E",
+    "Comment": "未使用",
+    "RoomNo": "r001",
+    "PlayerPos": "0.0 0.0 0.0 0.0",
+    "isRestartPoint": "NO"
+   },
+   {
+    "order": 1,
+    "Name": "Ending_F",
+    "Comment": "B_プロローグ時、再構築ゲームで長時間放置",
+    "RoomNo": "r001",
+    "PlayerPos": "0.0 0.0 0.0 0.0",
+    "isRestartPoint": "NO",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 2,
+    "Name": "Ending_G",
+    "Comment": "B_プロローグで飛行ユニットに乗らず逃走",
+    "RoomNo": "r001",
+    "PlayerPos": "0.0 0.0 0.0 0.0",
+    "isRestartPoint": "NO",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 3,
+    "Name": "Ending_H",
+    "Comment": "AB_巨大ロボ遭遇時に逃走",
+    "RoomNo": "r001",
+    "PlayerPos": "0.0 0.0 0.0 0.0",
+    "isRestartPoint": "NO",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 4,
+    "Name": "Ending_I",
+    "Comment": "A_コピー都市で９S放置して逃走",
+    "RoomNo": "r001",
+    "PlayerPos": "0.0 0.0 0.0 0.0",
+    "isRestartPoint": "NO",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 5,
+    "Name": "Ending_J",
+    "Comment": "A_和平を望むロボを殺害",
+    "RoomNo": "r001",
+    "PlayerPos": "0.0 0.0 0.0 0.0",
+    "isRestartPoint": "NO",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 6,
+    "Name": "Ending_K",
+    "Comment": "いつでも_アジを食べる",
+    "RoomNo": "r001",
+    "PlayerPos": "0.0 0.0 0.0 0.0",
+    "isRestartPoint": "NO",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 7,
+    "Name": "Ending_L",
+    "Comment": "AB_レジキャン襲撃〜イヴ戦間でエリア外へ逃走",
+    "RoomNo": "r001",
+    "PlayerPos": "0.0 0.0 0.0 0.0",
+    "isRestartPoint": "NO",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 8,
+    "Name": "Ending_M",
+    "Comment": "CD_パスカル村襲撃ミッション中に村から逃走",
+    "RoomNo": "r001",
+    "PlayerPos": "0.0 0.0 0.0 0.0",
+    "isRestartPoint": "NO",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 9,
+    "Name": "Ending_N",
+    "Comment": "CD_パスカル村の村人を全滅させる",
+    "RoomNo": "r001",
+    "PlayerPos": "0.0 0.0 0.0 0.0",
+    "isRestartPoint": "NO",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 10,
+    "Name": "Ending_O",
+    "Comment": "CD_大乱戦中に逃走",
+    "RoomNo": "r001",
+    "PlayerPos": "0.0 0.0 0.0 0.0",
+    "isRestartPoint": "NO",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 11,
+    "Name": "Ending_P",
+    "Comment": "CD_２Bがショッピングモール移動時、逃走",
+    "RoomNo": "r001",
+    "PlayerPos": "0.0 0.0 0.0 0.0",
+    "isRestartPoint": "NO",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 12,
+    "Name": "Ending_Q",
+    "Comment": "CD_９Sがショッピングモール移動時、逃走",
+    "RoomNo": "r001",
+    "PlayerPos": "0.0 0.0 0.0 0.0",
+    "isRestartPoint": "NO",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 13,
+    "Name": "Ending_R",
+    "Comment": "CD_パスカル村の避難している住人を殺す",
+    "RoomNo": "r001",
+    "PlayerPos": "0.0 0.0 0.0 0.0",
+    "isRestartPoint": "NO",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 14,
+    "Name": "Ending_S",
+    "Comment": "CD_デボルポポルを残して廃墟都市から逃走。",
+    "RoomNo": "r001",
+    "PlayerPos": "0.0 0.0 0.0 0.0",
+    "isRestartPoint": "NO",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 15,
+    "Name": "Ending_T",
+    "Comment": "いつでも_OSチップを外す",
+    "RoomNo": "r001",
+    "PlayerPos": "0.0 0.0 0.0 0.0",
+    "isRestartPoint": "NO",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 16,
+    "Name": "Ending_U",
+    "Comment": "いつでも_バンカーで自爆",
+    "RoomNo": "r001",
+    "PlayerPos": "0.0 0.0 0.0 0.0",
+    "isRestartPoint": "NO",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 17,
+    "Name": "Ending_V",
+    "Comment": "CD_塔メインユニットハッキングをセずに放置",
+    "RoomNo": "r001",
+    "PlayerPos": "0.0 0.0 0.0 0.0",
+    "isRestartPoint": "NO",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 18,
+    "Name": "Ending_W",
+    "Comment": "AB_プロローグロボット山で死亡",
+    "RoomNo": "r001",
+    "PlayerPos": "0.0 0.0 0.0 0.0",
+    "isRestartPoint": "NO",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 19,
+    "Name": "Ending_X",
+    "Comment": "CD_A2で２Bを助けずに逃走",
+    "RoomNo": "r001",
+    "PlayerPos": "0.0 0.0 0.0 0.0",
+    "isRestartPoint": "NO",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 20,
+    "Name": "Ending_Y",
+    "Comment": "CD_エミール最終戦で逃亡",
+    "RoomNo": "r001",
+    "PlayerPos": "0.0 0.0 0.0 0.0",
+    "isRestartPoint": "NO",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 21,
+    "Name": "Ending_Z",
+    "Comment": "CD_レジキャン前のパスカルを殺す",
+    "RoomNo": "r001",
+    "PlayerPos": "0.0 0.0 0.0 0.0",
+    "isRestartPoint": "NO",
+    "ManualMap": "YES"
+   }
+  ],
+  "pf31": [
+   {
+    "order": 0,
+    "Name": "start",
+    "Comment": "コメント欄",
+    "RoomNo": "r001",
+    "PlayerPos": "0.0 0.0 0.0 0.0",
+    "isRestartPoint": "NO"
+   },
+   {
+    "order": 1,
+    "Name": "endroll1",
+    "Comment": "スタッフロール１",
+    "RoomNo": "r001",
+    "PlayerPos": "0.0 0.0 0.0 0.0",
+    "isRestartPoint": "NO"
+   },
+   {
+    "order": 2,
+    "Name": "endroll2",
+    "Comment": "スタッフロール２",
+    "RoomNo": "r001",
+    "PlayerPos": "0.0 0.0 0.0 0.0",
+    "isRestartPoint": "NO"
+   },
+   {
+    "order": 3,
+    "Name": "shooting",
+    "Comment": "シューティング",
+    "RoomNo": "r001",
+    "PlayerPos": "0.0 0.0 0.0 0.0",
+    "isRestartPoint": "NO"
+   },
+   {
+    "order": 4,
+    "Name": "clear",
+    "Comment": "シューティングクリア",
+    "RoomNo": "r001",
+    "PlayerPos": "0.0 0.0 0.0 0.0",
+    "isRestartPoint": "NO"
+   }
+  ],
+  "pf40": [
+   {
+    "order": 0,
+    "Name": "save_p100_10",
+    "Comment": "セーブ画面：2Bと9Sバンカー会話後",
+    "RoomNo": "r001",
+    "PlayerPos": "0.0 0.0 0.0 0.0",
+    "isRestartPoint": "NO"
+   },
+   {
+    "order": 1,
+    "Name": "save_sub900",
+    "Comment": "セーブ画面：エミール最後の戦い",
+    "RoomNo": "r001",
+    "PlayerPos": "0.0 0.0 0.0 0.0",
+    "isRestartPoint": "NO"
+   }
+  ],
+  "pf50": [
+   {
+    "order": 0,
+    "Name": "trial_end",
+    "Comment": "コメント欄",
+    "RoomNo": "r001",
+    "PlayerPos": "0.0 0.0 0.0 0.0",
+    "isRestartPoint": "NO",
+    "ManualMap": "YES"
+   }
+  ],
+  "pf60": [
+   {
+    "order": 0,
+    "Name": "EndRoll_DLC",
+    "Comment": "DLCエンドロール",
+    "RoomNo": "r001",
+    "PlayerPos": "0.0 0.0 0.0 0.0",
+    "isRestartPoint": "NO",
+    "ManualMap": "YES"
+   }
+  ],
+  "pfa0": [
+   {
+    "order": 0,
+    "Name": "START",
+    "Comment": "敵セット部屋",
+    "RoomNo": "g5ab00",
+    "PlayerPos": "-1135.71 -35 -459.29 0",
+    "isRestartPoint": "NO",
+    "ManualMap": "YES"
+   }
+  ]
+ },
+ "chapters": [
+  {
+   "index": 0,
+   "chapter": 1,
+   "sub": 1,
+   "variant": 1,
+   "route_group": 0,
+   "character": 1,
+   "phase": "p100",
+   "subphase": "00_30_A_RobotM_Prologue_STG1",
+   "english_name": "2B's Aerial Battle",
+   "english_chapter": "Prologue"
+  },
+  {
+   "index": 1,
+   "chapter": 1,
+   "sub": 1,
+   "variant": 2,
+   "route_group": 1,
+   "character": 2,
+   "phase": "p100",
+   "subphase": "00_00_B_RobotM_Pro_RobotBrother",
+   "english_name": "9S Disarms the Defense System",
+   "english_chapter": "Prologue"
+  },
+  {
+   "index": 2,
+   "chapter": 1,
+   "sub": 2,
+   "variant": 1,
+   "route_group": 0,
+   "character": 1,
+   "phase": "p100",
+   "subphase": "00_55_A_RobotM_Prologue_EV",
+   "english_name": "2B's Defense Machine Battle",
+   "english_chapter": "Prologue"
+  },
+  {
+   "index": 3,
+   "chapter": 1,
+   "sub": 2,
+   "variant": 2,
+   "route_group": 1,
+   "character": 2,
+   "phase": "p100",
+   "subphase": "00_80_B_RobotM_Pro_BossArea",
+   "english_name": "9S Outside the Factory",
+   "english_chapter": "Prologue"
+  },
+  {
+   "index": 4,
+   "chapter": 1,
+   "sub": 2,
+   "variant": 3,
+   "route_group": 0,
+   "character": 1,
+   "phase": "p100",
+   "subphase": "00_80_A_RobotM_Pro_1stArea",
+   "english_name": "2B Inside the Factory",
+   "english_chapter": "Prologue"
+  },
+  {
+   "index": 5,
+   "chapter": 1,
+   "sub": 2,
+   "variant": 4,
+   "route_group": 0,
+   "character": 1,
+   "phase": "p100",
+   "subphase": "00_95_A_RobotM_Pro_lastArea",
+   "english_name": "2B's Defense Machine Battle 2",
+   "english_chapter": "Prologue"
+  },
+  {
+   "index": 6,
+   "chapter": 1,
+   "sub": 3,
+   "variant": 1,
+   "route_group": 0,
+   "character": 1,
+   "phase": "p100",
+   "subphase": "05_10_A_RobotM_ProBoss_phase1",
+   "english_name": "2B's Battle on Land",
+   "english_chapter": "Prologue"
+  },
+  {
+   "index": 7,
+   "chapter": 1,
+   "sub": 3,
+   "variant": 2,
+   "route_group": 1,
+   "character": 2,
+   "phase": "p100",
+   "subphase": "05_10_B_RobotM_ProBoss_phase1",
+   "english_name": "9S's Aerial Combat",
+   "english_chapter": "Prologue"
+  },
+  {
+   "index": 8,
+   "chapter": 1,
+   "sub": 3,
+   "variant": 3,
+   "route_group": 0,
+   "character": 1,
+   "phase": "p100",
+   "subphase": "05_30_A_RobotM_ProBoss_phase3",
+   "english_name": "2B's Aerial Combat",
+   "english_chapter": "Prologue"
+  },
+  {
+   "index": 9,
+   "chapter": 1,
+   "sub": 4,
+   "variant": 1,
+   "route_group": 0,
+   "character": 1,
+   "phase": "p100",
+   "subphase": "10_A_bunker_Robot_Battle",
+   "english_name": "2B Awakens",
+   "english_chapter": "Prologue"
+  },
+  {
+   "index": 10,
+   "chapter": 1,
+   "sub": 4,
+   "variant": 2,
+   "route_group": 1,
+   "character": 2,
+   "phase": "p100",
+   "subphase": "13_B_bunker_Setup",
+   "english_name": "9S Gets 2B Set Up",
+   "english_chapter": "Prologue"
+  },
+  {
+   "index": 11,
+   "chapter": 1,
+   "sub": 5,
+   "variant": 0,
+   "route_group": 2,
+   "character": 3,
+   "phase": "p100",
+   "subphase": "16_AB_bunker_Order",
+   "english_name": "The Mission",
+   "english_chapter": "Prologue"
+  },
+  {
+   "index": 12,
+   "chapter": 2,
+   "sub": 1,
+   "variant": 0,
+   "route_group": 2,
+   "character": 3,
+   "phase": "p100",
+   "subphase": "30_AB_Ruined_City_ForcedLanding",
+   "english_name": "Landing at the City Ruins",
+   "english_chapter": "Resistance Camp"
+  },
+  {
+   "index": 13,
+   "chapter": 2,
+   "sub": 2,
+   "variant": 0,
+   "route_group": 2,
+   "character": 3,
+   "phase": "p100",
+   "subphase": "50_AB_Desert_temple",
+   "english_name": "Traveling to the Desert",
+   "english_chapter": "Resistance Camp"
+  },
+  {
+   "index": 14,
+   "chapter": 3,
+   "sub": 1,
+   "variant": 0,
+   "route_group": 2,
+   "character": 3,
+   "phase": "p100",
+   "subphase": "51_AB_MainDesert",
+   "english_name": "At the Desert",
+   "english_chapter": "Adam and Eve"
+  },
+  {
+   "index": 15,
+   "chapter": 3,
+   "sub": 2,
+   "variant": 0,
+   "route_group": 2,
+   "character": 3,
+   "phase": "p100",
+   "subphase": "51_10_AB_Danchi_EV",
+   "english_name": "Desert Residential District",
+   "english_chapter": "Adam and Eve"
+  },
+  {
+   "index": 16,
+   "chapter": 3,
+   "sub": 3,
+   "variant": 0,
+   "route_group": 2,
+   "character": 3,
+   "phase": "p100",
+   "subphase": "56_AB_Danchi_Boss_EV1",
+   "english_name": "Battle with Adam",
+   "english_chapter": "Adam and Eve"
+  },
+  {
+   "index": 17,
+   "chapter": 3,
+   "sub": 4,
+   "variant": 0,
+   "route_group": 2,
+   "character": 3,
+   "phase": "p100",
+   "subphase": "58_50_AB_Goto_AmusementPark",
+   "english_name": "YoRHa Recon",
+   "english_chapter": "Adam and Eve"
+  },
+  {
+   "index": 18,
+   "chapter": 4,
+   "sub": 1,
+   "variant": 0,
+   "route_group": 2,
+   "character": 3,
+   "phase": "p100",
+   "subphase": "70_AB_Amusement_Park",
+   "english_name": "Amusement Park",
+   "english_chapter": "Mad Songstress"
+  },
+  {
+   "index": 19,
+   "chapter": 4,
+   "sub": 2,
+   "variant": 0,
+   "route_group": 2,
+   "character": 3,
+   "phase": "p100",
+   "subphase": "70_10_AB_Park_Tank",
+   "english_name": "Tank Boss",
+   "english_chapter": "Mad Songstress"
+  },
+  {
+   "index": 20,
+   "chapter": 4,
+   "sub": 3,
+   "variant": 0,
+   "route_group": 2,
+   "character": 3,
+   "phase": "p100",
+   "subphase": "76_10_AB_Amusement_Park_Boss",
+   "english_name": "Advent of the Songstress",
+   "english_chapter": "Mad Songstress"
+  },
+  {
+   "index": 21,
+   "chapter": 4,
+   "sub": 4,
+   "variant": 0,
+   "route_group": 2,
+   "character": 3,
+   "phase": "p100",
+   "subphase": "79_50_AB_Goto_Pascal_Village",
+   "english_name": "The Messenger Arrives",
+   "english_chapter": "Mad Songstress"
+  },
+  {
+   "index": 22,
+   "chapter": 5,
+   "sub": 1,
+   "variant": 0,
+   "route_group": 2,
+   "character": 3,
+   "phase": "p100",
+   "subphase": "80_00_AB_Pascal_Village",
+   "english_name": "Pascal's Village",
+   "english_chapter": "Excavated Land"
+  },
+  {
+   "index": 23,
+   "chapter": 5,
+   "sub": 2,
+   "variant": 0,
+   "route_group": 2,
+   "character": 3,
+   "phase": "p100",
+   "subphase": "90_00_AB_Ruined_City",
+   "english_name": "Goliath Attack",
+   "english_chapter": "Excavated Land"
+  },
+  {
+   "index": 24,
+   "chapter": 5,
+   "sub": 3,
+   "variant": 0,
+   "route_group": 2,
+   "character": 3,
+   "phase": "p200",
+   "subphase": "00_AB_Ruined_City",
+   "english_name": "Alien Ship",
+   "english_chapter": "Excavated Land"
+  },
+  {
+   "index": 25,
+   "chapter": 5,
+   "sub": 4,
+   "variant": 0,
+   "route_group": 2,
+   "character": 3,
+   "phase": "p200",
+   "subphase": "10_10_AB_Alien_Ship_Start",
+   "english_name": "Battle with Adam and Eve",
+   "english_chapter": "Excavated Land"
+  },
+  {
+   "index": 26,
+   "chapter": 6,
+   "sub": 1,
+   "variant": 0,
+   "route_group": 2,
+   "character": 3,
+   "phase": "p200",
+   "subphase": "20_AB_Bunker",
+   "english_name": "Reporting to the Commander",
+   "english_chapter": "King of the Forest"
+  },
+  {
+   "index": 27,
+   "chapter": 6,
+   "sub": 2,
+   "variant": 0,
+   "route_group": 2,
+   "character": 3,
+   "phase": "p200",
+   "subphase": "40_00_AB_ShopM_EmilQuest_Start",
+   "english_name": "To the Commercial Facility",
+   "english_chapter": "King of the Forest"
+  },
+  {
+   "index": 28,
+   "chapter": 6,
+   "sub": 3,
+   "variant": 0,
+   "route_group": 2,
+   "character": 3,
+   "phase": "p200",
+   "subphase": "40_70_AB_ShopM_EmilQuest_End",
+   "english_name": "Searching the Forest",
+   "english_chapter": "King of the Forest"
+  },
+  {
+   "index": 29,
+   "chapter": 6,
+   "sub": 4,
+   "variant": 0,
+   "route_group": 2,
+   "character": 3,
+   "phase": "p200",
+   "subphase": "60_10_AB_Forest_Castle_Castle",
+   "english_name": "Forest Castle",
+   "english_chapter": "King of the Forest"
+  },
+  {
+   "index": 30,
+   "chapter": 6,
+   "sub": 5,
+   "variant": 0,
+   "route_group": 2,
+   "character": 3,
+   "phase": "p200",
+   "subphase": "60_20_AB_Forest_Castle_Throne",
+   "english_name": "A2's Revenge",
+   "english_chapter": "King of the Forest"
+  },
+  {
+   "index": 31,
+   "chapter": 7,
+   "sub": 1,
+   "variant": 0,
+   "route_group": 2,
+   "character": 3,
+   "phase": "p200",
+   "subphase": "80_00_AB_Pascal_Village",
+   "english_name": "Reporting to Pascal",
+   "english_chapter": "Lost Child"
+  },
+  {
+   "index": 32,
+   "chapter": 7,
+   "sub": 2,
+   "variant": 0,
+   "route_group": 2,
+   "character": 3,
+   "phase": "p200",
+   "subphase": "80_20_AB_Submerge_City",
+   "english_name": "The Aircraft Carrier",
+   "english_chapter": "Lost Child"
+  },
+  {
+   "index": 33,
+   "chapter": 7,
+   "sub": 3,
+   "variant": 0,
+   "route_group": 2,
+   "character": 3,
+   "phase": "p200",
+   "subphase": "90_AB_Battle_Submerge_City",
+   "english_name": "Battle Over the Ocean",
+   "english_chapter": "Lost Child"
+  },
+  {
+   "index": 34,
+   "chapter": 7,
+   "sub": 4,
+   "variant": 0,
+   "route_group": 2,
+   "character": 3,
+   "phase": "p200",
+   "subphase": "94_00_AB_Kaiju_Start_EV",
+   "english_name": "Monster",
+   "english_chapter": "Lost Child"
+  },
+  {
+   "index": 35,
+   "chapter": 8,
+   "sub": 1,
+   "variant": 1,
+   "route_group": 0,
+   "character": 1,
+   "phase": "p200",
+   "subphase": "100_A_Submerge_City_2B",
+   "english_name": "2B Searches for 9S",
+   "english_chapter": "Copied City"
+  },
+  {
+   "index": 36,
+   "chapter": 8,
+   "sub": 1,
+   "variant": 2,
+   "route_group": 0,
+   "character": 1,
+   "phase": "p200",
+   "subphase": "110_00_A_Copy_City",
+   "english_name": "2B's Battle with Adam",
+   "english_chapter": "Copied City"
+  },
+  {
+   "index": 37,
+   "chapter": 8,
+   "sub": 1,
+   "variant": 3,
+   "route_group": 1,
+   "character": 2,
+   "phase": "p200",
+   "subphase": "110_00_B_Copy_City",
+   "english_name": "9S's Memory Area",
+   "english_chapter": "Copied City"
+  },
+  {
+   "index": 38,
+   "chapter": 9,
+   "sub": 1,
+   "variant": 1,
+   "route_group": 1,
+   "character": 2,
+   "phase": "p200",
+   "subphase": "120_AB_Bunker",
+   "english_name": "9S's Data Overhaul",
+   "english_chapter": "Deranged Religion"
+  },
+  {
+   "index": 39,
+   "chapter": 9,
+   "sub": 1,
+   "variant": 2,
+   "route_group": 0,
+   "character": 1,
+   "phase": "p200",
+   "subphase": "130_00_A_Resistance_Camp",
+   "english_name": "Trends Among the Machines",
+   "english_chapter": "Deranged Religion"
+  },
+  {
+   "index": 40,
+   "chapter": 9,
+   "sub": 1,
+   "variant": 3,
+   "route_group": 0,
+   "character": 1,
+   "phase": "p200",
+   "subphase": "140_00_A_RobotM_CrazyReligion",
+   "english_name": "2B Negotiates Peace",
+   "english_chapter": "Deranged Religion"
+  },
+  {
+   "index": 41,
+   "chapter": 9,
+   "sub": 2,
+   "variant": 1,
+   "route_group": 1,
+   "character": 2,
+   "phase": "p200",
+   "subphase": "140_B_Banker_9S",
+   "english_name": "9S Supports 2B",
+   "english_chapter": "Deranged Religion"
+  },
+  {
+   "index": 42,
+   "chapter": 9,
+   "sub": 2,
+   "variant": 2,
+   "route_group": 0,
+   "character": 1,
+   "phase": "p200",
+   "subphase": "140_40_A_RobotM_CR_UnderFactory",
+   "english_name": "2B Escapes the Factory",
+   "english_chapter": "Deranged Religion"
+  },
+  {
+   "index": 43,
+   "chapter": 9,
+   "sub": 2,
+   "variant": 3,
+   "route_group": 0,
+   "character": 1,
+   "phase": "p200",
+   "subphase": "140_80_A_RobotM_CR_UF_BossArea",
+   "english_name": "Multi-leg Goliath Battle",
+   "english_chapter": "Deranged Religion"
+  },
+  {
+   "index": 44,
+   "chapter": 9,
+   "sub": 3,
+   "variant": 1,
+   "route_group": 0,
+   "character": 1,
+   "phase": "p200",
+   "subphase": "140_90_A_RobotM_CR_UF_Exit",
+   "english_name": "Multi-leg Goliath Destroyed",
+   "english_chapter": "Deranged Religion"
+  },
+  {
+   "index": 45,
+   "chapter": 9,
+   "sub": 3,
+   "variant": 2,
+   "route_group": 1,
+   "character": 2,
+   "phase": "p200",
+   "subphase": "140_90_B_Banker_9S",
+   "english_name": "9S Learns the Truth",
+   "english_chapter": "Deranged Religion"
+  },
+  {
+   "index": 46,
+   "chapter": 10,
+   "sub": 1,
+   "variant": 1,
+   "route_group": 1,
+   "character": 2,
+   "phase": "p200",
+   "subphase": "150_B_Banker_9S",
+   "english_name": "9S Placed in Battle",
+   "english_chapter": "Loss"
+  },
+  {
+   "index": 47,
+   "chapter": 10,
+   "sub": 1,
+   "variant": 2,
+   "route_group": 0,
+   "character": 1,
+   "phase": "p200",
+   "subphase": "160_A_Ruined_City_2B",
+   "english_name": "2B Requests Backup",
+   "english_chapter": "Loss"
+  },
+  {
+   "index": 48,
+   "chapter": 10,
+   "sub": 1,
+   "variant": 3,
+   "route_group": 0,
+   "character": 1,
+   "phase": "p200",
+   "subphase": "170_00_A_Resistance_Camp_2B",
+   "english_name": "2B Assists the Resistance",
+   "english_chapter": "Loss"
+  },
+  {
+   "index": 49,
+   "chapter": 10,
+   "sub": 1,
+   "variant": 4,
+   "route_group": 0,
+   "character": 1,
+   "phase": "p200",
+   "subphase": "170_30_A_Resistance_Camp_2B",
+   "english_name": "Multi-leg Goliath Battle",
+   "english_chapter": "Loss"
+  },
+  {
+   "index": 50,
+   "chapter": 10,
+   "sub": 2,
+   "variant": 0,
+   "route_group": 2,
+   "character": 3,
+   "phase": "p200",
+   "subphase": "180_AB_Ruined_Front_Of_Camp",
+   "english_name": "Spherical Machine Battle",
+   "english_chapter": "Loss"
+  },
+  {
+   "index": 51,
+   "chapter": 10,
+   "sub": 3,
+   "variant": 0,
+   "route_group": 2,
+   "character": 3,
+   "phase": "p200",
+   "subphase": "190_AB_Pascal_Village",
+   "english_name": "Attack on Pascal's Village",
+   "english_chapter": "Loss"
+  },
+  {
+   "index": 52,
+   "chapter": 10,
+   "sub": 4,
+   "variant": 0,
+   "route_group": 2,
+   "character": 3,
+   "phase": "p200",
+   "subphase": "200_00_AB_Ruined_City_Eve_EV",
+   "english_name": "Battling Eve",
+   "english_chapter": "Loss"
+  },
+  {
+   "index": 53,
+   "chapter": 10,
+   "sub": 5,
+   "variant": 1,
+   "route_group": 0,
+   "character": 1,
+   "phase": "p200",
+   "subphase": "200_80_AB_Ruined_City_end",
+   "english_name": "The End of Battle",
+   "english_chapter": "Loss"
+  },
+  {
+   "index": 54,
+   "chapter": 10,
+   "sub": 5,
+   "variant": 2,
+   "route_group": 1,
+   "character": 2,
+   "phase": "p200",
+   "subphase": "200_80_AB_Ruined_City_end",
+   "english_name": "The Beginning of Battle",
+   "english_chapter": "Loss"
+  },
+  {
+   "index": 55,
+   "chapter": 11,
+   "sub": 1,
+   "variant": 0,
+   "route_group": 3,
+   "character": 1,
+   "phase": "p300",
+   "subphase": "00_10_CD_Bunker_Hangar_2B",
+   "english_name": "2B's Invasion Begins",
+   "english_chapter": "Full-scale Attack"
+  },
+  {
+   "index": 56,
+   "chapter": 11,
+   "sub": 2,
+   "variant": 0,
+   "route_group": 3,
+   "character": 2,
+   "phase": "p300",
+   "subphase": "10_CD_Ruined_City_9S",
+   "english_name": "9S Hacks the Defense System",
+   "english_chapter": "Full-scale Attack"
+  },
+  {
+   "index": 57,
+   "chapter": 11,
+   "sub": 3,
+   "variant": 0,
+   "route_group": 3,
+   "character": 1,
+   "phase": "p300",
+   "subphase": "20_CD_Ruined_City_2B",
+   "english_name": "2B's Battle for Control",
+   "english_chapter": "Full-scale Attack"
+  },
+  {
+   "index": 58,
+   "chapter": 11,
+   "sub": 4,
+   "variant": 0,
+   "route_group": 3,
+   "character": 2,
+   "phase": "p300",
+   "subphase": "26_10_CD_Ruined_City_9S",
+   "english_name": "Contaminated YoRHa",
+   "english_chapter": "Full-scale Attack"
+  },
+  {
+   "index": 59,
+   "chapter": 11,
+   "sub": 5,
+   "variant": 0,
+   "route_group": 3,
+   "character": 1,
+   "phase": "p300",
+   "subphase": "30_00_CD_Bunker_2B",
+   "english_name": "2B Escapes the Bunker",
+   "english_chapter": "Full-scale Attack"
+  },
+  {
+   "index": 60,
+   "chapter": 11,
+   "sub": 6,
+   "variant": 0,
+   "route_group": 3,
+   "character": 1,
+   "phase": "p300",
+   "subphase": "50_CD_Submerge_City_2B",
+   "english_name": "2B's Final Moments",
+   "english_chapter": "Full-scale Attack"
+  },
+  {
+   "index": 61,
+   "chapter": 11,
+   "sub": 7,
+   "variant": 0,
+   "route_group": 3,
+   "character": 2,
+   "phase": "p300",
+   "subphase": "50_20_CD_Ruined_City_2BDead_9S",
+   "english_name": "9S Gets Separated",
+   "english_chapter": "Full-scale Attack"
+  },
+  {
+   "index": 62,
+   "chapter": 12,
+   "sub": 1,
+   "variant": 0,
+   "route_group": 3,
+   "character": 4,
+   "phase": "p300",
+   "subphase": "70_00_CD_1_Ruined_City",
+   "english_name": "A2 Awakens",
+   "english_chapter": "Memories of Sand"
+  },
+  {
+   "index": 63,
+   "chapter": 12,
+   "sub": 2,
+   "variant": 0,
+   "route_group": 3,
+   "character": 4,
+   "phase": "p300",
+   "subphase": "80_CD_1_Desert_A2",
+   "english_name": "A2's Battle in the Desert",
+   "english_chapter": "Memories of Sand"
+  },
+  {
+   "index": 64,
+   "chapter": 13,
+   "sub": 1,
+   "variant": 0,
+   "route_group": 3,
+   "character": 2,
+   "phase": "p300",
+   "subphase": "140_CD_1_Resistance_Camp_9S",
+   "english_name": "9S Awakens",
+   "english_chapter": "Meat Box"
+  },
+  {
+   "index": 65,
+   "chapter": 13,
+   "sub": 2,
+   "variant": 0,
+   "route_group": 3,
+   "character": 2,
+   "phase": "p300",
+   "subphase": "150_CD_Ruined_City_9S",
+   "english_name": "9S Accesses the Tower",
+   "english_chapter": "Meat Box"
+  },
+  {
+   "index": 66,
+   "chapter": 13,
+   "sub": 3,
+   "variant": 0,
+   "route_group": 3,
+   "character": 2,
+   "phase": "p300",
+   "subphase": "160_00_CD_1_Forest_Castle_9S",
+   "english_name": "9S's Determination",
+   "english_chapter": "Meat Box"
+  },
+  {
+   "index": 67,
+   "chapter": 13,
+   "sub": 4,
+   "variant": 0,
+   "route_group": 3,
+   "character": 2,
+   "phase": "p300",
+   "subphase": "160_10_CD_1_Forest_Castle_9S",
+   "english_name": "9S and the Meat Box",
+   "english_chapter": "Meat Box"
+  },
+  {
+   "index": 68,
+   "chapter": 14,
+   "sub": 1,
+   "variant": 0,
+   "route_group": 3,
+   "character": 4,
+   "phase": "p300",
+   "subphase": "90_CD_2_Pascal_Village_A2_SQ",
+   "english_name": "A2 and the Oil Filter",
+   "english_chapter": "Pascal's Despair"
+  },
+  {
+   "index": 69,
+   "chapter": 14,
+   "sub": 2,
+   "variant": 0,
+   "route_group": 3,
+   "character": 4,
+   "phase": "p300",
+   "subphase": "95_CD_2_Pascal_Village_A2",
+   "english_name": "A Day in the Life of Pascal",
+   "english_chapter": "Pascal's Despair"
+  },
+  {
+   "index": 70,
+   "chapter": 14,
+   "sub": 3,
+   "variant": 0,
+   "route_group": 3,
+   "character": 4,
+   "phase": "p300",
+   "subphase": "100_CD_2_Desert_A2",
+   "english_name": "Pascal Needs Help",
+   "english_chapter": "Pascal's Despair"
+  },
+  {
+   "index": 71,
+   "chapter": 14,
+   "sub": 4,
+   "variant": 0,
+   "route_group": 3,
+   "character": 4,
+   "phase": "p300",
+   "subphase": "110_CD_2_Pascal_Village_A2",
+   "english_name": "Cannibal Machines",
+   "english_chapter": "Pascal's Despair"
+  },
+  {
+   "index": 72,
+   "chapter": 14,
+   "sub": 5,
+   "variant": 0,
+   "route_group": 3,
+   "character": 4,
+   "phase": "p300",
+   "subphase": "120_00_CD_2_RobotM_Shelter_A2",
+   "english_name": "A2 and the Children",
+   "english_chapter": "Pascal's Despair"
+  },
+  {
+   "index": 73,
+   "chapter": 15,
+   "sub": 1,
+   "variant": 0,
+   "route_group": 3,
+   "character": 2,
+   "phase": "p300",
+   "subphase": "180_00_CD_2_Forest_Castle_9S_2",
+   "english_name": "9S Continues Fighting",
+   "english_chapter": "Soul Box"
+  },
+  {
+   "index": 74,
+   "chapter": 15,
+   "sub": 2,
+   "variant": 0,
+   "route_group": 3,
+   "character": 2,
+   "phase": "p300",
+   "subphase": "180_10_CD_2_Submerge_City_9S",
+   "english_name": "9S and the Soul Box",
+   "english_chapter": "Soul Box"
+  },
+  {
+   "index": 75,
+   "chapter": 15,
+   "sub": 3,
+   "variant": 0,
+   "route_group": 3,
+   "character": 2,
+   "phase": "p300",
+   "subphase": "220_10_CD_GotoCamp_Yoroyoro_9S",
+   "english_name": "9S Wounded",
+   "english_chapter": "Soul Box"
+  },
+  {
+   "index": 76,
+   "chapter": 15,
+   "sub": 4,
+   "variant": 0,
+   "route_group": 3,
+   "character": 2,
+   "phase": "p300",
+   "subphase": "220_20_CD_ResiCamp_DeboPopo_HD",
+   "english_name": "9S Repaired",
+   "english_chapter": "Soul Box"
+  },
+  {
+   "index": 77,
+   "chapter": 16,
+   "sub": 1,
+   "variant": 1,
+   "route_group": 3,
+   "character": 2,
+   "phase": "p300",
+   "subphase": "230_CD_Resistance_Camp_9S",
+   "english_name": "9S and the Resource Unit",
+   "english_chapter": "God Box"
+  },
+  {
+   "index": 78,
+   "chapter": 16,
+   "sub": 1,
+   "variant": 2,
+   "route_group": 3,
+   "character": 4,
+   "phase": "p300",
+   "subphase": "200_CD_Robot_Mountain_A2",
+   "english_name": "A2 and the Resource Unit",
+   "english_chapter": "God Box"
+  },
+  {
+   "index": 79,
+   "chapter": 16,
+   "sub": 2,
+   "variant": 0,
+   "route_group": 3,
+   "character": 2,
+   "phase": "p300",
+   "subphase": "240_10_CD_Amusement_Park_9S",
+   "english_name": "9S and the God Box",
+   "english_chapter": "God Box"
+  },
+  {
+   "index": 80,
+   "chapter": 16,
+   "sub": 3,
+   "variant": 0,
+   "route_group": 3,
+   "character": 4,
+   "phase": "p300",
+   "subphase": "240_50_CD_Amusement_Park_A2",
+   "english_name": "A2 and the Machine Siblings",
+   "english_chapter": "God Box"
+  },
+  {
+   "index": 81,
+   "chapter": 17,
+   "sub": 1,
+   "variant": 0,
+   "route_group": 3,
+   "character": 2,
+   "phase": "p300",
+   "subphase": "250_CD_Unknown_9S",
+   "english_name": "9S Heads to the Tower",
+   "english_chapter": "The Tower"
+  },
+  {
+   "index": 82,
+   "chapter": 17,
+   "sub": 2,
+   "variant": 0,
+   "route_group": 3,
+   "character": 2,
+   "phase": "p300",
+   "subphase": "275_CD_Tower_walk_9S",
+   "english_name": "9S Searches the Tower",
+   "english_chapter": "The Tower"
+  },
+  {
+   "index": 83,
+   "chapter": 17,
+   "sub": 3,
+   "variant": 0,
+   "route_group": 3,
+   "character": 4,
+   "phase": "p300",
+   "subphase": "280_CD_Ruined_City_A2",
+   "english_name": "A2 Heads to the Tower",
+   "english_chapter": "The Tower"
+  },
+  {
+   "index": 84,
+   "chapter": 17,
+   "sub": 4,
+   "variant": 0,
+   "route_group": 3,
+   "character": 4,
+   "phase": "p300",
+   "subphase": "290_CD_Tower_A2",
+   "english_name": "A2 Searches the Tower",
+   "english_chapter": "The Tower"
+  },
+  {
+   "index": 85,
+   "chapter": 17,
+   "sub": 5,
+   "variant": 0,
+   "route_group": 3,
+   "character": 2,
+   "phase": "p300",
+   "subphase": "295_CD_Tower_SelfHack_9S",
+   "english_name": "9S Self-repairs",
+   "english_chapter": "The Tower"
+  },
+  {
+   "index": 86,
+   "chapter": 17,
+   "sub": 6,
+   "variant": 0,
+   "route_group": 3,
+   "character": 4,
+   "phase": "p300",
+   "subphase": "297_CD_Tower_Library_A2",
+   "english_name": "The Red Girls",
+   "english_chapter": "The Tower"
+  },
+  {
+   "index": 87,
+   "chapter": 17,
+   "sub": 7,
+   "variant": 0,
+   "route_group": 3,
+   "character": 4,
+   "phase": "p300",
+   "subphase": "300_00_CD_Tower_Elevator_A2",
+   "english_name": "To the Peak",
+   "english_chapter": "The Tower"
+  },
+  {
+   "index": 88,
+   "chapter": 17,
+   "sub": 8,
+   "variant": 0,
+   "route_group": 3,
+   "character": 4,
+   "phase": "p300",
+   "subphase": "315_CD_Tower_Unite",
+   "english_name": "Combined Multi-leg Machine",
+   "english_chapter": "The Tower"
+  },
+  {
+   "index": 89,
+   "chapter": 17,
+   "sub": 9,
+   "variant": 0,
+   "route_group": 3,
+   "character": 6,
+   "phase": "p300",
+   "subphase": "332_CD_Tower_Talk",
+   "english_name": "9S and A2",
+   "english_chapter": "The Tower"
+  },
+  {
+   "index": 90,
+   "chapter": 17,
+   "sub": 10,
+   "variant": 1,
+   "route_group": 3,
+   "character": 2,
+   "phase": "p300",
+   "subphase": "340_C_Tower_9Swin",
+   "english_name": "9S's Final Moments",
+   "english_chapter": "The Tower"
+  },
+  {
+   "index": 91,
+   "chapter": 17,
+   "sub": 10,
+   "variant": 2,
+   "route_group": 3,
+   "character": 4,
+   "phase": "p300",
+   "subphase": "340_D_Tower_A2win",
+   "english_name": "A2's Final Moments",
+   "english_chapter": "The Tower"
+  },
+  {
+   "index": 92,
+   "chapter": 17,
+   "sub": 11,
+   "variant": 0,
+   "route_group": 3,
+   "character": 0,
+   "phase": "pf31",
+   "subphase": "endroll1",
+   "english_name": "The End of the YoRHa Project",
+   "english_chapter": "The Tower"
+  }
+ ],
+ "phase_jumps": {
+  "p100": [
+   {
+    "hap": "イベント再生",
+    "action": "フェーズジャンプ",
+    "phase": "0x100",
+    "subPhase": "13_A_bunker_Setup"
+   },
+   {
+    "hap": "終了後フェーズジャンプ(2)",
+    "action": "フェーズジャンプ",
+    "phase": "0x100",
+    "subPhase": "00_80_B_TEST"
+   },
+   {
+    "hap": "アダムとイヴの食卓",
+    "action": "フェーズジャンプ",
+    "phase": "0x100",
+    "subPhase": "80_00_AB_Pascal_Village"
+   },
+   {
+    "hap": "2B起動ゲーム",
+    "action": "フェーズジャンプ_p100_16",
+    "phase": "0x100",
+    "subPhase": "16_AB_bunker_Order"
+   },
+   {
+    "hap": "流れ",
+    "action": "フェーズジャンプ_70_AB",
+    "phase": "0x100",
+    "subPhase": "70_AB_Amusement_Park"
+   },
+   {
+    "hap": "終了後フェーズジャンプ",
+    "action": "フェーズジャンプ",
+    "phase": "0x100",
+    "subPhase": "00_80_C_TEST"
+   },
+   {
+    "hap": "サウンドノベル",
+    "action": "フェーズジャンプ_playgo後",
+    "phase": "0x100",
+    "subPhase": "13_B_bunker_Setup"
+   },
+   {
+    "hap": "スクロールマップ",
+    "action": "スクロールマップ(2)",
+    "phase": "0x100",
+    "subPhase": "30_AB_Ruined_City_ForcedLanding"
+   },
+   {
+    "hap": "終了後フェーズジャンプ(3)",
+    "action": "フェーズジャンプ",
+    "phase": "0x100",
+    "subPhase": "00_80_A_TEST"
+   },
+   {
+    "hap": "スクロールマップ",
+    "action": "スクロールマップ",
+    "phase": "0x100",
+    "subPhase": "05_10_B_RobotM_ProBoss_phase1"
+   },
+   {
+    "hap": "バンカー捨てる処理",
+    "action": "フェーズジャンプ_p100_20",
+    "phase": "0x100",
+    "subPhase": "20_AB_buker_Aerial_battle"
+   },
+   {
+    "hap": "フェーズ切替(6)",
+    "action": "フェーズジャンプ",
+    "phase": "0x100",
+    "subPhase": "13_B_bunker_Setup"
+   },
+   {
+    "hap": "フェーズ切替(3)",
+    "action": "フェーズジャンプ",
+    "phase": "0x100",
+    "subPhase": "10_A_bunker_Robot_Battle"
+   },
+   {
+    "hap": "バットエンド処理",
+    "action": "フェーズジャンプ",
+    "phase": "0xf30",
+    "subPhase": "Ending_G"
+   },
+   {
+    "hap": "飛行バトル~フェーズジャンプ",
+    "action": "フェーズジャンプ_p200_00",
+    "phase": "0x200",
+    "subPhase": "00_AB_Ruined_City"
+   },
+   {
+    "hap": "バッドエンド",
+    "action": "フェーズジャンプ_バッドエンド",
+    "phase": "0xf30",
+    "subPhase": "Ending_H"
+   }
+  ],
+  "p200": [
+   {
+    "hap": "敵から逃走し次のサブフェーズへ",
+    "action": "フェーズジャンプ-敵から逃走した場合",
+    "phase": "0x200",
+    "subPhase": "60_00_B_King_of_the_forest_ev1"
+   },
+   {
+    "hap": "スクロールマップ",
+    "action": "スクロールマップ",
+    "phase": "0x200",
+    "subPhase": "92_AB_Battle_Submerge_City_3"
+   },
+   {
+    "hap": "流れ",
+    "action": "フェーズジャンプ_160_B_Ruined_City",
+    "phase": "0x200",
+    "subPhase": "160_B_Ruined_City_ArealBTL_9S"
+   },
+   {
+    "hap": "..M1090_S0320_GM_b",
+    "action": "フェーズジャンプ",
+    "phase": "0x300",
+    "subPhase": "00_CD_Bunker_2B"
+   },
+   {
+    "hap": "流れ",
+    "action": "フェーズジャンプ",
+    "phase": "0x200",
+    "subPhase": "110_00_AB_Copy_City"
+   },
+   {
+    "hap": "フェーズジャンプ(23)",
+    "action": "フェーズジャンプ_p200_10",
+    "phase": "0x200",
+    "subPhase": "10_AB_lien_Ship"
+   },
+   {
+    "hap": "フェーズジャンプ(18)",
+    "action": "フェーズジャンプ_p200_80",
+    "phase": "0x200",
+    "subPhase": "80_AB_Submerge_City"
+   },
+   {
+    "hap": "9Sを助ける(2)",
+    "action": "フェーズジャンプ_p200_130",
+    "phase": "0x200",
+    "subPhase": "130_00_A_Resistance_Camp"
+   },
+   {
+    "hap": "アダムイヴの食卓",
+    "action": "フェーズジャンプ",
+    "phase": "0x200",
+    "subPhase": "95_00_B_Ruined_City_diningtable"
+   },
+   {
+    "hap": "フェーズジャンプ(2)",
+    "action": "フェーズジャンプ_p200_80",
+    "phase": "0x200",
+    "subPhase": "80_AB_Submerge_City"
+   },
+   {
+    "hap": "STGマップ",
+    "action": "スクロールマップ",
+    "phase": "0x200",
+    "subPhase": "94_70_B_Kaiju_Missile"
+   },
+   {
+    "hap": "流れ(19)",
+    "action": "フェーズジャンプ",
+    "phase": "0x200",
+    "subPhase": "115_AB_Copy_City_AdamDie"
+   },
+   {
+    "hap": "流れ",
+    "action": "フェーズジャンプ",
+    "phase": "0x200",
+    "subPhase": "80_20_AB_Submerge_City"
+   },
+   {
+    "hap": "森の城へ_Bルート",
+    "action": "フェーズジャンプ",
+    "phase": "0x200",
+    "subPhase": "60_05_AB_Forest_Castle"
+   },
+   {
+    "hap": "フェーズジャンプ(43)",
+    "action": "フェーズジャンプ",
+    "phase": "0x200",
+    "subPhase": "100_A_Submerge_City_2B"
+   },
+   {
+    "hap": "マップの裏読み",
+    "action": "マップ裏読み",
+    "phase": "0x200",
+    "subPhase": "100_A_Submerge_City_2B"
+   },
+   {
+    "hap": "次のフェーズへジャンプ",
+    "action": "フェーズジャンプ",
+    "phase": "0x200",
+    "subPhase": "80_AB_Submerge_City"
+   },
+   {
+    "hap": "フェーズジャンプ(44)",
+    "action": "フェーズジャンプ",
+    "phase": "0x200",
+    "subPhase": "96_B_Pod_Talk"
+   },
+   {
+    "hap": "イベント",
+    "action": "フェーズジャンプ",
+    "phase": "0x200",
+    "subPhase": "80_30_AB_Submerge_City"
+   },
+   {
+    "hap": "フェーズジャンプ(8)",
+    "action": "フェーズジャンプ",
+    "phase": "0x200",
+    "subPhase": "180_AB_Ruined_Front_Of_Camp"
+   },
+   {
+    "hap": "フェーズジャンプ(24)",
+    "action": "フェーズジャンプ_p200_10",
+    "phase": "0x200",
+    "subPhase": "10_AB_lien_Ship"
+   },
+   {
+    "hap": "..M1090_S0310_HD",
+    "action": "フェーズジャンプ",
+    "phase": "0x200",
+    "subPhase": "200_70_AB_Ruined_City_end"
+   },
+   {
+    "hap": "進行制御",
+    "action": "フェーズジャンプ",
+    "phase": "0x200",
+    "subPhase": "200_50_AB_Ruined_City_EveBattle"
+   },
+   {
+    "hap": "森の城の建国EV3",
+    "action": "フェーズジャンプ",
+    "phase": "0x200",
+    "subPhase": "60_16_B_Forest_Castle_Castle2"
+   },
+   {
+    "hap": "フェーズジャンプ",
+    "action": "フェーズジャンプ",
+    "phase": "0x200",
+    "subPhase": "200_20_AB_Ruined_City_EveBattle"
+   },
+   {
+    "hap": "イベント",
+    "action": "フェーズジャンプ",
+    "phase": "0x200",
+    "subPhase": "10_20_AB_Alien_Ship_Battle"
+   },
+   {
+    "hap": "進行制御",
+    "action": "フェーズジャンプ",
+    "phase": "0x200",
+    "subPhase": "200_50_AB_Ruined_City_EveBattle"
+   },
+   {
+    "hap": "森の国の建国EV2",
+    "action": "フェーズジャンプ",
+    "phase": "0x200",
+    "subPhase": "60_08_B_Forest_Castle3"
+   },
+   {
+    "hap": "森の国の建国EV",
+    "action": "フェーズジャンプ",
+    "phase": "0x200",
+    "subPhase": "60_06_B_Forest_Castle2"
+   },
+   {
+    "hap": "次のサブフェーズへ_Bルート",
+    "action": "フェーズジャンプ-無視して進むと",
+    "phase": "0x200",
+    "subPhase": "60_15_B_King_of_the_forest_ev3"
+   },
+   {
+    "hap": "次のサブフェーズへ_Bルート",
+    "action": "フェーズジャンプ-無視して進むと",
+    "phase": "0x200",
+    "subPhase": "60_15_B_King_of_the_forest_ev3"
+   },
+   {
+    "hap": "悲しむイヴ(2)",
+    "action": "フェーズジャンプ",
+    "phase": "0x200",
+    "subPhase": "150_B_Banker_9S"
+   },
+   {
+    "hap": "悲しむイヴ",
+    "action": "フェーズジャンプ",
+    "phase": "0x200",
+    "subPhase": "160_A_Ruined_City_2B"
+   },
+   {
+    "hap": "流れ(4)",
+    "action": "フェーズジャンプ",
+    "phase": "0x200",
+    "subPhase": "80_10_AB_Resistance_Camp"
+   },
+   {
+    "hap": "エリア外警告",
+    "action": "フェーズジャンプ",
+    "phase": "0xf30",
+    "subPhase": "Ending_L"
+   },
+   {
+    "hap": "..M1090_S0250_HD",
+    "action": "フェーズジャンプ",
+    "phase": "0x200",
+    "subPhase": "200_10_AB_Ruined_City_EveBattle"
+   },
+   {
+    "hap": "流れ",
+    "action": "フェーズジャンプ",
+    "phase": "0x200",
+    "subPhase": "90_AB_Battle_Submerge_City"
+   },
+   {
+    "hap": "敵撃破で次のサブフェーズへ",
+    "action": "フェーズジャンプ-敵を撃破時",
+    "phase": "0x200",
+    "subPhase": "60_00_B_King_of_the_forest_ev1"
+   },
+   {
+    "hap": "..M1090_S0290_HD",
+    "action": "フェーズジャンプ",
+    "phase": "0x200",
+    "subPhase": "200_40_AB_Ruined_City_EveBattle"
+   },
+   {
+    "hap": "..M1090_S0320_GM_a",
+    "action": "フェーズジャンプ",
+    "phase": "0xf10",
+    "subPhase": "EndRoll_A"
+   },
+   {
+    "hap": "..M1090_S0310_HD(2)",
+    "action": "フェーズジャンプ",
+    "phase": "0x200",
+    "subPhase": "200_70_AB_Ruined_City_end"
+   },
+   {
+    "hap": "食卓イベント2回目",
+    "action": "フェーズジャンプ",
+    "phase": "0x200",
+    "subPhase": "80_30_AB_Submerge_City"
+   },
+   {
+    "hap": "フェーズジャンプ",
+    "action": "フェーズジャンプ",
+    "phase": "0x200",
+    "subPhase": "200_20_AB_Ruined_City_EveBattle"
+   },
+   {
+    "hap": "フェーズジャンプ",
+    "action": "フェーズジャンプ",
+    "phase": "0x200",
+    "subPhase": "200_00_AB_Ruined_City_Eve_EV"
+   },
+   {
+    "hap": "9Sを助ける",
+    "action": "フェーズジャンプ_p200_130",
+    "phase": "0x200",
+    "subPhase": "120_AB_Bunker"
+   },
+   {
+    "hap": "マップの裏読み(2)",
+    "action": "マップ裏読み",
+    "phase": "0x200",
+    "subPhase": "95_00_B_Ruined_City_diningtable"
+   },
+   {
+    "hap": "マップ",
+    "action": "スクロールマップ",
+    "phase": "0x200",
+    "subPhase": "180_AB_Ruined_Front_Of_Camp"
+   },
+   {
+    "hap": "EVトリガーの専用敵セット",
+    "action": "フェーズジャンプ-敵から闘争した場合",
+    "phase": "0x200",
+    "subPhase": "60_07_B_King_of_the_forest_ev2"
+   },
+   {
+    "hap": "EVトリガーの専用敵セット",
+    "action": "フェーズジャンプ-敵撃破時",
+    "phase": "0x200",
+    "subPhase": "60_07_B_King_of_the_forest_ev2"
+   },
+   {
+    "hap": "M1080_S0010_SD_b",
+    "action": "フェーズジャンプ",
+    "phase": "0x200",
+    "subPhase": "140_B_Banker_9S"
+   },
+   {
+    "hap": "コピー都市_最深部のアダム戦",
+    "action": "フェーズジャンプ",
+    "phase": "0x200",
+    "subPhase": "115_AB_Copy_City_AdamDie"
+   },
+   {
+    "hap": "流れ(2)",
+    "action": "フェーズジャンプ_p200_110",
+    "phase": "0x200",
+    "subPhase": "110_00_AB_Copy_City"
+   },
+   {
+    "hap": "..M1090_S0270_GM_b",
+    "action": "フェーズジャンプ",
+    "phase": "0x200",
+    "subPhase": "200_30_AB_Ruined_City_Eve_EV"
+   },
+   {
+    "hap": "..M1090_S0100_GM_a",
+    "action": "フェーズジャンプ",
+    "phase": "0x200",
+    "subPhase": "170_00_A_Resistance_Camp_2B"
+   },
+   {
+    "hap": "..M1090_S0110_HD_a",
+    "action": "フェーズジャンプ",
+    "phase": "0x200",
+    "subPhase": "170_10_A_Resistance_Camp_2B"
+   },
+   {
+    "hap": "..M1090_S0230_GM",
+    "action": "フェーズジャンプ",
+    "phase": "0x200",
+    "subPhase": "195_AB_Pascal_Village_toEve"
+   },
+   {
+    "hap": "..M1090_S0120_GM_a",
+    "action": "フェーズジャンプ",
+    "phase": "0x200",
+    "subPhase": "170_20_A_Resistance_Camp_2B"
+   },
+   {
+    "hap": "..M1090_S0120_GM_a",
+    "action": "フェーズジャンプ",
+    "phase": "0x200",
+    "subPhase": "170_30_A_Resistance_Camp_2B"
+   },
+   {
+    "hap": "..M1090_S0280_GM_a",
+    "action": "フェーズジャンプ",
+    "phase": "0x200",
+    "subPhase": "200_30_AB_Ruined_City_Eve_EV"
+   },
+   {
+    "hap": "..M1090_S0210_GM",
+    "action": "フェーズジャンプ",
+    "phase": "0x200",
+    "subPhase": "190_AB_Pascal_Village"
+   },
+   {
+    "hap": "司祭達を攻撃した際の対処2",
+    "action": "フェーズジャンプ",
+    "phase": "0xf30",
+    "subPhase": "Ending_J"
+   },
+   {
+    "hap": "司祭達を攻撃した際の対処",
+    "action": "フェーズジャンプ",
+    "phase": "0xf30",
+    "subPhase": "Ending_J"
+   }
+  ],
+  "p300": [
+   {
+    "hap": "スクリプト(14)",
+    "action": "フェーズジャンプ",
+    "phase": "0x300",
+    "subPhase": "130_00_CD_Pod_Talk"
+   },
+   {
+    "hap": "巨大ロボVS巨大ロボ",
+    "action": "フェーズジャンプ",
+    "phase": "0x300",
+    "subPhase": "120_90_CD_2_RobotM_Pascal_A2"
+   },
+   {
+    "hap": "流れ(5)",
+    "action": "フェーズジャンプ_10",
+    "phase": "0x300",
+    "subPhase": "10_CD_Ruined_City_9S"
+   },
+   {
+    "hap": "tgt_enemy_hack(7)",
+    "action": "フェーズジャンプ",
+    "phase": "0x300",
+    "subPhase": "180_30_CD_2_Pod_Talk"
+   },
+   {
+    "hap": "流れ(27)",
+    "action": "フェーズジャンプ_諦め",
+    "phase": "0xf10",
+    "subPhase": "BackTitle_CD"
+   },
+   {
+    "hap": "流れ(27)",
+    "action": "フェーズジャンプ_STGクリア",
+    "phase": "0x300",
+    "subPhase": "360_CD_TrueEnd_FIN"
+   },
+   {
+    "hap": "流れ",
+    "action": "フェーズジャンプ",
+    "phase": "0x300",
+    "subPhase": "23_CD_Ruined_City_2B"
+   },
+   {
+    "hap": "流れ",
+    "action": "フェーズジャンプ",
+    "phase": "0x300",
+    "subPhase": "25_CD_Ruined_City_2B"
+   },
+   {
+    "hap": "フェーズジャンプ(4)",
+    "action": "フェーズジャンプ_p300_298",
+    "phase": "0x300",
+    "subPhase": "298_CD_Tower_RedGirl_A2"
+   },
+   {
+    "hap": "バッドエンド処理",
+    "action": "フェーズジャンプ",
+    "phase": "0xf30",
+    "subPhase": "Ending_O"
+   },
+   {
+    "hap": "流れ",
+    "action": "フェーズジャンプ",
+    "phase": "0x300",
+    "subPhase": "220_CD_Submerge_City_9S"
+   },
+   {
+    "hap": "イベント再生",
+    "action": "フェーズジャンプ",
+    "phase": "0x300",
+    "subPhase": "320_CD_Tower_Summit"
+   },
+   {
+    "hap": "バッドエンド処理(4)",
+    "action": "フェーズジャンプ",
+    "phase": "0xf30",
+    "subPhase": "Ending_Q"
+   },
+   {
+    "hap": "UI画面会話",
+    "action": "フェーズジャンプ_9S_1",
+    "phase": "0x300",
+    "subPhase": "140_CD_1_Resistance_Camp_9S"
+   },
+   {
+    "hap": "UI画面会話",
+    "action": "フェーズジャンプ_9S_2",
+    "phase": "0x300",
+    "subPhase": "180_00_CD_2_Forest_Castle_9S_2"
+   },
+   {
+    "hap": "UI画面会話",
+    "action": "フェーズジャンプ_A2_1",
+    "phase": "0x300",
+    "subPhase": "70_00_CD_1_Ruined_City"
+   },
+   {
+    "hap": "UI画面会話",
+    "action": "フェーズジャンプ_A2_2",
+    "phase": "0x300",
+    "subPhase": "90_CD_2_Pascal_Village_A2_SQ"
+   },
+   {
+    "hap": "イベント(16)",
+    "action": "フェーズジャンプ",
+    "phase": "0x300",
+    "subPhase": "240_80_CD_Amusement_Park_A2"
+   },
+   {
+    "hap": "フェーズジャンプ",
+    "action": "フェーズジャンプ",
+    "phase": "0x300",
+    "subPhase": "160_10_CD_1_Forest_Castle_9S"
+   },
+   {
+    "hap": "バッドエンド処理(2)",
+    "action": "フェーズジャンプ",
+    "phase": "0xf30",
+    "subPhase": "Ending_O"
+   },
+   {
+    "hap": "兄弟を殺さず帰る",
+    "action": "フェーズジャンプ",
+    "phase": "0x300",
+    "subPhase": "250_CD_Unknown_9S"
+   },
+   {
+    "hap": "塔をハッキング",
+    "action": "フェーズジャンプ",
+    "phase": "0x300",
+    "subPhase": "270_CD_Tower_9S"
+   },
+   {
+    "hap": "流れ(25)",
+    "action": "フェーズジャンプ_p300_27",
+    "phase": "0x300",
+    "subPhase": "27_CD_Ruined_City_2B"
+   },
+   {
+    "hap": "地上_クモボス戦１",
+    "action": "フェーズジャンプ",
+    "phase": "0x300",
+    "subPhase": "310_00_CD_Shooting_9S"
+   },
+   {
+    "hap": "パスカル操作",
+    "action": "フェーズジャンプ",
+    "phase": "0x300",
+    "subPhase": "100_CD_2_Desert_A2"
+   },
+   {
+    "hap": "フェーズジャンプ(36)",
+    "action": "フェーズジャンプ_300_297",
+    "phase": "0x300",
+    "subPhase": "297_CD_Tower_Library_A2"
+   },
+   {
+    "hap": "サブフェーズ遷移",
+    "action": "フェーズジャンプ",
+    "phase": "0x300",
+    "subPhase": "220_30_CD_ResiCamp_Recover_9S"
+   },
+   {
+    "hap": "次のフェーズへジャンプ",
+    "action": "フェーズジャンプ",
+    "phase": "0x300",
+    "subPhase": "180_00_CD_2_Forest_Castle_9S_2"
+   },
+   {
+    "hap": "流れ(3)",
+    "action": "フェーズジャンプ_9Swin",
+    "phase": "0x300",
+    "subPhase": "340_C_Tower_9Swin"
+   },
+   {
+    "hap": "バッドエンド処理",
+    "action": "フェーズジャンプ",
+    "phase": "0xf30",
+    "subPhase": "Ending_O"
+   },
+   {
+    "hap": "流れ(30)",
+    "action": "フェーズジャンプ_p300_50_20",
+    "phase": "0x300",
+    "subPhase": "50_20_CD_Ruined_City_2BDead_9S"
+   },
+   {
+    "hap": "つなぎ",
+    "action": "フェーズジャンプ_300_297",
+    "phase": "0x300",
+    "subPhase": "297_CD_Tower_Library_A2"
+   },
+   {
+    "hap": "フェーズ遷移(3)",
+    "action": "フェーズジャンプ",
+    "phase": "0x300",
+    "subPhase": "240_50_CD_Amusement_Park_A2"
+   },
+   {
+    "hap": "バッドエンド",
+    "action": "フェーズジャンプ",
+    "phase": "0xf30",
+    "subPhase": "Ending_X"
+   },
+   {
+    "hap": "流れ",
+    "action": "フェーズジャンプ",
+    "phase": "0x300",
+    "subPhase": "220_10_CD_GotoCamp_Yoroyoro_9S"
+   },
+   {
+    "hap": "フェーズジャンプ(13)",
+    "action": "フェーズジャンプ",
+    "phase": "0x300",
+    "subPhase": "160_00_CD_1_Forest_Castle_9S"
+   },
+   {
+    "hap": "流れ(28)",
+    "action": "フェーズジャンプ_タイトル",
+    "phase": "0xf00",
+    "subPhase": "START"
+   },
+   {
+    "hap": "流れ",
+    "action": "フェーズジャンプ",
+    "phase": "0x300",
+    "subPhase": "70_10_CD_1_Ruined_City"
+   },
+   {
+    "hap": "イベント(15)",
+    "action": "フェーズジャンプ",
+    "phase": "0x300",
+    "subPhase": "240_60_CD_Amusement_Park_A2"
+   },
+   {
+    "hap": "デボルとの会話_無し",
+    "action": "フェーズジャンプ",
+    "phase": "0x300",
+    "subPhase": "290_CD_Tower_A2"
+   },
+   {
+    "hap": "流れ",
+    "action": "フェーズジャンプ",
+    "phase": "0x300",
+    "subPhase": "80_CD_1_Desert_A2"
+   },
+   {
+    "hap": "流れ(14)",
+    "action": "フェーズジャンプ_いらない？",
+    "phase": "0x300",
+    "subPhase": "335_CD_Tower_seleA2"
+   },
+   {
+    "hap": "流れ(14)",
+    "action": "フェーズジャンプ_DEnd",
+    "phase": "0xf10",
+    "subPhase": "EndRoll_CD"
+   },
+   {
+    "hap": "流れ(14)",
+    "action": "フェーズジャンプ_TrueEnd",
+    "phase": "0xf31",
+    "subPhase": "start"
+   },
+   {
+    "hap": "流れ(7)",
+    "action": "フェーズジャンプ_A2win",
+    "phase": "0x300",
+    "subPhase": "340_D_Tower_A2win"
+   },
+   {
+    "hap": "時間制限",
+    "action": "フェーズジャンプ",
+    "phase": "0xf30",
+    "subPhase": "Ending_P"
+   },
+   {
+    "hap": "流れ(33)",
+    "action": "フェーズジャンプ",
+    "phase": "0x300",
+    "subPhase": "95_CD_2_Pascal_Village_A2"
+   },
+   {
+    "hap": "流れ",
+    "action": "フェーズジャンプ_p300_60",
+    "phase": "0x300",
+    "subPhase": "60_CD_POD"
+   },
+   {
+    "hap": "バッドエンド_塔からの離脱",
+    "action": "フェーズジャンプ",
+    "phase": "0xf30",
+    "subPhase": "Ending_S"
+   },
+   {
+    "hap": "イベント読み込み",
+    "action": "フェーズジャンプ",
+    "phase": "0x300",
+    "subPhase": "82_CD_1_DesertBoss_1_A2"
+   },
+   {
+    "hap": "A2操作でパスカル村に向かう",
+    "action": "フェーズジャンプ",
+    "phase": "0x300",
+    "subPhase": "110_CD_2_Pascal_Village_A2"
+   },
+   {
+    "hap": "流れ",
+    "action": "フェーズジャンプ",
+    "phase": "0x300",
+    "subPhase": "70_20_CD_1_Ruined_City"
+   },
+   {
+    "hap": "流れ",
+    "action": "フェーズジャンプ",
+    "phase": "0x300",
+    "subPhase": "22_CD_Ruined_City_2B"
+   },
+   {
+    "hap": "流れ(17)",
+    "action": "フェーズジャンプ_f10",
+    "phase": "0xf10",
+    "subPhase": "BackTitle_B"
+   },
+   {
+    "hap": "M3060_S0255_GM",
+    "action": "フェーズジャンプ(2)",
+    "phase": "0x300",
+    "subPhase": "295_10_CD_Tower_RedGirl_9S"
+   },
+   {
+    "hap": "流れ(2)",
+    "action": "フェーズジャンプ_9Ssele",
+    "phase": "0x300",
+    "subPhase": "335_CD_Tower_sele9S"
+   },
+   {
+    "hap": "流れ(2)",
+    "action": "フェーズジャンプ_A2sele",
+    "phase": "0x300",
+    "subPhase": "335_CD_Tower_seleA2"
+   },
+   {
+    "hap": "boss(2)",
+    "action": "フェーズジャンプ",
+    "phase": "0x300",
+    "subPhase": "240_70_CD_Amusement_Park_A2"
+   },
+   {
+    "hap": "流れ(20)",
+    "action": "フェーズジャンプ_p300_280",
+    "phase": "0x300",
+    "subPhase": "280_CD_Ruined_City_A2"
+   },
+   {
+    "hap": "流れ(22)",
+    "action": "フェーズジャンプ_300_295",
+    "phase": "0x300",
+    "subPhase": "295_CD_Tower_SelfHack_9S"
+   },
+   {
+    "hap": "流れ(21)",
+    "action": "フェーズジャンプ_300_293",
+    "phase": "0x300",
+    "subPhase": "293_CD_Tower_LibraryHack_A2"
+   },
+   {
+    "hap": "次のフェーズへジャンプ(3)",
+    "action": "フェーズジャンプ",
+    "phase": "0x300",
+    "subPhase": "180_10_CD_2_Pod_Talk"
+   },
+   {
+    "hap": "合流",
+    "action": "フェーズジャンプ",
+    "phase": "0x300",
+    "subPhase": "220_10_CD_GotoCamp_Yoroyoro_9S"
+   },
+   {
+    "hap": "バッドエンド処理",
+    "action": "フェーズジャンプ",
+    "phase": "0xf30",
+    "subPhase": "Ending_O"
+   },
+   {
+    "hap": "次のフェーズへジャンプ(4)",
+    "action": "フェーズジャンプ",
+    "phase": "0x300",
+    "subPhase": "180_10_CD_2_Submerge_City_9S"
+   },
+   {
+    "hap": "流れ(9)",
+    "action": "フェーズジャンプ_p300_30",
+    "phase": "0x300",
+    "subPhase": "30_00_CD_Bunker_2B"
+   },
+   {
+    "hap": "フェーズジャンプ(43)",
+    "action": "フェーズジャンプ_p300_170_10_仮",
+    "phase": "0x300",
+    "subPhase": "170_10_CD_2_Pod_Talk"
+   },
+   {
+    "hap": "フェーズジャンプ(18)",
+    "action": "フェーズジャンプ_p300_220",
+    "phase": "0x300",
+    "subPhase": "240_10_CD_Amusement_Park_9S"
+   },
+   {
+    "hap": "シナリオ(5)",
+    "action": "フェーズジャンプ",
+    "phase": "0x300",
+    "subPhase": "250_CD_Unknown_9S"
+   },
+   {
+    "hap": "流れ(26)",
+    "action": "フェーズジャンプ_CEnd",
+    "phase": "0xf10",
+    "subPhase": "EndRoll_CD"
+   },
+   {
+    "hap": "流れ(26)",
+    "action": "フェーズジャンプ_TrueEnd",
+    "phase": "0xf31",
+    "subPhase": "start"
+   },
+   {
+    "hap": "Boss(2)",
+    "action": "フェーズジャンプ",
+    "phase": "0x300",
+    "subPhase": "83_CD_1_DesertBoss_HD_2_A2"
+   },
+   {
+    "hap": "ロボット兄弟",
+    "action": "フェーズジャンプ",
+    "phase": "0x300",
+    "subPhase": "250_CD_Unknown_9S"
+   },
+   {
+    "hap": "流れ(6)",
+    "action": "フェーズジャンプ_p300_17",
+    "phase": "0x300",
+    "subPhase": "17_CD_Bunker_Aerial_battle_2B"
+   },
+   {
+    "hap": "イベント再生",
+    "action": "フェーズジャンプ",
+    "phase": "0x300",
+    "subPhase": "40_CD_Bunker_Shooting_2B"
+   },
+   {
+    "hap": "流れ",
+    "action": "フェーズジャンプ",
+    "phase": "0x300",
+    "subPhase": "21_CD_Ruined_City_2B"
+   },
+   {
+    "hap": "M3010_S0025_GM",
+    "action": "フェーズジャンプ",
+    "phase": "0x300",
+    "subPhase": "81_CD_1_DesertBoss_HD_A2"
+   },
+   {
+    "hap": "キャラ切り替え&フェーズジャンプ",
+    "action": "フェーズジャンプ",
+    "phase": "0x300",
+    "subPhase": "26_CD_Ruined_City_9S"
+   },
+   {
+    "hap": "レジスタンスキャンプから外に出る",
+    "action": "フェーズジャンプ",
+    "phase": "0x300",
+    "subPhase": "150_CD_Ruined_City_9S"
+   },
+   {
+    "hap": "遊園地前から塔へ向かうA2",
+    "action": "フェーズジャンプ",
+    "phase": "0x300",
+    "subPhase": "290_CD_Tower_A2"
+   },
+   {
+    "hap": "フェーズジャンプ(23)",
+    "action": "フェーズジャンプ_9S_1",
+    "phase": "0x300",
+    "subPhase": "140_CD_1_Resistance_Camp_9S"
+   },
+   {
+    "hap": "フェーズジャンプ(23)",
+    "action": "フェーズジャンプ_A2_1",
+    "phase": "0x300",
+    "subPhase": "70_CD_1_Ruined_City_A2"
+   },
+   {
+    "hap": "フェーズジャンプ(12)",
+    "action": "フェーズジャンプ",
+    "phase": "0x300",
+    "subPhase": "140_CD_1_Resistance_Camp_9S"
+   },
+   {
+    "hap": "フェーズジャンプ(12)",
+    "action": "フェーズジャンプ_9S_2",
+    "phase": "0x300",
+    "subPhase": "180_00_CD_2_Forest_Castle_9S_2"
+   },
+   {
+    "hap": "フェーズジャンプ(12)",
+    "action": "フェーズジャンプ_9S_1",
+    "phase": "0x300",
+    "subPhase": "140_CD_1_Resistance_Camp_9S"
+   },
+   {
+    "hap": "フェーズジャンプ(12)",
+    "action": "フェーズジャンプ_A2_2",
+    "phase": "0x300",
+    "subPhase": "90_CD_2_Pascal_Village_A2_SQ"
+   },
+   {
+    "hap": "フェーズジャンプ(12)",
+    "action": "フェーズジャンプ_A2_1",
+    "phase": "0x300",
+    "subPhase": "70_CD_1_Ruined_City_A2"
+   },
+   {
+    "hap": "飛行ルート制御（プロローグ）",
+    "action": "スクロールマップ(2)",
+    "phase": "0x100",
+    "subPhase": "\"\""
+   },
+   {
+    "hap": "飛行ルート制御（プロローグ）",
+    "action": "スクロールマップ_バンカー爆発後降下STG",
+    "phase": "0x300",
+    "subPhase": "50_CD_Submerge_City_2B"
+   },
+   {
+    "hap": "STG背景ループ制御",
+    "action": "スクロールマップ_演説後バンカーから大廃墟都市へのＳＴＧ",
+    "phase": "0x300",
+    "subPhase": "20_CD_Ruined_City_2B"
+   },
+   {
+    "hap": "パスカル村_フェーズジャンプ",
+    "action": "フェーズジャンプ",
+    "phase": "0x300",
+    "subPhase": "120_00_CD_2_RobotM_Shelter_A2"
+   },
+   {
+    "hap": "フェーズジャンプ",
+    "action": "フェーズジャンプ",
+    "phase": "0x300",
+    "subPhase": "230_CD_Resistance_Camp_9S"
+   },
+   {
+    "hap": "生き残り敵配置/アクセス制御",
+    "action": "フェーズジャンプ",
+    "phase": "0x300",
+    "subPhase": "170_10_CD_2_Pod_Talk"
+   },
+   {
+    "hap": "エレベーターに乗る",
+    "action": "フェーズジャンプ",
+    "phase": "0x300",
+    "subPhase": "170_10_CD_2_Pod_Talk"
+   },
+   {
+    "hap": "赤い字少女大乱闘(2)",
+    "action": "フェーズジャンプ",
+    "phase": "0x300",
+    "subPhase": "300_00_CD_Tower_Elevator_A2"
+   },
+   {
+    "hap": "汚染ヨルハ飛行ユニット部隊と戦闘",
+    "action": "フェーズジャンプ",
+    "phase": "0x300",
+    "subPhase": "297_CD_Tower_Library_A2"
+   },
+   {
+    "hap": "シューティング1",
+    "action": "フェーズジャンプ",
+    "phase": "0x300",
+    "subPhase": "300_10_CD_Tower_Elevator_A2"
+   },
+   {
+    "hap": "..M3000_S0410_GM",
+    "action": "フェーズジャンプ",
+    "phase": "0x300",
+    "subPhase": "30_10_CD_Bunker_Battle_2B"
+   },
+   {
+    "hap": "屋上_敵出現→コア破壊→フェーズ遷移",
+    "action": "フェーズジャンプ",
+    "phase": "0x300",
+    "subPhase": "160_20_CD_1_Forest_Castle_9S"
+   },
+   {
+    "hap": "地上_ザコ戦",
+    "action": "フェーズジャンプ",
+    "phase": "0x300",
+    "subPhase": "310_10_CD_Shooting_9S"
+   },
+   {
+    "hap": "シューティング２",
+    "action": "フェーズジャンプ",
+    "phase": "0x300",
+    "subPhase": "300_20_CD_Tower_Elevator_A2"
+   },
+   {
+    "hap": "フェーズジャンプ(20)",
+    "action": "フェーズジャンプ",
+    "phase": "0x300",
+    "subPhase": "200_CD_Robot_Mountain_A2"
+   },
+   {
+    "hap": "屋上",
+    "action": "フェーズジャンプ",
+    "phase": "0x300",
+    "subPhase": "180_20_CD_2_Submerge_City_9S"
+   },
+   {
+    "hap": "地上_資材打ち上げイベント",
+    "action": "フェーズジャンプ",
+    "phase": "0x300",
+    "subPhase": "310_20_CD_Shooting_9S"
+   },
+   {
+    "hap": "シューティング３",
+    "action": "フェーズジャンプ",
+    "phase": "0x300",
+    "subPhase": "300_30_CD_Tower_Elevator_A2"
+   },
+   {
+    "hap": "フェーズジャンプ(46)",
+    "action": "フェーズジャンプ",
+    "phase": "0x300",
+    "subPhase": "15_CD_Ruined_City_9S"
+   },
+   {
+    "hap": "地上_クモボス戦２",
+    "action": "フェーズジャンプ",
+    "phase": "0x300",
+    "subPhase": "310_30_CD_Shooting_9S"
+   },
+   {
+    "hap": "シューティング4",
+    "action": "フェーズジャンプ",
+    "phase": "0x300",
+    "subPhase": "300_40_CD_Tower_Elevator_A2"
+   }
+  ],
+  "p400": [],
+  "pf10": [
+   {
+    "hap": "流れ(28)",
+    "action": "フェーズジャンプ_タイトル",
+    "phase": "0xf00",
+    "subPhase": "START"
+   }
+  ],
+  "pf30": [],
+  "pf31": [
+   {
+    "hap": "流れ(27)",
+    "action": "フェーズジャンプ_諦め",
+    "phase": "0xf10",
+    "subPhase": "BackTitle_CD"
+   },
+   {
+    "hap": "流れ(27)",
+    "action": "フェーズジャンプ_STGクリア",
+    "phase": "0x300",
+    "subPhase": "360_CD_TrueEnd_FIN"
+   }
+  ]
+ }
+}

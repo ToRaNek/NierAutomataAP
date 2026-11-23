@@ -1,0 +1,767 @@
+{
+ "endings": [
+  {
+   "letter": "A",
+   "title": "flowers for m[A]chines",
+   "pf30_subphase": null,
+   "pf30_comment_ja": null,
+   "pf30_comment_en_unofficial": null
+  },
+  {
+   "letter": "B",
+   "title": "or not to [B]e",
+   "pf30_subphase": null,
+   "pf30_comment_ja": null,
+   "pf30_comment_en_unofficial": null
+  },
+  {
+   "letter": "C",
+   "title": "meaningless [C]ode",
+   "pf30_subphase": null,
+   "pf30_comment_ja": null,
+   "pf30_comment_en_unofficial": null
+  },
+  {
+   "letter": "D",
+   "title": "chil[D]hood's end",
+   "pf30_subphase": null,
+   "pf30_comment_ja": null,
+   "pf30_comment_en_unofficial": null
+  },
+  {
+   "letter": "E",
+   "title": "the [E]nd of YoRHa",
+   "pf30_subphase": "Ending_E",
+   "pf30_comment_ja": "未使用",
+   "pf30_comment_en_unofficial": "unused"
+  },
+  {
+   "letter": "F",
+   "title": "mission [F]ailed",
+   "pf30_subphase": "Ending_F",
+   "pf30_comment_ja": "B_プロローグ時、再構築ゲームで長時間放置",
+   "pf30_comment_en_unofficial": "route B prologue: leave the rebuild mini-game idle for a long time"
+  },
+  {
+   "letter": "G",
+   "title": "hun[G]ry for knowledge",
+   "pf30_subphase": "Ending_G",
+   "pf30_comment_ja": "B_プロローグで飛行ユニットに乗らず逃走",
+   "pf30_comment_en_unofficial": "route B prologue: run away without boarding the flight unit"
+  },
+  {
+   "letter": "H",
+   "title": "a mountain too [H]igh",
+   "pf30_subphase": "Ending_H",
+   "pf30_comment_ja": "AB_巨大ロボ遭遇時に逃走",
+   "pf30_comment_en_unofficial": "routes A/B: run away when encountering the giant machine"
+  },
+  {
+   "letter": "I",
+   "title": "no [I] in team",
+   "pf30_subphase": "Ending_I",
+   "pf30_comment_ja": "A_コピー都市で９S放置して逃走",
+   "pf30_comment_en_unofficial": "route A: abandon 9S in the Copied City and run away"
+  },
+  {
+   "letter": "J",
+   "title": "bad [J]udgment",
+   "pf30_subphase": "Ending_J",
+   "pf30_comment_ja": "A_和平を望むロボを殺害",
+   "pf30_comment_en_unofficial": "route A: kill the peace-seeking machines"
+  },
+  {
+   "letter": "K",
+   "title": "aji wo [K]utta",
+   "pf30_subphase": "Ending_K",
+   "pf30_comment_ja": "いつでも_アジを食べる",
+   "pf30_comment_en_unofficial": "anytime: eat the mackerel"
+  },
+  {
+   "letter": "L",
+   "title": "[L]one wolf",
+   "pf30_subphase": "Ending_L",
+   "pf30_comment_ja": "AB_レジキャン襲撃〜イヴ戦間でエリア外へ逃走",
+   "pf30_comment_en_unofficial": "routes A/B: leave the area between the Resistance Camp attack and the Eve fight"
+  },
+  {
+   "letter": "M",
+   "title": "break ti[M]e",
+   "pf30_subphase": "Ending_M",
+   "pf30_comment_ja": "CD_パスカル村襲撃ミッション中に村から逃走",
+   "pf30_comment_en_unofficial": "routes C/D: run from the village during the Pascal's Village attack mission"
+  },
+  {
+   "letter": "N",
+   "title": "[N]o man's village",
+   "pf30_subphase": "Ending_N",
+   "pf30_comment_ja": "CD_パスカル村の村人を全滅させる",
+   "pf30_comment_en_unofficial": "routes C/D: wipe out the Pascal's Village residents"
+  },
+  {
+   "letter": "O",
+   "title": "just y[O]u and me",
+   "pf30_subphase": "Ending_O",
+   "pf30_comment_ja": "CD_大乱戦中に逃走",
+   "pf30_comment_en_unofficial": "routes C/D: run away during the big melee"
+  },
+  {
+   "letter": "P",
+   "title": "corru[P]tion",
+   "pf30_subphase": "Ending_P",
+   "pf30_comment_ja": "CD_２Bがショッピングモール移動時、逃走",
+   "pf30_comment_en_unofficial": "routes C/D: run away while 2B is moving to the shopping mall"
+  },
+  {
+   "letter": "Q",
+   "title": "[Q]uestionable actions",
+   "pf30_subphase": "Ending_Q",
+   "pf30_comment_ja": "CD_９Sがショッピングモール移動時、逃走",
+   "pf30_comment_en_unofficial": "routes C/D: run away while 9S is moving to the shopping mall"
+  },
+  {
+   "letter": "R",
+   "title": "mave[R]ick",
+   "pf30_subphase": "Ending_R",
+   "pf30_comment_ja": "CD_パスカル村の避難している住人を殺す",
+   "pf30_comment_en_unofficial": "routes C/D: kill the evacuated Pascal's Village residents"
+  },
+  {
+   "letter": "S",
+   "title": "city e[S]cape",
+   "pf30_subphase": "Ending_S",
+   "pf30_comment_ja": "CD_デボルポポルを残して廃墟都市から逃走。",
+   "pf30_comment_en_unofficial": "routes C/D: flee the City Ruins leaving Devola and Popola behind"
+  },
+  {
+   "letter": "T",
+   "title": "fa[T]al error",
+   "pf30_subphase": "Ending_T",
+   "pf30_comment_ja": "いつでも_OSチップを外す",
+   "pf30_comment_en_unofficial": "anytime: remove the OS chip"
+  },
+  {
+   "letter": "U",
+   "title": "deb[U]nked",
+   "pf30_subphase": "Ending_U",
+   "pf30_comment_ja": "いつでも_バンカーで自爆",
+   "pf30_comment_en_unofficial": "anytime: self-destruct in the Bunker"
+  },
+  {
+   "letter": "V",
+   "title": "reckless bra[V]ery",
+   "pf30_subphase": "Ending_V",
+   "pf30_comment_ja": "CD_塔メインユニットハッキングをセずに放置",
+   "pf30_comment_en_unofficial": "routes C/D: leave the Tower main unit without hacking it"
+  },
+  {
+   "letter": "W",
+   "title": "broken [W]ings",
+   "pf30_subphase": "Ending_W",
+   "pf30_comment_ja": "AB_プロローグロボット山で死亡",
+   "pf30_comment_en_unofficial": "routes A/B: die at the prologue factory (Robot Mountain)"
+  },
+  {
+   "letter": "X",
+   "title": "time to rela[X]",
+   "pf30_subphase": "Ending_X",
+   "pf30_comment_ja": "CD_A2で２Bを助けずに逃走",
+   "pf30_comment_en_unofficial": "routes C/D: as A2, run away without saving 2B"
+  },
+  {
+   "letter": "Y",
+   "title": "head[Y] battle",
+   "pf30_subphase": "Ending_Y",
+   "pf30_comment_ja": "CD_エミール最終戦で逃亡",
+   "pf30_comment_en_unofficial": "routes C/D: run away during the final Emil battle"
+  },
+  {
+   "letter": "Z",
+   "title": "over[Z]ealous",
+   "pf30_subphase": "Ending_Z",
+   "pf30_comment_ja": "CD_レジキャン前のパスカルを殺す",
+   "pf30_comment_en_unofficial": "routes C/D: kill Pascal in front of the Resistance Camp"
+  }
+ ],
+ "ending_jumps": [
+  {
+   "hap": "バットエンド処理",
+   "action": "フェーズジャンプ",
+   "phase": "0xf30",
+   "subPhase": "Ending_G",
+   "file": "ph1/p100.dat"
+  },
+  {
+   "hap": "バッドエンド",
+   "action": "フェーズジャンプ_バッドエンド",
+   "phase": "0xf30",
+   "subPhase": "Ending_H",
+   "file": "ph1/p100.dat"
+  },
+  {
+   "hap": "エリア外警告",
+   "action": "フェーズジャンプ",
+   "phase": "0xf30",
+   "subPhase": "Ending_L",
+   "file": "ph2/p200.dat"
+  },
+  {
+   "hap": "..M1090_S0320_GM_a",
+   "action": "フェーズジャンプ",
+   "phase": "0xf10",
+   "subPhase": "EndRoll_A",
+   "file": "ph2/p200.dat"
+  },
+  {
+   "hap": "司祭達を攻撃した際の対処2",
+   "action": "フェーズジャンプ",
+   "phase": "0xf30",
+   "subPhase": "Ending_J",
+   "file": "ph2/p200.dat"
+  },
+  {
+   "hap": "司祭達を攻撃した際の対処",
+   "action": "フェーズジャンプ",
+   "phase": "0xf30",
+   "subPhase": "Ending_J",
+   "file": "ph2/p200.dat"
+  },
+  {
+   "hap": "流れ(27)",
+   "action": "フェーズジャンプ_諦め",
+   "phase": "0xf10",
+   "subPhase": "BackTitle_CD",
+   "file": "ph3/p300.dat"
+  },
+  {
+   "hap": "バッドエンド処理",
+   "action": "フェーズジャンプ",
+   "phase": "0xf30",
+   "subPhase": "Ending_O",
+   "file": "ph3/p300.dat"
+  },
+  {
+   "hap": "バッドエンド処理(4)",
+   "action": "フェーズジャンプ",
+   "phase": "0xf30",
+   "subPhase": "Ending_Q",
+   "file": "ph3/p300.dat"
+  },
+  {
+   "hap": "バッドエンド処理(2)",
+   "action": "フェーズジャンプ",
+   "phase": "0xf30",
+   "subPhase": "Ending_O",
+   "file": "ph3/p300.dat"
+  },
+  {
+   "hap": "バッドエンド処理",
+   "action": "フェーズジャンプ",
+   "phase": "0xf30",
+   "subPhase": "Ending_O",
+   "file": "ph3/p300.dat"
+  },
+  {
+   "hap": "バッドエンド",
+   "action": "フェーズジャンプ",
+   "phase": "0xf30",
+   "subPhase": "Ending_X",
+   "file": "ph3/p300.dat"
+  },
+  {
+   "hap": "流れ(14)",
+   "action": "フェーズジャンプ_DEnd",
+   "phase": "0xf10",
+   "subPhase": "EndRoll_CD",
+   "file": "ph3/p300.dat"
+  },
+  {
+   "hap": "時間制限",
+   "action": "フェーズジャンプ",
+   "phase": "0xf30",
+   "subPhase": "Ending_P",
+   "file": "ph3/p300.dat"
+  },
+  {
+   "hap": "バッドエンド_塔からの離脱",
+   "action": "フェーズジャンプ",
+   "phase": "0xf30",
+   "subPhase": "Ending_S",
+   "file": "ph3/p300.dat"
+  },
+  {
+   "hap": "流れ(17)",
+   "action": "フェーズジャンプ_f10",
+   "phase": "0xf10",
+   "subPhase": "BackTitle_B",
+   "file": "ph3/p300.dat"
+  },
+  {
+   "hap": "バッドエンド処理",
+   "action": "フェーズジャンプ",
+   "phase": "0xf30",
+   "subPhase": "Ending_O",
+   "file": "ph3/p300.dat"
+  },
+  {
+   "hap": "流れ(26)",
+   "action": "フェーズジャンプ_CEnd",
+   "phase": "0xf10",
+   "subPhase": "EndRoll_CD",
+   "file": "ph3/p300.dat"
+  },
+  {
+   "hap": "流れ(27)",
+   "action": "フェーズジャンプ_諦め",
+   "phase": "0xf10",
+   "subPhase": "BackTitle_CD",
+   "file": "phf/pf31.dat"
+  },
+  {
+   "hap": "バッドエンド判定",
+   "action": "フェーズジャンプ_パスカル殺害後のバッドエンド",
+   "phase": "0xf30",
+   "subPhase": "Ending_Z",
+   "file": "quest/q910.dat"
+  },
+  {
+   "hap": "バッドエンド",
+   "action": "フェーズジャンプ_バッドエンド",
+   "phase": "0xf30",
+   "subPhase": "Ending_F",
+   "file": "quest/qac8.dat"
+  },
+  {
+   "hap": "流れ(27)",
+   "action": "フェーズジャンプ_DEnd",
+   "phase": "0xf10",
+   "subPhase": "EndRoll_CD",
+   "file": "quest/qaef.dat"
+  }
+ ],
+ "scene_state_endings": [
+  {
+   "hap": "..M1090_S0320_GM_a",
+   "action": "コマンド送信(3)",
+   "label": "SceneStateSystem.set",
+   "args": "ending_A",
+   "file": "ph2/p200.dat"
+  },
+  {
+   "hap": "流れ(3)",
+   "action": "コマンド送信_クリアB",
+   "label": "SceneStateSystem.set",
+   "args": "ending_B",
+   "file": "phf/pf10.dat"
+  },
+  {
+   "hap": "流れ(3)",
+   "action": "コマンド送信_実績＿Bクリア",
+   "label": "MiscState.unlockAchievement",
+   "args": "0x11",
+   "file": "phf/pf10.dat"
+  },
+  {
+   "hap": "流れ",
+   "action": "コマンド送信_実績＿Cクリア",
+   "label": "MiscState.unlockAchievement",
+   "args": "0x17",
+   "file": "phf/pf10.dat"
+  },
+  {
+   "hap": "流れ(2)",
+   "action": "コマンド送信_実績＿Aクリア",
+   "label": "MiscState.unlockAchievement",
+   "args": "0x10",
+   "file": "phf/pf10.dat"
+  }
+ ],
+ "other_ending_subphases": {
+  "pf00": [
+   {
+    "order": 0,
+    "Name": "SIGNIN",
+    "RoomNo": "rf00",
+    "PlayerPos": "0.0 0.0 0.0 0.0",
+    "isRestartPoint": "NO"
+   },
+   {
+    "order": 1,
+    "Name": "START",
+    "RoomNo": "rf00",
+    "PlayerPos": "0.0 0.0 0.0 0.0",
+    "isRestartPoint": "NO",
+    "BgmStart": null,
+    "BgmThrough": null,
+    "ManualMap": "YES"
+   }
+  ],
+  "pf10": [
+   {
+    "order": 0,
+    "Name": "EndRoll_A",
+    "Comment": "Aルートエンドロール",
+    "RoomNo": "r001 g5f0001",
+    "PlayerPos": "0.0 0.0 0.0 0.0",
+    "isRestartPoint": "NO",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 1,
+    "Name": "BackTitle_A",
+    "Comment": "Aルート後、タイトル画面へ遷移",
+    "RoomNo": "r001 g5f0001",
+    "PlayerPos": "0.0 0.0 0.0 0.0",
+    "isRestartPoint": "NO",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 2,
+    "Name": "BackTitle_B",
+    "Comment": "Bルート後、タイトル画面へ遷移",
+    "RoomNo": "r001 g5f0001",
+    "PlayerPos": "0.0 0.0 0.0 0.0",
+    "isRestartPoint": "NO",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 3,
+    "Name": "EndRoll_CD",
+    "Comment": "CDルートエンドロール",
+    "RoomNo": "r001 g5f0001",
+    "PlayerPos": "0.0 0.0 0.0 0.0",
+    "isRestartPoint": "NO",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 4,
+    "Name": "BackTitle_CD",
+    "Comment": "C/Dルート後、タイトル画面へ遷移",
+    "RoomNo": "r001 g5f0001",
+    "PlayerPos": "0.0 0.0 0.0 0.0",
+    "isRestartPoint": "NO",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 5,
+    "Name": "BackTitle_True",
+    "Comment": "最終ルート後、タイトル画面へ遷移",
+    "RoomNo": "r001 g5f0001",
+    "PlayerPos": "0.0 0.0 0.0 0.0",
+    "isRestartPoint": "NO",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 6,
+    "Name": "BackTitle_FIN",
+    "Comment": "オンライン名前登録",
+    "RoomNo": "r001 g5f0001",
+    "PlayerPos": "0.0 0.0 0.0 0.0",
+    "isRestartPoint": "NO",
+    "ManualMap": "YES"
+   }
+  ],
+  "pf20": [
+   {
+    "order": 0,
+    "Name": "START",
+    "Comment": "コメント欄",
+    "RoomNo": "r001",
+    "PlayerPos": "0.0 0.0 0.0 0.0",
+    "isRestartPoint": "NO"
+   }
+  ],
+  "pf30": [
+   {
+    "order": 0,
+    "Name": "Ending_E",
+    "Comment": "未使用",
+    "RoomNo": "r001",
+    "PlayerPos": "0.0 0.0 0.0 0.0",
+    "isRestartPoint": "NO"
+   },
+   {
+    "order": 1,
+    "Name": "Ending_F",
+    "Comment": "B_プロローグ時、再構築ゲームで長時間放置",
+    "RoomNo": "r001",
+    "PlayerPos": "0.0 0.0 0.0 0.0",
+    "isRestartPoint": "NO",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 2,
+    "Name": "Ending_G",
+    "Comment": "B_プロローグで飛行ユニットに乗らず逃走",
+    "RoomNo": "r001",
+    "PlayerPos": "0.0 0.0 0.0 0.0",
+    "isRestartPoint": "NO",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 3,
+    "Name": "Ending_H",
+    "Comment": "AB_巨大ロボ遭遇時に逃走",
+    "RoomNo": "r001",
+    "PlayerPos": "0.0 0.0 0.0 0.0",
+    "isRestartPoint": "NO",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 4,
+    "Name": "Ending_I",
+    "Comment": "A_コピー都市で９S放置して逃走",
+    "RoomNo": "r001",
+    "PlayerPos": "0.0 0.0 0.0 0.0",
+    "isRestartPoint": "NO",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 5,
+    "Name": "Ending_J",
+    "Comment": "A_和平を望むロボを殺害",
+    "RoomNo": "r001",
+    "PlayerPos": "0.0 0.0 0.0 0.0",
+    "isRestartPoint": "NO",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 6,
+    "Name": "Ending_K",
+    "Comment": "いつでも_アジを食べる",
+    "RoomNo": "r001",
+    "PlayerPos": "0.0 0.0 0.0 0.0",
+    "isRestartPoint": "NO",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 7,
+    "Name": "Ending_L",
+    "Comment": "AB_レジキャン襲撃〜イヴ戦間でエリア外へ逃走",
+    "RoomNo": "r001",
+    "PlayerPos": "0.0 0.0 0.0 0.0",
+    "isRestartPoint": "NO",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 8,
+    "Name": "Ending_M",
+    "Comment": "CD_パスカル村襲撃ミッション中に村から逃走",
+    "RoomNo": "r001",
+    "PlayerPos": "0.0 0.0 0.0 0.0",
+    "isRestartPoint": "NO",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 9,
+    "Name": "Ending_N",
+    "Comment": "CD_パスカル村の村人を全滅させる",
+    "RoomNo": "r001",
+    "PlayerPos": "0.0 0.0 0.0 0.0",
+    "isRestartPoint": "NO",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 10,
+    "Name": "Ending_O",
+    "Comment": "CD_大乱戦中に逃走",
+    "RoomNo": "r001",
+    "PlayerPos": "0.0 0.0 0.0 0.0",
+    "isRestartPoint": "NO",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 11,
+    "Name": "Ending_P",
+    "Comment": "CD_２Bがショッピングモール移動時、逃走",
+    "RoomNo": "r001",
+    "PlayerPos": "0.0 0.0 0.0 0.0",
+    "isRestartPoint": "NO",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 12,
+    "Name": "Ending_Q",
+    "Comment": "CD_９Sがショッピングモール移動時、逃走",
+    "RoomNo": "r001",
+    "PlayerPos": "0.0 0.0 0.0 0.0",
+    "isRestartPoint": "NO",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 13,
+    "Name": "Ending_R",
+    "Comment": "CD_パスカル村の避難している住人を殺す",
+    "RoomNo": "r001",
+    "PlayerPos": "0.0 0.0 0.0 0.0",
+    "isRestartPoint": "NO",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 14,
+    "Name": "Ending_S",
+    "Comment": "CD_デボルポポルを残して廃墟都市から逃走。",
+    "RoomNo": "r001",
+    "PlayerPos": "0.0 0.0 0.0 0.0",
+    "isRestartPoint": "NO",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 15,
+    "Name": "Ending_T",
+    "Comment": "いつでも_OSチップを外す",
+    "RoomNo": "r001",
+    "PlayerPos": "0.0 0.0 0.0 0.0",
+    "isRestartPoint": "NO",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 16,
+    "Name": "Ending_U",
+    "Comment": "いつでも_バンカーで自爆",
+    "RoomNo": "r001",
+    "PlayerPos": "0.0 0.0 0.0 0.0",
+    "isRestartPoint": "NO",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 17,
+    "Name": "Ending_V",
+    "Comment": "CD_塔メインユニットハッキングをセずに放置",
+    "RoomNo": "r001",
+    "PlayerPos": "0.0 0.0 0.0 0.0",
+    "isRestartPoint": "NO",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 18,
+    "Name": "Ending_W",
+    "Comment": "AB_プロローグロボット山で死亡",
+    "RoomNo": "r001",
+    "PlayerPos": "0.0 0.0 0.0 0.0",
+    "isRestartPoint": "NO",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 19,
+    "Name": "Ending_X",
+    "Comment": "CD_A2で２Bを助けずに逃走",
+    "RoomNo": "r001",
+    "PlayerPos": "0.0 0.0 0.0 0.0",
+    "isRestartPoint": "NO",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 20,
+    "Name": "Ending_Y",
+    "Comment": "CD_エミール最終戦で逃亡",
+    "RoomNo": "r001",
+    "PlayerPos": "0.0 0.0 0.0 0.0",
+    "isRestartPoint": "NO",
+    "ManualMap": "YES"
+   },
+   {
+    "order": 21,
+    "Name": "Ending_Z",
+    "Comment": "CD_レジキャン前のパスカルを殺す",
+    "RoomNo": "r001",
+    "PlayerPos": "0.0 0.0 0.0 0.0",
+    "isRestartPoint": "NO",
+    "ManualMap": "YES"
+   }
+  ],
+  "pf31": [
+   {
+    "order": 0,
+    "Name": "start",
+    "Comment": "コメント欄",
+    "RoomNo": "r001",
+    "PlayerPos": "0.0 0.0 0.0 0.0",
+    "isRestartPoint": "NO"
+   },
+   {
+    "order": 1,
+    "Name": "endroll1",
+    "Comment": "スタッフロール１",
+    "RoomNo": "r001",
+    "PlayerPos": "0.0 0.0 0.0 0.0",
+    "isRestartPoint": "NO"
+   },
+   {
+    "order": 2,
+    "Name": "endroll2",
+    "Comment": "スタッフロール２",
+    "RoomNo": "r001",
+    "PlayerPos": "0.0 0.0 0.0 0.0",
+    "isRestartPoint": "NO"
+   },
+   {
+    "order": 3,
+    "Name": "shooting",
+    "Comment": "シューティング",
+    "RoomNo": "r001",
+    "PlayerPos": "0.0 0.0 0.0 0.0",
+    "isRestartPoint": "NO"
+   },
+   {
+    "order": 4,
+    "Name": "clear",
+    "Comment": "シューティングクリア",
+    "RoomNo": "r001",
+    "PlayerPos": "0.0 0.0 0.0 0.0",
+    "isRestartPoint": "NO"
+   }
+  ],
+  "pf40": [
+   {
+    "order": 0,
+    "Name": "save_p100_10",
+    "Comment": "セーブ画面：2Bと9Sバンカー会話後",
+    "RoomNo": "r001",
+    "PlayerPos": "0.0 0.0 0.0 0.0",
+    "isRestartPoint": "NO"
+   },
+   {
+    "order": 1,
+    "Name": "save_sub900",
+    "Comment": "セーブ画面：エミール最後の戦い",
+    "RoomNo": "r001",
+    "PlayerPos": "0.0 0.0 0.0 0.0",
+    "isRestartPoint": "NO"
+   }
+  ],
+  "pf50": [
+   {
+    "order": 0,
+    "Name": "trial_end",
+    "Comment": "コメント欄",
+    "RoomNo": "r001",
+    "PlayerPos": "0.0 0.0 0.0 0.0",
+    "isRestartPoint": "NO",
+    "ManualMap": "YES"
+   }
+  ],
+  "pf60": [
+   {
+    "order": 0,
+    "Name": "EndRoll_DLC",
+    "Comment": "DLCエンドロール",
+    "RoomNo": "r001",
+    "PlayerPos": "0.0 0.0 0.0 0.0",
+    "isRestartPoint": "NO",
+    "ManualMap": "YES"
+   }
+  ],
+  "pfa0": [
+   {
+    "order": 0,
+    "Name": "START",
+    "Comment": "敵セット部屋",
+    "RoomNo": "g5ab00",
+    "PlayerPos": "-1135.71 -35 -459.29 0",
+    "isRestartPoint": "NO",
+    "ManualMap": "YES"
+   }
+  ]
+ }
+}

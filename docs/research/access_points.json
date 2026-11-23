@@ -1,0 +1,752 @@
+{
+ "note": "Terminaux = objets ba1000 (Bunker/camp) et ba1100 ('自販機' = distributeur) avec le parametre codeName ft_XX ; deverrouillage par la variable MiscState 'ft_XX true/false'. La correspondance code -> nom affiche est DEDUITE (voir confidence/evidence), pas lue dans une table.",
+ "english_names": {
+  "CORE_MAP_TRANS_0001": "Bunker",
+  "CORE_MAP_TRANS_0002": "Resistance Camp",
+  "CORE_MAP_TRANS_0003": "City Ruins: Center",
+  "CORE_MAP_TRANS_0004": "City Ruins: Near Factory",
+  "CORE_MAP_TRANS_0005": "City Ruins: Near the Tower",
+  "CORE_MAP_TRANS_0006": "Desert: Camp",
+  "CORE_MAP_TRANS_0007": "Desert: Center",
+  "CORE_MAP_TRANS_0008": "Desert: Oil Field",
+  "CORE_MAP_TRANS_0009": "Desert: Housing Complex",
+  "CORE_MAP_TRANS_0010": "Park Ruins: Attraction Sq.",
+  "CORE_MAP_TRANS_0011": "Park Ruins: Coaster",
+  "CORE_MAP_TRANS_0012": "Park Ruins: Above Theater",
+  "CORE_MAP_TRANS_0013": "Park Ruins: Theater",
+  "CORE_MAP_TRANS_0014": "Pascal's Village",
+  "CORE_MAP_TRANS_0015": "Forest Zone: Center",
+  "CORE_MAP_TRANS_0016": "Forest Castle: Front",
+  "CORE_MAP_TRANS_0017": "Forest Castle: Royal Chamber",
+  "CORE_MAP_TRANS_0018": "Factory: Entrance",
+  "CORE_MAP_TRANS_0019": "Factory: Hangar",
+  "CORE_MAP_TRANS_0020": "Factory: Furnace",
+  "CORE_MAP_TRANS_0021": "Flooded City: Coast",
+  "CORE_MAP_TRANS_0022": "City Ruins: Cave"
+ },
+ "code_to_name_inferred": [
+  {
+   "code": "ft_BK",
+   "inferred_name_keys": [
+    "CORE_MAP_TRANS_0001"
+   ],
+   "inferred_names": [
+    "Bunker"
+   ],
+   "confidence": "high",
+   "evidence": "objets ba1000 de la Bunker (qb40), MiscState 'ft_BK' dans p300 'バンカーセーブ禁止'",
+   "seen_in_layouts_or_commands": true
+  },
+  {
+   "code": "ft_RMI",
+   "inferred_name_keys": [
+    "CORE_MAP_TRANS_0019",
+    "CORE_MAP_TRANS_0020"
+   ],
+   "inferred_names": [
+    "Factory: Hangar",
+    "Factory: Furnace"
+   ],
+   "confidence": "low",
+   "evidence": "ba1100 r520 groupe 'ボス前' (avant le boss, interieur usine)",
+   "seen_in_layouts_or_commands": true
+  },
+  {
+   "code": "ft_RMI2",
+   "inferred_name_keys": [
+    "CORE_MAP_TRANS_0019",
+    "CORE_MAP_TRANS_0020"
+   ],
+   "inferred_names": [
+    "Factory: Hangar",
+    "Factory: Furnace"
+   ],
+   "confidence": "low",
+   "evidence": "ba1100 r520 groupe '開始地点' (point de depart, interieur usine)",
+   "seen_in_layouts_or_commands": true
+  },
+  {
+   "code": "ft_AP",
+   "inferred_name_keys": [
+    "CORE_MAP_TRANS_0010"
+   ],
+   "inferred_names": [
+    "Park Ruins: Attraction Sq."
+   ],
+   "confidence": "low",
+   "evidence": "ba1100 r130 groupe '遊園地' action '飛行機遊具前' (parc d'attractions)",
+   "seen_in_layouts_or_commands": true
+  },
+  {
+   "code": "ft_RC",
+   "inferred_name_keys": [
+    "CORE_MAP_TRANS_0002"
+   ],
+   "inferred_names": [
+    "Resistance Camp"
+   ],
+   "confidence": "high",
+   "evidence": "ba1000 dans r110 ; p200 'レジキャン端末故障/復旧' (terminal du camp)",
+   "seen_in_layouts_or_commands": true
+  },
+  {
+   "code": "ft_CC",
+   "inferred_name_keys": [
+    "CORE_MAP_TRANS_0003"
+   ],
+   "inferred_names": [
+    "City Ruins: Center"
+   ],
+   "confidence": "high",
+   "evidence": "ba1100 groupe '自販機＿中央エリア' (zone centrale)",
+   "seen_in_layouts_or_commands": true
+  },
+  {
+   "code": "ft_CRb",
+   "inferred_name_keys": [
+    "CORE_MAP_TRANS_0004"
+   ],
+   "inferred_names": [
+    "City Ruins: Near Factory"
+   ],
+   "confidence": "medium",
+   "evidence": "ba1100 groupe '自販機＿ロボット山入り口' (entree de l'usine)",
+   "seen_in_layouts_or_commands": true
+  },
+  {
+   "code": "ft_CS",
+   "inferred_name_keys": [
+    "CORE_MAP_TRANS_0005"
+   ],
+   "inferred_names": [
+    "City Ruins: Near the Tower"
+   ],
+   "confidence": "low",
+   "evidence": "ba1100 groupe '自販機＿ショッピングモール付近' (pres du centre commercial) ; seul terminal de ville restant",
+   "seen_in_layouts_or_commands": true
+  },
+  {
+   "code": "ft_DC",
+   "inferred_name_keys": [
+    "CORE_MAP_TRANS_0006"
+   ],
+   "inferred_names": [
+    "Desert: Camp"
+   ],
+   "confidence": "medium",
+   "evidence": "ba1100 r150 groupe '砂漠入口' (entree du desert)",
+   "seen_in_layouts_or_commands": true
+  },
+  {
+   "code": "ft_DI",
+   "inferred_name_keys": [
+    "CORE_MAP_TRANS_0007"
+   ],
+   "inferred_names": [
+    "Desert: Center"
+   ],
+   "confidence": "medium",
+   "evidence": "ba1100 r150 groupe '砂漠内部' (interieur du desert)",
+   "seen_in_layouts_or_commands": true
+  },
+  {
+   "code": "ft_DO",
+   "inferred_name_keys": [
+    "CORE_MAP_TRANS_0008"
+   ],
+   "inferred_names": [
+    "Desert: Oil Field"
+   ],
+   "confidence": "high",
+   "evidence": "ba1100 r150 groupe '砂漠油田' (champ petrolifere)",
+   "seen_in_layouts_or_commands": true
+  },
+  {
+   "code": "ft_DD",
+   "inferred_name_keys": [
+    "CORE_MAP_TRANS_0009"
+   ],
+   "inferred_names": [
+    "Desert: Housing Complex"
+   ],
+   "confidence": "high",
+   "evidence": "ba1100 r150 groupe '砂漠団地' (complexe residentiel)",
+   "seen_in_layouts_or_commands": true
+  },
+  {
+   "code": "ft_AP_C",
+   "inferred_name_keys": [
+    "CORE_MAP_TRANS_0011"
+   ],
+   "inferred_names": [
+    "Park Ruins: Coaster"
+   ],
+   "confidence": "low",
+   "evidence": "chaine de l'exe uniquement (C = Coaster ?)",
+   "seen_in_layouts_or_commands": false
+  },
+  {
+   "code": "ft_AP_T",
+   "inferred_name_keys": [
+    "CORE_MAP_TRANS_0012",
+    "CORE_MAP_TRANS_0013"
+   ],
+   "inferred_names": [
+    "Park Ruins: Above Theater",
+    "Park Ruins: Theater"
+   ],
+   "confidence": "low",
+   "evidence": "chaine de l'exe uniquement (T = Theater ?)",
+   "seen_in_layouts_or_commands": false
+  },
+  {
+   "code": "ft_AP_T2",
+   "inferred_name_keys": [
+    "CORE_MAP_TRANS_0012",
+    "CORE_MAP_TRANS_0013"
+   ],
+   "inferred_names": [
+    "Park Ruins: Above Theater",
+    "Park Ruins: Theater"
+   ],
+   "confidence": "low",
+   "evidence": "chaine de l'exe uniquement (T2 = 2e terminal du theatre ?)",
+   "seen_in_layouts_or_commands": false
+  },
+  {
+   "code": "ft_RME",
+   "inferred_name_keys": [
+    "CORE_MAP_TRANS_0018"
+   ],
+   "inferred_names": [
+    "Factory: Entrance"
+   ],
+   "confidence": "medium",
+   "evidence": "ba1100 r120 (RM = Robot Mountain = usine, E = entree ?)",
+   "seen_in_layouts_or_commands": true
+  },
+  {
+   "code": "ft_AS",
+   "inferred_name_keys": [
+    "CORE_MAP_TRANS_0022"
+   ],
+   "inferred_names": [
+    "City Ruins: Cave"
+   ],
+   "confidence": "medium",
+   "evidence": "ba1100 r200 (y=-105, souterrain) ; p200 'エイリアンシップ端末故障' (vaisseau alien, situe dans la caverne)",
+   "seen_in_layouts_or_commands": true
+  },
+  {
+   "code": "ft_PV",
+   "inferred_name_keys": [
+    "CORE_MAP_TRANS_0014"
+   ],
+   "inferred_names": [
+    "Pascal's Village"
+   ],
+   "confidence": "medium",
+   "evidence": "MiscState 'ft_PV' dans p200 ; PV = Pascal Village (cf. shop_PV_*)",
+   "seen_in_layouts_or_commands": true
+  },
+  {
+   "code": "ft_FC",
+   "inferred_name_keys": [
+    "CORE_MAP_TRANS_0015"
+   ],
+   "inferred_names": [
+    "Forest Zone: Center"
+   ],
+   "confidence": "medium",
+   "evidence": "ba1100 r160 groupe '森' (foret)",
+   "seen_in_layouts_or_commands": true
+  },
+  {
+   "code": "ft_FC2",
+   "inferred_name_keys": [
+    "CORE_MAP_TRANS_0016"
+   ],
+   "inferred_names": [
+    "Forest Castle: Front"
+   ],
+   "confidence": "high",
+   "evidence": "ba1100 r160 groupe '城前' (devant le chateau)",
+   "seen_in_layouts_or_commands": true
+  },
+  {
+   "code": "ft_FC3",
+   "inferred_name_keys": [
+    "CORE_MAP_TRANS_0017"
+   ],
+   "inferred_names": [
+    "Forest Castle: Royal Chamber"
+   ],
+   "confidence": "high",
+   "evidence": "ba1100 r160 groupe '王室前' (devant la salle royale)",
+   "seen_in_layouts_or_commands": true
+  },
+  {
+   "code": "ft_SC",
+   "inferred_name_keys": [
+    "CORE_MAP_TRANS_0021"
+   ],
+   "inferred_names": [
+    "Flooded City: Coast"
+   ],
+   "confidence": "high",
+   "evidence": "ba1100 r170 ; p200 '水没都市端末故障' (terminal de la ville engloutie)",
+   "seen_in_layouts_or_commands": true
+  }
+ ],
+ "codes_in_exe_v104": [
+  "ft_BK",
+  "ft_RMI",
+  "ft_RMI2",
+  "ft_AP",
+  "ft_RC",
+  "ft_CC",
+  "ft_CRb",
+  "ft_CS",
+  "ft_DC",
+  "ft_DI",
+  "ft_DO",
+  "ft_DD",
+  "ft_AP_C",
+  "ft_AP_T",
+  "ft_AP_T2",
+  "ft_RME",
+  "ft_AS",
+  "ft_PV",
+  "ft_FC",
+  "ft_FC2",
+  "ft_FC3",
+  "ft_SC"
+ ],
+ "terminal_entities": [
+  {
+   "objId": "ba1000",
+   "codeName": "ft_BK",
+   "position": [
+    -20.866901,
+    -41.465683,
+    -7.603981
+   ],
+   "file": "quest/qb40.dat",
+   "hap": "設置物",
+   "action": "オブジェ配置_転送装置"
+  },
+  {
+   "objId": "ba1000",
+   "codeName": "ft_BK",
+   "position": [
+    -18.132168,
+    -42.733414,
+    -7.603096
+   ],
+   "file": "quest/qb40.dat",
+   "hap": "設置物",
+   "action": "オブジェ配置_転送装置"
+  },
+  {
+   "objId": "ba1000",
+   "codeName": "ft_BK",
+   "position": [
+    -15.335762,
+    -43.808838,
+    -7.603271
+   ],
+   "file": "quest/qb40.dat",
+   "hap": "設置物",
+   "action": "オブジェ配置_転送装置"
+  },
+  {
+   "objId": "ba1000",
+   "codeName": "ft_BK",
+   "position": [
+    44.755402,
+    -12.361977,
+    -7.606552
+   ],
+   "file": "quest/qb40.dat",
+   "hap": "設置物",
+   "action": "オブジェ配置_転送装置"
+  },
+  {
+   "objId": "ba1000",
+   "codeName": "ft_BK",
+   "position": [
+    45.465546,
+    -9.364647,
+    -7.6045
+   ],
+   "file": "quest/qb40.dat",
+   "hap": "設置物",
+   "action": "オブジェ配置_転送装置"
+  },
+  {
+   "objId": "ba1000",
+   "codeName": "ft_BK",
+   "position": [
+    45.984482,
+    -6.383717,
+    -7.604912
+   ],
+   "file": "quest/qb40.dat",
+   "hap": "設置物",
+   "action": "オブジェ配置_転送装置"
+  },
+  {
+   "objId": "ba1100",
+   "codeName": "ft_CC",
+   "position": [
+    -9.810495,
+    1.583737,
+    327.413361
+   ],
+   "file": "st1/r100.dat",
+   "hap": "自販機＿中央エリア",
+   "action": "オブジェ配置_自販機＿中央エリア"
+  },
+  {
+   "objId": "ba1000",
+   "codeName": "ft_RC",
+   "position": [
+    243.287323,
+    9.455211,
+    671.591858
+   ],
+   "file": "st1/r110.dat",
+   "hap": "設置物",
+   "action": "オブジェ配置"
+  },
+  {
+   "objId": "ba1100",
+   "codeName": "ft_RME",
+   "position": [
+    -441.755219,
+    -19.418234,
+    621.065247
+   ],
+   "file": "st1/r120.dat",
+   "hap": "ファストトラベルまわり",
+   "action": "オブジェ配置"
+  },
+  {
+   "objId": "ba1100",
+   "codeName": "ft_AP",
+   "position": [
+    665.108704,
+    13.366321,
+    373.622253
+   ],
+   "file": "st1/r130.dat",
+   "hap": "遊園地",
+   "action": "オブジェ配置_飛行機遊具前"
+  },
+  {
+   "objId": "ba1100",
+   "codeName": "ft_DC",
+   "position": [
+    -177.609299,
+    11.795318,
+    22.331329
+   ],
+   "file": "st1/r150.dat",
+   "hap": "砂漠入口",
+   "action": "オブジェ配置"
+  },
+  {
+   "objId": "ba1100",
+   "codeName": "ft_DD",
+   "position": [
+    -109.194,
+    -83.11055,
+    -815.082581
+   ],
+   "file": "st1/r150.dat",
+   "hap": "砂漠団地",
+   "action": "オブジェ配置"
+  },
+  {
+   "objId": "ba1100",
+   "codeName": "ft_DI",
+   "position": [
+    -1014.423828,
+    -4.638937,
+    -549.4552
+   ],
+   "file": "st1/r150.dat",
+   "hap": "砂漠内部",
+   "action": "オブジェ配置"
+  },
+  {
+   "objId": "ba1100",
+   "codeName": "ft_DO",
+   "position": [
+    -891.817078,
+    -10.525623,
+    -73.726013
+   ],
+   "file": "st1/r150.dat",
+   "hap": "砂漠油田",
+   "action": "オブジェ配置"
+  },
+  {
+   "objId": "ba1100",
+   "codeName": "ft_FC",
+   "position": [
+    223.13089,
+    -0.541363,
+    -461.076904
+   ],
+   "file": "st1/r160.dat",
+   "hap": "森",
+   "action": "オブジェ配置-森部分"
+  },
+  {
+   "objId": "ba1100",
+   "codeName": "ft_FC2",
+   "position": [
+    836.993469,
+    -21.32983,
+    -213.411011
+   ],
+   "file": "st1/r160.dat",
+   "hap": "城前",
+   "action": "オブジェ配置-城前"
+  },
+  {
+   "objId": "ba1100",
+   "codeName": "ft_FC3",
+   "position": [
+    1002.915039,
+    10.768871,
+    -381.575531
+   ],
+   "file": "st1/r160.dat",
+   "hap": "王室前",
+   "action": "オブジェ配置-王室前"
+  },
+  {
+   "objId": "ba1100",
+   "codeName": "ft_SC",
+   "position": [
+    469.011322,
+    -62.47649,
+    634.009583
+   ],
+   "file": "st1/r170.dat",
+   "hap": "ファストトラベルまわり",
+   "action": "オブジェ配置"
+  },
+  {
+   "objId": "ba1100",
+   "codeName": "ft_CC",
+   "position": [
+    -9.810495,
+    1.583737,
+    327.413361
+   ],
+   "file": "st2/r200.dat",
+   "hap": "ファストトラベルまわり",
+   "action": "オブジェ配置"
+  },
+  {
+   "objId": "ba1100",
+   "codeName": "ft_AS",
+   "position": [
+    202.508957,
+    -105.585838,
+    343.414886
+   ],
+   "file": "st2/r200.dat",
+   "hap": "ファストトラベルまわり(2)",
+   "action": "オブジェ配置"
+  },
+  {
+   "objId": "ba1100",
+   "codeName": "ft_RMI",
+   "position": [
+    -617.506714,
+    -133.146622,
+    207.370682
+   ],
+   "file": "st5/r520.dat",
+   "hap": "ボス前",
+   "action": "オブジェ配置-ボス前"
+  },
+  {
+   "objId": "ba1100",
+   "codeName": "ft_RMI2",
+   "position": [
+    -504.709503,
+    -298.651581,
+    482.691803
+   ],
+   "file": "st5/r520.dat",
+   "hap": "開始地点",
+   "action": "オブジェ配置-開始地点"
+  },
+  {
+   "objId": "ba1100",
+   "codeName": "ft_CC",
+   "position": [
+    -9.810495,
+    1.583737,
+    327.413361
+   ],
+   "file": "core/corehap.dat:core_hap.pak",
+   "hap": "自販機_陥没付近",
+   "action": null
+  },
+  {
+   "objId": "ba1100",
+   "codeName": "ft_CS",
+   "position": [
+    97.253029,
+    0.441439,
+    91.512794
+   ],
+   "file": "core/corehap.dat:core_hap.pak",
+   "hap": "自販機＿ショッピングモール付近",
+   "action": null
+  },
+  {
+   "objId": "ba1100",
+   "codeName": "ft_CRb",
+   "position": [
+    -83.118835,
+    0.175064,
+    548.511536
+   ],
+   "file": "core/corehap.dat:core_hap.pak",
+   "hap": "自販機＿ロボット山入り口",
+   "action": null
+  }
+ ],
+ "unlock_variable_commands": [
+  {
+   "file": "ph2/p200.dat",
+   "hap": "セーブ制御",
+   "action": "コマンド送信",
+   "args": "\"ft_PV false\""
+  },
+  {
+   "file": "ph2/p200.dat",
+   "hap": "セーブ制御",
+   "action": "コマンド送信",
+   "args": "\"ft_RC false\""
+  },
+  {
+   "file": "ph2/p200.dat",
+   "hap": "転送端末ロック処理",
+   "action": "複数コマンド送信",
+   "args": "\"ft_RC false\""
+  },
+  {
+   "file": "ph2/p200.dat",
+   "hap": "転送端末ロック処理",
+   "action": "複数コマンド送信",
+   "args": "\"ft_CC false\""
+  },
+  {
+   "file": "ph2/p200.dat",
+   "hap": "転送端末ロック処理",
+   "action": "複数コマンド送信",
+   "args": "\"ft_DC false\""
+  },
+  {
+   "file": "ph2/p200.dat",
+   "hap": "転送端末ロック処理",
+   "action": "複数コマンド送信",
+   "args": "\"ft_DI false\""
+  },
+  {
+   "file": "ph2/p200.dat",
+   "hap": "転送端末ロック処理",
+   "action": "複数コマンド送信",
+   "args": "\"ft_AP false\""
+  },
+  {
+   "file": "ph2/p200.dat",
+   "hap": "転送端末ロック処理",
+   "action": "複数コマンド送信",
+   "args": "\"ft_AS false\""
+  },
+  {
+   "file": "ph2/p200.dat",
+   "hap": "転送端末ロック処理",
+   "action": "複数コマンド送信",
+   "args": "\"ft_PV false\""
+  },
+  {
+   "file": "ph2/p200.dat",
+   "hap": "転送端末ロック処理",
+   "action": "複数コマンド送信",
+   "args": "\"ft_FC false\""
+  },
+  {
+   "file": "ph2/p200.dat",
+   "hap": "転送端末ロック処理",
+   "action": "複数コマンド送信",
+   "args": "\"ft_SC false\""
+  },
+  {
+   "file": "ph2/p200.dat",
+   "hap": "流れ(2)",
+   "action": "コマンド送信_レジキャン端末故障",
+   "args": "\"ft_RC false\""
+  },
+  {
+   "file": "ph2/p200.dat",
+   "hap": "流れ(2)",
+   "action": "コマンド送信_水没都市端末故障",
+   "args": "\"ft_SC false\""
+  },
+  {
+   "file": "ph2/p200.dat",
+   "hap": "流れ(2)",
+   "action": "コマンド送信_エイリアンシップ端末故障",
+   "args": "\"ft_AS false\""
+  },
+  {
+   "file": "ph2/p200.dat",
+   "hap": "流れ(2)",
+   "action": "コマンド送信_レジキャン端末復旧",
+   "args": "\"ft_RC true\""
+  },
+  {
+   "file": "ph3/p300.dat",
+   "hap": "バンカーセーブ禁止",
+   "action": "コマンド送信",
+   "args": "\"ft_BK false\""
+  },
+  {
+   "file": "quest/q170.dat",
+   "hap": "流れ(7)",
+   "action": "コマンド送信_端末故障",
+   "args": "\"ft_CC false\""
+  },
+  {
+   "file": "quest/q170.dat",
+   "hap": "流れ(13)",
+   "action": "コマンド送信_端末故障",
+   "args": "\"ft_CS false\""
+  },
+  {
+   "file": "quest/q170.dat",
+   "hap": "流れ(8)",
+   "action": "コマンド送信_端末故障",
+   "args": "\"ft_CRb false\""
+  }
+ ],
+ "transporter_commands": [
+  {
+   "file": "ph2/p200.dat",
+   "hap": "転送端末ブロック用ＮＰＣ",
+   "action": "コマンド送信_転送端末ロック",
+   "label": "BehaviorTransporterBa.lock",
+   "args": null
+  }
+ ]
+}
