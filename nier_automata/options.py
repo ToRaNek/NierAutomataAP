@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from Options import Choice, DeathLink, DefaultOnToggle, OptionSet, PerGameCommonOptions, Range
+from Options import Choice, DeathLink, DefaultOnToggle, OptionSet, PerGameCommonOptions, Range, Toggle
 
 from .data.tables import MAX_CHEST_CHECKS, MAX_STORY, MAX_WEAPON_CHECKS
 
@@ -62,8 +62,8 @@ class ApItems(DefaultOnToggle):
     display_name = "AP Items"
 
 
-class ItemChecks(DefaultOnToggle):
-    """Le premier ramassage de chaque materiau (coffre, ennemi, sol) envoie un check "Item: <nom>"."""
+class ItemChecks(Toggle):
+    """Desactive par defaut. Si active : le premier ramassage de chaque materiau envoie un check "Item: <nom>"."""
     display_name = "Item Checks"
 
 

@@ -10,3 +10,5 @@ e2e_plando2/
 e2e_plando2_serve.py
 e2e_plando3/
 e2e_plando3_serve.py
+spots_chests.tsv
+spots_items.tsv

@@ -89,3 +89,10 @@ def test_prologue_includes_factory_phases_beyond_00():
     assert is_prologue("00_90_A_RobotM_Pro_3rdArea")
     assert not is_prologue("10_AB_City")
     assert abilities_allowed("05_00_A_RobotM_Pro_ArmBoss_2nd") is False
+
+
+def test_item_checks_off_by_default():
+    import ast, pathlib
+    src = (pathlib.Path(__file__).parent.parent / "nier_automata" / "options.py").read_text(encoding="utf-8")
+    cls = next(n for n in ast.parse(src).body if isinstance(n, ast.ClassDef) and n.name == "ItemChecks")
+    assert [b.id for b in cls.bases] == ["Toggle"]  # Toggle = desactive par defaut
