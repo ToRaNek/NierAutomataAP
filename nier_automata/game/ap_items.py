@@ -32,6 +32,7 @@ PICKUP_CARRIER_KEY = "ITEM_NAME_921"
 AP_MARKER_NAME = "Météorite"
 CONTENT_OFFSET = 0x838
 IT0000 = 0x70000
+SET_ITEM_VTABLE_RVA = 0xC79AE8  # BehaviorSetItem (it0000) ; la vtable change quand l'objet est detruit
 
 
 def pick_spots(path, min_dist: float = 40.0, per_area: int = 5):
@@ -49,6 +50,54 @@ def pick_spots(path, min_dist: float = 40.0, per_area: int = 5):
         if all(math.dist((x, y, z), (a, b, c)) >= min_dist for _, a, b, c in out):
             chosen.append((x, y, z))
             out.append((code, x, y, z))
+    return out
+
+
+def extend_spots(spots, found, phase: str, limit: int, min_dist: float = 25.0, offset: float = 2.0):
+    """Nouveaux emplacements a partir des objets poses par le jeu (sur le chemin du joueur) : decales de
+    `offset` m, a plus de `min_dist` m de tout emplacement existant, jusqu'a `limit` emplacements au total.
+    Ordre deterministe (tri par position) : la numerotation ne depend pas de l'ordre en memoire."""
+    if not spawn_allowed(phase):
+        return []
+    code = phase_code(phase) or phase
+    taken = [(x, y, z) for _, x, y, z in spots]
+    new = []
+    for x, y, z in sorted(found):
+        if len(spots) + len(new) >= limit:
+            break
+        p = (round(x + offset, 1), round(y, 1), round(z, 1))
+        if all(math.dist(p, q) >= min_dist for q in taken):
+            taken.append(p)
+            new.append((code, *p))
+    return new
+
+
+def find_game_items(mem) -> list[tuple[float, float, float]]:
+    """Positions des objets ramassables poses par le jeu (hors AP Items)."""
+    import ctypes
+    from ctypes import wintypes
+    from .spawner import _MBI
+    k = mem._k
+    k.VirtualQueryEx.argtypes = [wintypes.HANDLE, ctypes.c_void_p, ctypes.POINTER(_MBI), ctypes.c_size_t]
+    k.VirtualQueryEx.restype = ctypes.c_size_t
+    vt = mem.base + SET_ITEM_VTABLE_RVA
+    out, addr = [], 0
+    while addr < 0x7FFFFFFFFFFF:
+        mbi = _MBI()
+        if not k.VirtualQueryEx(mem.handle, ctypes.c_void_p(addr), ctypes.byref(mbi), ctypes.sizeof(mbi)):
+            break
+        base, size = mbi.BaseAddress or 0, mbi.RegionSize
+        if mbi.State == 0x1000 and mbi.Protect in (0x04, 0x40) and size < 0x40000000 and size % 8 == 0:
+            try:
+                arr = memoryview(mem.read(base, size)).cast("Q")
+                for i, v in enumerate(arr):
+                    if v == vt:
+                        o = base + i * 8
+                        if struct.unpack("<I", mem.read(o + CONTENT_OFFSET, 4))[0] < MARKER_FLAG:
+                            out.append(struct.unpack("<3f", mem.read(o + 0x50, 12)))
+            except OSError:
+                pass
+        addr = base + size
     return out
 
 
@@ -106,9 +155,6 @@ def nearest_spawned(spots, spawned: set, collected: set, pos, radius: float):
         if d <= best_d:
             best, best_d = i, d
     return best
-
-
-SET_ITEM_VTABLE_RVA = 0xC79AE8  # BehaviorSetItem (it0000) ; la vtable change quand l'objet est detruit
 
 
 def nearest_object(objs: dict, pos_of, pos, radius: float):

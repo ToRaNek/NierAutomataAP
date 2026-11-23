@@ -127,3 +127,25 @@ def test_pick_spots_dedupes_positions_across_phases():
     path = [("30_AB_A", 0.0, 0.0, 0.0), ("40_AB_B", 1.0, 0.0, 0.0), ("40_AB_B", 100.0, 0.0, 0.0)]
     spots = pick_spots(path, min_dist=25.0, per_area=6)
     assert [s[1] for s in spots] == [0.0, 100.0]
+
+
+from nier_automata.game.ap_items import extend_spots
+
+
+def test_extend_spots_adds_spaced_new_spots_up_to_limit():
+    spots = [("30_AB", 0.0, 0.0, 0.0)]
+    found = [(1.0, 0.0, 0.0), (50.0, 0.0, 0.0), (52.0, 0.0, 0.0), (120.0, 0.0, 0.0), (300.0, 0.0, 0.0)]
+    new = extend_spots(spots, found, "40_AB_Camp", limit=3, min_dist=25.0, offset=2.0)
+    assert new == [("40_AB", 52.0, 0.0, 0.0), ("40_AB", 122.0, 0.0, 0.0)]  # decales de 2 m, max 3 au total
+
+
+def test_extend_spots_ignores_prologue_and_menus():
+    assert extend_spots([], [(0.0, 0.0, 0.0)], "00_60_A_RobotM_Pro_Tutorial", limit=5) == []
+    assert extend_spots([], [(0.0, 0.0, 0.0)], "SIGNIN", limit=5) == []
+
+
+def test_extend_spots_deterministic_order():
+    found = [(100.0, 0.0, 0.0), (0.0, 0.0, 0.0)]
+    a = extend_spots([], found, "30_AB_x", limit=5)
+    b = extend_spots([], list(reversed(found)), "30_AB_x", limit=5)
+    assert a == b  # ordre de la memoire sans importance

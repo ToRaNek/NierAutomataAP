@@ -9,7 +9,6 @@ from CommonClient import CommonContext, get_base_parser, gui_enabled, logger, se
 from NetUtils import ClientStatus
 
 from .data.phases import GOAL_PHASE_PREFIX, abilities_allowed
-from .data.ap_spots import AP_SPOTS
 from .game import ap_items as apit
 from .game import notify
 from .data.tables import SHOP_PLACES_ORDER, ap_item_location as apit_loc, location_name_to_id, shop_location
@@ -108,13 +107,16 @@ class NierContext(CommonContext):
             self.shop_pid = None
             self.shop_applied = None
             self.shop_described = None
-            ground = [LOC_IDS[apit_loc(i + 1)] for i in range(len(AP_SPOTS))] if self.ap_items_on else []
+            self.ap_item_count = int(sd.get("ap_item_count", 0))
+            ground = [LOC_IDS[apit_loc(i + 1)] for i in range(self.ap_item_count)] if self.ap_items_on else []
             self.ap_ground_ids = set(ground)
             shops = [LOC_IDS[shop_location(p, k)] for p in SHOP_PLACES_ORDER for k in range(1, self.shop_checks + 1)]
             ids = [i for i in ground + shops if i in self.server_locations]
             if ids:
                 asyncio.create_task(self.send_msgs([{"cmd": "LocationScouts", "locations": ids, "create_as_hint": 0}]))
-            self.spots = apit.SpotTracker(self.state, AP_SPOTS)
+            self.spots = apit.SpotTracker(self.state, self.state.ap_dynamic_spots)
+            self.ap_discover_at = 0.0
+            self.ap_discovering = False
             self.ap_tracked = {}
             self.ap_pid = None
             self.ap_phase = None
@@ -223,11 +225,27 @@ async def ability_loop(ctx: NierContext):
             pass
 
 
+async def discover_spots(ctx: NierContext, mem, phase: str):
+    """Releve les objets poses par le jeu autour du joueur et en fait de nouveaux emplacements d'AP Items."""
+    try:
+        found = await asyncio.to_thread(apit.find_game_items, mem)
+        new = apit.extend_spots(ctx.state.ap_dynamic_spots, found, phase, ctx.ap_item_count)
+        if new:
+            ctx.state.ap_dynamic_spots.extend(new)
+            logger.info("AP Items : %d nouvel(s) emplacement(s) (%d/%d)", len(new),
+                        len(ctx.state.ap_dynamic_spots), ctx.ap_item_count)
+    except OSError:
+        pass
+    finally:
+        ctx.ap_discovering = False
+
+
 async def ap_items_step(ctx: NierContext):
     """Pose les AP Items de la zone, prepare leur message quand le joueur approche, detecte le ramassage.
     Les objets sont suivis eux-memes (vraie position, disparition au ramassage)."""
-    if not getattr(ctx, "ap_items_on", False) or not AP_SPOTS:
+    if not getattr(ctx, "ap_items_on", False) or not ctx.ap_item_count:
         return
+    spots = ctx.state.ap_dynamic_spots
     mem = ctx.nier.mem
     if ctx.ap_pid != mem.pid:
         ok = await asyncio.to_thread(apit.install, mem)
@@ -239,20 +257,26 @@ async def ap_items_step(ctx: NierContext):
         ctx.spots.set_game_process(mem.pid)
         ctx.pickup_note = await asyncio.to_thread(notify.Notifier, mem, apit.PICKUP_CARRIER_KEY, apit.PICKUP_CARRIER)
         found = await asyncio.to_thread(apit.find_marked_objects, mem)
-        ctx.ap_tracked = apit.match_objects_to_spots(found, AP_SPOTS, ctx.state.ap_spots_collected, 50.0)
+        ctx.ap_tracked = apit.match_objects_to_spots(found, spots, ctx.state.ap_spots_collected, 50.0)
         for i in ctx.ap_tracked.values():
             ctx.spots.mark_spawned(i)
     phase = ctx.nier.phase()
+    import time
     if phase != ctx.ap_phase:
         if ctx.ap_phase is not None:
             ctx.spots.reset_session(); ctx.ap_tracked.clear()
         ctx.ap_phase = phase
+        ctx.ap_discover_at = time.monotonic() + 5.0   # laisser la zone se charger
+    if (len(spots) < ctx.ap_item_count and not ctx.ap_discovering and time.monotonic() >= ctx.ap_discover_at):
+        ctx.ap_discovering = True
+        ctx.ap_discover_at = time.monotonic() + 60.0
+        asyncio.create_task(discover_spots(ctx, mem, phase))
     ent = ctx.nier.entity()
     if ent is None:
         return
     pos = struct.unpack("<3f", mem.read(ent + 0x50, 12))
     for i in ctx.spots.to_spawn(phase, pos):
-        _, x, y, z = AP_SPOTS[i]
+        _, x, y, z = spots[i]
         obj = await asyncio.to_thread(apit.spawn_ap_item, mem, (x, y, z))
         ctx.spots.mark_spawned(i)
         if obj:

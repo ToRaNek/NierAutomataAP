@@ -74,9 +74,17 @@ class ShopPrice(Range):
 
 
 class ApItems(DefaultOnToggle):
-    """Des objets "AP Item" apparaissent au sol a des emplacements predefinis sur le chemin.
-    Les ramasser envoie un check (rien n'est ajoute a l'inventaire)."""
+    """Des objets "AP Item" apparaissent au sol sur le chemin du joueur (a cote des objets poses par le jeu
+    dans les zones traversees). Les ramasser envoie un check (rien n'est ajoute a l'inventaire)."""
     display_name = "AP Items"
+
+
+class ApItemCount(Range):
+    """Nombre d'AP Items au sol."""
+    display_name = "AP Item Count"
+    range_start = 1
+    range_end = 100
+    default = 30
 
 
 class ItemChecks(Toggle):
@@ -100,6 +108,7 @@ class NierAutomataOptions(PerGameCommonOptions):
     weapon_checks: WeaponChecks
     item_checks: ItemChecks
     ap_items: ApItems
+    ap_item_count: ApItemCount
     shop_checks: ShopChecks
     shop_price: ShopPrice
     chest_checks: ChestChecks

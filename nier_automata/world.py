@@ -9,7 +9,6 @@ from .data.tables import (
     SHOP_PLACES_ORDER, others_only, shop_location,
 )
 from .data.weapons import STARTING_WEAPONS, WEAPONS
-from .data.ap_spots import AP_SPOTS
 from .options import NierAutomataOptions
 
 GAME = "NieR:Automata"
@@ -56,7 +55,7 @@ class NierAutomataWorld(World):
         if self.options.item_checks:
             names += [item_location(m) for m in MATERIALS]
         if self.options.ap_items:
-            names += [ap_item_location(i + 1) for i in range(len(AP_SPOTS))]
+            names += [ap_item_location(i + 1) for i in range(self.options.ap_item_count.value)]
         names += [shop_location(p, k) for p in SHOP_PLACES_ORDER for k in range(1, self.options.shop_checks.value + 1)]
         return names
 
@@ -115,6 +114,7 @@ class NierAutomataWorld(World):
             "item_checks": bool(self.options.item_checks),
             "chest_checks": self.options.chest_checks.value,
             "ap_items": bool(self.options.ap_items),
+            "ap_item_count": self.options.ap_item_count.value,
             "shop_checks": self.options.shop_checks.value,
             "shop_price": self.options.shop_price.value,
             "max_level_check": self.options.max_level_check.value,

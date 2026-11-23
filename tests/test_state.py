@@ -57,3 +57,12 @@ def test_to_json_changes_with_state():
     before = s.to_json()
     s.weapons_found += 1
     assert s.to_json() != before
+
+
+def test_dynamic_spots_roundtrip(tmp_path):
+    from nier_automata.game.state import ClientState
+    s = ClientState(seed="S", slot=1, save_slot=None)
+    s.ap_dynamic_spots.append(("30_AB", 1.5, 2.0, 3.0))
+    p = tmp_path / "s.json"
+    s.save(p)
+    assert ClientState.load(p).ap_dynamic_spots == [("30_AB", 1.5, 2.0, 3.0)]
