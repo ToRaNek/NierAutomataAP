@@ -112,3 +112,12 @@ def test_pod_program_patches_verified_in_game_v104():
     a, b = ABILITY_PATCHES["Pod Program"]
     assert (a.rva, a.original, a.locked) == (0x529240, bytes.fromhex("e88b53f7ff"), bytes.fromhex("31c00f1f00"))
     assert (b.rva, b.original, b.locked) == (0x5292AE, bytes.fromhex("e81d53f7ff"), bytes.fromhex("31c00f1f00"))
+
+
+def test_nothing_locked_when_not_allowed():
+    m = mem_with_originals()
+    lock = AbilityLock(m, randomized={"Double Jump", "Air Dash"})
+    lock.sync(received=set())                          # bloque
+    lock.sync(received=set(), allowed=False)           # prologue / vaisseau : tout se debloque
+    assert m.read(m.base + DJ.rva, 1) == DJ.original
+    assert m.read(m.base + AD.rva, 6) == AD.original

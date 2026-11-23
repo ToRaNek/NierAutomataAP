@@ -26,7 +26,10 @@ class AbilityLock:
             writer = getattr(self.mem, "write_code", self.mem.write)
             writer(addr, want)
 
-    def sync(self, received: set[str], grounded: Optional[bool] = None) -> None:
+    def sync(self, received: set[str], grounded: Optional[bool] = None, allowed: bool = True) -> None:
+        if not allowed:
+            self.unlock_all()
+            return
         for name in self.randomized:
             if name in CONDITIONAL:
                 self._set(CONDITIONAL[name], locked=name not in received and grounded is True)

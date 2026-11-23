@@ -71,3 +71,13 @@ def test_pool_weapon_count_never_exceeds_open_locations():
     assert pool_weapon_count(story_locations=12, total_locations=91, candidates=37) == 12
     assert pool_weapon_count(story_locations=40, total_locations=60, candidates=37) == 30
     assert pool_weapon_count(story_locations=3, total_locations=3, candidates=37) == 1
+
+
+def test_abilities_never_locked_in_prologue_or_flight():
+    from nier_automata.data.phases import abilities_allowed
+    assert abilities_allowed("00_60_A_RobotM_Pro_Tutorial") is False   # tutoriel des controles
+    assert abilities_allowed("00_40_A_RobotM_Prologue_STG2") is False  # vaisseau du prologue
+    assert abilities_allowed("10_AB_City_STG_Test") is False           # phase vaisseau hors prologue
+    assert abilities_allowed("SIGNIN") is False
+    assert abilities_allowed("") is False
+    assert abilities_allowed("10_AB_City") is True

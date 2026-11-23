@@ -15,3 +15,13 @@ def phase_code(phase: str) -> Optional[str]:
     if len(parts) < 2:
         return None
     return "_".join(parts[:2])
+
+
+def abilities_allowed(phase: str) -> bool:
+    """Les capacites ne sont jamais bloquees pendant le prologue (codes "00_", tutoriels de controles :
+    bloquer une action attendue coincerait le joueur) ni pendant les phases de vaisseau ("STG")."""
+    if not phase or phase in MENU_PHASES:
+        return False
+    if phase.startswith("00_") or "STG" in phase:
+        return False
+    return True

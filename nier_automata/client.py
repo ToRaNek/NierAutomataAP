@@ -7,7 +7,7 @@ import urllib.parse
 from CommonClient import CommonContext, get_base_parser, gui_enabled, logger, server_loop
 from NetUtils import ClientStatus
 
-from .data.phases import GOAL_PHASE_PREFIX
+from .data.phases import GOAL_PHASE_PREFIX, abilities_allowed
 from .game.abilities import AbilityLock
 from .game.deathlink import DeathTracker
 from .game.game import NierGame, backup_saves
@@ -131,7 +131,8 @@ async def ability_loop(ctx: NierContext):
                 continue
             if ctx.ability_lock is None or ctx.ability_lock.mem is not ctx.nier.mem:
                 ctx.ability_lock = AbilityLock(ctx.nier.mem, ctx.randomized_abilities)
-            ctx.ability_lock.sync(ctx.received_names, ctx.nier.grounded())
+            ctx.ability_lock.sync(ctx.received_names, ctx.nier.grounded(),
+                                  allowed=abilities_allowed(ctx.nier.phase()))
         except Exception:
             pass
 
