@@ -205,3 +205,30 @@ def test_fallback_fills_remaining_slots_spaced():
     one = [(camp, 100.0, 0.0, 0.0)]
     s = fallback_spot(one, camp, (10.0, 0.0, 5.0), per_area=2)
     assert s == (camp, 14.0, 0.0, 5.0)   # decalage croissant : 2 m + 2 m par emplacement deja la
+
+
+def test_extend_spots_only_items_near_walked_path():
+    camp = "40_AB_Resistance_Camp_Leader"
+    path = [(0.0, 0.0, 0.0), (50.0, 0.0, 0.0), (100.0, 0.0, 0.0)]
+    found = [(52.0, 0.5, 3.0),      # au sol pres du trajet : garde
+             (100.0, 20.0, 0.0),    # sur un toit (20 m au-dessus) : rejete
+             (300.0, 0.0, 0.0)]     # loin du trajet : rejete
+    new = extend_spots([], found, camp, per_area=3, min_dist=40.0, path=path)
+    assert (camp, 54.0, 0.5, 3.0) in new
+    assert all(abs(s[2] - 0.0) < 3 for s in new)        # tout au sol
+    assert all(s[1] < 200 for s in new)
+
+
+def test_extend_spots_uses_path_points_when_no_item():
+    camp = "40_AB_Resistance_Camp_Leader"
+    path = [(float(x), 0.0, 0.0) for x in range(0, 200, 5)]
+    new = extend_spots([], [], camp, per_area=2, min_dist=60.0, path=path)
+    assert len(new) == 2 and abs(new[1][1] - new[0][1]) >= 60.0
+
+
+def test_fill_phase_from_path_ignores_spacing_when_needed():
+    from nier_automata.game.ap_items import fill_from_path
+    camp = "40_AB_Resistance_Camp_Leader"
+    path = [(0.0, 0.0, 0.0), (1.0, 0.0, 0.0)]               # trajet tres court (cinematique)
+    new = fill_from_path([], camp, path, per_area=2)
+    assert len(new) == 2

@@ -63,25 +63,50 @@ def _route_key(phase: str, phase_limit: int):
     return ROUTE_A[i][0]
 
 
+NEAR_PATH_H, NEAR_PATH_V = 10.0, 3.0   # objet du jeu retenu s'il est pres du trajet reel du joueur (au sol)
+
+
+def near_path(p, path) -> bool:
+    return any(math.hypot(p[0] - q[0], p[2] - q[2]) <= NEAR_PATH_H and abs(p[1] - q[1]) <= NEAR_PATH_V
+               for q in path)
+
+
 def extend_spots(spots, found, phase: str, per_area: int = 2, phase_limit: int = 99,
-                 min_dist: float = 60.0, offset: float = 2.0):
-    """Nouveaux emplacements a partir des objets poses par le jeu dans la phase d'histoire courante (cle =
-    phase nommee de la route A, d'ou des checks "AP Item: <lieu> #k") : decales de `offset` m, a plus de
-    `min_dist` m de tout emplacement, au plus `per_area` par phase. Ordre deterministe (tri par position)."""
+                 min_dist: float = 60.0, offset: float = 2.0, path=None):
+    """Nouveaux emplacements dans la phase d'histoire courante (cle = phase nommee de la route A, d'ou des
+    checks "AP Item: <lieu> #k"), au plus `per_area` par phase, a plus de `min_dist` m les uns des autres.
+    Candidats, dans l'ordre : objets poses par le jeu PRES DU TRAJET reel du joueur (au sol, pas sur un toit),
+    decales de `offset` m ; puis les points du trajet eux-memes. Sans trajet : les objets du jeu."""
     code = _route_key(phase, phase_limit)
     if code is None:
         return []
     taken = [(x, y, z) for _, x, y, z in spots]
     in_area = sum(1 for c, *_ in spots if c == code)
+    items = [(round(x + offset, 1), round(y, 1), round(z, 1)) for x, y, z in sorted(found)
+             if path is None or near_path((x, y, z), path)]
+    walk = [(round(x, 1), round(y, 1), round(z, 1)) for x, y, z in (path or [])]
     new = []
-    for x, y, z in sorted(found):
+    for p in items + walk:
         if in_area + len(new) >= per_area:
             break
-        p = (round(x + offset, 1), round(y, 1), round(z, 1))
         if all(math.dist(p, q) >= min_dist for q in taken):
             taken.append(p)
             new.append((code, *p))
     return new
+
+
+def fill_from_path(spots, phase: str, path, per_area: int = 2, phase_limit: int = 99):
+    """Fin d'une phase : places restantes sur des points du trajet (les plus espaces possible), pour que
+    chaque check reste faisable meme si la phase etait courte."""
+    code = _route_key(phase, phase_limit)
+    if code is None or not path:
+        return []
+    n = per_area - sum(1 for c, *_ in spots if c == code)
+    if n <= 0:
+        return []
+    step = max(1, len(path) // n)
+    picks = [path[min(i * step, len(path) - 1)] for i in range(n)]
+    return [(code, round(x + 1.5 * i, 1), round(y, 1), round(z, 1)) for i, (x, y, z) in enumerate(picks)]
 
 
 def fallback_spot(spots, phase: str, player_pos, per_area: int = 2, phase_limit: int = 99, offset: float = 2.0):

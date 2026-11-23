@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import asyncio
+import math
 import struct
 import urllib.parse
 
@@ -141,6 +142,7 @@ class NierContext(CommonContext):
             self.spots = apit.SpotTracker(self.state, self.state.ap_dynamic_spots)
             self.ap_discover_at = 0.0
             self.ap_phase_since = 0.0
+            self.ap_path = {}   # phase -> positions au sol du joueur (trajet reel)
             self.ap_discovering = False
             self.ap_tracked = {}
             self.ap_pid = None
@@ -322,15 +324,8 @@ async def discover_spots(ctx: NierContext, mem, phase: str):
     try:
         found = await asyncio.to_thread(apit.find_game_items, mem)
         spots = ctx.state.ap_dynamic_spots
-        new = apit.extend_spots(spots, found, phase, ctx.ap_per_phase, ctx.ap_phase_count)
-        ent = ctx.nier.entity()
-        if ent is not None:  # places restantes (phase courte, arene sans objet) : a cote du joueur
-            pos = struct.unpack("<3f", mem.read(ent + 0x50, 12))
-            while True:
-                fb = apit.fallback_spot(spots + new, phase, pos, ctx.ap_per_phase, ctx.ap_phase_count)
-                if fb is None:
-                    break
-                new.append(fb)
+        new = apit.extend_spots(spots, found, phase, ctx.ap_per_phase, ctx.ap_phase_count,
+                                path=ctx.ap_path.get(phase, []))
         if new:
             spots.extend(new)
             logger.info("AP Items : %s", ", ".join(spot_location(spots, len(spots) - len(new) + j)
@@ -365,7 +360,18 @@ async def ap_items_step(ctx: NierContext):
     import time
     if phase != ctx.ap_phase:
         if ctx.ap_phase is not None:
-            ctx.spots.reset_session(); ctx.ap_tracked.clear()
+            # un changement d'etape ne decharge pas forcement la zone : on garde les objets encore au sol
+            ctx.ap_tracked = {o: i for o, i in ctx.ap_tracked.items() if apit.object_alive(mem, o)}
+            ctx.spots.reset_session()
+            for i in ctx.ap_tracked.values():
+                ctx.spots.mark_spawned(i)
+            # fin de l'etape precedente : places restantes sur son trajet (chaque check reste faisable)
+            filled = apit.fill_from_path(spots, ctx.ap_phase, ctx.ap_path.get(ctx.ap_phase, []),
+                                         ctx.ap_per_phase, ctx.ap_phase_count)
+            if filled:
+                spots.extend(filled)
+                logger.info("AP Items : %s", ", ".join(spot_location(spots, len(spots) - len(filled) + j)
+                                                       for j in range(len(filled))))
         ctx.ap_phase = phase
         ctx.ap_discover_at = time.monotonic() + 5.0   # laisser la zone se charger
         ctx.ap_phase_since = time.monotonic()
@@ -378,6 +384,10 @@ async def ap_items_step(ctx: NierContext):
     if ent is None:
         return
     pos = struct.unpack("<3f", mem.read(ent + 0x50, 12))
+    if ctx.nier.grounded():
+        walk = ctx.ap_path.setdefault(phase, [])
+        if not walk or math.dist(walk[-1], pos) >= 5.0:
+            walk.append(pos)
     for i in ctx.spots.to_spawn(phase, pos):
         _, x, y, z = spots[i]
         obj = await asyncio.to_thread(apit.spawn_ap_item, mem, (x, y, z))
