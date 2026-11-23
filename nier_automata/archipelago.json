@@ -1,0 +1,8 @@
+{
+  "game": "NieR:Automata",
+  "minimum_ap_version": "0.6.4",
+  "world_version": "0.1.0",
+  "authors": ["ToRaNek"],
+  "version": 7,
+  "compatible_version": 7
+}

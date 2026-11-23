@@ -3,6 +3,7 @@ from __future__ import annotations
 
 from typing import Iterable, Optional
 
+from ..data.phases import MENU_PHASES, phase_code
 from .state import ClientState
 
 
@@ -32,7 +33,7 @@ class PhaseTracker:
         self.sent = set(already_sent)
 
     def check(self, phase: str) -> list[str]:
-        if not phase or phase == "START":
+        if not phase or phase in MENU_PHASES:
             return []
         hits = [name for name, prefix in self.phases
                 if phase.startswith(prefix) and name not in self.sent]
@@ -41,3 +42,19 @@ class PhaseTracker:
 
     def is_goal(self, phase: str) -> bool:
         return bool(phase) and phase.startswith(self.phases[-1][1])
+
+
+class StoryTracker:
+    """Chaque nouveau code de phase ("NN_XX") donne "Story Progress #n", jusqu'a max_count."""
+
+    def __init__(self, state: ClientState, max_count: int):
+        self.state = state
+        self.max_count = max_count
+
+    def check(self, phase: str) -> Optional[int]:
+        code = phase_code(phase)
+        if code is None or code in self.state.story_codes:
+            return None
+        self.state.story_codes.add(code)
+        n = len(self.state.story_codes)
+        return n if n <= self.max_count else None

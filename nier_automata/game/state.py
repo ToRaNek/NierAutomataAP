@@ -26,6 +26,7 @@ class ClientState:
     sent_locations: set[int] = field(default_factory=set)
     weapons_found: int = 0
     ap_weapons: set[int] = field(default_factory=set)
+    story_codes: set[str] = field(default_factory=set)
 
     def save(self, path: Path) -> None:
         path = Path(path)
@@ -36,6 +37,7 @@ class ClientState:
             "sent_locations": sorted(self.sent_locations),
             "weapons_found": self.weapons_found,
             "ap_weapons": sorted(self.ap_weapons),
+            "story_codes": sorted(self.story_codes),
         }
         fd, tmp = tempfile.mkstemp(dir=path.parent, suffix=".tmp")
         try:
@@ -55,4 +57,5 @@ class ClientState:
         return cls(seed=d["seed"], slot=d["slot"], save_slot=d["save_slot"],
                    next_item_index=d["next_item_index"],
                    sent_locations=set(d["sent_locations"]),
-                   weapons_found=d["weapons_found"], ap_weapons=set(d["ap_weapons"]))
+                   weapons_found=d["weapons_found"], ap_weapons=set(d["ap_weapons"]),
+                   story_codes=set(d.get("story_codes", [])))

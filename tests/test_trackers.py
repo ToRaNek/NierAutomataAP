@@ -62,6 +62,7 @@ def test_phase_already_sent_skipped():
 def test_menu_phase_ignored():
     t = PhaseTracker(PHASES)
     assert t.check("START") == []
+    assert t.check("SIGNIN") == []
     assert t.check("") == []
 
 
@@ -69,3 +70,33 @@ def test_is_goal():
     t = PhaseTracker(PHASES)
     assert t.is_goal("58_AB_BossArea_Fall") is True
     assert t.is_goal("00_60_A_RobotM_Pro_Tutorial") is False
+
+
+from nier_automata.game.trackers import StoryTracker
+
+
+def test_story_new_code_counts():
+    s = st()
+    t = StoryTracker(s, max_count=3)
+    assert t.check("00_60_A_RobotM_Pro_Tutorial") == 1
+    assert t.check("00_60_A_Other_Section") is None  # meme code
+    assert t.check("10_AB_City") == 2
+
+
+def test_story_ignores_menu():
+    t = StoryTracker(st(), max_count=3)
+    assert t.check("SIGNIN") is None
+    assert t.check("START") is None
+
+
+def test_story_capped():
+    s = st()
+    t = StoryTracker(s, max_count=1)
+    t.check("00_60_A")
+    assert t.check("10_AB_City") is None
+    assert s.story_codes == {"00_60", "10_AB"}
+
+
+def test_story_survives_restart():
+    s = st(story_codes={"00_60"})
+    assert StoryTracker(s, max_count=3).check("00_60_A") is None
