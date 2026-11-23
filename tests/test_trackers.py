@@ -119,3 +119,12 @@ def test_transient_weapon_not_counted():
     t.scan({0x41A})          # valeur passagere pendant un chargement
     assert t.scan(set()) == ([], None)
     assert s.weapons_found == 0
+
+
+def test_refound_weapon_after_reload_not_recounted():
+    s = st()
+    t = WeaponTracker(s, max_found=5)
+    t.scan({0x3F5}); t.scan({0x3F5})          # Iron Pipe trouvee -> #1, retiree
+    t.scan({0x3F5})                           # rechargement : retrouvee
+    assert t.scan({0x3F5}) == ([0x3F5], None)  # retiree mais pas recomptee
+    assert s.weapons_found == 1

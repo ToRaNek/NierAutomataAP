@@ -22,12 +22,29 @@ class Trackers:
 class TickResult:
     locations: list[int] = field(default_factory=list)
     goal: bool = False
+    refused: bool = False
 
 
 def new_state(seed: str, slot: int) -> ClientState:
     """Etat neuf : les armes de depart de 2B ne doivent jamais compter comme trouvees."""
     return ClientState(seed=seed, slot=slot, save_slot=None,
                        ap_weapons={WEAPONS[n] for n in STARTING_WEAPONS})
+
+
+def due_locations(state: ClientState, story_checks: int, weapon_checks: int) -> set[int]:
+    """Locations meritees d'apres l'etat (renvoyees tant que le serveur ne les a pas confirmees)."""
+    due = {_LOCS[story_location(i)] for i in range(1, min(len(state.story_codes), story_checks) + 1)}
+    due |= {_LOCS[weapon_location(i)] for i in range(1, min(state.weapons_found, weapon_checks) + 1)}
+    return due
+
+
+def is_fresh(state: ClientState) -> bool:
+    return state.next_item_index == 0 and state.weapons_found == 0 and not state.story_codes
+
+
+def looks_like_new_game(game) -> bool:
+    starting = {WEAPONS[n] for n in STARTING_WEAPONS}
+    return game.owned_weapons() <= starting and game.phase().startswith("00_")
 
 
 def make_trackers(state: ClientState, story_checks: int, weapon_checks: int) -> Trackers:
@@ -38,6 +55,9 @@ def tick(game, state: ClientState, received: list[str], trackers: Trackers, goal
     """game : in_game(), phase(), owned_weapons(), give(name) -> bool, remove_weapon(id) -> bool."""
     result = TickResult()
     if not game.in_game():
+        return result
+    if is_fresh(state) and not looks_like_new_game(game):
+        result.refused = True  # sauvegarde deja avancee : on ne touche a rien
         return result
 
     # 1. objets recus pas encore appliques
@@ -61,16 +81,13 @@ def tick(game, state: ClientState, received: list[str], trackers: Trackers, goal
     to_remove, n = trackers.weapons.scan(owned)
     for wid in to_remove:
         game.remove_weapon(wid)
-    if n is not None:
-        result.locations.append(_LOCS[weapon_location(n)])
 
     # 4. progression de l'histoire
     phase = game.phase()
-    n = trackers.story.check(phase)
-    if n is not None:
-        result.locations.append(_LOCS[story_location(n)])
+    trackers.story.check(phase)
 
-    result.locations = [loc for loc in result.locations if loc not in state.sent_locations]
+    due = due_locations(state, trackers.story.max_count, trackers.weapons.max_found)
+    result.locations = sorted(due - state.sent_locations)
     state.sent_locations.update(result.locations)
     result.goal = bool(phase) and phase.startswith(goal_prefix)
     return result

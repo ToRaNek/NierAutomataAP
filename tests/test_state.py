@@ -50,3 +50,10 @@ def test_state_path_rejects_traversal(tmp_path, monkeypatch):
     p = state_mod.state_path("../../evil", 1)
     assert p.parent == tmp_path / "NierAutomataAP"
     assert ".." not in p.name and "/" not in p.name and "\\" not in p.name
+
+
+def test_to_json_changes_with_state():
+    s = make()
+    before = s.to_json()
+    s.weapons_found += 1
+    assert s.to_json() != before

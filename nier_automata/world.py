@@ -1,4 +1,4 @@
-from BaseClasses import Item, ItemClassification, Location, Region, Tutorial
+from BaseClasses import Item, ItemClassification, Location, LocationProgressType, Region, Tutorial
 from worlds.AutoWorld import WebWorld, World
 from worlds.LauncherComponents import Component, Type, components, launch_subprocess
 
@@ -54,7 +54,11 @@ class NierAutomataWorld(World):
     def create_regions(self) -> None:
         menu = Region("Menu", self.player, self.multiworld)
         for name in self._location_names():
-            menu.locations.append(NierLocation(self.player, name, self.location_name_to_id[name], menu))
+            loc = NierLocation(self.player, name, self.location_name_to_id[name], menu)
+            if name.startswith("Weapon Found"):
+                # Peut etre inatteignable (peu d'armes en route A) : jamais d'objet de progression ici.
+                loc.progress_type = LocationProgressType.EXCLUDED
+            menu.locations.append(loc)
         goal = NierLocation(self.player, GOAL_LOCATION, None, menu)
         goal.place_locked_item(NierItem("Victory", ItemClassification.progression, None, self.player))
         menu.locations.append(goal)

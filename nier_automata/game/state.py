@@ -27,18 +27,26 @@ class ClientState:
     weapons_found: int = 0
     ap_weapons: set[int] = field(default_factory=set)
     story_codes: set[str] = field(default_factory=set)
+    found_weapon_ids: set[int] = field(default_factory=set)
 
-    def save(self, path: Path) -> None:
-        path = Path(path)
-        path.parent.mkdir(parents=True, exist_ok=True)
-        data = {
+    def to_dict(self) -> dict:
+        return {
             "seed": self.seed, "slot": self.slot, "save_slot": self.save_slot,
             "next_item_index": self.next_item_index,
             "sent_locations": sorted(self.sent_locations),
             "weapons_found": self.weapons_found,
             "ap_weapons": sorted(self.ap_weapons),
             "story_codes": sorted(self.story_codes),
+            "found_weapon_ids": sorted(self.found_weapon_ids),
         }
+
+    def to_json(self) -> str:
+        return json.dumps(self.to_dict(), sort_keys=True)
+
+    def save(self, path: Path) -> None:
+        path = Path(path)
+        path.parent.mkdir(parents=True, exist_ok=True)
+        data = self.to_dict()
         fd, tmp = tempfile.mkstemp(dir=path.parent, suffix=".tmp")
         try:
             with os.fdopen(fd, "w", encoding="utf-8") as f:
@@ -58,4 +66,5 @@ class ClientState:
                    next_item_index=d["next_item_index"],
                    sent_locations=set(d["sent_locations"]),
                    weapons_found=d["weapons_found"], ap_weapons=set(d["ap_weapons"]),
-                   story_codes=set(d.get("story_codes", [])))
+                   story_codes=set(d.get("story_codes", [])),
+                   found_weapon_ids=set(d.get("found_weapon_ids", [])))

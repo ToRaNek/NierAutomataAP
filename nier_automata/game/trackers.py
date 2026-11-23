@@ -29,8 +29,9 @@ class WeaponTracker:
             return [], None
         weapon = confirmed[0]
         self._pending.discard(weapon)
-        if self.state.weapons_found >= self.max_found:
+        if weapon in self.state.found_weapon_ids or self.state.weapons_found >= self.max_found:
             return [weapon], None
+        self.state.found_weapon_ids.add(weapon)
         self.state.weapons_found += 1
         return [weapon], self.state.weapons_found
 

@@ -102,7 +102,7 @@ def test_ap_weapon_reinjected_after_reload():
 
 
 def test_goal_sent_on_ending_phase():
-    s, tr = setup()
+    s, tr = setup(story_codes={"00_60"})  # partie deja liee
     r = tick(FakeGame(phase="58_AB_BossArea_Fall"), s, [], tr, GOAL)
     assert r.goal is True
 
@@ -115,3 +115,58 @@ def test_new_state_keeps_starting_weapons():
     r = tick(g, s, [], tr, GOAL)
     assert g.weapons == {0x42E, 0x4EC}
     assert LOCS[weapon_location(1)] not in r.locations
+
+
+from nier_automata.game.loop import due_locations
+
+
+def test_due_locations_from_state():
+    s, _ = setup()
+    s.weapons_found = 2
+    s.story_codes = {"00_60", "00_70", "00_80"}
+    due = due_locations(s, story_checks=2, weapon_checks=1)
+    assert due == {LOCS[story_location(1)], LOCS[story_location(2)], LOCS[weapon_location(1)]}
+
+
+class CrashingGame(FakeGame):
+    def __init__(self, **kw):
+        super().__init__(**kw)
+        self.crash = False
+
+    def phase(self):
+        if self.crash:
+            raise OSError("jeu ferme")
+        return super().phase()
+
+
+def test_weapon_check_not_lost_on_oserror():
+    s, tr = setup()
+    g = CrashingGame()
+    tick(g, s, [], tr, GOAL)
+    g.weapons.add(0x41A)
+    tick(g, s, [], tr, GOAL)
+    g.crash = True
+    try:
+        tick(g, s, [], tr, GOAL)  # scan valide l'arme puis phase() plante
+    except OSError:
+        pass
+    assert LOCS[weapon_location(1)] in due_locations(s, story_checks=5, weapon_checks=3)
+
+
+def test_refuses_existing_save_on_first_link():
+    from nier_automata.game.loop import new_state
+    s = new_state("S", 1)
+    tr = make_trackers(s, story_checks=5, weapon_checks=3)
+    g = FakeGame(phase="10_AB_City", weapons={0x42E, 0x4EC, 0x3F5})
+    r = tick(g, s, ["Small Recovery"], tr, GOAL)
+    assert r.refused
+    assert g.weapons == {0x42E, 0x4EC, 0x3F5} and g.items == {}
+    assert r.locations == []
+
+
+def test_accepts_new_game_on_first_link():
+    from nier_automata.game.loop import new_state
+    s = new_state("S", 1)
+    tr = make_trackers(s, story_checks=5, weapon_checks=3)
+    r = tick(FakeGame(), s, [], tr, GOAL)
+    assert not r.refused

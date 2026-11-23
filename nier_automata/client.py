@@ -9,7 +9,7 @@ from NetUtils import ClientStatus
 
 from .data.phases import GOAL_PHASE_PREFIX
 from .game.game import NierGame, backup_saves
-from .game.loop import make_trackers, new_state, tick
+from .game.loop import due_locations, make_trackers, new_state, tick
 from .game.state import ClientState, state_path
 
 GAME = "NieR:Automata"
@@ -45,6 +45,11 @@ class NierContext(CommonContext):
             self.trackers = make_trackers(self.state, sd.get("story_checks", 12), sd.get("weapon_checks", 8))
             self.goal_prefix = sd.get("goal_phase_prefix", GOAL_PHASE_PREFIX)
             logger.info("Connecte. Etat local : %s", path)
+            # Renvoyer les checks merites que le serveur n'a pas (coupure pendant un envoi).
+            missing = due_locations(self.state, self.trackers.story.max_count,
+                                    self.trackers.weapons.max_found) - set(args.get("checked_locations", []))
+            if missing:
+                asyncio.create_task(self.send_msgs([{"cmd": "LocationChecks", "locations": sorted(missing)}]))
 
     async def connection_closed(self):
         await super().connection_closed()
@@ -70,28 +75,37 @@ class NierContext(CommonContext):
 async def game_loop(ctx: NierContext):
     while not ctx.exit_event.is_set():
         await asyncio.sleep(0.5)
-        if ctx.state is None or ctx.trackers is None:
-            continue
-        if not ctx.nier.in_game():
-            ctx._status(ctx.nier.error or "En attente d'une partie chargee...")
-            continue
-        ctx._status(f"Jeu detecte ({ctx.nier.version}), phase {ctx.nier.phase()}")
-        if not ctx.backed_up:
-            dst = backup_saves()
-            logger.info("Sauvegardes copiees dans %s", dst)
-            ctx.backed_up = True
-        received = [ctx.item_names.lookup_in_game(i.item) for i in ctx.items_received]
         try:
-            result = tick(ctx.nier, ctx.state, received, ctx.trackers, ctx.goal_prefix)
-        except OSError as e:
-            logger.warning("Lecture memoire impossible (%s), nouvel essai...", e)
-            continue
-        if result.locations:
-            await ctx.send_msgs([{"cmd": "LocationChecks", "locations": result.locations}])
-        if result.goal and not ctx.goal_sent:
-            await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
-            ctx.goal_sent = True
-            logger.info("Fin A atteinte : objectif envoye !")
+            await game_iteration(ctx)
+        except Exception as e:  # la boucle ne doit jamais mourir
+            logger.warning("Erreur pendant le tour de jeu (%s), nouvel essai...", e)
+
+
+async def game_iteration(ctx: NierContext):
+    if ctx.state is None or ctx.trackers is None:
+        return
+    if not ctx.nier.in_game():
+        ctx._status(ctx.nier.error or "En attente d'une partie chargee...")
+        return
+    if not ctx.backed_up:
+        dst = backup_saves()
+        if dst:
+            logger.info("Sauvegardes copiees dans %s", dst)
+        ctx.backed_up = True
+    received = [ctx.item_names.lookup_in_game(i.item) for i in ctx.items_received]
+    before = ctx.state.to_json()
+    result = tick(ctx.nier, ctx.state, received, ctx.trackers, ctx.goal_prefix)
+    if result.refused:
+        ctx._status("Sauvegarde deja avancee : commence une NOUVELLE partie pour cette seed.")
+        return
+    ctx._status(f"Jeu detecte ({ctx.nier.version}), phase {ctx.nier.phase()}")
+    if result.locations:
+        await ctx.send_msgs([{"cmd": "LocationChecks", "locations": result.locations}])
+    if result.goal and not ctx.goal_sent:
+        await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
+        ctx.goal_sent = True
+        logger.info("Fin A atteinte : objectif envoye !")
+    if ctx.state.to_json() != before:
         ctx.state.save(ctx.state_file)
 
 
