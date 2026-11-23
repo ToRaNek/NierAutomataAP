@@ -13,6 +13,8 @@ from .memory import Memory
 CHIP_SLOT_SIZE = 48
 CHIP_SLOTS = 300
 EMPTY = 0xFFFFFFFF
+# "Puce systeme" (verifiee en jeu v1.04 : id 3338, type 42, slot 0, cout 2).
+SYSTEM_CHIP_TYPES = {42}
 
 
 @dataclass
@@ -28,7 +30,8 @@ class Chip:
 
 def _parse(index: int, raw: bytes) -> Chip:
     f = struct.unpack("<12I", raw)
-    return Chip(index, raw, f[1], f[2], f[3], f[4], f[8] == 0 and f[9] == 0 and f[10] == 0)
+    is_os = (f[8] == 0 and f[9] == 0 and f[10] == 0) or (f[1] != EMPTY and f[2] in SYSTEM_CHIP_TYPES)
+    return Chip(index, raw, f[1], f[2], f[3], f[4], is_os)
 
 
 class ChipTable:

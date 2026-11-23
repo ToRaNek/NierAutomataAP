@@ -55,3 +55,11 @@ def test_add_raw_full_returns_false():
     t = table(m, count=1)
     t.add_raw(chip_raw(3007, 6, 0, 4))
     assert t.add_raw(chip_raw(3008, 6, 1, 5)) is False
+
+
+def test_system_chip_3338_never_removed():
+    m = FakeMemory()
+    t = table(m)
+    m.write(m.base + START, chip_raw(3338, 42, 0, 2))  # "Puce systeme", verifiee en jeu
+    assert t.read_all()[0].is_os
+    assert t.remove(0) is False
