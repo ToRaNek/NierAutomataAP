@@ -51,6 +51,16 @@ def looks_like_new_game(game) -> bool:
     return game.owned_weapons() <= starting and game.phase().startswith("00_")
 
 
+GOAL_STORY = 0
+GOAL_ENDING_A = 1
+
+
+def goal_reached(state: ClientState, phase: str, goal: int, story_checks: int, goal_prefix: str) -> bool:
+    if goal == GOAL_STORY:
+        return len(state.story_codes) >= story_checks
+    return bool(phase) and phase.startswith(goal_prefix)
+
+
 def make_trackers(state: ClientState, story_checks: int, weapon_checks: int,
                   item_checks: bool = True) -> Trackers:
     enabled = set(MATERIALS.values()) if item_checks else set()
@@ -58,7 +68,8 @@ def make_trackers(state: ClientState, story_checks: int, weapon_checks: int,
                     ItemTracker(state, enabled))
 
 
-def tick(game, state: ClientState, received: list[str], trackers: Trackers, goal_prefix: str) -> TickResult:
+def tick(game, state: ClientState, received: list[str], trackers: Trackers, goal_prefix: str,
+         goal: int = GOAL_ENDING_A) -> TickResult:
     """game : in_game(), phase(), owned_weapons(), give(name) -> bool, remove_weapon(id) -> bool."""
     result = TickResult()
     if not game.in_game():
@@ -99,5 +110,5 @@ def tick(game, state: ClientState, received: list[str], trackers: Trackers, goal
     due = due_locations(state, trackers.story.max_count, trackers.weapons.max_found)
     result.locations = sorted(due - state.sent_locations)
     state.sent_locations.update(result.locations)
-    result.goal = bool(phase) and phase.startswith(goal_prefix)
+    result.goal = goal_reached(state, phase, goal, trackers.story.max_count, goal_prefix)
     return result

@@ -5,7 +5,7 @@ from worlds.LauncherComponents import Component, Type, components, launch_subpro
 from .data.items_data import FILLER_ITEMS, MATERIALS
 from .data.phases import GOAL_PHASE_PREFIX
 from .data.tables import (
-    GOAL_LOCATION, item_location, item_name_to_id, location_name_to_id, story_location, weapon_location,
+    GOAL_LOCATION, item_location, item_name_to_id, pool_weapon_count, location_name_to_id, story_location, weapon_location,
 )
 from .data.weapons import STARTING_WEAPONS, WEAPONS
 from .options import NierAutomataOptions
@@ -61,7 +61,8 @@ class NierAutomataWorld(World):
                 # Peut etre inatteignable (peu d'armes en route A) : jamais d'objet de progression ici.
                 loc.progress_type = LocationProgressType.EXCLUDED
             menu.locations.append(loc)
-        goal = NierLocation(self.player, GOAL_LOCATION, None, menu)
+        goal_name = "Goal: Story Progress" if self.options.goal.value == 0 else GOAL_LOCATION
+        goal = NierLocation(self.player, goal_name, None, menu)
         goal.place_locked_item(NierItem("Victory", ItemClassification.progression, None, self.player))
         menu.locations.append(goal)
         self.multiworld.regions.append(menu)
@@ -76,7 +77,8 @@ class NierAutomataWorld(World):
     def create_items(self) -> None:
         count = len(self._location_names())
         candidates = sorted(set(WEAPONS) - STARTING_WEAPONS)
-        weapons = self.random.sample(candidates, min(len(candidates), count // 2))
+        n = pool_weapon_count(self.options.story_checks.value, count, len(candidates))
+        weapons = self.random.sample(candidates, n)
         pool = [self.create_item(w) for w in weapons]
         pool += [self.create_item(self.get_filler_item_name()) for _ in range(count - len(pool))]
         self.multiworld.itempool += pool
@@ -89,5 +91,6 @@ class NierAutomataWorld(World):
             "story_checks": self.options.story_checks.value,
             "weapon_checks": self.options.weapon_checks.value,
             "item_checks": bool(self.options.item_checks),
+            "goal": self.options.goal.value,
             "goal_phase_prefix": GOAL_PHASE_PREFIX,
         }

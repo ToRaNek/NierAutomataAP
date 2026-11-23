@@ -25,6 +25,7 @@ class NierContext(CommonContext):
         self.state: ClientState | None = None
         self.trackers = None
         self.goal_prefix = GOAL_PHASE_PREFIX
+        self.goal = 1
         self.backed_up = False
         self.goal_sent = False
         self.last_status = ""
@@ -45,6 +46,7 @@ class NierContext(CommonContext):
             self.trackers = make_trackers(self.state, sd.get("story_checks", 12), sd.get("weapon_checks", 8),
                                           sd.get("item_checks", False))
             self.goal_prefix = sd.get("goal_phase_prefix", GOAL_PHASE_PREFIX)
+            self.goal = sd.get("goal", 1)
             logger.info("Connecte. Etat local : %s", path)
             # Renvoyer les checks merites que le serveur n'a pas (coupure pendant un envoi).
             missing = due_locations(self.state, self.trackers.story.max_count,
@@ -95,7 +97,7 @@ async def game_iteration(ctx: NierContext):
         ctx.backed_up = True
     received = [ctx.item_names.lookup_in_game(i.item) for i in ctx.items_received]
     before = ctx.state.to_json()
-    result = tick(ctx.nier, ctx.state, received, ctx.trackers, ctx.goal_prefix)
+    result = tick(ctx.nier, ctx.state, received, ctx.trackers, ctx.goal_prefix, ctx.goal)
     if result.refused:
         ctx._status("Sauvegarde deja avancee : commence une NOUVELLE partie pour cette seed.")
         return
@@ -105,7 +107,7 @@ async def game_iteration(ctx: NierContext):
     if result.goal and not ctx.goal_sent:
         await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
         ctx.goal_sent = True
-        logger.info("Fin A atteinte : objectif envoye !")
+        logger.info("Objectif atteint : victoire envoyee !")
     if ctx.state.to_json() != before:
         ctx.state.save(ctx.state_file)
 

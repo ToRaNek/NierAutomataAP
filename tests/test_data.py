@@ -63,3 +63,11 @@ def test_item_location_codes_unique():
     assert item_location("Iron Ore") == "Item: Iron Ore"
     assert item_location("Iron Ore") in locs
     assert len(set(locs.values())) == len(locs)
+
+
+def test_pool_weapon_count_never_exceeds_open_locations():
+    from nier_automata.data.tables import pool_weapon_count
+    # 12 histoire (non exclues) + 79 exclues : 12 armes max, le reste en filler
+    assert pool_weapon_count(story_locations=12, total_locations=91, candidates=37) == 12
+    assert pool_weapon_count(story_locations=40, total_locations=60, candidates=37) == 30
+    assert pool_weapon_count(story_locations=3, total_locations=3, candidates=37) == 1

@@ -184,3 +184,26 @@ def test_tick_sends_item_location():
     g.owned = {540, 601}
     r = tick(g, s, [], tr, GOAL)
     assert LOCS["Item: Iron Ore"] in r.locations
+
+
+from nier_automata.game.loop import goal_reached, GOAL_STORY, GOAL_ENDING_A
+
+
+def test_goal_story_progress_reached_at_count():
+    s, _ = setup(story_codes={"00_60", "00_70", "00_80", "10_AB", "11_AB"})
+    assert goal_reached(s, "11_AB_x", GOAL_STORY, 5, GOAL) is True
+    s.story_codes.discard("11_AB")
+    assert goal_reached(s, "10_AB_x", GOAL_STORY, 5, GOAL) is False
+
+
+def test_goal_ending_a_needs_phase():
+    s, _ = setup(story_codes={"00_60"})
+    assert goal_reached(s, "58_AB_BossArea_Fall", GOAL_ENDING_A, 5, GOAL) is True
+    assert goal_reached(s, "10_AB_City", GOAL_ENDING_A, 5, GOAL) is False
+
+
+def test_tick_story_goal():
+    s, tr = setup(story_codes={"00_60"})
+    tr = make_trackers(s, story_checks=1, weapon_checks=3)
+    r = tick(FakeGame(), s, [], tr, GOAL, goal=GOAL_STORY)
+    assert r.goal is True

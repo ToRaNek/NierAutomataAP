@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from Options import DefaultOnToggle, PerGameCommonOptions, Range
+from Options import Choice, DefaultOnToggle, PerGameCommonOptions, Range
 
 from .data.tables import MAX_STORY, MAX_WEAPON_CHECKS
 
@@ -27,8 +27,19 @@ class ItemChecks(DefaultOnToggle):
     display_name = "Item Checks"
 
 
+class Goal(Choice):
+    """Condition de victoire.
+    story_progress : atteindre `story_checks` sequences d'histoire (partie courte, reglable).
+    ending_a : terminer la route A (premiere fin, partie longue)."""
+    display_name = "Goal"
+    option_story_progress = 0
+    option_ending_a = 1
+    default = 0
+
+
 @dataclass
 class NierAutomataOptions(PerGameCommonOptions):
     story_checks: StoryChecks
     weapon_checks: WeaponChecks
     item_checks: ItemChecks
+    goal: Goal
