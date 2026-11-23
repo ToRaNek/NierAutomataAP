@@ -11,6 +11,8 @@ from NetUtils import ClientStatus
 from .data.phases import GOAL_PHASE_PREFIX, abilities_allowed
 from .data.ap_spots import AP_SPOTS
 from .game import ap_items as apit
+from .game import notify
+from .data.items_data import FILLER_ITEMS
 from .game.abilities import AbilityLock
 from .game.deathlink import DeathTracker
 from .game.game import NierGame, backup_saves
@@ -34,6 +36,9 @@ class NierContext(CommonContext):
         self.deaths = DeathTracker()
         self.saved_json = ""
         self.received_names: set[str] = set()
+        self.notes: list[str] = []
+        self.note_slot = None
+        self.note_pid = None
         self.randomized_abilities: set[str] = set()
         self.ability_lock = None
         self.death_link_on = False
@@ -48,6 +53,18 @@ class NierContext(CommonContext):
         await self.send_connect()
 
     def on_package(self, cmd: str, args: dict):
+        if cmd == "PrintJSON" and args.get("type") in ("ItemSend", "ItemCheat") and self.slot is not None:
+            try:
+                it = args["item"]
+                get = (lambda k: it[k]) if isinstance(it, dict) else (lambda k: getattr(it, k))
+                sender, receiver = get("player"), args["receiving"]
+                name = self.item_names.lookup_in_slot(get("item"), receiver)
+                msgs = notify.messages_for_item_send(self.slot, sender, receiver, name,
+                                                     self.player_names.get(sender, "?"),
+                                                     self.player_names.get(receiver, "?"))
+                self.notes.extend(msgs)
+            except Exception as e:
+                logger.info("notification ignoree : %r", e)
         if cmd == "Connected":
             sd = args.get("slot_data", {})
             seed = getattr(self, "server_seed_name", None) or self.seed_name or "seed"
@@ -130,6 +147,29 @@ async def game_loop(ctx: NierContext):
             await game_iteration(ctx)
         except Exception as e:  # la boucle ne doit jamais mourir
             logger.warning("Erreur pendant le tour de jeu (%s), nouvel essai...", e)
+
+
+async def notify_loop(ctx: NierContext):
+    """Affiche les notifications une par une (message "Objet recupere" du porteur)."""
+    while not ctx.exit_event.is_set():
+        await asyncio.sleep(2.5)
+        try:
+            if not ctx.notes or ctx.state is None or not ctx.nier.in_game():
+                continue
+            mem = ctx.nier.mem
+            if ctx.note_pid != mem.pid:
+                ctx.note_slot = await asyncio.to_thread(notify.Notifier, mem)
+                ctx.note_pid = mem.pid
+            if not ctx.note_slot.ok:
+                ctx.notes.clear()
+                continue
+            prefix, item = ctx.notes.pop(0)
+            await asyncio.to_thread(ctx.note_slot.show, prefix, item)
+            await asyncio.sleep(1.5)
+            ctx.note_slot.restore()
+            ctx.nier._items.remove(notify.CARRIER_ITEM)
+        except Exception as e:
+            logger.info("notification echouee : %r", e)
 
 
 async def ability_loop(ctx: NierContext):
@@ -232,10 +272,12 @@ def launch(*launch_args):
         ctx.run_cli()
         watcher = asyncio.create_task(game_loop(ctx), name="NierGameLoop")
         abilities = asyncio.create_task(ability_loop(ctx), name="NierAbilityLoop")
+        notes = asyncio.create_task(notify_loop(ctx), name="NierNotifyLoop")
         await ctx.exit_event.wait()
         ctx.server_address = None
         watcher.cancel()
         abilities.cancel()
+        notes.cancel()
         ctx.release_abilities()
         await ctx.shutdown()
 

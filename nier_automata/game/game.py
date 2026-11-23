@@ -104,10 +104,8 @@ class NierGame:
             add_funds(self.mem, self._off["funds"], FUNDS_ITEMS[name])
             return True
         if name in FILLER_ITEMS:
-            qty = FILLER_QUANTITY.get(name, 1)
-            if self.give_with_popup(FILLER_ITEMS[name]):
-                return qty == 1 or self._items.add(FILLER_ITEMS[name], qty - 1)
-            return self._items.add(FILLER_ITEMS[name], qty)
+            # ajout discret : la notification "De X : <objet>" du client remplace le message du jeu
+            return self._items.add(FILLER_ITEMS[name], FILLER_QUANTITY.get(name, 1))
         return True  # objet inconnu : ignore plutot que bloquer la file
 
     def remove_weapon(self, weapon_id: int) -> bool:
