@@ -28,6 +28,7 @@ class NierContext(CommonContext):
         self.goal_prefix = GOAL_PHASE_PREFIX
         self.goal = 1
         self.deaths = DeathTracker()
+        self.saved_json = ""
         self.death_link_on = False
         self.backed_up = False
         self.goal_sent = False
@@ -46,6 +47,9 @@ class NierContext(CommonContext):
             path = state_path(seed, self.slot)
             self.state = ClientState.load(path) or new_state(seed, self.slot)
             self.state_file = path
+            self.saved_json = ""
+            self.goal_sent = False
+            self.deaths = DeathTracker()
             self.trackers = make_trackers(self.state, sd.get("story_checks", 12), sd.get("weapon_checks", 8),
                                           sd.get("item_checks", False))
             self.goal_prefix = sd.get("goal_phase_prefix", GOAL_PHASE_PREFIX)
@@ -67,9 +71,14 @@ class NierContext(CommonContext):
 
     def on_deathlink(self, data: dict):
         super().on_deathlink(data)
-        if self.nier.in_game() and self.nier.kill():
-            self.deaths.expect_death()
-            logger.info("DeathLink recu de %s : 2B meurt.", data.get("source", "?"))
+        try:
+            if self.nier.in_game() and self.nier.kill():
+                self.deaths.expect_death()
+                logger.info("DeathLink recu de %s : 2B meurt.", data.get("source", "?"))
+            else:
+                logger.info("DeathLink recu de %s ignore : pas en jeu.", data.get("source", "?"))
+        except Exception as e:
+            logger.warning("DeathLink recu mais impossible d'agir (%s)", e)
 
     def run_gui(self):
         from kvui import GameManager
@@ -100,6 +109,7 @@ async def game_iteration(ctx: NierContext):
     if ctx.state is None or ctx.trackers is None:
         return
     if not ctx.nier.in_game():
+        ctx.deaths.reset()
         ctx._status(ctx.nier.error or "En attente d'une partie chargee...")
         return
     if not ctx.backed_up:
@@ -108,7 +118,6 @@ async def game_iteration(ctx: NierContext):
             logger.info("Sauvegardes copiees dans %s", dst)
         ctx.backed_up = True
     received = [ctx.item_names.lookup_in_game(i.item) for i in ctx.items_received]
-    before = ctx.state.to_json()
     result = tick(ctx.nier, ctx.state, received, ctx.trackers, ctx.goal_prefix, ctx.goal)
     if result.refused:
         ctx._status("Sauvegarde deja avancee : commence une NOUVELLE partie pour cette seed.")
@@ -120,10 +129,12 @@ async def game_iteration(ctx: NierContext):
         await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
         ctx.goal_sent = True
         logger.info("Objectif atteint : victoire envoyee !")
-    if ctx.death_link_on and ctx.deaths.update(ctx.nier.hp()):
-        await ctx.send_death(f"{ctx.player_names.get(ctx.slot, '2B')} est mort(e) dans NieR:Automata")
-    if ctx.state.to_json() != before:
+    current = ctx.state.to_json()
+    if current != ctx.saved_json:  # compare au dernier etat ECRIT : une erreur ne bloque pas la sauvegarde
         ctx.state.save(ctx.state_file)
+        ctx.saved_json = current
+    if ctx.death_link_on and ctx.deaths.update(ctx.nier.hp(), ctx.nier.entity()):
+        await ctx.send_death(f"{ctx.player_names.get(ctx.slot, '2B')} est mort(e) dans NieR:Automata")
 
 
 def launch(*launch_args):

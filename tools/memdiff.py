@@ -14,7 +14,9 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from nier_automata.game.memory import ProcessMemory  # noqa: E402
-from nier_automata.game.snapshot import diff_u32, exclude_offsets, filter_small  # noqa: E402
+import json  # noqa: E402
+
+from nier_automata.game.snapshot import diff_u32, exclude_blocks, exclude_offsets, filter_small  # noqa: E402
 
 START, END, BLOCK = 0xF00000, 0x1800000, 0x10000
 SNAPS = Path(__file__).with_name("snaps")
@@ -33,12 +35,21 @@ def snap(name: str) -> None:
         data += chunk.ljust(BLOCK, b"\x00")
     SNAPS.mkdir(exist_ok=True)
     (SNAPS / f"{name}.bin").write_bytes(bytes(data))
+    (SNAPS / f"{name}.meta.json").write_text(json.dumps({"bad_blocks": [START + b - START for b in bad]}))
     print(f"{name}: {len(data)} octets, {len(bad)} blocs illisibles")
 
 
 def diff(a: str, b: str, small: bool, exclude: str | None) -> None:
     ra, rb = (SNAPS / f"{a}.bin").read_bytes(), (SNAPS / f"{b}.bin").read_bytes()
     changes = diff_u32(ra, rb, START)
+    bad = set()
+    for n in (a, b, exclude):
+        meta = SNAPS / f"{n}.meta.json" if n else None
+        if meta and meta.exists():
+            bad |= set(json.loads(meta.read_text())["bad_blocks"])
+    if bad:
+        print(f"Attention : {len(bad)} blocs illisibles exclus du diff")
+        changes = exclude_blocks(changes, bad, BLOCK)
     if exclude:
         rc = (SNAPS / f"{exclude}.bin").read_bytes()
         changes = exclude_offsets(changes, {o for o, _, _ in diff_u32(rb, rc, START)})

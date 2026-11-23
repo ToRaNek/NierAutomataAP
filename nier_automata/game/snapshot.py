@@ -17,10 +17,17 @@ def filter_small(changes, max_delta: int):
     out = []
     for off, old, new in changes:
         x = old ^ new
-        if abs(new - old) <= max_delta or (x & (x - 1)) == 0:
+        delta = (new - old) & 0xFFFFFFFF
+        signed = delta - (1 << 32) if delta >= (1 << 31) else delta
+        if abs(signed) <= max_delta or (x & (x - 1)) == 0:
             out.append((off, old, new))
     return out
 
 
 def exclude_offsets(changes, noise: set[int]):
     return [c for c in changes if c[0] not in noise]
+
+
+def exclude_blocks(changes, bad_blocks: set[int], block: int):
+    """Retire les changements situes dans un bloc illisible (rempli de zeros) d'une des photos."""
+    return [c for c in changes if (c[0] - c[0] % block) not in bad_blocks]

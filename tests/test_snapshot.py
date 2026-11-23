@@ -27,3 +27,13 @@ def test_filter_small_keeps_single_bit_flag():
 
 def test_exclude_offsets_removes_noise():
     assert exclude_offsets([(0, 1, 2), (4, 1, 2)], noise={4}) == [(0, 1, 2)]
+
+
+def test_exclude_unreadable_blocks():
+    from nier_automata.game.snapshot import exclude_blocks
+    changes = [(0x10004, 0, 1), (0x20008, 0, 1)]
+    assert exclude_blocks(changes, bad_blocks={0x10000}, block=0x10000) == [(0x20008, 0, 1)]
+
+
+def test_filter_small_signed_decrement():
+    assert filter_small([(0, 0, 0xFFFFFFFF)], max_delta=2) == [(0, 0, 0xFFFFFFFF)]

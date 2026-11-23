@@ -135,14 +135,17 @@ from nier_automata.game.trackers import ItemTracker
 
 def test_item_baseline_not_checked():
     s = st()
-    assert ItemTracker(s, enabled_ids={540, 601}).scan({540}) == []
+    t = ItemTracker(s, enabled_ids={540, 601})
+    assert t.scan({540}) == []
+    assert t.scan({540}) == []
     assert s.item_baseline == {540}
 
 
 def test_new_material_checked_once():
     s = st()
     t = ItemTracker(s, enabled_ids={540, 601})
-    t.scan({540})
+    t.scan({540}); t.scan({540})
+    assert t.scan({540, 601}) == []
     assert t.scan({540, 601}) == [601]
     assert t.scan({540, 601}) == []
     assert s.items_found == {601}
@@ -153,3 +156,23 @@ def test_disabled_item_ignored():
     t = ItemTracker(s, enabled_ids={601})
     t.scan(set())
     assert t.scan({0}) == []
+
+
+def test_item_transient_value_not_checked():
+    s = st()
+    t = ItemTracker(s, enabled_ids={540, 601})
+    t.scan({540}); t.scan({540})          # baseline confirmee
+    assert t.scan({540, 601}) == []       # vu une fois
+    assert t.scan({540}) == []            # disparu : passager
+    assert s.items_found == set()
+
+
+def test_item_baseline_needs_two_identical_reads():
+    s = st()
+    t = ItemTracker(s, enabled_ids={540, 601})
+    t.scan(set())                         # table vide pendant un chargement
+    t.scan({540, 601})
+    assert s.item_baseline is None or s.item_baseline == {540, 601}
+    t.scan({540, 601})
+    assert s.item_baseline == {540, 601}
+    assert s.items_found == set()

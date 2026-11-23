@@ -180,8 +180,9 @@ def test_tick_sends_item_location():
     s, tr = setup(story_codes={"00_60"})
     g = FakeGame()
     g.owned = {540}
-    tick(g, s, [], tr, GOAL)
+    tick(g, s, [], tr, GOAL); tick(g, s, [], tr, GOAL)
     g.owned = {540, 601}
+    tick(g, s, [], tr, GOAL)
     r = tick(g, s, [], tr, GOAL)
     assert LOCS["Item: Iron Ore"] in r.locations
 

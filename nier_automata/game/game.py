@@ -97,19 +97,28 @@ class NierGame:
     def remove_weapon(self, weapon_id: int) -> bool:
         return self._weapons.remove(weapon_id)
 
-    def _entity(self) -> Optional[int]:
-        p = struct.unpack("<Q", self.mem.read(self.mem.base + self._off["playerEntity"], 8))[0]
+    def entity(self) -> Optional[int]:
+        try:
+            p = struct.unpack("<Q", self.mem.read(self.mem.base + self._off["playerEntity"], 8))[0]
+        except (OSError, AttributeError):
+            return None
         return p if 0x10000 < p < 0x7FFFFFFFFFFF else None
 
     def hp(self) -> Optional[int]:
-        p = self._entity()
+        p = self.entity()
         if p is None:
             return None
-        return struct.unpack("<I", self.mem.read(p + HP_OFFSET, 4))[0]
+        try:
+            return struct.unpack("<I", self.mem.read(p + HP_OFFSET, 4))[0]
+        except OSError:
+            return None
 
     def kill(self) -> bool:
-        p = self._entity()
+        p = self.entity()
         if p is None:
             return False
-        self.mem.write(p + HP_OFFSET, struct.pack("<I", 0))
+        try:
+            self.mem.write(p + HP_OFFSET, struct.pack("<I", 0))
+        except OSError:
+            return False
         return True

@@ -70,17 +70,23 @@ class StoryTracker:
 
 
 class ItemTracker:
-    """Premier ramassage de chaque objet active. La 1re lecture sert de reference (pas de check)."""
+    """Premier ramassage de chaque objet active. Reference = deux lectures identiques (pas de check) ;
+    un objet doit ensuite etre vu deux scans de suite pour compter (valeurs passageres)."""
 
     def __init__(self, state: ClientState, enabled_ids: set[int]):
         self.state = state
         self.enabled_ids = enabled_ids
+        self._prev: Optional[set[int]] = None
 
     def scan(self, owned_item_ids: set[int]) -> list[int]:
         owned = owned_item_ids & self.enabled_ids
+        prev, self._prev = self._prev, owned
         if self.state.item_baseline is None:
-            self.state.item_baseline = set(owned)
+            if prev is not None and prev == owned:
+                self.state.item_baseline = set(owned)
             return []
-        new = sorted(owned - self.state.item_baseline - self.state.items_found)
+        if prev is None:
+            return []
+        new = sorted((owned & prev) - self.state.item_baseline - self.state.items_found)
         self.state.items_found.update(new)
         return new
