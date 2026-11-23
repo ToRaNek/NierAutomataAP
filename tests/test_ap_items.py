@@ -57,3 +57,43 @@ def test_due_includes_ap_items():
     locs = location_name_to_id()
     due = due_locations(s, 0, 0)
     assert {locs["AP Item #1"], locs["AP Item #3"]} <= due and locs["AP Item #2"] not in due
+
+
+from nier_automata.game.ap_items import PICKUP_CARRIER, nearest_spawned, pickup_text
+
+
+def test_pickup_carrier_is_long_name_item():
+    assert PICKUP_CARRIER == 921  # "Sachet de qualite", 17 caracteres
+
+
+def test_pickup_text_for_other_player():
+    assert pickup_text(me=1, receiver=2, item="Cure All Status", receiver_name="Niicotine") == (
+        "Pour Niicotine : ", "Cure All Status")
+
+
+def test_pickup_text_for_self():
+    assert pickup_text(me=1, receiver=1, item="Phoenix Sword", receiver_name="ToRaNek") == ("Trouvé : ", "Phoenix Sword")
+
+
+def test_pickup_text_unknown_content():
+    assert pickup_text(me=1, receiver=None, item=None, receiver_name=None) == ("", "AP Item")
+
+
+def test_nearest_spawned_within_radius():
+    spots = [("30_AB", 0.0, 0.0, 0.0), ("30_AB", 10.0, 0.0, 0.0)]
+    assert nearest_spawned(spots, spawned={0, 1}, collected=set(), pos=(9.0, 0.0, 0.0), radius=4.0) == 1
+    assert nearest_spawned(spots, spawned={0, 1}, collected={1}, pos=(9.0, 0.0, 0.0), radius=4.0) is None
+    assert nearest_spawned(spots, spawned={0}, collected=set(), pos=(9.0, 0.0, 0.0), radius=4.0) is None
+
+
+def test_no_respawn_after_client_restart_in_same_game_process():
+    s = st()
+    t = SpotTracker(s, SPOTS, radius=150.0)
+    t.set_game_process(1234)
+    t.mark_spawned(0)
+    t2 = SpotTracker(s, SPOTS, radius=150.0)      # client relance, meme jeu
+    t2.set_game_process(1234)
+    assert 0 not in t2.to_spawn("30_AB_x", (0.0, 0.0, 0.0))
+    t3 = SpotTracker(s, SPOTS, radius=150.0)      # jeu redemarre : on repose
+    t3.set_game_process(5678)
+    assert 0 in t3.to_spawn("30_AB_x", (0.0, 0.0, 0.0))

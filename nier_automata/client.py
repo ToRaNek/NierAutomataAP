@@ -12,6 +12,9 @@ from .data.phases import GOAL_PHASE_PREFIX, abilities_allowed
 from .data.ap_spots import AP_SPOTS
 from .game import ap_items as apit
 from .game import notify
+from .data.tables import ap_item_location as apit_loc, location_name_to_id
+
+LOC_IDS = location_name_to_id()
 from .data.items_data import FILLER_ITEMS
 from .game.abilities import AbilityLock
 from .game.deathlink import DeathTracker
@@ -53,16 +56,25 @@ class NierContext(CommonContext):
         await self.send_connect()
 
     def on_package(self, cmd: str, args: dict):
+        if cmd == "LocationInfo":
+            for it in args.get("locations", []):
+                get = (lambda k, it=it: it[k]) if isinstance(it, dict) else (lambda k, it=it: getattr(it, k))
+                rec = get("player")
+                self.ap_contents[get("location")] = (rec, self.item_names.lookup_in_slot(get("item"), rec))
         if cmd == "PrintJSON" and args.get("type") in ("ItemSend", "ItemCheat") and self.slot is not None:
             try:
                 it = args["item"]
                 get = (lambda k: it[k]) if isinstance(it, dict) else (lambda k: getattr(it, k))
                 sender, receiver = get("player"), args["receiving"]
+                if sender == self.slot and get("location") in getattr(self, "ap_contents", {}):
+                    raise StopIteration  # deja affiche par le message de ramassage de l'AP Item
                 name = self.item_names.lookup_in_slot(get("item"), receiver)
                 msgs = notify.messages_for_item_send(self.slot, sender, receiver, name,
                                                      self.player_names.get(sender, "?"),
                                                      self.player_names.get(receiver, "?"))
                 self.notes.extend(msgs)
+            except StopIteration:
+                pass
             except Exception as e:
                 logger.info("notification ignoree : %r", e)
         if cmd == "Connected":
@@ -82,6 +94,14 @@ class NierContext(CommonContext):
             self.death_link_on = bool(sd.get("death_link", False))
             self.randomized_abilities = set(sd.get("randomized_abilities", []))
             self.ap_items_on = bool(sd.get("ap_items", False))
+            self.ap_contents = {}
+            self.ap_prepared = None
+            self.pickup_note = None
+            if self.ap_items_on:
+                ids = [LOC_IDS[apit_loc(i + 1)] for i in range(len(AP_SPOTS))]
+                ids = [i for i in ids if i in self.server_locations]
+                if ids:
+                    asyncio.create_task(self.send_msgs([{"cmd": "LocationScouts", "locations": ids, "create_as_hint": 0}]))
             self.spots = apit.SpotTracker(self.state, AP_SPOTS)
             self.ap_tracked = {}
             self.ap_pid = None
@@ -156,6 +176,8 @@ async def notify_loop(ctx: NierContext):
         try:
             if not ctx.notes or ctx.state is None or not ctx.nier.in_game():
                 continue
+            if getattr(ctx, "ap_prepared", None) is not None:
+                continue
             mem = ctx.nier.mem
             if ctx.note_pid != mem.pid:
                 ctx.note_slot = await asyncio.to_thread(notify.Notifier, mem)
@@ -195,14 +217,18 @@ async def ap_items_step(ctx: NierContext):
     if ctx.ap_pid != mem.pid:
         ok = await asyncio.to_thread(apit.install, mem)
         ctx.ap_pid = mem.pid
-        ctx.spots.reset_session(); ctx.ap_tracked.clear()
+        ctx.ap_tracked.clear()
+        ctx.spots.set_game_process(mem.pid)
+        ctx.pickup_note = await asyncio.to_thread(notify.Notifier, mem, apit.PICKUP_CARRIER_KEY, apit.PICKUP_CARRIER)
         logger.info("AP Items : %s", "deviation installee" if ok else "version non supportee")
         if not ok:
             ctx.ap_items_on = False
             return
     phase = ctx.nier.phase()
     if phase != ctx.ap_phase:
-        ctx.spots.reset_session(); ctx.ap_tracked.clear(); ctx.ap_phase = phase
+        if ctx.ap_phase is not None:
+            ctx.spots.reset_session(); ctx.ap_tracked.clear()
+        ctx.ap_phase = phase
     ent = ctx.nier.entity()
     if ent is None:
         return
@@ -213,15 +239,30 @@ async def ap_items_step(ctx: NierContext):
         ctx.spots.mark_spawned(i)
         if work:
             ctx.ap_tracked[work] = i
-    marker = ctx.nier._items.find(apit.AP_MARKER_ITEM) is not None
+    near = apit.nearest_spawned(AP_SPOTS, set(ctx.ap_tracked.values()), ctx.state.ap_spots_collected, pos, 4.0)
+    if near != ctx.ap_prepared and ctx.pickup_note.ok:
+        if near is None:
+            ctx.pickup_note.restore()
+        else:
+            rec, name = ctx.ap_contents.get(LOC_IDS[apit_loc(near + 1)], (None, None))
+            prefix, item = apit.pickup_text(ctx.slot, rec, name, ctx.player_names.get(rec, "?") if rec else None)
+            ctx.pickup_note.prepare(prefix, item)
+        ctx.ap_prepared = near
+    marker = ctx.nier._items.find(apit.PICKUP_CARRIER) is not None
     def obj_of(w):
         return struct.unpack("<Q", mem.read(w + 0x60, 8))[0]
-    for i in apit.resolve_pickups(ctx.ap_tracked, obj_of, marker):
+    picked = apit.resolve_pickups(ctx.ap_tracked, obj_of, marker)
+    if marker and not picked:
+        # objet pose par une session precedente du client (non suivi) : le plus proche
+        i = apit.nearest_spawned(AP_SPOTS, ctx.state.ap_spawned_spots, ctx.state.ap_spots_collected, pos, 10.0)
+        if i is not None:
+            picked = [i]
+    for i in picked:
         ctx.spots.collected(i)
         logger.info("AP Item #%d ramasse !", i + 1)
     ctx.ap_tracked = {w: i for w, i in ctx.ap_tracked.items() if i not in ctx.state.ap_spots_collected}
     if marker:
-        ctx.nier._items.remove(apit.AP_MARKER_ITEM)
+        ctx.nier._items.remove(apit.PICKUP_CARRIER)
 
 
 async def game_iteration(ctx: NierContext):

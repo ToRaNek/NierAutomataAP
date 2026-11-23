@@ -22,7 +22,9 @@ DROP_CALL_RVA = 0x7CA790
 RETURN_RVA = 0x5EB5C5
 SITE_ORIGINAL = bytes.fromhex("8b9738080000488bcf")
 MARKER_FLAG = 0x10000
-AP_MARKER_ITEM = 688           # Meteorite, renommee "AP Item"
+AP_MARKER_ITEM = 688           # (ancien marqueur, garde pour compatibilite)
+PICKUP_CARRIER = 921           # "Sachet de qualité" (17 car.) : nom reecrit avec le contenu de l'AP Item
+PICKUP_CARRIER_KEY = "ITEM_NAME_921"
 AP_MARKER_NAME = "Météorite"
 CONTENT_OFFSET = 0x838
 IT0000 = 0x70000
@@ -52,20 +54,50 @@ class SpotTracker:
         self.radius = radius
         self._spawned: set[int] = set()
 
+    def set_game_process(self, pid: int) -> None:
+        """Un objet pose reste au sol tant que le processus du jeu vit : on s'en souvient (dans l'etat)
+        pour ne pas le reposer si le client est relance."""
+        if self.state.ap_spawned_pid != pid:
+            self.state.ap_spawned_pid = pid
+            self.state.ap_spawned_spots.clear()
+
     def to_spawn(self, phase: str, player_pos) -> list[int]:
         code = phase_code(phase)
         return [i for i, (c, x, y, z) in enumerate(self.spots)
                 if c == code and i not in self.state.ap_spots_collected and i not in self._spawned
+                and i not in self.state.ap_spawned_spots
                 and math.dist((x, y, z), player_pos) <= self.radius]
 
     def mark_spawned(self, i: int) -> None:
         self._spawned.add(i)
+        self.state.ap_spawned_spots.add(i)
 
     def collected(self, i: int) -> None:
         self.state.ap_spots_collected.add(i)
 
     def reset_session(self) -> None:
+        """Changement de zone : les objets non ramasses sont decharges par le jeu, on pourra les reposer."""
         self._spawned.clear()
+        self.state.ap_spawned_spots.clear()
+
+
+def pickup_text(me: int, receiver, item, receiver_name) -> tuple[str, str]:
+    """(prefixe du modele, nom d'objet) du message de ramassage d'un AP Item."""
+    if item is None or receiver is None:
+        return "", "AP Item"
+    if receiver == me:
+        return "Trouvé : ", item
+    return f"Pour {receiver_name} : ", item
+
+
+def nearest_spawned(spots, spawned: set, collected: set, pos, radius: float):
+    best, best_d = None, radius
+    for i in spawned - collected:
+        _, x, y, z = spots[i]
+        d = math.dist((x, y, z), pos)
+        if d <= best_d:
+            best, best_d = i, d
+    return best
 
 
 def resolve_pickups(tracked: dict, obj_of, marker_received: bool) -> list[int]:
@@ -160,7 +192,7 @@ def spawn_ap_item(mem, pos) -> int:
     for _ in range(20):
         obj = struct.unpack("<Q", mem.read(work + 0x60, 8))[0] if work else 0
         if obj:
-            mem.write(obj + CONTENT_OFFSET, struct.pack("<I", MARKER_FLAG | AP_MARKER_ITEM))
+            mem.write(obj + CONTENT_OFFSET, struct.pack("<I", MARKER_FLAG | PICKUP_CARRIER))
             return work
         time.sleep(0.05)
     return work

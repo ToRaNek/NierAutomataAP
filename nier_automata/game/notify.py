@@ -84,9 +84,10 @@ def _scan(mem, patterns: list[bytes]) -> dict[bytes, list[int]]:
 class Notifier:
     """Adresses des textes a modifier (cherchees une fois par processus)."""
 
-    def __init__(self, mem):
+    def __init__(self, mem, carrier_key: str = CARRIER_KEY, carrier_item: int = CARRIER_ITEM):
         self.mem = mem
-        key = CARRIER_KEY.encode("utf-16-le") + b"\0\0"
+        self.carrier_item = carrier_item
+        key = carrier_key.encode("utf-16-le") + b"\0\0"
         tpl = TEMPLATE.encode("utf-16-le") + b"\0\0"
         found = _scan(mem, [key, tpl])
         self.carrier: Optional[int] = None
@@ -108,7 +109,14 @@ class Notifier:
         for a in self.templates:
             self.mem.write(a, tpl)
         self.mem.write(self.carrier, encode_fixed(item, min(MAX_LEN, len(self.carrier_orig) // 2)))
-        return remote_call(self.mem, self.mem.base + GIVE_ITEM_RVA, CARRIER_ITEM, 1, 1, 1, e=1) & 0xFF == 1
+        return remote_call(self.mem, self.mem.base + GIVE_ITEM_RVA, self.carrier_item, 1, 1, 1, e=1) & 0xFF == 1
+
+    def prepare(self, prefix: str, item: str) -> None:
+        """Ecrit modele + nom du porteur sans donner l'objet (le joueur va le ramasser)."""
+        tpl = encode_fixed(template_for(prefix) if prefix else PLACEHOLDER, TEMPLATE_LEN)
+        for a in self.templates:
+            self.mem.write(a, tpl)
+        self.mem.write(self.carrier, encode_fixed(item, min(MAX_LEN, len(self.carrier_orig) // 2)))
 
     def restore(self) -> None:
         orig = TEMPLATE.encode("utf-16-le")
