@@ -29,4 +29,7 @@ ABILITY_PATCHES: dict[str, tuple[CodePatch, ...]] = {
     # call 0x49EA20 (lecture du bouton de tir) -> xor eax,eax : le Pod ne tire plus (teste en jeu,
     # trouve par dichotomie sur les 27 appels de 0x49EA20).
     "Pod Fire": (CodePatch(0x4306CF, bytes.fromhex("e84ce30600"), bytes.fromhex("31c00f1f00")),),
+    # Lecture des boutons d'attaque (call 0x49F060 / 0x49EFE0) -> "non presse" (teste en jeu, dichotomie).
+    "Light Attack": (CodePatch(0x47A389, bytes.fromhex("e8d24c0200"), bytes.fromhex("31c00f1f00")),),
+    "Heavy Attack": (CodePatch(0x47A355, bytes.fromhex("e8864c0200"), bytes.fromhex("31c00f1f00")),),
 }

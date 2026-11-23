@@ -99,3 +99,10 @@ def test_pod_fire_patch_verified_in_game_v104():
     pf, = ABILITY_PATCHES["Pod Fire"]
     # call 0x49EA20 (bouton de tir) -> xor eax,eax ; nop3 : le bouton de tir du Pod lit "non presse"
     assert (pf.rva, pf.original, pf.locked) == (0x4306CF, bytes.fromhex("e84ce30600"), bytes.fromhex("31c00f1f00"))
+
+
+def test_attack_patches_verified_in_game_v104():
+    la, = ABILITY_PATCHES["Light Attack"]
+    ha, = ABILITY_PATCHES["Heavy Attack"]
+    assert (la.rva, la.original, la.locked) == (0x47A389, bytes.fromhex("e8d24c0200"), bytes.fromhex("31c00f1f00"))
+    assert (ha.rva, ha.original, ha.locked) == (0x47A355, bytes.fromhex("e8864c0200"), bytes.fromhex("31c00f1f00"))
