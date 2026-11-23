@@ -37,3 +37,9 @@ def test_add_funds_and_cap():
     assert read_u32(m, 0x100) == 2220
     add_funds(m, 0x100, 99_999_999)
     assert read_u32(m, 0x100) == MAX_FUNDS
+
+
+def test_hp_offset_is_real_value_not_copy():
+    from nier_automata.game.deathlink import HP_OFFSET
+    # +0x858 n'est qu'une copie recalculee a chaque image (verifie en jeu) ; vraie valeur a +0x10668
+    assert HP_OFFSET == 0x10668

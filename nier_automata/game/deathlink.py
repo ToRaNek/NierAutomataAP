@@ -5,7 +5,8 @@ from typing import Optional
 
 from .memory import Memory, read_u32, write_u32
 
-HP_OFFSET = 0x858
+# Vrais PV (verifie en jeu : +0x858 est une copie recalculee a chaque image).
+HP_OFFSET = 0x10668
 MAX_HP_OFFSET = 0x85C
 MAX_FUNDS = 9_999_999
 
