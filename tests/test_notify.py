@@ -9,29 +9,31 @@ def test_constants_verified_in_game():
 
 
 def test_received_from_other_player():
-    assert messages_for_item_send(1, 2, 1, "Hookshot", "Niicotine", "ToRaNek") == [("De Niicotine : ", "Hookshot")]
+    assert messages_for_item_send(1, 2, 1, "Hookshot", "Niicotine", "ToRaNek", "Chest 3") == [("De Niicotine : ", "Hookshot")]
 
 
-def test_sent_to_other_player():
-    assert messages_for_item_send(1, 1, 3, "Grappin", "ToRaNek", "Fifi") == [("Pour Fifi : ", "Grappin")]
+def test_sent_to_other_player_shows_check_then_gift():
+    assert messages_for_item_send(1, 1, 3, "Grappin", "ToRaNek", "Fifi", "Story Progress #2") == [
+        ("Check : ", "Story Progress #2"), ("Pour Fifi : ", "Grappin")]
 
 
-def test_own_item_found_by_self():
-    assert messages_for_item_send(1, 1, 1, "Soins legers", "ToRaNek", "ToRaNek") == [("Check validé : ", "Soins legers")]
+def test_own_item_check():
+    assert messages_for_item_send(1, 1, 1, "Soins legers", "ToRaNek", "ToRaNek", "Level 2") == [
+        ("Check : ", "Level 2"), ("Pour toi : ", "Soins legers")]
 
 
 def test_unrelated_event_ignored():
-    assert messages_for_item_send(1, 2, 3, "X", "A", "B") == []
+    assert messages_for_item_send(1, 2, 3, "X", "A", "B", "L") == []
 
 
 def test_template_fits_and_keeps_placeholder():
-    for prefix in ("De Niicotine : ", "Pour Un_Nom_Tres_Long_De_Joueur : ", "Check validé : "):
+    for prefix in ("De Niicotine : ", "Pour Un_Nom_Tres_Long_De_Joueur : ", "Check : "):
         t = template_for(prefix)
         assert len(t) <= TEMPLATE_LEN and t.endswith("<ITEM NAME>")
 
 
 def test_item_name_truncated():
-    (_, item), = messages_for_item_send(1, 2, 1, "Progressive Hookshot Deluxe", "A", "B")
+    (_, item), = messages_for_item_send(1, 2, 1, "Progressive Hookshot Deluxe", "A", "B", "L")
     assert len(item) <= MAX_LEN
 
 

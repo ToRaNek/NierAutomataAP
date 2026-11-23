@@ -19,6 +19,7 @@ MAX_LEN = 17
 TEMPLATE = "Objet récupéré : <ITEM NAME>"
 TEMPLATE_LEN = len(TEMPLATE)
 PLACEHOLDER = "<ITEM NAME>"
+TEMPLATE_KEY = "HUD_LOG_TXT_01"
 GIVE_ITEM_RVA = 0x8006F0
 
 
@@ -40,15 +41,15 @@ def template_for(prefix: str) -> str:
 
 
 def messages_for_item_send(me: int, sender: int, receiver: int, item: str,
-                           sender_name: str, receiver_name: str) -> list[tuple[str, str]]:
-    """(prefixe, nom d'objet) a afficher pour "sender a envoye item a receiver"."""
+                           sender_name: str, receiver_name: str, location: str) -> list[tuple[str, str]]:
+    """(prefixe, texte) a afficher pour "sender a envoye item a receiver depuis location".
+    Check valide par moi : "Check : <location>" puis "Pour <qui> : <objet>". Recu : "De <qui> : <objet>"."""
     item = item[:MAX_LEN]
-    if receiver == me and sender == me:
-        return [("Check validé : ", item)]
+    if sender == me:
+        to = "toi" if receiver == me else receiver_name
+        return [("Check : ", location[:MAX_LEN]), (f"Pour {to} : ", item)]
     if receiver == me:
         return [(f"De {sender_name} : ", item)]
-    if sender == me:
-        return [(f"Pour {receiver_name} : ", item)]
     return []
 
 
@@ -87,9 +88,9 @@ class Notifier:
     def __init__(self, mem, carrier_key: str = CARRIER_KEY, carrier_item: int = CARRIER_ITEM):
         self.mem = mem
         self.carrier_item = carrier_item
-        key = carrier_key.encode("utf-16-le") + b"\0\0"
-        tpl = TEMPLATE.encode("utf-16-le") + b"\0\0"
-        found = _scan(mem, [key, tpl])
+        key = carrier_key.encode("utf-16-le") + bytes(2)
+        tkey = TEMPLATE_KEY.encode("utf-16-le") + bytes(2)
+        found = _scan(mem, [key, tkey])
         self.carrier: Optional[int] = None
         for a in found[key]:
             length = struct.unpack("<I", mem.read(a + len(key), 4))[0]
@@ -97,7 +98,17 @@ class Notifier:
                 self.carrier = a + len(key) + 4
                 self.carrier_orig = mem.read(self.carrier, (length - 1) * 2)
                 break
-        self.templates = found[tpl]
+        # modele retrouve par sa CLE (son texte a pu rester modifie par une session precedente)
+        self.templates = []
+        for a in found[tkey]:
+            length = struct.unpack("<I", mem.read(a + len(tkey), 4))[0]
+            if length == TEMPLATE_LEN + 1:
+                value = a + len(tkey) + 4
+                current = mem.read(value, TEMPLATE_LEN * 2)
+                copies = _scan(mem, [current + bytes(2)])[current + bytes(2)]
+                self.templates = sorted(set(copies) | {value})
+                self.restore()
+                break
 
     @property
     def ok(self) -> bool:

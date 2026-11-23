@@ -69,9 +69,11 @@ class NierContext(CommonContext):
                 if sender == self.slot and get("location") in getattr(self, "ap_contents", {}):
                     raise StopIteration  # deja affiche par le message de ramassage de l'AP Item
                 name = self.item_names.lookup_in_slot(get("item"), receiver)
+                loc_name = self.location_names.lookup_in_slot(get("location"), sender)
                 msgs = notify.messages_for_item_send(self.slot, sender, receiver, name,
                                                      self.player_names.get(sender, "?"),
-                                                     self.player_names.get(receiver, "?"))
+                                                     self.player_names.get(receiver, "?"), loc_name)
+                logger.info("notification en file : %s", msgs)
                 self.notes.extend(msgs)
             except StopIteration:
                 pass
@@ -183,10 +185,12 @@ async def notify_loop(ctx: NierContext):
                 ctx.note_slot = await asyncio.to_thread(notify.Notifier, mem)
                 ctx.note_pid = mem.pid
             if not ctx.note_slot.ok:
+                logger.info("notifications impossibles : textes introuvables")
                 ctx.notes.clear()
                 continue
             prefix, item = ctx.notes.pop(0)
-            await asyncio.to_thread(ctx.note_slot.show, prefix, item)
+            shown = await asyncio.to_thread(ctx.note_slot.show, prefix, item)
+            logger.info("notification affichee (%s) : %s%s", shown, prefix, item)
             await asyncio.sleep(1.5)
             ctx.note_slot.restore()
             ctx.nier._items.remove(notify.CARRIER_ITEM)
