@@ -4,3 +4,4 @@ tools/bisect_targets.json
 tools/bisect_mode.txt
 path_log.tsv
 e2e_apitems/
+e2e_duo/

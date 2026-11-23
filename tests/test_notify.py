@@ -33,3 +33,17 @@ def test_template_fits_and_keeps_placeholder():
 def test_item_name_truncated():
     (_, item), = messages_for_item_send(1, 2, 1, "Progressive Hookshot Deluxe", "A", "B")
     assert len(item) <= MAX_LEN
+
+
+from nier_automata.game.notify import encode_fixed
+
+
+def test_encode_fixed_never_exceeds_capacity_with_emoji():
+    b = encode_fixed("😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀", 17)   # 2 unites UTF-16 par emoji
+    assert len(b) == 17 * 2
+    assert b.decode("utf-16-le", "surrogatepass").count("\ud83d") == b.decode("utf-16-le", "surrogatepass").count("\ude00")
+
+
+def test_encode_fixed_strips_control_and_pads():
+    b = encode_fixed("A\nB\x00C", 5)
+    assert b == "ABC".encode("utf-16-le") + b"\0\0" * 2

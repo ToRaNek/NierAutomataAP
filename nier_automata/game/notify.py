@@ -22,6 +22,16 @@ PLACEHOLDER = "<ITEM NAME>"
 GIVE_ITEM_RVA = 0x8006F0
 
 
+def encode_fixed(text: str, units: int) -> bytes:
+    """UTF-16LE sur exactement `units` unites (octets = 2*units), jamais plus : coupe sur une limite
+    d'unite sans separer une paire de substitution (emoji), retire les caracteres de controle."""
+    clean = "".join(ch for ch in text if ch.isprintable())
+    raw = clean.encode("utf-16-le", "surrogatepass")[:units * 2]
+    if len(raw) >= 2 and 0xD800 <= int.from_bytes(raw[-2:], "little") <= 0xDBFF:
+        raw = raw[:-2]  # moitie haute d'une paire coupee
+    return raw.ljust(units * 2, bytes(1))
+
+
 def template_for(prefix: str) -> str:
     room = TEMPLATE_LEN - len(PLACEHOLDER)
     if len(prefix) > room:
@@ -94,10 +104,10 @@ class Notifier:
 
     def show(self, prefix: str, item: str) -> bool:
         from .spawner import remote_call
-        tpl = template_for(prefix).encode("utf-16-le").ljust(TEMPLATE_LEN * 2, b"\0")
+        tpl = encode_fixed(template_for(prefix), TEMPLATE_LEN)
         for a in self.templates:
             self.mem.write(a, tpl)
-        self.mem.write(self.carrier, item[:MAX_LEN].encode("utf-16-le").ljust(MAX_LEN * 2, b"\0"))
+        self.mem.write(self.carrier, encode_fixed(item, min(MAX_LEN, len(self.carrier_orig) // 2)))
         return remote_call(self.mem, self.mem.base + GIVE_ITEM_RVA, CARRIER_ITEM, 1, 1, 1, e=1) & 0xFF == 1
 
     def restore(self) -> None:
