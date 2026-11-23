@@ -129,7 +129,6 @@ class NierContext(CommonContext):
             self.shop = None
             self.shop_pid = None
             self.shop_applied = None
-            self.shop_described = None
             self.ap_per_phase = int(sd.get("ap_items_per_phase", 0))
             self.ap_phase_count = int(sd.get("ap_phase_count", 0))
             ground = [LOC_IDS[apit_loc(i, k)] for i in ap_phase_indices(self.ap_phase_count)
@@ -418,16 +417,19 @@ async def ap_items_step(ctx: NierContext):
 
 
 async def shop_step(ctx: NierContext) -> list[int]:
-    """AP Items en tete des magasins ; description = contenu ; achat -> check (porteur retire)."""
+    """AP Items en tete des magasins ; un porteur par emplacement ; achat -> check (porteur retire)."""
     if not getattr(ctx, "shop_checks", 0):
         return []
     from pathlib import Path
     mem = ctx.nier.mem
+    slots = [(p, k) for p in SHOP_PLACES_ORDER for k in range(1, ctx.shop_checks + 1)]
     if ctx.shop_pid != mem.pid:
         orig = Path(ctx.state_file).parent / f"shop_table_{mem.pid}.bin"
-        ctx.shop = await asyncio.to_thread(shopm.ShopSession, mem, orig, ctx.shop_price)
-        ctx.shop_pid, ctx.shop_applied, ctx.shop_described = mem.pid, None, None
-        logger.info("Magasins : %s", "AP Items installes" if ctx.shop.ok else "table introuvable")
+        owned = {c for c in shopm.CARRIER_POOL if ctx.nier._items.find(c) is not None}
+        ctx.shop = await asyncio.to_thread(shopm.ShopSession, mem, orig, ctx.shop_price, slots, owned)
+        ctx.shop_pid, ctx.shop_applied = mem.pid, None
+        logger.info("Magasins : %s", f"AP Items installes ({len(ctx.shop.carriers)} emplacements)"
+                    if ctx.shop.ok else "table introuvable")
     if not ctx.shop.ok:
         return []
     done = set(ctx.checked_locations) | ctx.state.sent_locations
@@ -437,26 +439,21 @@ async def shop_step(ctx: NierContext) -> list[int]:
     if key != ctx.shop_applied:
         ctx.shop.apply(active)
         ctx.shop_applied = key
-    place = ctx.shop.current_place()
-    if place is None:
-        return []
-    mapping = shopm.carrier_map(active[place], shopm.CARRIER_IDS)
     texts = {}
-    for k in active[place]:
+    for place, k in slots:
         lid = LOC_IDS[shop_location(place, k)]
         rec, name = ctx.ap_contents.get(lid, (None, None))
-        texts[k] = shopm.description(ctx.slot, rec, name, ctx.player_names.get(rec, "?") if rec else None,
-                                     bool(ctx.ap_flags.get(lid, 0) & 1))
-    sig = repr((place, sorted(texts.items())))
-    if sig != ctx.shop_described:
-        ctx.shop.describe(mapping, texts)
-        ctx.shop_described = sig
+        texts[(place, k)] = shopm.description(ctx.slot, rec, name, ctx.player_names.get(rec, "?") if rec else None,
+                                              bool(ctx.ap_flags.get(lid, 0) & 1))
+    await asyncio.to_thread(ctx.shop.describe, texts)
     sent = []
-    for cid, k in mapping.items():
+    for cid, (place, k) in ctx.shop.carriers.items():
         if ctx.nier._items.find(cid) is not None:
             ctx.nier._items.remove(cid)
-            sent.append(LOC_IDS[shop_location(place, k)])
-            logger.info("AP Item achete : %s", shop_location(place, k))
+            lid = LOC_IDS[shop_location(place, k)]
+            if lid not in done:
+                sent.append(lid)
+                logger.info("AP Item achete : %s", shop_location(place, k))
     return sent
 
 

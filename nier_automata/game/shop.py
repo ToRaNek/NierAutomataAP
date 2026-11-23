@@ -18,8 +18,10 @@ SHOP_UI_RVA = 0x1410E00
 SHOP_LIST_OFFSET = 0x748
 # Porteurs : skins de Pod 1-4 (objets uniques jamais vendus, textes dans le fichier CORE qui a toutes les
 # lettres ; les teintures 880.. ont leurs textes dans un fichier aux lettres incompletes). 959 = notifications.
-CARRIER_NAMES = [f"item_uq_podSkin{i}" for i in range(1, 5)]
-CARRIER_IDS = [950, 951, 952, 953]
+CARRIER_POOL = list(range(950, 959))                      # skins de Pod 1-9 (959 : notifications)
+CARRIER_NAME = {950 + i: f"item_uq_podSkin{i + 1}" for i in range(9)}
+CARRIER_NAMES = [CARRIER_NAME[c] for c in CARRIER_POOL]
+CARRIER_IDS = CARRIER_POOL
 THUMB_SITE_RVA = 0x808FFF        # mov edx,0xf ; juste avant sprintf("item_thumb_%03d", id % 1000) (r9 = numero)
 THUMB_SITE_ORIGINAL = bytes.fromhex("ba0f000000")
 THUMB_RETURN_RVA = 0x809004
@@ -93,22 +95,22 @@ def _victims(names: list[str], count: int, carriers: list[str]) -> list[int]:
     return out
 
 
-def plan(raw: bytes, slots: dict[str, int], carriers: list[str]) -> list[tuple[int, int]]:
-    """Ecritures (offset, u16) pour mettre `slots[shop]` porteurs en tete de chaque magasin, toujours en vente."""
+def plan(raw: bytes, carriers_by_shop: dict[str, list[str]]) -> list[tuple[int, int]]:
+    """Ecritures (offset, u16) pour mettre en tete de chaque magasin ses porteurs (dans l'ordre), toujours
+    en vente. Les autres objets gardent leur ordre ; les victimes sont d'abord les bonus de stats."""
     b = _Bxm(raw)
-    carrier_data = [b.pair(c, None) for c in carriers]
     writes: list[tuple[int, int]] = []
-    for shop, count in slots.items():
-        count = min(count, len(carriers))
+    for shop, carriers in carriers_by_shop.items():
         lst = b.item_list(shop)
-        if lst is None or count <= 0 or None in carrier_data[:count]:
+        data = [b.pair(c, None) for c in carriers]
+        if lst is None or not carriers or None in data:
             continue
         kids = b.children(lst)
         names = [b.name(k) for k in kids]
-        vic = _victims(names, count, carriers)
+        vic = _victims(names, len(carriers), carriers)
         records = [list(b.nodes[k]) for k in kids]
         for slot, v in enumerate(vic):
-            records[v][3] = carrier_data[slot]
+            records[v][3] = data[slot]
             for st in range(records[v][1], records[v][1] + records[v][0]):
                 one = b.pair(b.name(st), "1")
                 if one is not None and one != b.nodes[st][3]:
@@ -119,6 +121,12 @@ def plan(raw: bytes, slots: dict[str, int], carriers: list[str]) -> list[tuple[i
                 if rec[f] != b.nodes[pos][f]:
                     writes.append((16 + pos * 8 + 2 * f, rec[f]))
     return writes
+
+
+def assign_carriers(slots: list[tuple[str, int]], pool: list[int], owned: set) -> dict[int, tuple[str, int]]:
+    """Un porteur (objet unique non possede) par emplacement (lieu, numero)."""
+    free = [c for c in pool if c not in owned]
+    return dict(zip(free, slots))
 
 
 def reserve_names(raw: bytes, carriers: list[str]) -> list[tuple[int, bytes]]:
@@ -242,9 +250,10 @@ def carrier_map(active: list[int], carrier_ids: list[int]) -> dict[int, int]:
 
 
 class ShopSession:
-    """Etat des AP Items en magasin pour un processus du jeu."""
+    """AP Items en magasin pour un processus du jeu. Chaque emplacement (lieu, numero) a son propre porteur :
+    description fixe, et un achat identifie directement l'emplacement (rien a deviner)."""
 
-    def __init__(self, mem, orig_path, price: int):
+    def __init__(self, mem, orig_path, price: int, slots: list[tuple[str, int]], owned: set):
         from .mcd_text import MenuTexts
         self.mem = mem
         self.ok = False
@@ -265,45 +274,39 @@ class ShopSession:
                 orig_path.write_bytes(self.orig)
             except OSError:
                 pass
-        self.base = bytearray(self.orig)
-        for off, data in reserve_names(self.orig, CARRIER_NAMES):
-            self.base[off:off + len(data)] = data
-        self.base = bytes(self.base)
-        ids = item_ids_by_name(mem)
-        self.shop_ids = {s: {ids[n] for n in names if n in ids} for s, names in shop_item_names(self.orig).items()
-                         if "TEST" not in s}
+        self.carriers = assign_carriers(slots, CARRIER_POOL, owned)     # id -> (lieu, numero)
+        used = [CARRIER_NAME[c] for c in self.carriers]
+        base = bytearray(self.orig)
+        for off, data in reserve_names(self.orig, used):
+            base[off:off + len(data)] = data
+        self.base = bytes(base)
         self.texts = MenuTexts(mem)
-        for cid in CARRIER_IDS:
+        ids = item_ids_by_name(mem)
+        for cid in self.carriers:
             self.texts.set_text(f"CORE_ITEM_NAME_{cid}", "AP Item")
-        for name in CARRIER_NAMES:
-            set_price(mem, ids, name, price)
-        install_thumb(mem)
-        self.place: Optional[str] = None
-        self.last_shown: list[int] = []
+            set_price(mem, ids, CARRIER_NAME[cid], price)
+        if self.carriers:
+            install_thumb(mem, min(self.carriers), max(self.carriers))
+        self.described: dict[int, str] = {}
         self.ok = True
 
     def apply(self, active: dict[str, list[int]]) -> None:
-        slots = {shop: len(active.get(place, [])) for place, shops in SHOP_PLACES.items() for shop in shops}
+        by_place: dict[str, list[str]] = {}
+        for cid, (place, k) in sorted(self.carriers.items(), key=lambda kv: kv[1]):
+            if k in active.get(place, []):
+                by_place.setdefault(place, []).append(CARRIER_NAME[cid])
+        per_shop = {shop: by_place.get(place, []) for place, shops in SHOP_PLACES.items() for shop in shops}
         b = bytearray(self.base)
-        for off, val in plan(self.base, slots, CARRIER_NAMES):
+        for off, val in plan(self.base, per_shop):
             struct.pack_into(">H", b, off, val)
         self.mem.write(self.addr, bytes(b))
 
-    def current_place(self) -> Optional[str]:
-        shown = displayed_ids(self.mem)
-        if shown != self.last_shown:
-            self.last_shown = shown
-            shop_name = identify(shown, self.shop_ids, set(CARRIER_IDS))
-            place = next((p for p, shops in SHOP_PLACES.items() if shop_name in shops), None)
-            if place is not None:
-                self.place = place
-            return place if place is not None else self.place
-        return self.place
-
-    def describe(self, mapping: dict[int, int], texts: dict[int, str]) -> None:
-        for cid, k in mapping.items():
-            self.texts.set_text(f"CORE_ITEM_HELP_{cid}", texts.get(k, "Objet Archipelago"), width=34)
-
+    def describe(self, texts: dict[tuple[str, int], str]) -> None:
+        for cid, slot in self.carriers.items():
+            t = texts.get(slot, "Objet Archipelago")
+            if self.described.get(cid) != t:
+                self.texts.set_text(f"CORE_ITEM_HELP_{cid}", t, width=34)
+                self.described[cid] = t
 
 def no_image_cave(cave: int, base: int, lo: int, hi: int) -> bytes:
     """test eax,eax ; je skip ; cmp esi,lo ; jb show ; cmp esi,hi ; jbe skip ; show: jmp ; skip: jmp."""
@@ -365,13 +368,15 @@ def thumb_cave(cave: int, base: int, lo: int, hi: int, thumb: int) -> bytes:
     return bytes(c)
 
 
-def install_thumb(mem) -> bool:
+def install_thumb(mem, lo: int = 950, hi: int = 958) -> bool:
     """Les porteurs n'ont pas de vignette (une fois par processus)."""
     import ctypes
     from ctypes import wintypes
     site = mem.base + THUMB_SITE_RVA
     cur = mem.read(site, 5)
-    if cur[0] == 0xE9:
+    if cur[0] == 0xE9:   # deja installee (session precedente) : on met a jour les bornes
+        cave = site + 5 + struct.unpack("<i", cur[1:5])[0]
+        mem.write(cave, thumb_cave(cave, mem.base, lo, hi, THUMB_NONE))
         return True
     if cur != THUMB_SITE_ORIGINAL:
         return False
@@ -388,6 +393,6 @@ def install_thumb(mem) -> bool:
     k.CloseHandle(h)
     if not cave:
         return False
-    mem.write(cave, thumb_cave(cave, mem.base, min(CARRIER_IDS), max(CARRIER_IDS), THUMB_NONE))
+    mem.write(cave, thumb_cave(cave, mem.base, lo, hi, THUMB_NONE))
     mem.write_code(site, bytes([0xE9]) + struct.pack("<i", cave - (site + 5)))
     return True

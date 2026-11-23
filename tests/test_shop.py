@@ -94,7 +94,7 @@ def apply(raw, writes):
 
 def test_plan_puts_carriers_first_and_always_on():
     raw = make_bxm(SHOPS + [("shop_X", [("item_uq_music_3", "00")])])
-    writes = shop.plan(raw, {"shop_RC_Grocery": 2}, CARRIERS)
+    writes = shop.plan(raw, {"shop_RC_Grocery": CARRIERS[:2]})
     got = items_of(apply(raw, writes), "shop_RC_Grocery")
     assert got[:2] == [("item_uq_music_2", "11"), ("item_uq_music_3", "11")]
     # victimes : d'abord l'objet porteur deja present, puis un bonus de stats ; le reste garde son ordre
@@ -104,12 +104,12 @@ def test_plan_puts_carriers_first_and_always_on():
 
 def test_plan_zero_slots_is_identity():
     raw = make_bxm(SHOPS + [("shop_X", [("item_uq_music_3", "11")])])
-    assert apply(raw, shop.plan(raw, {"shop_RC_Grocery": 0}, CARRIERS)) == raw
+    assert apply(raw, shop.plan(raw, {"shop_RC_Grocery": []})) == raw
 
 
 def test_plan_does_not_touch_shared_data_entries():
     raw = make_bxm(SHOPS + [("shop_X", [("item_uq_music_3", "11")])])
-    patched = apply(raw, shop.plan(raw, {"shop_RC_Grocery": 2, "shop_PV_Grocery": 1}, CARRIERS))
+    patched = apply(raw, shop.plan(raw, {"shop_RC_Grocery": CARRIERS[:2], "shop_PV_Grocery": CARRIERS[1:2]}))
     nn, dn, _ = struct.unpack(">HHI", raw[8:16])
     data_area = slice(16 + nn * 8, 16 + nn * 8 + dn * 4)
     assert patched[data_area] == raw[data_area]
@@ -136,7 +136,7 @@ def test_reserve_names_reuses_test_shop_strings_only():
     patched = apply_bytes(raw, shop.reserve_names(raw, carriers))
     assert ("item_uq_hairSpray_A", "1") in items_of(patched, "shop_TEST_Grocery")
     assert items_of(patched, "shop_RC_Grocery") == SHOPS[0][1]       # vrais magasins intacts
-    writes = shop.plan(patched, {"shop_PV_Grocery": 1}, carriers)
+    writes = shop.plan(patched, {"shop_PV_Grocery": carriers[:1]})
     assert items_of(apply(patched, writes), "shop_PV_Grocery")[0] == ("item_uq_hairSpray_A", "11")
 
 
@@ -207,3 +207,11 @@ def test_thumb_cave_swaps_carrier_thumbnail_only():
     assert ("cmp", "ebx, 0x3b6") in ins and ("cmp", "ebx, 0x3b9") in ins
     assert ("mov", "r9d, 4") in ins and ("mov", "edx, 0xf") in ins
     assert ins[-1] == ("jmp", hex(base + shop.THUMB_RETURN_RVA))
+
+
+def test_assign_carriers_one_per_slot_skipping_owned():
+    slots = [("Resistance Camp", 1), ("Resistance Camp", 2), ("Pascal's Village", 1)]
+    pool = [950, 951, 952, 953]
+    got = shop.assign_carriers(slots, pool, owned={951})
+    assert got == {950: ("Resistance Camp", 1), 952: ("Resistance Camp", 2), 953: ("Pascal's Village", 1)}
+    assert shop.assign_carriers(slots, [950], owned=set()) == {950: ("Resistance Camp", 1)}  # pas assez : le reste saute
