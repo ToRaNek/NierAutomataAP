@@ -135,8 +135,8 @@ from nier_automata.game.ap_items import extend_spots
 def test_extend_spots_adds_spaced_new_spots_up_to_limit():
     spots = [("30_AB", 0.0, 0.0, 0.0)]
     found = [(1.0, 0.0, 0.0), (50.0, 0.0, 0.0), (52.0, 0.0, 0.0), (120.0, 0.0, 0.0), (300.0, 0.0, 0.0)]
-    new = extend_spots(spots, found, "40_AB_Camp", limit=3, min_dist=25.0, offset=2.0)
-    assert new == [("40_AB", 52.0, 0.0, 0.0), ("40_AB", 122.0, 0.0, 0.0)]  # decales de 2 m, max 3 au total
+    new = extend_spots(spots, found, "40_AB_Camp", limit=3, min_dist=25.0, offset=2.0, per_area=10)
+    assert new == [("40_AB_Camp", 52.0, 0.0, 0.0), ("40_AB_Camp", 122.0, 0.0, 0.0)]  # decales de 2 m, max 3
 
 
 def test_extend_spots_ignores_prologue_and_menus():
@@ -149,3 +149,12 @@ def test_extend_spots_deterministic_order():
     a = extend_spots([], found, "30_AB_x", limit=5)
     b = extend_spots([], list(reversed(found)), "30_AB_x", limit=5)
     assert a == b  # ordre de la memoire sans importance
+
+
+def test_extend_spots_spreads_along_route():
+    found = [(float(x), 0.0, 0.0) for x in range(0, 1000, 10)]
+    new = extend_spots([], found, "40_AB_Resistance_Camp_Leader", limit=30, min_dist=60.0, per_area=3)
+    assert len(new) == 3                                                  # au plus 3 par phase
+    assert all(b[1] - a[1] >= 60.0 for a, b in zip(new, new[1:]))
+    more = extend_spots(new, found, "50_AB_Desert_temple", limit=30, min_dist=60.0, per_area=3)
+    assert len(more) == 3 and more[0][0] == "50_AB_Desert_temple"

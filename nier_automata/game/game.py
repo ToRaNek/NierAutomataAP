@@ -83,6 +83,15 @@ class NierGame:
     def phase(self) -> str:
         return read_cstr(self.mem, self._off["currentPhase"])
 
+    ground = None  # GroundWatch (objets au sol), fourni par le client
+
+    def ground_pickup(self, pos) -> bool:
+        """Un objet au sol vient-il d'etre ramasse a cote de `pos` ?"""
+        try:
+            return bool(self.ground and self.ground.picked_near(pos))
+        except OSError:
+            return False
+
     def chest_counter(self) -> int:
         return read_u32(self.mem, self._off["chestCounter"])
 

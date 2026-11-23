@@ -53,17 +53,19 @@ def pick_spots(path, min_dist: float = 40.0, per_area: int = 5):
     return out
 
 
-def extend_spots(spots, found, phase: str, limit: int, min_dist: float = 25.0, offset: float = 2.0):
+def extend_spots(spots, found, phase: str, limit: int, min_dist: float = 60.0, offset: float = 2.0,
+                 per_area: int = 3):
     """Nouveaux emplacements a partir des objets poses par le jeu (sur le chemin du joueur) : decales de
-    `offset` m, a plus de `min_dist` m de tout emplacement existant, jusqu'a `limit` emplacements au total.
-    Ordre deterministe (tri par position) : la numerotation ne depend pas de l'ordre en memoire."""
+    `offset` m, a plus de `min_dist` m de tout emplacement existant, au plus `per_area` par phase de l'histoire
+    (repartis le long de la route) et `limit` au total. Ordre deterministe (tri par position)."""
     if not spawn_allowed(phase):
         return []
-    code = phase_code(phase) or phase
+    code = phase
     taken = [(x, y, z) for _, x, y, z in spots]
+    in_area = sum(1 for c, *_ in spots if c == code)
     new = []
     for x, y, z in sorted(found):
-        if len(spots) + len(new) >= limit:
+        if len(spots) + len(new) >= limit or in_area + len(new) >= per_area:
             break
         p = (round(x + offset, 1), round(y, 1), round(z, 1))
         if all(math.dist(p, q) >= min_dist for q in taken):
@@ -72,33 +74,73 @@ def extend_spots(spots, found, phase: str, limit: int, min_dist: float = 25.0, o
     return new
 
 
-def find_game_items(mem) -> list[tuple[float, float, float]]:
-    """Positions des objets ramassables poses par le jeu (hors AP Items)."""
+def scan_ground_objects(mem) -> dict:
+    """Objets ramassables poses par le jeu (hors AP Items) -> {objet: position}. Lit d'abord la seule zone
+    memoire des entites (0,5 s, verifie en jeu), sinon toute la memoire."""
     import ctypes
     from ctypes import wintypes
-    from .spawner import _MBI
+    from .spawner import _MBI, entity_region
     k = mem._k
     k.VirtualQueryEx.argtypes = [wintypes.HANDLE, ctypes.c_void_p, ctypes.POINTER(_MBI), ctypes.c_size_t]
     k.VirtualQueryEx.restype = ctypes.c_size_t
-    vt = mem.base + SET_ITEM_VTABLE_RVA
-    out, addr = [], 0
+    vt = struct.pack("<Q", mem.base + SET_ITEM_VTABLE_RVA)
+
+    def scan(base, size, out):
+        try:
+            data = mem.read(base, size)
+        except OSError:
+            return
+        i = data.find(vt)
+        while i != -1:
+            if i % 8 == 0:
+                o = base + i
+                try:
+                    if struct.unpack("<I", mem.read(o + CONTENT_OFFSET, 4))[0] < MARKER_FLAG:
+                        out[o] = struct.unpack("<3f", mem.read(o + 0x50, 12))
+                except OSError:
+                    pass
+            i = data.find(vt, i + 1)
+
+    out: dict = {}
+    region = entity_region(mem)
+    if region:
+        scan(*region, out)
+        if out:
+            return out
+    addr = 0
     while addr < 0x7FFFFFFFFFFF:
         mbi = _MBI()
         if not k.VirtualQueryEx(mem.handle, ctypes.c_void_p(addr), ctypes.byref(mbi), ctypes.sizeof(mbi)):
             break
         base, size = mbi.BaseAddress or 0, mbi.RegionSize
-        if mbi.State == 0x1000 and mbi.Protect in (0x04, 0x40) and size < 0x40000000 and size % 8 == 0:
-            try:
-                arr = memoryview(mem.read(base, size)).cast("Q")
-                for i, v in enumerate(arr):
-                    if v == vt:
-                        o = base + i * 8
-                        if struct.unpack("<I", mem.read(o + CONTENT_OFFSET, 4))[0] < MARKER_FLAG:
-                            out.append(struct.unpack("<3f", mem.read(o + 0x50, 12)))
-            except OSError:
-                pass
+        if mbi.State == 0x1000 and mbi.Protect in (0x04, 0x40) and size < 0x40000000:
+            scan(base, size, out)
         addr = base + size
     return out
+
+
+def find_game_items(mem) -> list[tuple[float, float, float]]:
+    return list(scan_ground_objects(mem).values())
+
+
+class GroundWatch:
+    """Objets au sol autour du joueur (instantane rafraichi regulierement). picked_near() : un objet proche
+    a-t-il disparu (ramasse) depuis l'instantane ? Sert a ne pas compter un ramassage comme un coffre."""
+
+    def __init__(self, mem):
+        self.mem = mem
+        self.items: dict = {}
+
+    def refresh(self) -> None:
+        self.items = scan_ground_objects(self.mem)
+
+    def picked_near(self, pos, radius: float = 8.0) -> bool:
+        hit = False
+        for o, p in list(self.items.items()):
+            if math.dist(p, pos) <= radius and not object_alive(self.mem, o):
+                hit = True
+                del self.items[o]
+        return hit
 
 
 class SpotTracker:

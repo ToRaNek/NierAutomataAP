@@ -77,6 +77,24 @@ def enough_types(found: Sequence[tuple[int, str]], want: int) -> bool:
 PLAYER_PTR_RVA = 0x1020C88
 
 
+def entity_region(mem):
+    """(debut, taille) de la zone memoire qui contient le joueur : les entites (ennemis, objets au sol)
+    y sont aussi (verifie en jeu, ~370 Mo)."""
+    try:
+        player = struct.unpack("<Q", mem.read(mem.base + PLAYER_PTR_RVA, 8))[0]
+    except OSError:
+        return None
+    if not player:
+        return None
+    k = mem._k
+    k.VirtualQueryEx.argtypes = [wintypes.HANDLE, ctypes.c_void_p, ctypes.POINTER(_MBI), ctypes.c_size_t]
+    k.VirtualQueryEx.restype = ctypes.c_size_t
+    mbi = _MBI()
+    if not k.VirtualQueryEx(mem.handle, ctypes.c_void_p(player), ctypes.byref(mbi), ctypes.sizeof(mbi)):
+        return None
+    return mbi.BaseAddress or 0, mbi.RegionSize
+
+
 def loaded_enemies(mem, want: int = 3) -> list[tuple[int, str]]:
     """(objId, nom) des ennemis vivants. Verifie en jeu : les entites (joueur et ennemis) sont dans la meme
     zone memoire (~370 Mo) ; on ne lit qu'elle (1-2 s au lieu de ~17 s), puis tout si rien n'y est trouve."""

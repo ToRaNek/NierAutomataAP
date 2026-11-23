@@ -121,7 +121,9 @@ def tick(game, state: ClientState, received: list[str], trackers: Trackers, goal
 
     # 6. coffres
     if trackers.chests.max_count:
-        trackers.chests.update(game.chest_counter(), phase_code(phase), game.position())
+        pos = game.position()
+        picked = getattr(game, "ground_pickup", lambda p: False)(pos)
+        trackers.chests.update(game.chest_counter(), phase_code(phase), pos, ground_pickup=picked)
 
     # 7. niveaux
     if trackers.max_level_check and hasattr(game, "level"):

@@ -225,6 +225,28 @@ async def ability_loop(ctx: NierContext):
             pass
 
 
+async def ground_step(ctx: NierContext):
+    """Instantane des objets au sol toutes les 3 s (distingue un ramassage d'un coffre)."""
+    import time
+    mem = ctx.nier.mem
+    if getattr(ctx, "ground_pid", None) != mem.pid:
+        ctx.nier.ground = apit.GroundWatch(mem)
+        ctx.ground_pid, ctx.ground_next, ctx.ground_busy = mem.pid, 0.0, False
+    if ctx.ground_busy or time.monotonic() < ctx.ground_next:
+        return
+    ctx.ground_busy = True
+
+    async def run():
+        try:
+            await asyncio.to_thread(ctx.nier.ground.refresh)
+        except OSError:
+            pass
+        finally:
+            ctx.ground_next = time.monotonic() + 3.0
+            ctx.ground_busy = False
+    asyncio.create_task(run())
+
+
 async def discover_spots(ctx: NierContext, mem, phase: str):
     """Releve les objets poses par le jeu autour du joueur et en fait de nouveaux emplacements d'AP Items."""
     try:
@@ -374,6 +396,7 @@ async def game_iteration(ctx: NierContext):
         ctx._status("Sauvegarde deja avancee : commence une NOUVELLE partie pour cette seed.")
         return
     ctx._status(f"Jeu detecte ({ctx.nier.version}), phase {ctx.nier.phase()}")
+    await ground_step(ctx)
     await ap_items_step(ctx)
     bought = await shop_step(ctx)
     extra = sorted((due_locations(ctx.state, 0, 0) | set(bought)) - ctx.state.sent_locations)

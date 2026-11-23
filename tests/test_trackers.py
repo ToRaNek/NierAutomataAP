@@ -254,3 +254,16 @@ def test_level_never_decreases_and_ignores_garbage():
     t.update(5000); t.update(5000)    # valeur absurde (chargement)
     t.update(0); t.update(0)
     assert s.max_level == 4
+
+
+def test_ground_pickup_does_not_count_as_chest():
+    s = st()
+    t = ChestTracker(s, max_count=5)
+    pos = (0.0, 0.0, 0.0)
+    for c in (3, 3):
+        t.update(c, "30_AB", pos)
+    t.update(4, "30_AB", pos, ground_pickup=True)
+    assert t.update(4, "30_AB", pos, ground_pickup=True) is None   # ramassage au sol : pas de check
+    assert s.chests_found == 0
+    t.update(5, "30_AB", (50.0, 0.0, 0.0))
+    assert t.update(5, "30_AB", (50.0, 0.0, 0.0)) == 1            # vrai coffre

@@ -113,7 +113,9 @@ class ChestTracker:
         return any(c == code and abs(x - sx) <= CHEST_SPOT_RADIUS and abs(z - sz) <= CHEST_SPOT_RADIUS
                    for c, sx, sz in self.state.chest_spots)
 
-    def update(self, counter: int, code: Optional[str], pos) -> Optional[int]:
+    def update(self, counter: int, code: Optional[str], pos, ground_pickup: bool = False) -> Optional[int]:
+        """ground_pickup : un objet au sol vient d'etre ramasse a cote du joueur (le compteur du jeu compte
+        aussi ces ramassages, verifie en jeu) -> la hausse est consommee sans check."""
         prev, self._prev = self._prev, counter
         if prev != counter:
             return None  # attendre une 2e lecture identique
@@ -123,7 +125,7 @@ class ChestTracker:
         if counter == self._last:
             return None
         self._last = counter
-        if code is None or self._known(code, pos):
+        if ground_pickup or code is None or self._known(code, pos):
             return None
         self.state.chest_spots.append((code, pos[0], pos[2]))
         if self.state.chests_found >= self.max_count:
