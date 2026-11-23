@@ -326,8 +326,7 @@ class MenuTexts:
             f = CoreText(mem, p)
             if f.ok and all(f.base != g.base for g in self.files):
                 self.files.append(f)
-        for f in self.files[1:]:
-            f.borrow_glyphs(self.files[0])
+        # (emprunt de glyphes abandonne : le jeu dessine chaque fichier avec sa propre texture)
 
     @property
     def ok(self) -> bool:

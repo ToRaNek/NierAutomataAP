@@ -6,7 +6,8 @@ Verifie en jeu (v1.04, 2026-11-23) :
 - les paires (nom, valeur) sont PARTAGEES entre noeuds : on ne modifie que les noeuds (indice de donnee,
   ordre des enregistrements), jamais les donnees ;
 - l'objet "magasin ouvert" est global (RVA 0x1410E00) ; +0x748 : identifiants des objets affiches (-1 = fin) ;
-- porteurs : teintures pour cheveux (objets uniques 880.., jamais vendus) renommees "AP Item" (texte MCD).
+- porteurs : skins de Pod 950..953 (objets uniques jamais vendus) renommes "AP Item" (texte MCD CORE) ;
+- image : une deviation saute l'image de l'objet pour les porteurs.
 """
 from __future__ import annotations
 
@@ -15,9 +16,14 @@ from typing import Iterable, Optional
 
 SHOP_UI_RVA = 0x1410E00
 SHOP_LIST_OFFSET = 0x748
-# Porteurs : teintures pour cheveux (objets uniques jamais vendus) ; les vrais objets restent en vente.
-CARRIER_NAMES = [f"item_uq_hairSpray_{c}" for c in "ABCD"]
-CARRIER_IDS = [880, 881, 882, 883]
+# Porteurs : skins de Pod 1-4 (objets uniques jamais vendus, textes dans le fichier CORE qui a toutes les
+# lettres ; les teintures 880.. ont leurs textes dans un fichier aux lettres incompletes). 959 = notifications.
+CARRIER_NAMES = [f"item_uq_podSkin{i}" for i in range(1, 5)]
+CARRIER_IDS = [950, 951, 952, 953]
+NO_IMAGE_SITE_RVA = 0x8FFE1B     # test eax,eax ; je <pas d'image> (apres recherche de l'image de l'objet)
+NO_IMAGE_SITE_ORIGINAL = bytes.fromhex("85c00f84b5feffff")
+SHOW_IMAGE_RVA = 0x8FFE23
+SKIP_IMAGE_RVA = 0x8FFCD8
 ITEM_TABLE_RVA = 0x133BA60   # fiches objets (0x1A0 octets) : +0x0 id, +0x10 nom interne, +0x98 prix d'achat
 ITEM_ENTRY = 0x1A0
 PRICE_OFFSET = 0x98
@@ -267,6 +273,7 @@ class ShopSession:
             self.texts.set_text(f"CORE_ITEM_NAME_{cid}", "AP Item")
         for name in CARRIER_NAMES:
             set_price(mem, ids, name, price)
+        install_no_image(mem)
         self.place: Optional[str] = None
         self.last_shown: list[int] = []
         self.ok = True
@@ -292,3 +299,47 @@ class ShopSession:
     def describe(self, mapping: dict[int, int], texts: dict[int, str]) -> None:
         for cid, k in mapping.items():
             self.texts.set_text(f"CORE_ITEM_HELP_{cid}", texts.get(k, "Objet Archipelago"), width=34)
+
+
+def no_image_cave(cave: int, base: int, lo: int, hi: int) -> bytes:
+    """test eax,eax ; je skip ; cmp esi,lo ; jb show ; cmp esi,hi ; jbe skip ; show: jmp ; skip: jmp."""
+    c = bytearray(b"\x85\xC0")
+    je = len(c); c += b"\x0F\x84\0\0\0\0"
+    c += b"\x81\xFE" + struct.pack("<I", lo)
+    jb = len(c); c += b"\x72\x00"
+    c += b"\x81\xFE" + struct.pack("<I", hi)
+    jbe = len(c); c += b"\x0F\x86\0\0\0\0"
+    show = len(c); c += b"\xE9" + struct.pack("<i", base + SHOW_IMAGE_RVA - (cave + show + 5))
+    skip = len(c); c += b"\xE9" + struct.pack("<i", base + SKIP_IMAGE_RVA - (cave + skip + 5))
+    struct.pack_into("<i", c, je + 2, skip - (je + 6))
+    c[jb + 1] = show - (jb + 2)
+    struct.pack_into("<i", c, jbe + 2, skip - (jbe + 6))
+    return bytes(c)
+
+
+def install_no_image(mem) -> bool:
+    """Pas d'image pour les porteurs (une fois par processus)."""
+    import ctypes
+    from ctypes import wintypes
+    site = mem.base + NO_IMAGE_SITE_RVA
+    cur = mem.read(site, 8)
+    if cur[0] == 0xE9:
+        return True
+    if cur != NO_IMAGE_SITE_ORIGINAL:
+        return False
+    k = mem._k
+    k.OpenProcess.restype = wintypes.HANDLE
+    h = k.OpenProcess(0x1F0FFF, False, mem.pid)
+    k.VirtualAllocEx.argtypes = [wintypes.HANDLE, ctypes.c_void_p, ctypes.c_size_t, wintypes.DWORD, wintypes.DWORD]
+    k.VirtualAllocEx.restype = ctypes.c_void_p
+    cave = None
+    for delta in range(0x10000000, 0x7F000000, 0x1000000):
+        cave = k.VirtualAllocEx(h, ctypes.c_void_p((mem.base - delta) & ~0xFFFF), 0x1000, 0x3000, 0x40)
+        if cave:
+            break
+    k.CloseHandle(h)
+    if not cave:
+        return False
+    mem.write(cave, no_image_cave(cave, mem.base, min(CARRIER_IDS), max(CARRIER_IDS)))
+    mem.write_code(site, b"\xE9" + struct.pack("<i", cave - (site + 5)) + b"\x90" * 3)
+    return True

@@ -186,3 +186,14 @@ def test_glyph_plan_borrows_missing_into_spare_symbols():
 def test_identify_ignores_unknown_ids_like_chips():
     sets = {"RC": {0, 1, 100, 101, 921}, "RC_small": {0, 1, 921}, "PV": {0, 1, 2, 50}}
     assert shop.identify([880, 3335, 3336, 100, 0], sets, carriers={880}) == "RC"
+
+
+def test_no_image_cave_skips_carriers_only():
+    from capstone import Cs, CS_ARCH_X86, CS_MODE_64
+    base, cave = 0x140000000, 0x13F000000
+    code = shop.no_image_cave(cave, base, 950, 953)
+    ins = [(i.mnemonic, i.op_str) for i in Cs(CS_ARCH_X86, CS_MODE_64).disasm(code, cave)]
+    assert ins[0] == ("test", "eax, eax")
+    assert ("cmp", "esi, 0x3b6") in ins and ("cmp", "esi, 0x3b9") in ins
+    targets = {int(op, 16) for m, op in ins if m == "jmp"}
+    assert targets == {base + shop.SHOW_IMAGE_RVA, base + shop.SKIP_IMAGE_RVA}
