@@ -7921,188 +7921,7 @@
    }
   }
  ],
- "records_without_placement": [
-  {
-   "SaveID": 3,
-   "name": "Small Stubby (Electromagnetic-shield-equipped)",
-   "EmID": "em0000",
-   "category": "Standard Machines"
-  },
-  {
-   "SaveID": 9,
-   "name": "Medium Biped (Shield-equipped)",
-   "EmID": "em0010",
-   "category": "Standard Machines"
-  },
-  {
-   "SaveID": 10,
-   "name": "Medium Biped (Electromagnetic Shield-equipped)",
-   "EmID": "em0010",
-   "category": "Standard Machines"
-  },
-  {
-   "SaveID": 35,
-   "name": "Medium Biped (Shield-equipped)",
-   "EmID": "em0012",
-   "category": "Desert Machines"
-  },
-  {
-   "SaveID": 36,
-   "name": "Medium Biped (Electromagnetic Shield-equipped)",
-   "EmID": "em0012",
-   "category": "Desert Machines"
-  },
-  {
-   "SaveID": 46,
-   "name": "Medium Flyer",
-   "EmID": "em0033",
-   "category": "Amusement Park Machines"
-  },
-  {
-   "SaveID": 47,
-   "name": "Medium Flyer (Kamikaze Unit)",
-   "EmID": "em0033",
-   "category": "Amusement Park Machines"
-  },
-  {
-   "SaveID": 48,
-   "name": "Medium Flyer (Gunner x2, Kamikaze x2)",
-   "EmID": "em0033",
-   "category": "Amusement Park Machines"
-  },
-  {
-   "SaveID": 52,
-   "name": "Medium Biped (Shield-equipped)",
-   "EmID": "em0014",
-   "category": "Forest Kingdom Machines"
-  },
-  {
-   "SaveID": 53,
-   "name": "Medium Biped (Electromagnetic Shield-equipped)",
-   "EmID": "em0014",
-   "category": "Forest Kingdom Machines"
-  },
-  {
-   "SaveID": 72,
-   "name": "Pascal",
-   "EmID": "pl1000",
-   "category": "Village Machines"
-  },
-  {
-   "SaveID": 73,
-   "name": "Pascal",
-   "EmID": "pl1001",
-   "category": "Village Machines"
-  },
-  {
-   "SaveID": 77,
-   "name": "Big Sister Machine",
-   "EmID": "em005b",
-   "category": "Village Machines"
-  },
-  {
-   "SaveID": 81,
-   "name": "High-speed Machine",
-   "EmID": "emb033",
-   "category": "Amicable Machines"
-  },
-  {
-   "SaveID": 107,
-   "name": "Small Stubby",
-   "EmID": "em0000",
-   "category": "EMP Attack Machines"
-  },
-  {
-   "SaveID": 108,
-   "name": "Small Biped",
-   "EmID": "em0050",
-   "category": "EMP Attack Machines"
-  },
-  {
-   "SaveID": 109,
-   "name": "Medium Biped",
-   "EmID": "em0010",
-   "category": "EMP Attack Machines"
-  },
-  {
-   "SaveID": 110,
-   "name": "Goliath Biped",
-   "EmID": "em0040",
-   "category": "EMP Attack Machines"
-  },
-  {
-   "SaveID": 114,
-   "name": "Adam (Battle in the Alien Ship)",
-   "EmID": "em6000",
-   "category": "Special Unit Machines"
-  },
-  {
-   "SaveID": 117,
-   "name": "Eve (Final Battle)",
-   "EmID": "em5000",
-   "category": "Special Unit Machines"
-  },
-  {
-   "SaveID": 118,
-   "name": "Eve (Final Battle)",
-   "EmID": "em5000",
-   "category": "Special Unit Machines"
-  },
-  {
-   "SaveID": 124,
-   "name": "Ernst",
-   "EmID": "bg2081",
-   "category": "Special Unit Machines"
-  },
-  {
-   "SaveID": 129,
-   "name": "Hegel",
-   "EmID": "em8800",
-   "category": "Special Unit Machines"
-  },
-  {
-   "SaveID": 145,
-   "name": "21O",
-   "EmID": "em1074",
-   "category": "Androids"
-  },
-  {
-   "SaveID": 151,
-   "name": "Hateful Sister",
-   "EmID": "emb000",
-   "category": "Peculiar Machines"
-  },
-  {
-   "SaveID": 152,
-   "name": "Vengeful Child",
-   "EmID": "emb000",
-   "category": "Peculiar Machines"
-  },
-  {
-   "SaveID": 156,
-   "name": "Gunman Biped",
-   "EmID": "emb012",
-   "category": "Peculiar Machines"
-  },
-  {
-   "SaveID": 157,
-   "name": "Gunman Flyer",
-   "EmID": "emb031",
-   "category": "Peculiar Machines"
-  },
-  {
-   "SaveID": 158,
-   "name": "Gunman Stubby",
-   "EmID": "emb004",
-   "category": "Peculiar Machines"
-  },
-  {
-   "SaveID": 161,
-   "name": "Zombie Clown",
-   "EmID": "emb052",
-   "category": "Peculiar Machines"
-  }
- ],
+ "records_without_placement": [],
  "placed_em_without_emlist": {
   "em011e": 182,
   "em3004": 89,
@@ -278075,5 +277894,3669 @@
    "area_confidence": "low",
    "area_nearest_dist_m": 19
   }
- ]
+ ],
+ "records_resolved_logic_gaps": [
+  {
+   "SaveID": 3,
+   "name": "Small Stubby (Electromagnetic-shield-equipped)",
+   "source": "logic_gaps",
+   "confidence": "high",
+   "unlock": [
+    {
+     "how": "kill",
+     "rule": "exe 0x8257C0 (mort, masque setFlag 0x10000010)",
+     "placements": 16,
+     "confidence": "high"
+    }
+   ],
+   "positions": [
+    {
+     "objId": "em0000",
+     "setType": 2,
+     "setFlag": 268435456,
+     "kind": "generator",
+     "position": [
+      342.16,
+      -184.48,
+      -123.3
+     ],
+     "file": "core/corehap.dat",
+     "member": "core_hap.pak",
+     "hap": "谷底_q210で無効(2)",
+     "action": "敵発生機_EM_谷底_1",
+     "group_chain": [
+      "q210で無効(2)",
+      "B",
+      "EM",
+      "STG中停止",
+      "ハッキング中停止",
+      "r100/r200共通"
+     ],
+     "scene_states": [
+      "0x0010d8ea",
+      "NOT q210/CLR",
+      "NOT q210/RUN_1",
+      "Route/B"
+     ],
+     "rate": 1,
+     "area": "Ravine / valley floor (谷底)",
+     "area_source": "name_keyword"
+    },
+    {
+     "objId": "em0000",
+     "setType": 2,
+     "setFlag": 268435456,
+     "kind": "generator",
+     "position": [
+      255.38,
+      3.88,
+      285.29
+     ],
+     "file": "ph3/p300.dat",
+     "member": "p300_hap.pak",
+     "hap": "敵",
+     "action": "敵発生機_高速道路",
+     "group_chain": [
+      "20~25_配置物",
+      "ハッキング中停止(8)",
+      "特殊ステージ中停止"
+     ],
+     "subphases": [
+      "p300:20_CD_Ruined_City_2B",
+      "p300:21_CD_Ruined_City_2B",
+      "p300:22_CD_Ruined_City_2B",
+      "p300:23_CD_Ruined_City_2B",
+      "p300:25_CD_Ruined_City_2B"
+     ],
+     "rate": 2,
+     "area": "City Ruins",
+     "area_source": "owner_subphase"
+    },
+    {
+     "objId": "em0000",
+     "setType": 2,
+     "setFlag": 268435456,
+     "kind": "layout",
+     "position": [
+      789.43,
+      151.68,
+      295.36
+     ],
+     "file": "ph3/p300.dat",
+     "member": "p300_hap.pak",
+     "hap": "enemy_2F(2)",
+     "action": "敵セットエリア",
+     "group_chain": [
+      "10_1F_3F",
+      "240_資源回収ユニット(遊園地)",
+      "ハッキング中停止(8)",
+      "特殊ステージ中停止"
+     ],
+     "subphases": [
+      "p300:240_10_CD_Amusement_Park_9S",
+      "p300:240_20_CD_Amusement_Park_9S",
+      "p300:240_30_CD_Amusement_Park_9S",
+      "p300:240_40_CD_Amusement_Park_9S",
+      "p300:240_50_CD_Amusement_Park_A2",
+      "p300:240_60_CD_Amusement_Park_A2",
+      "p300:240_70_CD_Amusement_Park_A2",
+      "p300:240_80_CD_Amusement_Park_A2",
+      "p300:240_CD_Amusement_Park"
+     ],
+     "params": {
+      "Lv": "50",
+      "LOOK": "1"
+     },
+     "area": "Resource Recovery Unit",
+     "area_source": "name_keyword"
+    },
+    {
+     "objId": "em0000",
+     "setType": 2,
+     "setFlag": 268435456,
+     "kind": "layout",
+     "position": [
+      743.87,
+      151.68,
+      299.71
+     ],
+     "file": "ph3/p300.dat",
+     "member": "p300_hap.pak",
+     "hap": "enemy_2F(2)",
+     "action": "敵セットエリア",
+     "group_chain": [
+      "10_1F_3F",
+      "240_資源回収ユニット(遊園地)",
+      "ハッキング中停止(8)",
+      "特殊ステージ中停止"
+     ],
+     "subphases": [
+      "p300:240_10_CD_Amusement_Park_9S",
+      "p300:240_20_CD_Amusement_Park_9S",
+      "p300:240_30_CD_Amusement_Park_9S",
+      "p300:240_40_CD_Amusement_Park_9S",
+      "p300:240_50_CD_Amusement_Park_A2",
+      "p300:240_60_CD_Amusement_Park_A2",
+      "p300:240_70_CD_Amusement_Park_A2",
+      "p300:240_80_CD_Amusement_Park_A2",
+      "p300:240_CD_Amusement_Park"
+     ],
+     "params": {
+      "Lv": "50",
+      "LOOK": "1"
+     },
+     "area": "Resource Recovery Unit",
+     "area_source": "name_keyword"
+    },
+    {
+     "objId": "em0000",
+     "setType": 2,
+     "setFlag": 268435712,
+     "kind": "layout",
+     "position": [
+      250.0,
+      820.0,
+      500.0
+     ],
+     "file": "ph3/p300.dat",
+     "member": "p300_hap.pak",
+     "hap": "地上_資材打ち上げイベント",
+     "action": "敵セット",
+     "group_chain": [
+      "300_20_フロア_資材打ち上げイベント",
+      "300〜310_塔_エレベータ戦闘",
+      "ハッキング中停止(8)",
+      "特殊ステージ中停止"
+     ],
+     "subphases": [
+      "p300:300_00_CD_Tower_Elevator_A2",
+      "p300:300_10_CD_Tower_Elevator_A2",
+      "p300:300_20_CD_Tower_Elevator_A2",
+      "p300:300_30_CD_Tower_Elevator_A2",
+      "p300:300_40_CD_Tower_Elevator_A2",
+      "p300:310_00_CD_Shooting_9S",
+      "p300:310_10_CD_Shooting_9S",
+      "p300:310_20_CD_Shooting_9S",
+      "p300:310_30_CD_Shooting_9S",
+      "p300:310_50_CD_Shooting_3Dbattle_9S"
+     ],
+     "params": {
+      "Lv": "50"
+     },
+     "area": "Tower",
+     "area_source": "name_keyword"
+    },
+    {
+     "objId": "em0000",
+     "setType": 2,
+     "setFlag": 268435456,
+     "kind": "layout",
+     "position": [
+      432.24,
+      -92.22,
+      845.84
+     ],
+     "file": "quest/q091.dat",
+     "member": "q091_323b730a_grp.pak",
+     "hap": "ランク3",
+     "action": "敵セット(3)",
+     "group_chain": [
+      "戦闘",
+      "q091_賭博闘技場_コロシアム",
+      "q091_A",
+      "シリアス停止",
+      "ハッキング中停止"
+     ],
+     "scene_states": [
+      "NOT 0xffbfa47f"
+     ],
+     "params": {
+      "Lv": "50"
+     }
+    },
+    {
+     "objId": "em0000",
+     "setType": 2,
+     "setFlag": 268435456,
+     "kind": "layout",
+     "position": [
+      443.22,
+      -92.22,
+      850.89
+     ],
+     "file": "quest/q091.dat",
+     "member": "q091_323b730a_grp.pak",
+     "hap": "ランク3",
+     "action": "敵セット(3)",
+     "group_chain": [
+      "戦闘",
+      "q091_賭博闘技場_コロシアム",
+      "q091_A",
+      "シリアス停止",
+      "ハッキング中停止"
+     ],
+     "scene_states": [
+      "NOT 0xffbfa47f"
+     ],
+     "params": {
+      "Lv": "50"
+     }
+    },
+    {
+     "objId": "em0000",
+     "setType": 2,
+     "setFlag": 268435456,
+     "kind": "layout",
+     "position": [
+      445.13,
+      -92.22,
+      861.41
+     ],
+     "file": "quest/q091.dat",
+     "member": "q091_323b730a_grp.pak",
+     "hap": "ランク3",
+     "action": "敵セット(3)",
+     "group_chain": [
+      "戦闘",
+      "q091_賭博闘技場_コロシアム",
+      "q091_A",
+      "シリアス停止",
+      "ハッキング中停止"
+     ],
+     "scene_states": [
+      "NOT 0xffbfa47f"
+     ],
+     "params": {
+      "Lv": "50"
+     }
+    },
+    {
+     "objId": "em0000",
+     "setType": 2,
+     "setFlag": 268435456,
+     "kind": "layout",
+     "position": [
+      436.66,
+      -92.22,
+      869.0
+     ],
+     "file": "quest/q091.dat",
+     "member": "q091_323b730a_grp.pak",
+     "hap": "ランク3",
+     "action": "敵セット(3)",
+     "group_chain": [
+      "戦闘",
+      "q091_賭博闘技場_コロシアム",
+      "q091_A",
+      "シリアス停止",
+      "ハッキング中停止"
+     ],
+     "scene_states": [
+      "NOT 0xffbfa47f"
+     ],
+     "params": {
+      "Lv": "50"
+     }
+    },
+    {
+     "objId": "em0000",
+     "setType": 2,
+     "setFlag": 268435456,
+     "kind": "layout",
+     "position": [
+      425.68,
+      -92.22,
+      863.97
+     ],
+     "file": "quest/q091.dat",
+     "member": "q091_323b730a_grp.pak",
+     "hap": "ランク3",
+     "action": "敵セット(3)",
+     "group_chain": [
+      "戦闘",
+      "q091_賭博闘技場_コロシアム",
+      "q091_A",
+      "シリアス停止",
+      "ハッキング中停止"
+     ],
+     "scene_states": [
+      "NOT 0xffbfa47f"
+     ],
+     "params": {
+      "Lv": "50"
+     }
+    },
+    {
+     "objId": "em0000",
+     "setType": 2,
+     "setFlag": 268435456,
+     "kind": "layout",
+     "position": [
+      423.76,
+      -92.22,
+      853.46
+     ],
+     "file": "quest/q091.dat",
+     "member": "q091_323b730a_grp.pak",
+     "hap": "ランク3",
+     "action": "敵セット(3)",
+     "group_chain": [
+      "戦闘",
+      "q091_賭博闘技場_コロシアム",
+      "q091_A",
+      "シリアス停止",
+      "ハッキング中停止"
+     ],
+     "scene_states": [
+      "NOT 0xffbfa47f"
+     ],
+     "params": {
+      "Lv": "50"
+     }
+    },
+    {
+     "objId": "em0000",
+     "setType": 2,
+     "setFlag": 2416181248,
+     "kind": "layout",
+     "position": [
+      -156.6,
+      28.96,
+      -33.92
+     ],
+     "file": "quest/q150.dat",
+     "member": "q150_1cb57768_grp.pak",
+     "hap": "敵セット(7)",
+     "action": "敵セットエリア",
+     "group_chain": [
+      "q150/RUN_15クリアするまで",
+      "進行不可になるまで有効"
+     ],
+     "scene_states": [
+      "0x3d938857",
+      "NOT 0x79efa52e",
+      "q150/RUN_13",
+      "q150/RUN_14",
+      "q150/RUN_15"
+     ],
+     "params": {
+      "Lv": "20"
+     }
+    }
+   ],
+   "positions_total": 13
+  },
+  {
+   "SaveID": 9,
+   "name": "Medium Biped (Shield-equipped)",
+   "source": "logic_gaps",
+   "confidence": "high",
+   "unlock": [
+    {
+     "how": "kill",
+     "rule": "exe 0x8257C0 (mort, masque setFlag 0x10)",
+     "placements": 55,
+     "confidence": "high"
+    }
+   ],
+   "positions": [
+    {
+     "objId": "em0010",
+     "setFlag": 16,
+     "kind": "layout",
+     "position": [
+      -451.17,
+      32.57,
+      501.27
+     ],
+     "file": "ph1/p100.dat",
+     "member": "p100_7dab3316_grp.pak",
+     "hap": "最後の円形部屋",
+     "action": "敵セットエリア-3戦目",
+     "group_chain": [
+      "00_90_A_ロボット山_最後の部屋",
+      "00_プロローグ",
+      "ハッキング中停止(6)",
+      "特殊ステージ中停止"
+     ],
+     "subphases": [
+      "p100:00_00_B_RobotM_Pro_RobotBrother",
+      "p100:00_02_B_RobotM_Pro_9S_appearanc",
+      "p100:00_05_B_RobotM_Pro_9S_STG1",
+      "p100:00_10_B_RobotM_Pro_9S_STG2",
+      "p100:00_15_B_RobotM_Pro_9S_STG3",
+      "p100:00_30_A_RobotM_Prologue_STG1",
+      "p100:00_40_A_RobotM_Prologue_STG2",
+      "p100:00_50_A_RobotM_Prologue_STG3",
+      "p100:00_55_A_RobotM_Prologue_EV",
+      "p100:00_60_A_RobotM_Pro_Tutorial",
+      "p100:00_70_A_RobotM_Pro_ArmBoss_1st",
+      "p100:00_80_A_RobotM_Pro_1stArea",
+      "p100:00_80_B_RobotM_Pro_BossArea",
+      "p100:00_82_B_RobotM_Pro_9S_STG4",
+      "p100:00_83_B_RobotM_Pro_9S_STG5",
+      "p100:00_85_A_RobotM_Pro_2ndArea",
+      "p100:00_90_A_RobotM_Pro_3rdArea",
+      "p100:00_95_A_RobotM_Pro_lastArea"
+     ],
+     "params": {
+      "Lv": "3"
+     },
+     "area": "Abandoned Factory",
+     "area_source": "name_keyword"
+    },
+    {
+     "objId": "em0010",
+     "setFlag": 16,
+     "kind": "layout",
+     "position": [
+      -451.18,
+      33.04,
+      476.68
+     ],
+     "file": "ph1/p100.dat",
+     "member": "p100_7dab3316_grp.pak",
+     "hap": "最後の円形部屋",
+     "action": "敵セットエリア-3戦目",
+     "group_chain": [
+      "00_90_A_ロボット山_最後の部屋",
+      "00_プロローグ",
+      "ハッキング中停止(6)",
+      "特殊ステージ中停止"
+     ],
+     "subphases": [
+      "p100:00_00_B_RobotM_Pro_RobotBrother",
+      "p100:00_02_B_RobotM_Pro_9S_appearanc",
+      "p100:00_05_B_RobotM_Pro_9S_STG1",
+      "p100:00_10_B_RobotM_Pro_9S_STG2",
+      "p100:00_15_B_RobotM_Pro_9S_STG3",
+      "p100:00_30_A_RobotM_Prologue_STG1",
+      "p100:00_40_A_RobotM_Prologue_STG2",
+      "p100:00_50_A_RobotM_Prologue_STG3",
+      "p100:00_55_A_RobotM_Prologue_EV",
+      "p100:00_60_A_RobotM_Pro_Tutorial",
+      "p100:00_70_A_RobotM_Pro_ArmBoss_1st",
+      "p100:00_80_A_RobotM_Pro_1stArea",
+      "p100:00_80_B_RobotM_Pro_BossArea",
+      "p100:00_82_B_RobotM_Pro_9S_STG4",
+      "p100:00_83_B_RobotM_Pro_9S_STG5",
+      "p100:00_85_A_RobotM_Pro_2ndArea",
+      "p100:00_90_A_RobotM_Pro_3rdArea",
+      "p100:00_95_A_RobotM_Pro_lastArea"
+     ],
+     "params": {
+      "Lv": "3"
+     },
+     "area": "Abandoned Factory",
+     "area_source": "name_keyword"
+    },
+    {
+     "objId": "em0010",
+     "setFlag": 16,
+     "kind": "layout",
+     "position": [
+      -453.19,
+      33.07,
+      484.91
+     ],
+     "file": "ph1/p100.dat",
+     "member": "p100_7dab3316_grp.pak",
+     "hap": "最後の円形部屋",
+     "action": "敵セットエリア-2戦目(3)",
+     "group_chain": [
+      "00_90_A_ロボット山_最後の部屋",
+      "00_プロローグ",
+      "ハッキング中停止(6)",
+      "特殊ステージ中停止"
+     ],
+     "subphases": [
+      "p100:00_00_B_RobotM_Pro_RobotBrother",
+      "p100:00_02_B_RobotM_Pro_9S_appearanc",
+      "p100:00_05_B_RobotM_Pro_9S_STG1",
+      "p100:00_10_B_RobotM_Pro_9S_STG2",
+      "p100:00_15_B_RobotM_Pro_9S_STG3",
+      "p100:00_30_A_RobotM_Prologue_STG1",
+      "p100:00_40_A_RobotM_Prologue_STG2",
+      "p100:00_50_A_RobotM_Prologue_STG3",
+      "p100:00_55_A_RobotM_Prologue_EV",
+      "p100:00_60_A_RobotM_Pro_Tutorial",
+      "p100:00_70_A_RobotM_Pro_ArmBoss_1st",
+      "p100:00_80_A_RobotM_Pro_1stArea",
+      "p100:00_80_B_RobotM_Pro_BossArea",
+      "p100:00_82_B_RobotM_Pro_9S_STG4",
+      "p100:00_83_B_RobotM_Pro_9S_STG5",
+      "p100:00_85_A_RobotM_Pro_2ndArea",
+      "p100:00_90_A_RobotM_Pro_3rdArea",
+      "p100:00_95_A_RobotM_Pro_lastArea"
+     ],
+     "params": {
+      "Lv": "2"
+     },
+     "area": "Abandoned Factory",
+     "area_source": "name_keyword"
+    },
+    {
+     "objId": "em0010",
+     "setFlag": 16,
+     "kind": "layout",
+     "position": [
+      -448.83,
+      33.04,
+      484.93
+     ],
+     "file": "ph1/p100.dat",
+     "member": "p100_7dab3316_grp.pak",
+     "hap": "最後の円形部屋",
+     "action": "敵セットエリア-2戦目(3)",
+     "group_chain": [
+      "00_90_A_ロボット山_最後の部屋",
+      "00_プロローグ",
+      "ハッキング中停止(6)",
+      "特殊ステージ中停止"
+     ],
+     "subphases": [
+      "p100:00_00_B_RobotM_Pro_RobotBrother",
+      "p100:00_02_B_RobotM_Pro_9S_appearanc",
+      "p100:00_05_B_RobotM_Pro_9S_STG1",
+      "p100:00_10_B_RobotM_Pro_9S_STG2",
+      "p100:00_15_B_RobotM_Pro_9S_STG3",
+      "p100:00_30_A_RobotM_Prologue_STG1",
+      "p100:00_40_A_RobotM_Prologue_STG2",
+      "p100:00_50_A_RobotM_Prologue_STG3",
+      "p100:00_55_A_RobotM_Prologue_EV",
+      "p100:00_60_A_RobotM_Pro_Tutorial",
+      "p100:00_70_A_RobotM_Pro_ArmBoss_1st",
+      "p100:00_80_A_RobotM_Pro_1stArea",
+      "p100:00_80_B_RobotM_Pro_BossArea",
+      "p100:00_82_B_RobotM_Pro_9S_STG4",
+      "p100:00_83_B_RobotM_Pro_9S_STG5",
+      "p100:00_85_A_RobotM_Pro_2ndArea",
+      "p100:00_90_A_RobotM_Pro_3rdArea",
+      "p100:00_95_A_RobotM_Pro_lastArea"
+     ],
+     "params": {
+      "Lv": "2"
+     },
+     "area": "Abandoned Factory",
+     "area_source": "name_keyword"
+    },
+    {
+     "objId": "em0010",
+     "setFlag": 262160,
+     "kind": "layout",
+     "position": [
+      376.99,
+      -76.13,
+      856.42
+     ],
+     "file": "ph2/p200.dat",
+     "member": "p200_hap.pak",
+     "hap": "流れ",
+     "action": "敵セットエリア-ミサイル攻撃敵",
+     "group_chain": [
+      "80_30_ミサイルまで",
+      "80_パスカル村〜水没都市",
+      "ハッキング中停止(7)",
+      "特殊ステージ中停止"
+     ],
+     "subphases": [
+      "p200:80_00_AB_Pascal_Village",
+      "p200:80_10_AB_Resistance_Camp",
+      "p200:80_20_AB_Submerge_City",
+      "p200:80_30_AB_Submerge_City"
+     ],
+     "params": {
+      "Lv": "20",
+      "Lv_B": "40"
+     },
+     "area": "Flooded City",
+     "area_source": "name_keyword"
+    },
+    {
+     "objId": "em0010",
+     "setFlag": 262160,
+     "kind": "layout",
+     "position": [
+      387.87,
+      -76.61,
+      875.91
+     ],
+     "file": "ph2/p200.dat",
+     "member": "p200_hap.pak",
+     "hap": "流れ",
+     "action": "敵セットエリア-ミサイル攻撃敵",
+     "group_chain": [
+      "80_30_ミサイルまで",
+      "80_パスカル村〜水没都市",
+      "ハッキング中停止(7)",
+      "特殊ステージ中停止"
+     ],
+     "subphases": [
+      "p200:80_00_AB_Pascal_Village",
+      "p200:80_10_AB_Resistance_Camp",
+      "p200:80_20_AB_Submerge_City",
+      "p200:80_30_AB_Submerge_City"
+     ],
+     "params": {
+      "Lv": "20",
+      "Lv_B": "40"
+     },
+     "area": "Flooded City",
+     "area_source": "name_keyword"
+    },
+    {
+     "objId": "em0010",
+     "setFlag": 16,
+     "kind": "generator",
+     "position": [
+      320.47,
+      21.43,
+      693.37
+     ],
+     "file": "ph2/p200.dat",
+     "member": "p200_hap.pak",
+     "hap": "..M1090_S0120_GM_a",
+     "action": "敵発生機_2D(2)",
+     "group_chain": [
+      "10_戦闘",
+      "170_レジスタンスキャンプ_村内戦闘",
+      "ハッキング中停止(7)",
+      "特殊ステージ中停止"
+     ],
+     "subphases": [
+      "p200:170_00_A_Resistance_Camp_2B",
+      "p200:170_10_A_Resistance_Camp_2B",
+      "p200:170_20_A_Resistance_Camp_2B",
+      "p200:170_30_A_Resistance_Camp_2B",
+      "p200:170_40_A_Resistance_Camp_2B"
+     ],
+     "rate": 0,
+     "area": "Resistance Camp",
+     "area_source": "name_keyword"
+    },
+    {
+     "objId": "em0010",
+     "setFlag": 16,
+     "kind": "layout",
+     "position": [
+      306.31,
+      9.47,
+      680.55
+     ],
+     "file": "ph2/p200.dat",
+     "member": "p200_hap.pak",
+     "hap": "..M1090_S0120_GM_a",
+     "action": "敵セットエリア",
+     "group_chain": [
+      "10_戦闘",
+      "170_レジスタンスキャンプ_村内戦闘",
+      "ハッキング中停止(7)",
+      "特殊ステージ中停止"
+     ],
+     "subphases": [
+      "p200:170_00_A_Resistance_Camp_2B",
+      "p200:170_10_A_Resistance_Camp_2B",
+      "p200:170_20_A_Resistance_Camp_2B",
+      "p200:170_30_A_Resistance_Camp_2B",
+      "p200:170_40_A_Resistance_Camp_2B"
+     ],
+     "params": {
+      "Lv": "27",
+      "Lv_B": "45"
+     },
+     "area": "Resistance Camp",
+     "area_source": "name_keyword"
+    },
+    {
+     "objId": "em0010",
+     "setFlag": 16,
+     "kind": "layout",
+     "position": [
+      315.46,
+      9.47,
+      690.7
+     ],
+     "file": "ph2/p200.dat",
+     "member": "p200_hap.pak",
+     "hap": "..M1090_S0120_GM_a",
+     "action": "敵セットエリア",
+     "group_chain": [
+      "10_戦闘",
+      "170_レジスタンスキャンプ_村内戦闘",
+      "ハッキング中停止(7)",
+      "特殊ステージ中停止"
+     ],
+     "subphases": [
+      "p200:170_00_A_Resistance_Camp_2B",
+      "p200:170_10_A_Resistance_Camp_2B",
+      "p200:170_20_A_Resistance_Camp_2B",
+      "p200:170_30_A_Resistance_Camp_2B",
+      "p200:170_40_A_Resistance_Camp_2B"
+     ],
+     "params": {
+      "Lv": "27",
+      "Lv_B": "45"
+     },
+     "area": "Resistance Camp",
+     "area_source": "name_keyword"
+    },
+    {
+     "objId": "em0010",
+     "setFlag": 16,
+     "kind": "layout",
+     "position": [
+      306.58,
+      9.47,
+      681.5
+     ],
+     "file": "ph2/p200.dat",
+     "member": "p200_hap.pak",
+     "hap": "..M1090_S0120_GM_a",
+     "action": "敵セットエリア",
+     "group_chain": [
+      "10_戦闘",
+      "170_レジスタンスキャンプ_村内戦闘",
+      "ハッキング中停止(7)",
+      "特殊ステージ中停止"
+     ],
+     "subphases": [
+      "p200:170_00_A_Resistance_Camp_2B",
+      "p200:170_10_A_Resistance_Camp_2B",
+      "p200:170_20_A_Resistance_Camp_2B",
+      "p200:170_30_A_Resistance_Camp_2B",
+      "p200:170_40_A_Resistance_Camp_2B"
+     ],
+     "params": {
+      "Lv": "27",
+      "Lv_B": "45"
+     },
+     "area": "Resistance Camp",
+     "area_source": "name_keyword"
+    },
+    {
+     "objId": "em0010",
+     "setFlag": 268435472,
+     "kind": "generator",
+     "position": [
+      255.38,
+      3.88,
+      285.29
+     ],
+     "file": "ph3/p300.dat",
+     "member": "p300_hap.pak",
+     "hap": "敵",
+     "action": "敵発生機_高速道路",
+     "group_chain": [
+      "20~25_配置物",
+      "ハッキング中停止(8)",
+      "特殊ステージ中停止"
+     ],
+     "subphases": [
+      "p300:20_CD_Ruined_City_2B",
+      "p300:21_CD_Ruined_City_2B",
+      "p300:22_CD_Ruined_City_2B",
+      "p300:23_CD_Ruined_City_2B",
+      "p300:25_CD_Ruined_City_2B"
+     ],
+     "rate": 1,
+     "area": "City Ruins",
+     "area_source": "owner_subphase"
+    },
+    {
+     "objId": "em0010",
+     "setFlag": 268763152,
+     "kind": "layout",
+     "position": [
+      479.25,
+      14.65,
+      -55.54
+     ],
+     "file": "ph3/p300.dat",
+     "member": "p300_hap.pak",
+     "hap": "パスカル村_2F",
+     "action": "敵セット_2Fの裏側(敵)",
+     "group_chain": [
+      "パスカル村_敵の配置",
+      "共食いレイアウト（A2操作時）",
+      "110_パスカルの村_パスカル護衛",
+      "ハッキング中停止(8)",
+      "特殊ステージ中停止"
+     ],
+     "subphases": [
+      "p300:110_CD_2_Pascal_Village_A2"
+     ],
+     "scene_states": [
+      "0x5554b8b7"
+     ],
+     "params": {
+      "Lv": "49"
+     },
+     "area": "Pascal's Village",
+     "area_source": "name_keyword"
+    }
+   ],
+   "positions_total": 54
+  },
+  {
+   "SaveID": 10,
+   "name": "Medium Biped (Electromagnetic Shield-equipped)",
+   "source": "logic_gaps",
+   "confidence": "high",
+   "unlock": [
+    {
+     "how": "kill",
+     "rule": "exe 0x8257C0 (mort, masque setFlag 0x10000010)",
+     "placements": 4,
+     "confidence": "high"
+    }
+   ],
+   "positions": [
+    {
+     "objId": "em0010",
+     "setFlag": 268435472,
+     "kind": "generator",
+     "position": [
+      255.38,
+      3.88,
+      285.29
+     ],
+     "file": "ph3/p300.dat",
+     "member": "p300_hap.pak",
+     "hap": "敵",
+     "action": "敵発生機_高速道路",
+     "group_chain": [
+      "20~25_配置物",
+      "ハッキング中停止(8)",
+      "特殊ステージ中停止"
+     ],
+     "subphases": [
+      "p300:20_CD_Ruined_City_2B",
+      "p300:21_CD_Ruined_City_2B",
+      "p300:22_CD_Ruined_City_2B",
+      "p300:23_CD_Ruined_City_2B",
+      "p300:25_CD_Ruined_City_2B"
+     ],
+     "rate": 1,
+     "area": "City Ruins",
+     "area_source": "owner_subphase"
+    },
+    {
+     "objId": "em0010",
+     "setFlag": 268763152,
+     "kind": "layout",
+     "position": [
+      479.25,
+      14.65,
+      -55.54
+     ],
+     "file": "ph3/p300.dat",
+     "member": "p300_hap.pak",
+     "hap": "パスカル村_2F",
+     "action": "敵セット_2Fの裏側(敵)",
+     "group_chain": [
+      "パスカル村_敵の配置",
+      "共食いレイアウト（A2操作時）",
+      "110_パスカルの村_パスカル護衛",
+      "ハッキング中停止(8)",
+      "特殊ステージ中停止"
+     ],
+     "subphases": [
+      "p300:110_CD_2_Pascal_Village_A2"
+     ],
+     "scene_states": [
+      "0x5554b8b7"
+     ],
+     "params": {
+      "Lv": "49"
+     },
+     "area": "Pascal's Village",
+     "area_source": "name_keyword"
+    },
+    {
+     "objId": "em0010",
+     "setFlag": 2416181264,
+     "kind": "layout",
+     "position": [
+      -156.47,
+      28.96,
+      -36.46
+     ],
+     "file": "quest/q150.dat",
+     "member": "q150_1cb57768_grp.pak",
+     "hap": "敵セット(7)",
+     "action": "敵セットエリア",
+     "group_chain": [
+      "q150/RUN_15クリアするまで",
+      "進行不可になるまで有効"
+     ],
+     "scene_states": [
+      "0x3d938857",
+      "NOT 0x79efa52e",
+      "q150/RUN_13",
+      "q150/RUN_14",
+      "q150/RUN_15"
+     ],
+     "params": {
+      "Lv": "20"
+     }
+    },
+    {
+     "objId": "em0010",
+     "setFlag": 268435472,
+     "kind": "generator",
+     "position": [
+      265.1,
+      -116.08,
+      439.73
+     ],
+     "file": "st5/r501.dat",
+     "member": "r501_hap.pak",
+     "hap": "左奥",
+     "action": "敵発生機",
+     "params": {
+      "Lv": "28",
+      "Lv_B": "45",
+      "Lv_C": "60"
+     },
+     "rate": 4,
+     "area": "Copied City",
+     "area_source": "room_file"
+    }
+   ],
+   "positions_total": 4
+  },
+  {
+   "SaveID": 35,
+   "name": "Medium Biped (Shield-equipped)",
+   "source": "logic_gaps",
+   "confidence": "high",
+   "unlock": [
+    {
+     "how": "kill",
+     "rule": "exe 0x8257C0 (mort, masque setFlag 0x10)",
+     "placements": 3,
+     "confidence": "high"
+    }
+   ],
+   "positions": [
+    {
+     "objId": "em0012",
+     "setType": 3,
+     "setFlag": 16,
+     "kind": "layout",
+     "position": [
+      -351.78,
+      -19.42,
+      -154.21
+     ],
+     "file": "st1/r150.dat",
+     "member": "r150_hap.pak",
+     "hap": "砂漠地下(2)",
+     "action": "敵セットエリア",
+     "group_chain": [
+      "砂漠地下全て共通",
+      "EM(7)",
+      "ハッキング中停止(9)"
+     ],
+     "params": {
+      "Lv": "10",
+      "Lv_B": "35",
+      "Lv_C": "47"
+     },
+     "area": "Desert Zone",
+     "area_source": "name_keyword"
+    },
+    {
+     "objId": "em0012",
+     "setType": 3,
+     "setFlag": 268435472,
+     "kind": "layout",
+     "position": [
+      -349.85,
+      -19.42,
+      -154.81
+     ],
+     "file": "st1/r150.dat",
+     "member": "r150_hap.pak",
+     "hap": "砂漠地下(2)",
+     "action": "敵セットエリア",
+     "group_chain": [
+      "砂漠地下全て共通",
+      "EM(7)",
+      "ハッキング中停止(9)"
+     ],
+     "params": {
+      "Lv": "10",
+      "Lv_B": "35",
+      "Lv_C": "47"
+     },
+     "area": "Desert Zone",
+     "area_source": "name_keyword"
+    },
+    {
+     "objId": "em0012",
+     "setType": 3,
+     "setFlag": 16,
+     "kind": "layout",
+     "position": [
+      -347.83,
+      -19.42,
+      -155.43
+     ],
+     "file": "st1/r150.dat",
+     "member": "r150_hap.pak",
+     "hap": "砂漠地下(2)",
+     "action": "敵セットエリア",
+     "group_chain": [
+      "砂漠地下全て共通",
+      "EM(7)",
+      "ハッキング中停止(9)"
+     ],
+     "params": {
+      "Lv": "10",
+      "Lv_B": "35",
+      "Lv_C": "47"
+     },
+     "area": "Desert Zone",
+     "area_source": "name_keyword"
+    }
+   ],
+   "positions_total": 3
+  },
+  {
+   "SaveID": 36,
+   "name": "Medium Biped (Electromagnetic Shield-equipped)",
+   "source": "logic_gaps",
+   "confidence": "high",
+   "unlock": [
+    {
+     "how": "kill",
+     "rule": "exe 0x8257C0 (mort, masque setFlag 0x10000010)",
+     "placements": 1,
+     "confidence": "high"
+    }
+   ],
+   "positions": [
+    {
+     "objId": "em0012",
+     "setType": 3,
+     "setFlag": 268435472,
+     "kind": "layout",
+     "position": [
+      -349.85,
+      -19.42,
+      -154.81
+     ],
+     "file": "st1/r150.dat",
+     "member": "r150_hap.pak",
+     "hap": "砂漠地下(2)",
+     "action": "敵セットエリア",
+     "group_chain": [
+      "砂漠地下全て共通",
+      "EM(7)",
+      "ハッキング中停止(9)"
+     ],
+     "params": {
+      "Lv": "10",
+      "Lv_B": "35",
+      "Lv_C": "47"
+     },
+     "area": "Desert Zone",
+     "area_source": "name_keyword"
+    }
+   ],
+   "positions_total": 1
+  },
+  {
+   "SaveID": 46,
+   "name": "Medium Flyer",
+   "source": "logic_gaps",
+   "confidence": "high",
+   "unlock": [
+    {
+     "how": "kill",
+     "rule": "exe 0x8257C0 (mort, masque setFlag 0x0)",
+     "placements": 1,
+     "confidence": "high"
+    }
+   ],
+   "positions": [
+    {
+     "objId": "em0033",
+     "setType": 1,
+     "setFlag": 1,
+     "kind": "layout",
+     "position": [
+      777.73,
+      182.67,
+      279.93
+     ],
+     "file": "ph3/p300.dat",
+     "member": "p300_hap.pak",
+     "hap": "enemy_3F(3)",
+     "action": "敵セットエリア",
+     "group_chain": [
+      "10_1F_3F",
+      "240_資源回収ユニット(遊園地)",
+      "ハッキング中停止(8)",
+      "特殊ステージ中停止"
+     ],
+     "subphases": [
+      "p300:240_10_CD_Amusement_Park_9S",
+      "p300:240_20_CD_Amusement_Park_9S",
+      "p300:240_30_CD_Amusement_Park_9S",
+      "p300:240_40_CD_Amusement_Park_9S",
+      "p300:240_50_CD_Amusement_Park_A2",
+      "p300:240_60_CD_Amusement_Park_A2",
+      "p300:240_70_CD_Amusement_Park_A2",
+      "p300:240_80_CD_Amusement_Park_A2",
+      "p300:240_CD_Amusement_Park"
+     ],
+     "params": {
+      "Lv": "50",
+      "speedRate": "0.5",
+      "LOOK": "1"
+     },
+     "area": "Resource Recovery Unit",
+     "area_source": "name_keyword"
+    }
+   ],
+   "positions_total": 1
+  },
+  {
+   "SaveID": 47,
+   "name": "Medium Flyer (Kamikaze Unit)",
+   "source": "logic_gaps",
+   "confidence": "high",
+   "unlock": [
+    {
+     "how": "kill",
+     "rule": "exe 0x8257C0 (mort, masque setFlag 0x0)",
+     "placements": 1,
+     "confidence": "high"
+    }
+   ],
+   "positions": [
+    {
+     "objId": "em0033",
+     "setType": 2,
+     "setFlag": 1,
+     "kind": "layout",
+     "position": [
+      766.82,
+      185.03,
+      297.75
+     ],
+     "file": "ph3/p300.dat",
+     "member": "p300_hap.pak",
+     "hap": "enemy_3F(3)",
+     "action": "敵セットエリア",
+     "group_chain": [
+      "10_1F_3F",
+      "240_資源回収ユニット(遊園地)",
+      "ハッキング中停止(8)",
+      "特殊ステージ中停止"
+     ],
+     "subphases": [
+      "p300:240_10_CD_Amusement_Park_9S",
+      "p300:240_20_CD_Amusement_Park_9S",
+      "p300:240_30_CD_Amusement_Park_9S",
+      "p300:240_40_CD_Amusement_Park_9S",
+      "p300:240_50_CD_Amusement_Park_A2",
+      "p300:240_60_CD_Amusement_Park_A2",
+      "p300:240_70_CD_Amusement_Park_A2",
+      "p300:240_80_CD_Amusement_Park_A2",
+      "p300:240_CD_Amusement_Park"
+     ],
+     "params": {
+      "Lv": "50",
+      "speedRate": "0.5",
+      "LOOK": "1"
+     },
+     "area": "Resource Recovery Unit",
+     "area_source": "name_keyword"
+    }
+   ],
+   "positions_total": 1
+  },
+  {
+   "SaveID": 48,
+   "name": "Medium Flyer (Gunner x2, Kamikaze x2)",
+   "source": "logic_gaps",
+   "confidence": "high",
+   "unlock": [
+    {
+     "how": "kill",
+     "rule": "exe 0x8257C0 (mort, masque setFlag 0x0)",
+     "placements": 1,
+     "confidence": "high"
+    }
+   ],
+   "positions": [
+    {
+     "objId": "em0033",
+     "setType": 3,
+     "setFlag": 1,
+     "kind": "layout",
+     "position": [
+      755.67,
+      165.37,
+      316.17
+     ],
+     "file": "ph3/p300.dat",
+     "member": "p300_hap.pak",
+     "hap": "enemy_3F(3)",
+     "action": "敵セットエリア",
+     "group_chain": [
+      "10_1F_3F",
+      "240_資源回収ユニット(遊園地)",
+      "ハッキング中停止(8)",
+      "特殊ステージ中停止"
+     ],
+     "subphases": [
+      "p300:240_10_CD_Amusement_Park_9S",
+      "p300:240_20_CD_Amusement_Park_9S",
+      "p300:240_30_CD_Amusement_Park_9S",
+      "p300:240_40_CD_Amusement_Park_9S",
+      "p300:240_50_CD_Amusement_Park_A2",
+      "p300:240_60_CD_Amusement_Park_A2",
+      "p300:240_70_CD_Amusement_Park_A2",
+      "p300:240_80_CD_Amusement_Park_A2",
+      "p300:240_CD_Amusement_Park"
+     ],
+     "params": {
+      "Lv": "50",
+      "speedRate": "0.5",
+      "LOOK": "1"
+     },
+     "area": "Resource Recovery Unit",
+     "area_source": "name_keyword"
+    }
+   ],
+   "positions_total": 1
+  },
+  {
+   "SaveID": 52,
+   "name": "Medium Biped (Shield-equipped)",
+   "source": "logic_gaps",
+   "confidence": "high",
+   "unlock": [
+    {
+     "how": "kill",
+     "rule": "exe 0x8257C0 (mort, masque setFlag 0x10)",
+     "placements": 14,
+     "confidence": "high"
+    }
+   ],
+   "positions": [
+    {
+     "objId": "em0014",
+     "setType": 1,
+     "setFlag": 67108880,
+     "kind": "layout",
+     "position": [
+      997.4,
+      -10.1,
+      -375.02
+     ],
+     "file": "st1/r160.dat",
+     "member": "r160_7d516476_grp.pak",
+     "hap": "城内-前半部分",
+     "action": "敵セットエリア-4つ目の通路(4階)",
+     "group_chain": [
+      "Aルート敵セット",
+      "森の城_城内",
+      "専用EVサブフェーズ中に無効",
+      "ハッキング中停止_r160"
+     ],
+     "scene_states": [
+      "NOT 0x3a1171c3",
+      "Route/A"
+     ],
+     "params": {
+      "Lv": "23"
+     },
+     "area": "Forest Castle",
+     "area_source": "name_keyword"
+    },
+    {
+     "objId": "em0014",
+     "setType": 1,
+     "setFlag": 268435472,
+     "kind": "layout",
+     "position": [
+      997.4,
+      -10.1,
+      -375.02
+     ],
+     "file": "st1/r160.dat",
+     "member": "r160_3593e9bf_grp.pak",
+     "hap": "城内-前半部分_B",
+     "action": "敵セットエリア-4つ目の通路(4階)",
+     "group_chain": [
+      "Bルート敵セット",
+      "森の城_城内",
+      "専用EVサブフェーズ中に無効",
+      "ハッキング中停止_r160"
+     ],
+     "scene_states": [
+      "NOT 0x3a1171c3",
+      "Route/B"
+     ],
+     "params": {
+      "Lv": "43"
+     },
+     "area": "Forest Castle",
+     "area_source": "name_keyword"
+    },
+    {
+     "objId": "em0014",
+     "setType": 1,
+     "setFlag": 65552,
+     "kind": "layout",
+     "position": [
+      910.76,
+      -24.73,
+      -325.21
+     ],
+     "file": "st1/r160.dat",
+     "member": "r160_3593e9bf_grp.pak",
+     "hap": "城内-前半部分_B",
+     "action": "敵セットエリア-最初の部屋",
+     "group_chain": [
+      "Bルート敵セット",
+      "森の城_城内",
+      "専用EVサブフェーズ中に無効",
+      "ハッキング中停止_r160"
+     ],
+     "scene_states": [
+      "NOT 0x3a1171c3",
+      "Route/B"
+     ],
+     "params": {
+      "Lv": "40"
+     },
+     "area": "Forest Castle",
+     "area_source": "name_keyword"
+    },
+    {
+     "objId": "em0014",
+     "setType": 1,
+     "setFlag": 8388624,
+     "kind": "layout",
+     "position": [
+      697.71,
+      -40.64,
+      -510.39
+     ],
+     "file": "st1/r160.dat",
+     "member": "r160_3679f341_grp.pak",
+     "hap": "森の敵_B",
+     "action": "敵セットエリア-城付近（巡回３）",
+     "group_chain": [
+      "敵セット-Bルート専用",
+      "敵セット",
+      "森の城_森部分",
+      "専用EVサブフェーズ中に無効",
+      "ハッキング中停止_r160"
+     ],
+     "scene_states": [
+      "NOT 0x3a1171c3",
+      "Route/B"
+     ],
+     "params": {
+      "Lv": "40"
+     },
+     "area": "Forest Zone",
+     "area_source": "name_keyword"
+    },
+    {
+     "objId": "em0014",
+     "setType": 1,
+     "setFlag": 8388624,
+     "kind": "layout",
+     "position": [
+      695.36,
+      -40.64,
+      -510.39
+     ],
+     "file": "st1/r160.dat",
+     "member": "r160_3679f341_grp.pak",
+     "hap": "森の敵_B",
+     "action": "敵セットエリア-城付近（巡回３）",
+     "group_chain": [
+      "敵セット-Bルート専用",
+      "敵セット",
+      "森の城_森部分",
+      "専用EVサブフェーズ中に無効",
+      "ハッキング中停止_r160"
+     ],
+     "scene_states": [
+      "NOT 0x3a1171c3",
+      "Route/B"
+     ],
+     "params": {
+      "Lv": "40"
+     },
+     "area": "Forest Zone",
+     "area_source": "name_keyword"
+    },
+    {
+     "objId": "em0014",
+     "setType": 1,
+     "setFlag": 8388624,
+     "kind": "layout",
+     "position": [
+      695.36,
+      -40.64,
+      -512.87
+     ],
+     "file": "st1/r160.dat",
+     "member": "r160_3679f341_grp.pak",
+     "hap": "森の敵_B",
+     "action": "敵セットエリア-城付近（巡回３）",
+     "group_chain": [
+      "敵セット-Bルート専用",
+      "敵セット",
+      "森の城_森部分",
+      "専用EVサブフェーズ中に無効",
+      "ハッキング中停止_r160"
+     ],
+     "scene_states": [
+      "NOT 0x3a1171c3",
+      "Route/B"
+     ],
+     "params": {
+      "Lv": "40"
+     },
+     "area": "Forest Zone",
+     "area_source": "name_keyword"
+    },
+    {
+     "objId": "em0014",
+     "setType": 1,
+     "setFlag": 8388624,
+     "kind": "layout",
+     "position": [
+      699.75,
+      -40.64,
+      -512.87
+     ],
+     "file": "st1/r160.dat",
+     "member": "r160_3679f341_grp.pak",
+     "hap": "森の敵_B",
+     "action": "敵セットエリア-城付近（巡回３）",
+     "group_chain": [
+      "敵セット-Bルート専用",
+      "敵セット",
+      "森の城_森部分",
+      "専用EVサブフェーズ中に無効",
+      "ハッキング中停止_r160"
+     ],
+     "scene_states": [
+      "NOT 0x3a1171c3",
+      "Route/B"
+     ],
+     "params": {
+      "Lv": "40"
+     },
+     "area": "Forest Zone",
+     "area_source": "name_keyword"
+    },
+    {
+     "objId": "em0014",
+     "setType": 1,
+     "setFlag": 268435472,
+     "kind": "layout",
+     "position": [
+      997.4,
+      -10.1,
+      -375.02
+     ],
+     "file": "st1/r160.dat",
+     "member": "r160_3af9d7f5_grp.pak",
+     "hap": "城内-前半部分_C,Dルート",
+     "action": "敵セットエリア-4つ目の通路(4階)",
+     "group_chain": [
+      "C,Dルート敵セット",
+      "森の城_城内",
+      "専用EVサブフェーズ中に無効",
+      "ハッキング中停止_r160"
+     ],
+     "scene_states": [
+      "NOT 0x3a1171c3",
+      "Route/C",
+      "Route/D"
+     ],
+     "params": {
+      "Lv": "55"
+     },
+     "area": "Forest Castle",
+     "area_source": "name_keyword"
+    },
+    {
+     "objId": "em0014",
+     "setType": 1,
+     "setFlag": 109051920,
+     "kind": "layout",
+     "position": [
+      697.71,
+      -40.64,
+      -510.39
+     ],
+     "file": "st1/r160.dat",
+     "member": "r160_53284c86_grp.pak",
+     "hap": "森の敵",
+     "action": "敵セットエリア-城付近（巡回３）",
+     "group_chain": [
+      "敵セット-Aルート専用",
+      "敵セット",
+      "森の城_森部分",
+      "専用EVサブフェーズ中に無効",
+      "ハッキング中停止_r160"
+     ],
+     "scene_states": [
+      "NOT 0x3a1171c3",
+      "Route/A"
+     ],
+     "params": {
+      "Lv": "23"
+     },
+     "area": "Forest Zone",
+     "area_source": "name_keyword"
+    },
+    {
+     "objId": "em0014",
+     "setType": 1,
+     "setFlag": 109051920,
+     "kind": "layout",
+     "position": [
+      695.36,
+      -40.64,
+      -510.39
+     ],
+     "file": "st1/r160.dat",
+     "member": "r160_53284c86_grp.pak",
+     "hap": "森の敵",
+     "action": "敵セットエリア-城付近（巡回３）",
+     "group_chain": [
+      "敵セット-Aルート専用",
+      "敵セット",
+      "森の城_森部分",
+      "専用EVサブフェーズ中に無効",
+      "ハッキング中停止_r160"
+     ],
+     "scene_states": [
+      "NOT 0x3a1171c3",
+      "Route/A"
+     ],
+     "params": {
+      "Lv": "23"
+     },
+     "area": "Forest Zone",
+     "area_source": "name_keyword"
+    },
+    {
+     "objId": "em0014",
+     "setType": 1,
+     "setFlag": 109051920,
+     "kind": "layout",
+     "position": [
+      695.36,
+      -40.64,
+      -512.87
+     ],
+     "file": "st1/r160.dat",
+     "member": "r160_53284c86_grp.pak",
+     "hap": "森の敵",
+     "action": "敵セットエリア-城付近（巡回３）",
+     "group_chain": [
+      "敵セット-Aルート専用",
+      "敵セット",
+      "森の城_森部分",
+      "専用EVサブフェーズ中に無効",
+      "ハッキング中停止_r160"
+     ],
+     "scene_states": [
+      "NOT 0x3a1171c3",
+      "Route/A"
+     ],
+     "params": {
+      "Lv": "23"
+     },
+     "area": "Forest Zone",
+     "area_source": "name_keyword"
+    },
+    {
+     "objId": "em0014",
+     "setType": 1,
+     "setFlag": 109051920,
+     "kind": "layout",
+     "position": [
+      699.75,
+      -40.64,
+      -512.87
+     ],
+     "file": "st1/r160.dat",
+     "member": "r160_53284c86_grp.pak",
+     "hap": "森の敵",
+     "action": "敵セットエリア-城付近（巡回３）",
+     "group_chain": [
+      "敵セット-Aルート専用",
+      "敵セット",
+      "森の城_森部分",
+      "専用EVサブフェーズ中に無効",
+      "ハッキング中停止_r160"
+     ],
+     "scene_states": [
+      "NOT 0x3a1171c3",
+      "Route/A"
+     ],
+     "params": {
+      "Lv": "23"
+     },
+     "area": "Forest Zone",
+     "area_source": "name_keyword"
+    }
+   ],
+   "positions_total": 14
+  },
+  {
+   "SaveID": 53,
+   "name": "Medium Biped (Electromagnetic Shield-equipped)",
+   "source": "logic_gaps",
+   "confidence": "high",
+   "unlock": [
+    {
+     "how": "kill",
+     "rule": "exe 0x8257C0 (mort, masque setFlag 0x10000010)",
+     "placements": 2,
+     "confidence": "high"
+    }
+   ],
+   "positions": [
+    {
+     "objId": "em0014",
+     "setType": 1,
+     "setFlag": 268435472,
+     "kind": "layout",
+     "position": [
+      997.4,
+      -10.1,
+      -375.02
+     ],
+     "file": "st1/r160.dat",
+     "member": "r160_3593e9bf_grp.pak",
+     "hap": "城内-前半部分_B",
+     "action": "敵セットエリア-4つ目の通路(4階)",
+     "group_chain": [
+      "Bルート敵セット",
+      "森の城_城内",
+      "専用EVサブフェーズ中に無効",
+      "ハッキング中停止_r160"
+     ],
+     "scene_states": [
+      "NOT 0x3a1171c3",
+      "Route/B"
+     ],
+     "params": {
+      "Lv": "43"
+     },
+     "area": "Forest Castle",
+     "area_source": "name_keyword"
+    },
+    {
+     "objId": "em0014",
+     "setType": 1,
+     "setFlag": 268435472,
+     "kind": "layout",
+     "position": [
+      997.4,
+      -10.1,
+      -375.02
+     ],
+     "file": "st1/r160.dat",
+     "member": "r160_3af9d7f5_grp.pak",
+     "hap": "城内-前半部分_C,Dルート",
+     "action": "敵セットエリア-4つ目の通路(4階)",
+     "group_chain": [
+      "C,Dルート敵セット",
+      "森の城_城内",
+      "専用EVサブフェーズ中に無効",
+      "ハッキング中停止_r160"
+     ],
+     "scene_states": [
+      "NOT 0x3a1171c3",
+      "Route/C",
+      "Route/D"
+     ],
+     "params": {
+      "Lv": "55"
+     },
+     "area": "Forest Castle",
+     "area_source": "name_keyword"
+    }
+   ],
+   "positions_total": 2
+  },
+  {
+   "SaveID": 72,
+   "name": "Pascal",
+   "source": "logic_gaps",
+   "confidence": "high",
+   "unlock": [
+    {
+     "area": "Abandoned Factory",
+     "how": "hap EmListUnlockAction (敵図鑑解放)",
+     "rule": "exe 0x3A04C0 -> 0x8257C0",
+     "file": "ph3/p300.dat",
+     "member": "p300_hap.pak",
+     "hap": "最後の選択",
+     "action": "敵図鑑解放",
+     "group_chain": [
+      "パスカルの最後",
+      "パスカル最後の選択",
+      "120_90_CD_2_ロボット山_パスカルの最後の選択",
+      "120_パスカルの絶望",
+      "ハッキング中停止(8)",
+      "特殊ステージ中停止"
+     ],
+     "subphases": [
+      "p300:120_00_CD_2_RobotM_Shelter_A2",
+      "p300:120_30_CD_2_RobotM_TankBoss_A2",
+      "p300:120_50_CD_2_RobotM_Operate1_A2",
+      "p300:120_70_CD_2_RobotM_Operate2_A2",
+      "p300:120_90_CD_2_RobotM_Pascal_A2",
+      "p300:120_95_CD_2_Branch_A2_9S"
+     ],
+     "scene_states": [
+      "Route/C",
+      "Route/D"
+     ],
+     "confidence": "high"
+    }
+   ],
+   "positions": [
+    {
+     "objId": "pl1000",
+     "setType": 1,
+     "setFlag": 1,
+     "kind": "layout",
+     "position": [
+      -451.07,
+      12.92,
+      483.72
+     ],
+     "file": "ph3/p300.dat",
+     "member": "p300_hap.pak",
+     "hap": "パスカル",
+     "action": "オブジェ配置-パスカル",
+     "group_chain": [
+      "ロボット山時のみ有効",
+      "120_共通グループ",
+      "120_パスカルの絶望",
+      "ハッキング中停止(8)",
+      "特殊ステージ中停止"
+     ],
+     "subphases": [
+      "p300:120_00_CD_2_RobotM_Shelter_A2",
+      "p300:120_30_CD_2_RobotM_TankBoss_A2",
+      "p300:120_50_CD_2_RobotM_Operate1_A2",
+      "p300:120_70_CD_2_RobotM_Operate2_A2",
+      "p300:120_90_CD_2_RobotM_Pascal_A2",
+      "p300:120_95_CD_2_Branch_A2_9S"
+     ],
+     "scene_states": [
+      "Route/C",
+      "Route/D"
+     ],
+     "params": {
+      "NameTag": "pascal"
+     },
+     "area": "Abandoned Factory",
+     "area_source": "name_keyword",
+     "note": "entite pl1000 posee dans le meme fichier et les memes sous-phases"
+    },
+    {
+     "objId": "pl1000",
+     "kind": "layout",
+     "position": [
+      -449.92,
+      12.92,
+      515.1
+     ],
+     "file": "ph3/p300.dat",
+     "member": "p300_hap.pak",
+     "hap": "戦車戦",
+     "action": "オブジェ配置-パスカル",
+     "group_chain": [
+      "防衛戦",
+      "120_30_CD_2_ロボット山_戦車戦",
+      "120_パスカルの絶望",
+      "ハッキング中停止(8)",
+      "特殊ステージ中停止"
+     ],
+     "subphases": [
+      "p300:120_00_CD_2_RobotM_Shelter_A2",
+      "p300:120_30_CD_2_RobotM_TankBoss_A2",
+      "p300:120_50_CD_2_RobotM_Operate1_A2",
+      "p300:120_70_CD_2_RobotM_Operate2_A2",
+      "p300:120_90_CD_2_RobotM_Pascal_A2",
+      "p300:120_95_CD_2_Branch_A2_9S"
+     ],
+     "scene_states": [
+      "Route/C",
+      "Route/D"
+     ],
+     "area": "Abandoned Factory",
+     "area_source": "name_keyword",
+     "note": "entite pl1000 posee dans le meme fichier et les memes sous-phases"
+    },
+    {
+     "objId": "pl1000",
+     "setType": 4,
+     "kind": "layout",
+     "position": [
+      -450.98,
+      13.06,
+      492.7
+     ],
+     "file": "ph3/p300.dat",
+     "member": "p300_hap.pak",
+     "hap": "最後の選択",
+     "action": "オブジェ配置-パスカルの最後",
+     "group_chain": [
+      "パスカルの最後",
+      "パスカル最後の選択",
+      "120_90_CD_2_ロボット山_パスカルの最後の選択",
+      "120_パスカルの絶望",
+      "ハッキング中停止(8)",
+      "特殊ステージ中停止"
+     ],
+     "subphases": [
+      "p300:120_00_CD_2_RobotM_Shelter_A2",
+      "p300:120_30_CD_2_RobotM_TankBoss_A2",
+      "p300:120_50_CD_2_RobotM_Operate1_A2",
+      "p300:120_70_CD_2_RobotM_Operate2_A2",
+      "p300:120_90_CD_2_RobotM_Pascal_A2",
+      "p300:120_95_CD_2_Branch_A2_9S"
+     ],
+     "scene_states": [
+      "Route/C",
+      "Route/D"
+     ],
+     "params": {
+      "NameTag": "pascal"
+     },
+     "area": "Abandoned Factory",
+     "area_source": "name_keyword",
+     "note": "entite pl1000 posee dans le meme fichier et les memes sous-phases"
+    },
+    {
+     "objId": "pl1000",
+     "setType": 6,
+     "kind": "layout",
+     "position": [
+      -451.27,
+      23.89,
+      602.17
+     ],
+     "file": "ph3/p300.dat",
+     "member": "p300_hap.pak",
+     "hap": "キャラ配置",
+     "action": "オブジェ配置-パスカル操作",
+     "group_chain": [
+      "設置物",
+      "パスカル最後の選択",
+      "120_90_CD_2_ロボット山_パスカルの最後の選択",
+      "120_パスカルの絶望",
+      "ハッキング中停止(8)",
+      "特殊ステージ中停止"
+     ],
+     "subphases": [
+      "p300:120_00_CD_2_RobotM_Shelter_A2",
+      "p300:120_30_CD_2_RobotM_TankBoss_A2",
+      "p300:120_50_CD_2_RobotM_Operate1_A2",
+      "p300:120_70_CD_2_RobotM_Operate2_A2",
+      "p300:120_90_CD_2_RobotM_Pascal_A2",
+      "p300:120_95_CD_2_Branch_A2_9S"
+     ],
+     "scene_states": [
+      "Route/C",
+      "Route/D"
+     ],
+     "area": "Abandoned Factory",
+     "area_source": "name_keyword",
+     "note": "entite pl1000 posee dans le meme fichier et les memes sous-phases"
+    }
+   ],
+   "positions_total": 4
+  },
+  {
+   "SaveID": 73,
+   "name": "Pascal",
+   "source": "logic_gaps",
+   "confidence": "high",
+   "unlock": [
+    {
+     "area": "Flooded City",
+     "how": "hap EmListUnlockAction (敵図鑑解放)",
+     "rule": "exe 0x3A04C0 -> 0x8257C0",
+     "file": "ph2/p200.dat",
+     "member": "p200_hap.pak",
+     "hap": "流れ(2)",
+     "action": "敵図鑑解放",
+     "group_chain": [
+      "A(Ｂルートは通らない)",
+      "100_水没都市_怪獣戦後",
+      "ハッキング中停止(7)",
+      "特殊ステージ中停止"
+     ],
+     "subphases": [
+      "p200:100_A_Submerge_City_2B"
+     ],
+     "scene_states": [],
+     "confidence": "high"
+    }
+   ],
+   "positions": [],
+   "positions_total": 0
+  },
+  {
+   "SaveID": 77,
+   "name": "Big Sister Machine",
+   "source": "logic_gaps",
+   "confidence": "high",
+   "unlock": [
+    {
+     "how": "quest completion",
+     "quest": "q110",
+     "quest_name": "Lost Girl",
+     "rule": "exe 0x3F8671 -> 0x8259D0 (QueID == '0x%03d' % quete)",
+     "quest_giver_positions": [
+      [
+       446.0691,
+       -1.328,
+       -47.4986
+      ]
+     ],
+     "confidence": "high"
+    },
+    {
+     "how": "quest completion",
+     "quest": "q110",
+     "quest_name": "Lost Girl",
+     "rule": "exe 0x3F8671 -> 0x8259D0 (QueID == '0x%03d' % quete)",
+     "quest_giver_positions": [
+      [
+       446.0691,
+       -1.328,
+       -47.4986
+      ]
+     ],
+     "confidence": "high"
+    }
+   ],
+   "positions": [
+    {
+     "objId": "em001b",
+     "setFlag": 1074266112,
+     "kind": "layout",
+     "position": [
+      -569.4,
+      -4.18,
+      -684.47
+     ],
+     "file": "quest/q110.dat",
+     "member": "q110_hap.pak",
+     "hap": "砂漠妹ロボ",
+     "action": "オブジェ配置エリア",
+     "group_chain": [
+      "q110/RUN_1~2",
+      "進行不能になるまで有効",
+      "q110/BREAKまで有効",
+      "ハッキング中停止(3)"
+     ],
+     "scene_states": [
+      "0x199ba17a",
+      "NOT 0x1218f1d8",
+      "NOT 0xb94f1357",
+      "NOT 0xe9bf7664",
+      "q110/RUN_1",
+      "q110/RUN_2"
+     ],
+     "params": {
+      "NameTag": "youngsister",
+      "speedRate": "1.25"
+     },
+     "area": "Desert Zone",
+     "area_source": "name_keyword",
+     "note": "ennemi du meme EmID/setType (combat de la quete ; la donnee vient a la fin de la quete)"
+    },
+    {
+     "objId": "em001b",
+     "setFlag": 524288,
+     "kind": "layout",
+     "position": [
+      444.23,
+      -1.33,
+      -45.37
+     ],
+     "file": "st1/r140.dat",
+     "member": "r140_hap.pak",
+     "hap": "妹ロボ(2)",
+     "action": "オブジェ配置",
+     "group_chain": [
+      "sub_110/クリア後に有効",
+      "村人_サブクエNPC",
+      "パスカル村_村人配置",
+      "ハッキング中停止(9)"
+     ],
+     "scene_states": [
+      "0xff67b389",
+      "NOT 0x4469eb13",
+      "NOT 0xd3d00f73",
+      "q110/CLR"
+     ],
+     "params": {
+      "NameTag": "youngsister",
+      "Lv": "10"
+     },
+     "area": "Pascal's Village",
+     "area_source": "name_keyword",
+     "note": "ennemi du meme EmID/setType (combat de la quete ; la donnee vient a la fin de la quete)"
+    }
+   ],
+   "positions_total": 2
+  },
+  {
+   "SaveID": 81,
+   "name": "High-speed Machine",
+   "source": "logic_gaps",
+   "confidence": "high",
+   "unlock": [
+    {
+     "how": "quest completion",
+     "quest": "q300",
+     "quest_name": "Speed Star",
+     "rule": "exe 0x3F8671 -> 0x8259D0 (QueID == '0x%03d' % quete)",
+     "quest_giver_positions": [
+      [
+       58.8042,
+       21.8078,
+       564.9041
+      ]
+     ],
+     "confidence": "high"
+    }
+   ],
+   "positions": [
+    {
+     "objId": "emb033",
+     "setFlag": 1074266112,
+     "kind": "layout",
+     "position": [
+      58.8,
+      21.81,
+      564.9
+     ],
+     "file": "quest/q300.dat",
+     "member": "q300_hap.pak",
+     "hap": "スピードスター",
+     "action": "オブジェ配置エリア",
+     "group_chain": [
+      "q300/REQ",
+      "進行不可になるまで有効(7)",
+      "ダンジョンで無効_q300",
+      "ハッキング中停止"
+     ],
+     "scene_states": [
+      "NOT 0x0be35e7c",
+      "NOT 0x1b35bf40",
+      "NOT 0x5b73d702",
+      "NOT 0x6eae38de",
+      "NOT 0xc27a86b8",
+      "NOT q300/DONE",
+      "NOT q300/FIN"
+     ],
+     "params": {
+      "speedRate": "1.2",
+      "NameTag": "robobusy"
+     },
+     "note": "ennemi du meme EmID/setType (combat de la quete ; la donnee vient a la fin de la quete)"
+    },
+    {
+     "objId": "emb033",
+     "setFlag": 3221749760,
+     "kind": "layout",
+     "position": [
+      28.37,
+      21.08,
+      417.06
+     ],
+     "file": "quest/q300.dat",
+     "member": "q300_hap.pak",
+     "hap": "第三レース_レース開始(2)",
+     "action": "オブジェ配置",
+     "group_chain": [
+      "q300/RUN_5",
+      "進行不可になるまで有効(7)",
+      "ダンジョンで無効_q300",
+      "ハッキング中停止"
+     ],
+     "scene_states": [
+      "NOT 0x0be35e7c",
+      "NOT 0x5b73d702",
+      "NOT 0xc27a86b8",
+      "q300/CLR",
+      "q300/RUN_5"
+     ],
+     "params": {
+      "speedRate": "1.5",
+      "NameTag": "robobusy"
+     },
+     "note": "ennemi du meme EmID/setType (combat de la quete ; la donnee vient a la fin de la quete)"
+    },
+    {
+     "objId": "emb033",
+     "setFlag": 3221749760,
+     "kind": "layout",
+     "position": [
+      58.52,
+      -18.0,
+      482.33
+     ],
+     "file": "quest/q300.dat",
+     "member": "q300_hap.pak",
+     "hap": "第一レース_レース開始",
+     "action": "オブジェ配置",
+     "group_chain": [
+      "q300/RUN_1",
+      "進行不可になるまで有効(7)",
+      "ダンジョンで無効_q300",
+      "ハッキング中停止"
+     ],
+     "scene_states": [
+      "NOT 0x0be35e7c",
+      "NOT 0x5b73d702",
+      "NOT 0xc27a86b8",
+      "q300/RUN_1",
+      "q300/RUN_2"
+     ],
+     "params": {
+      "speedRate": "1.3",
+      "NameTag": "robobusy"
+     },
+     "note": "ennemi du meme EmID/setType (combat de la quete ; la donnee vient a la fin de la quete)"
+    },
+    {
+     "objId": "emb033",
+     "setFlag": 3221749760,
+     "kind": "layout",
+     "position": [
+      -10.55,
+      18.56,
+      274.08
+     ],
+     "file": "quest/q300.dat",
+     "member": "q300_hap.pak",
+     "hap": "第二レース_レース開始",
+     "action": "オブジェ配置",
+     "group_chain": [
+      "q300/RUN_3",
+      "進行不可になるまで有効(7)",
+      "ダンジョンで無効_q300",
+      "ハッキング中停止"
+     ],
+     "scene_states": [
+      "NOT 0x0be35e7c",
+      "NOT 0x5b73d702",
+      "NOT 0xc27a86b8",
+      "q300/RUN_3",
+      "q300/RUN_4"
+     ],
+     "params": {
+      "speedRate": "1.4",
+      "NameTag": "robobusy"
+     },
+     "note": "ennemi du meme EmID/setType (combat de la quete ; la donnee vient a la fin de la quete)"
+    }
+   ],
+   "positions_total": 4
+  },
+  {
+   "SaveID": 107,
+   "name": "Small Stubby",
+   "source": "logic_gaps",
+   "confidence": "medium",
+   "unlock": [
+    {
+     "how": "kill after EMP attack",
+     "rule": "exe 0x825780 : setType remplace par 10 si [ennemi+0x2C32C] != 0 ; drapeau mis par 0x53FCCD (fn 0x53F890) et 0x69646F (fn 0x692819), etats d'attaque (motions 05a0..05a2 / EM0051_*)",
+     "data_source": "aucune : pas de setType 10 dans les hap ; tout em0000 tue apres avoir declenche cette attaque",
+     "confidence": "medium"
+    }
+   ],
+   "positions": [],
+   "positions_total": 0
+  },
+  {
+   "SaveID": 108,
+   "name": "Small Biped",
+   "source": "logic_gaps",
+   "confidence": "medium",
+   "unlock": [
+    {
+     "how": "kill after EMP attack",
+     "rule": "exe 0x825780 : setType remplace par 10 si [ennemi+0x2C32C] != 0 ; drapeau mis par 0x53FCCD (fn 0x53F890) et 0x69646F (fn 0x692819), etats d'attaque (motions 05a0..05a2 / EM0051_*)",
+     "data_source": "aucune : pas de setType 10 dans les hap ; tout em0050 tue apres avoir declenche cette attaque",
+     "confidence": "medium"
+    }
+   ],
+   "positions": [],
+   "positions_total": 0
+  },
+  {
+   "SaveID": 109,
+   "name": "Medium Biped",
+   "source": "logic_gaps",
+   "confidence": "medium",
+   "unlock": [
+    {
+     "how": "kill after EMP attack",
+     "rule": "exe 0x825780 : setType remplace par 10 si [ennemi+0x2C32C] != 0 ; drapeau mis par 0x53FCCD (fn 0x53F890) et 0x69646F (fn 0x692819), etats d'attaque (motions 05a0..05a2 / EM0051_*)",
+     "data_source": "aucune : pas de setType 10 dans les hap ; tout em0010 tue apres avoir declenche cette attaque",
+     "confidence": "medium"
+    }
+   ],
+   "positions": [],
+   "positions_total": 0
+  },
+  {
+   "SaveID": 110,
+   "name": "Goliath Biped",
+   "source": "logic_gaps",
+   "confidence": "medium",
+   "unlock": [
+    {
+     "how": "kill after EMP attack",
+     "rule": "exe 0x825780 : setType remplace par 10 si [ennemi+0x2C32C] != 0 ; drapeau mis par 0x53FCCD (fn 0x53F890) et 0x69646F (fn 0x692819), etats d'attaque (motions 05a0..05a2 / EM0051_*)",
+     "data_source": "aucune : pas de setType 10 dans les hap ; tout em0040 tue apres avoir declenche cette attaque",
+     "confidence": "medium"
+    }
+   ],
+   "positions": [],
+   "positions_total": 0
+  },
+  {
+   "SaveID": 114,
+   "name": "Adam (Battle in the Alien Ship)",
+   "source": "logic_gaps",
+   "confidence": "high",
+   "unlock": [
+    {
+     "area": "Alien Ship",
+     "how": "hap EmListUnlockAction (敵図鑑解放)",
+     "rule": "exe 0x3A04C0 -> 0x8257C0",
+     "file": "ph2/p200.dat",
+     "member": "p200_hap.pak",
+     "hap": "Bルート",
+     "action": "敵図鑑解放(2)",
+     "group_chain": [
+      "B",
+      "10_20_アダムイヴ_終了イベント",
+      "ハッキング中停止(7)",
+      "特殊ステージ中停止"
+     ],
+     "subphases": [
+      "p200:10_20_AB_Alien_Ship_Battle",
+      "p200:10_30_AB_Alien_Ship_End"
+     ],
+     "scene_states": [
+      "Route/A",
+      "Route/B"
+     ],
+     "confidence": "high"
+    },
+    {
+     "area": "Alien Ship",
+     "how": "hap EmListUnlockAction (敵図鑑解放)",
+     "rule": "exe 0x3A04C0 -> 0x8257C0",
+     "file": "ph2/p200.dat",
+     "member": "p200_33d262a8_grp.pak",
+     "hap": "Aルート",
+     "action": "敵図鑑解放(2)",
+     "group_chain": [
+      "A",
+      "10_20_アダムイヴ_終了イベント",
+      "ハッキング中停止(7)",
+      "特殊ステージ中停止"
+     ],
+     "subphases": [
+      "p200:10_20_AB_Alien_Ship_Battle",
+      "p200:10_30_AB_Alien_Ship_End"
+     ],
+     "scene_states": [
+      "Route/A",
+      "Route/B"
+     ],
+     "confidence": "high"
+    }
+   ],
+   "positions": [],
+   "positions_total": 0
+  },
+  {
+   "SaveID": 117,
+   "name": "Eve (Final Battle)",
+   "source": "logic_gaps",
+   "confidence": "high",
+   "unlock": [
+    {
+     "how": "ending",
+     "trigger": "saut de phase vers pf10 EndRoll_A ou BackTitle_A",
+     "rule": "exe 0x85C160 : code -1 -> 0x85C89D enregistre em5000 setType 5 puis 6",
+     "confidence": "high"
+    }
+   ],
+   "positions": [
+    {
+     "objId": "em5000",
+     "setType": 1,
+     "kind": "layout",
+     "position": [
+      494.03,
+      -98.71,
+      348.07
+     ],
+     "file": "ph2/p200.dat",
+     "member": "p200_hap.pak",
+     "hap": "イベント",
+     "action": "敵セット",
+     "group_chain": [
+      "AB(6)",
+      "10_10_アダムイヴ_開始イベント",
+      "ハッキング中停止(7)",
+      "特殊ステージ中停止"
+     ],
+     "subphases": [
+      "p200:10_10_AB_Alien_Ship_Start",
+      "p200:10_20_AB_Alien_Ship_Battle"
+     ],
+     "params": {
+      "HP_BAR_OFF": "1",
+      "Lv": "16"
+     },
+     "area": "Alien Ship",
+     "area_source": "owner_subphase",
+     "note": "combat final d'Eve (setType du placement != 5/6)"
+    },
+    {
+     "objId": "em5000",
+     "setType": 11,
+     "kind": "layout",
+     "position": [
+      -30.16,
+      114.29,
+      670.37
+     ],
+     "file": "ph2/p200.dat",
+     "member": "p200_hap.pak",
+     "hap": "食卓イベント2回目",
+     "action": "敵セットエリア",
+     "group_chain": [
+      "95_00_B_大廃墟都市_アダムとイヴの食卓：2回目",
+      "ハッキング中停止(7)",
+      "特殊ステージ中停止"
+     ],
+     "subphases": [
+      "p200:95_00_B_Ruined_City_diningtable"
+     ],
+     "scene_states": [
+      "Route/B"
+     ],
+     "area": "City Ruins",
+     "area_source": "name_keyword",
+     "note": "combat final d'Eve (setType du placement != 5/6)"
+    },
+    {
+     "objId": "em5000",
+     "setType": 15,
+     "kind": "layout",
+     "position": [
+      7.24,
+      0.74,
+      312.41
+     ],
+     "file": "quest/qabd.dat",
+     "member": "qabd_hap.pak",
+     "hap": "流れ",
+     "action": "敵セットエリア",
+     "note": "combat final d'Eve (setType du placement != 5/6)"
+    },
+    {
+     "objId": "em5000",
+     "setType": 12,
+     "kind": "layout",
+     "position": [
+      -0.15,
+      0.0,
+      6.15
+     ],
+     "file": "quest/qabd.dat",
+     "member": "qabd_hap.pak",
+     "hap": "第一戦",
+     "action": "敵セットエリア_イヴ",
+     "params": {
+      "Lv": "1"
+     },
+     "note": "combat final d'Eve (setType du placement != 5/6)"
+    },
+    {
+     "objId": "em5000",
+     "setType": 13,
+     "kind": "layout",
+     "position": [
+      -0.15,
+      0.0,
+      50.3
+     ],
+     "file": "quest/qabd.dat",
+     "member": "qabd_hap.pak",
+     "hap": "第二戦",
+     "action": "敵セットエリア_イヴ",
+     "params": {
+      "Lv": "1"
+     },
+     "note": "combat final d'Eve (setType du placement != 5/6)"
+    },
+    {
+     "objId": "em5000",
+     "setType": 14,
+     "kind": "layout",
+     "position": [
+      -0.15,
+      0.0,
+      69.38
+     ],
+     "file": "quest/qabd.dat",
+     "member": "qabd_hap.pak",
+     "hap": "第三戦",
+     "action": "敵セットエリア_イヴ",
+     "params": {
+      "Lv": "1"
+     },
+     "note": "combat final d'Eve (setType du placement != 5/6)"
+    }
+   ],
+   "positions_total": 6
+  },
+  {
+   "SaveID": 118,
+   "name": "Eve (Final Battle)",
+   "source": "logic_gaps",
+   "confidence": "high",
+   "unlock": [
+    {
+     "how": "ending",
+     "trigger": "saut de phase vers pf10 EndRoll_A ou BackTitle_A",
+     "rule": "exe 0x85C160 : code -1 -> 0x85C89D enregistre em5000 setType 5 puis 6",
+     "confidence": "high"
+    }
+   ],
+   "positions": [
+    {
+     "objId": "em5000",
+     "setType": 1,
+     "kind": "layout",
+     "position": [
+      494.03,
+      -98.71,
+      348.07
+     ],
+     "file": "ph2/p200.dat",
+     "member": "p200_hap.pak",
+     "hap": "イベント",
+     "action": "敵セット",
+     "group_chain": [
+      "AB(6)",
+      "10_10_アダムイヴ_開始イベント",
+      "ハッキング中停止(7)",
+      "特殊ステージ中停止"
+     ],
+     "subphases": [
+      "p200:10_10_AB_Alien_Ship_Start",
+      "p200:10_20_AB_Alien_Ship_Battle"
+     ],
+     "params": {
+      "HP_BAR_OFF": "1",
+      "Lv": "16"
+     },
+     "area": "Alien Ship",
+     "area_source": "owner_subphase",
+     "note": "combat final d'Eve (setType du placement != 5/6)"
+    },
+    {
+     "objId": "em5000",
+     "setType": 11,
+     "kind": "layout",
+     "position": [
+      -30.16,
+      114.29,
+      670.37
+     ],
+     "file": "ph2/p200.dat",
+     "member": "p200_hap.pak",
+     "hap": "食卓イベント2回目",
+     "action": "敵セットエリア",
+     "group_chain": [
+      "95_00_B_大廃墟都市_アダムとイヴの食卓：2回目",
+      "ハッキング中停止(7)",
+      "特殊ステージ中停止"
+     ],
+     "subphases": [
+      "p200:95_00_B_Ruined_City_diningtable"
+     ],
+     "scene_states": [
+      "Route/B"
+     ],
+     "area": "City Ruins",
+     "area_source": "name_keyword",
+     "note": "combat final d'Eve (setType du placement != 5/6)"
+    },
+    {
+     "objId": "em5000",
+     "setType": 15,
+     "kind": "layout",
+     "position": [
+      7.24,
+      0.74,
+      312.41
+     ],
+     "file": "quest/qabd.dat",
+     "member": "qabd_hap.pak",
+     "hap": "流れ",
+     "action": "敵セットエリア",
+     "note": "combat final d'Eve (setType du placement != 5/6)"
+    },
+    {
+     "objId": "em5000",
+     "setType": 12,
+     "kind": "layout",
+     "position": [
+      -0.15,
+      0.0,
+      6.15
+     ],
+     "file": "quest/qabd.dat",
+     "member": "qabd_hap.pak",
+     "hap": "第一戦",
+     "action": "敵セットエリア_イヴ",
+     "params": {
+      "Lv": "1"
+     },
+     "note": "combat final d'Eve (setType du placement != 5/6)"
+    },
+    {
+     "objId": "em5000",
+     "setType": 13,
+     "kind": "layout",
+     "position": [
+      -0.15,
+      0.0,
+      50.3
+     ],
+     "file": "quest/qabd.dat",
+     "member": "qabd_hap.pak",
+     "hap": "第二戦",
+     "action": "敵セットエリア_イヴ",
+     "params": {
+      "Lv": "1"
+     },
+     "note": "combat final d'Eve (setType du placement != 5/6)"
+    },
+    {
+     "objId": "em5000",
+     "setType": 14,
+     "kind": "layout",
+     "position": [
+      -0.15,
+      0.0,
+      69.38
+     ],
+     "file": "quest/qabd.dat",
+     "member": "qabd_hap.pak",
+     "hap": "第三戦",
+     "action": "敵セットエリア_イヴ",
+     "params": {
+      "Lv": "1"
+     },
+     "note": "combat final d'Eve (setType du placement != 5/6)"
+    }
+   ],
+   "positions_total": 6
+  },
+  {
+   "SaveID": 124,
+   "name": "Ernst",
+   "source": "logic_gaps",
+   "confidence": "high",
+   "unlock": [
+    {
+     "how": "quest completion",
+     "quest": "q440",
+     "quest_name": "Treasure Hunt at the Castle",
+     "rule": "exe 0x3F8671 -> 0x8259D0 (QueID == '0x%03d' % quete)",
+     "quest_giver_positions": [
+      [
+       579.7039,
+       -40.0732,
+       -125.4836
+      ]
+     ],
+     "confidence": "high"
+    }
+   ],
+   "positions": [
+    {
+     "objId": "bg2081",
+     "kind": "layout",
+     "position": [
+      1279.23,
+      -31.63,
+      -503.88
+     ],
+     "file": "st1/r160.dat",
+     "member": "r160_hap.pak",
+     "hap": "q440",
+     "action": "森の王",
+     "group_chain": [
+      "専用EVサブフェーズ中に無効",
+      "ハッキング中停止_r160"
+     ],
+     "scene_states": [
+      "NOT 0x3a1171c3"
+     ],
+     "area": "Forest Zone",
+     "area_source": "name_keyword",
+     "note": "ennemi du meme EmID/setType (combat de la quete ; la donnee vient a la fin de la quete)"
+    },
+    {
+     "objId": "bg2081",
+     "kind": "layout",
+     "position": [
+      1279.23,
+      -31.64,
+      -503.88
+     ],
+     "file": "st1/r160.dat",
+     "member": "r160_hap.pak",
+     "hap": "初代王の墓",
+     "action": "オブジェ配置",
+     "group_chain": [
+      "オブジェクト関連_森の城",
+      "森の城_城内",
+      "専用EVサブフェーズ中に無効",
+      "ハッキング中停止_r160"
+     ],
+     "scene_states": [
+      "NOT 0x3a1171c3"
+     ],
+     "area": "Forest Castle",
+     "area_source": "name_keyword",
+     "note": "ennemi du meme EmID/setType (combat de la quete ; la donnee vient a la fin de la quete)"
+    }
+   ],
+   "positions_total": 2
+  },
+  {
+   "SaveID": 129,
+   "name": "Hegel",
+   "source": "logic_gaps",
+   "confidence": "high",
+   "unlock": [
+    {
+     "how": "kill",
+     "rule": "exe 0x8257C0 (mort, masque setFlag 0x0)",
+     "placements": 2,
+     "confidence": "high"
+    },
+    {
+     "how": "same as 128",
+     "rule": "2 lignes identiques (em8800 st0, mode 0) : 0x8257C0 ne s'arrete pas a la 1re ligne -> 128 et 129 debloquees ensemble",
+     "confidence": "high"
+    }
+   ],
+   "positions": [
+    {
+     "objId": "em8800",
+     "kind": "layout",
+     "position": [
+      -1151.0,
+      -27.38,
+      -533.0
+     ],
+     "file": "ph3/p300.dat",
+     "member": "p300_hap.pak",
+     "hap": "Boss",
+     "action": "敵セット",
+     "group_chain": [
+      "81~83_ボス",
+      "81to84_砂漠ボス戦",
+      "ハッキング中停止(8)",
+      "特殊ステージ中停止"
+     ],
+     "subphases": [
+      "p300:81_CD_1_DesertBoss_HD_A2",
+      "p300:82_CD_1_DesertBoss_1_A2",
+      "p300:83_CD_1_DesertBoss_HD_2_A2",
+      "p300:84_CD_1_DesertBoss_HK_A2"
+     ],
+     "params": {
+      "Lv": "48"
+     },
+     "area": "Desert Zone",
+     "area_source": "name_keyword"
+    },
+    {
+     "objId": "em8800",
+     "setFlag": 262144,
+     "kind": "layout",
+     "position": [
+      -1134.14,
+      -27.38,
+      -476.29
+     ],
+     "file": "ph3/p300.dat",
+     "member": "p300_hap.pak",
+     "hap": "Boss",
+     "action": "敵セット_メモリロード",
+     "group_chain": [
+      "81~83_ボス",
+      "81to84_砂漠ボス戦",
+      "ハッキング中停止(8)",
+      "特殊ステージ中停止"
+     ],
+     "subphases": [
+      "p300:81_CD_1_DesertBoss_HD_A2",
+      "p300:82_CD_1_DesertBoss_1_A2",
+      "p300:83_CD_1_DesertBoss_HD_2_A2",
+      "p300:84_CD_1_DesertBoss_HK_A2"
+     ],
+     "area": "Desert Zone",
+     "area_source": "name_keyword"
+    }
+   ],
+   "positions_total": 2
+  },
+  {
+   "SaveID": 145,
+   "name": "21O",
+   "source": "logic_gaps",
+   "confidence": "high",
+   "unlock": [
+    {
+     "area": "Amusement Park",
+     "how": "hap EmListUnlockAction (敵図鑑解放)",
+     "rule": "exe 0x3A04C0 -> 0x8257C0",
+     "file": "ph3/p300.dat",
+     "member": "p300_hap.pak",
+     "hap": "9S再起動",
+     "action": "敵図鑑解放",
+     "group_chain": [
+      "250_遊園地_9S塔へ",
+      "ハッキング中停止(8)",
+      "特殊ステージ中停止"
+     ],
+     "subphases": [
+      "p300:250_CD_Unknown_9S"
+     ],
+     "scene_states": [],
+     "confidence": "high"
+    }
+   ],
+   "positions": [],
+   "positions_total": 0
+  },
+  {
+   "SaveID": 151,
+   "name": "Hateful Sister",
+   "source": "logic_gaps",
+   "confidence": "high",
+   "unlock": [
+    {
+     "how": "quest state",
+     "state": "q400/RUN_2",
+     "quest": "q400",
+     "rule": "exe 0x825AE0 (appele par 0x3F1CA7) : RUN_1 -> 150, RUN_2 -> +151, DONE -> +152",
+     "confidence": "high"
+    }
+   ],
+   "positions": [
+    {
+     "objId": "emb000",
+     "kind": "layout",
+     "position": [
+      -137.4,
+      4.22,
+      333.15
+     ],
+     "file": "quest/q400.dat",
+     "member": "q400_b6b3b30d_grp.pak",
+     "hap": "q400_大ハイキョ都市",
+     "action": "敵セットエリア_ゼンマイゴールド",
+     "params": {
+      "Lv": "25",
+      "UniqueID": "0x28",
+      "LOOK": "1"
+     },
+     "area": "City Ruins",
+     "area_source": "name_keyword",
+     "note": "emb000 du script/hap de q400"
+    },
+    {
+     "objId": "emb000",
+     "kind": "layout",
+     "position": [
+      565.39,
+      -70.37,
+      777.17
+     ],
+     "file": "quest/q400.dat",
+     "member": "q400_ff7e37ac_grp.pak",
+     "hap": "q401_水没都市",
+     "action": "敵セットエリア_ゼンマイゴールド",
+     "params": {
+      "Lv": "25",
+      "UniqueID": "0x30",
+      "LOOK": "1"
+     },
+     "area": "Flooded City",
+     "area_source": "name_keyword",
+     "note": "emb000 du script/hap de q400"
+    },
+    {
+     "objId": "emb000",
+     "kind": "layout",
+     "position": [
+      -316.37,
+      -53.74,
+      -697.18
+     ],
+     "file": "quest/q400.dat",
+     "member": "q400_137b1c11_grp.pak",
+     "hap": "q402_砂漠",
+     "action": "敵セットエリア_ゼンマイゴールド",
+     "params": {
+      "Lv": "25",
+      "UniqueID": "0x29",
+      "LOOK": "1"
+     },
+     "area": "Desert Zone",
+     "area_source": "name_keyword",
+     "note": "emb000 du script/hap de q400"
+    }
+   ],
+   "positions_total": 3
+  },
+  {
+   "SaveID": 152,
+   "name": "Vengeful Child",
+   "source": "logic_gaps",
+   "confidence": "high",
+   "unlock": [
+    {
+     "how": "quest state",
+     "state": "q400/DONE",
+     "quest": "q400",
+     "rule": "exe 0x825AE0 (appele par 0x3F1CA7) : RUN_1 -> 150, RUN_2 -> +151, DONE -> +152",
+     "confidence": "high"
+    }
+   ],
+   "positions": [
+    {
+     "objId": "emb000",
+     "kind": "layout",
+     "position": [
+      -137.4,
+      4.22,
+      333.15
+     ],
+     "file": "quest/q400.dat",
+     "member": "q400_b6b3b30d_grp.pak",
+     "hap": "q400_大ハイキョ都市",
+     "action": "敵セットエリア_ゼンマイゴールド",
+     "params": {
+      "Lv": "25",
+      "UniqueID": "0x28",
+      "LOOK": "1"
+     },
+     "area": "City Ruins",
+     "area_source": "name_keyword",
+     "note": "emb000 du script/hap de q400"
+    },
+    {
+     "objId": "emb000",
+     "kind": "layout",
+     "position": [
+      565.39,
+      -70.37,
+      777.17
+     ],
+     "file": "quest/q400.dat",
+     "member": "q400_ff7e37ac_grp.pak",
+     "hap": "q401_水没都市",
+     "action": "敵セットエリア_ゼンマイゴールド",
+     "params": {
+      "Lv": "25",
+      "UniqueID": "0x30",
+      "LOOK": "1"
+     },
+     "area": "Flooded City",
+     "area_source": "name_keyword",
+     "note": "emb000 du script/hap de q400"
+    },
+    {
+     "objId": "emb000",
+     "kind": "layout",
+     "position": [
+      -316.37,
+      -53.74,
+      -697.18
+     ],
+     "file": "quest/q400.dat",
+     "member": "q400_137b1c11_grp.pak",
+     "hap": "q402_砂漠",
+     "action": "敵セットエリア_ゼンマイゴールド",
+     "params": {
+      "Lv": "25",
+      "UniqueID": "0x29",
+      "LOOK": "1"
+     },
+     "area": "Desert Zone",
+     "area_source": "name_keyword",
+     "note": "emb000 du script/hap de q400"
+    }
+   ],
+   "positions_total": 3
+  },
+  {
+   "SaveID": 156,
+   "name": "Gunman Biped",
+   "source": "logic_gaps",
+   "confidence": "high",
+   "unlock": [
+    {
+     "how": "quest completion",
+     "quest": "q590",
+     "quest_name": "Heritage of the Past",
+     "rule": "exe 0x3F8671 -> 0x8259D0 (QueID == '0x%03d' % quete)",
+     "quest_giver_positions": [
+      [
+       -1259.6724,
+       -19.2864,
+       -633.8124
+      ]
+     ],
+     "confidence": "high"
+    }
+   ],
+   "positions": [
+    {
+     "objId": "emb012",
+     "setType": 4,
+     "kind": "layout",
+     "position": [
+      -1245.74,
+      -33.37,
+      -514.98
+     ],
+     "file": "st1/r150.dat",
+     "member": "r150_hap.pak",
+     "hap": "敵セット",
+     "action": "敵セットエリア",
+     "group_chain": [
+      "q590_ガンマン",
+      "EM(7)",
+      "ハッキング中停止(9)"
+     ],
+     "scene_states": [
+      "0x311010fb"
+     ],
+     "params": {
+      "Lv": "40"
+     },
+     "area": "Desert Zone",
+     "area_source": "room_file",
+     "note": "ennemi du meme EmID/setType (combat de la quete ; la donnee vient a la fin de la quete)"
+    }
+   ],
+   "positions_total": 1
+  },
+  {
+   "SaveID": 157,
+   "name": "Gunman Flyer",
+   "source": "logic_gaps",
+   "confidence": "high",
+   "unlock": [
+    {
+     "how": "quest completion",
+     "quest": "q590",
+     "quest_name": "Heritage of the Past",
+     "rule": "exe 0x3F8671 -> 0x8259D0 (QueID == '0x%03d' % quete)",
+     "quest_giver_positions": [
+      [
+       -1259.6724,
+       -19.2864,
+       -633.8124
+      ]
+     ],
+     "confidence": "high"
+    }
+   ],
+   "positions": [
+    {
+     "objId": "emb031",
+     "kind": "layout",
+     "position": [
+      -1251.38,
+      -30.9,
+      -519.39
+     ],
+     "file": "st1/r150.dat",
+     "member": "r150_hap.pak",
+     "hap": "敵セット",
+     "action": "敵セットエリア",
+     "group_chain": [
+      "q590_ガンマン",
+      "EM(7)",
+      "ハッキング中停止(9)"
+     ],
+     "scene_states": [
+      "0x311010fb"
+     ],
+     "params": {
+      "Lv": "38"
+     },
+     "area": "Desert Zone",
+     "area_source": "room_file",
+     "note": "ennemi du meme EmID/setType (combat de la quete ; la donnee vient a la fin de la quete)"
+    },
+    {
+     "objId": "emb031",
+     "kind": "layout",
+     "position": [
+      -1243.75,
+      -30.9,
+      -521.09
+     ],
+     "file": "st1/r150.dat",
+     "member": "r150_hap.pak",
+     "hap": "敵セット",
+     "action": "敵セットエリア",
+     "group_chain": [
+      "q590_ガンマン",
+      "EM(7)",
+      "ハッキング中停止(9)"
+     ],
+     "scene_states": [
+      "0x311010fb"
+     ],
+     "params": {
+      "Lv": "40"
+     },
+     "area": "Desert Zone",
+     "area_source": "room_file",
+     "note": "ennemi du meme EmID/setType (combat de la quete ; la donnee vient a la fin de la quete)"
+    },
+    {
+     "objId": "emb031",
+     "kind": "layout",
+     "position": [
+      -1239.86,
+      -30.9,
+      -515.34
+     ],
+     "file": "st1/r150.dat",
+     "member": "r150_hap.pak",
+     "hap": "敵セット",
+     "action": "敵セットエリア",
+     "group_chain": [
+      "q590_ガンマン",
+      "EM(7)",
+      "ハッキング中停止(9)"
+     ],
+     "scene_states": [
+      "0x311010fb"
+     ],
+     "params": {
+      "Lv": "38"
+     },
+     "area": "Desert Zone",
+     "area_source": "room_file",
+     "note": "ennemi du meme EmID/setType (combat de la quete ; la donnee vient a la fin de la quete)"
+    }
+   ],
+   "positions_total": 3
+  },
+  {
+   "SaveID": 158,
+   "name": "Gunman Stubby",
+   "source": "logic_gaps",
+   "confidence": "high",
+   "unlock": [
+    {
+     "how": "quest completion",
+     "quest": "q590",
+     "quest_name": "Heritage of the Past",
+     "rule": "exe 0x3F8671 -> 0x8259D0 (QueID == '0x%03d' % quete)",
+     "quest_giver_positions": [
+      [
+       -1259.6724,
+       -19.2864,
+       -633.8124
+      ]
+     ],
+     "confidence": "high"
+    }
+   ],
+   "positions": [
+    {
+     "objId": "emb004",
+     "setType": 1,
+     "kind": "layout",
+     "position": [
+      -1248.95,
+      -33.51,
+      -524.62
+     ],
+     "file": "st1/r150.dat",
+     "member": "r150_hap.pak",
+     "hap": "敵セット",
+     "action": "敵セットエリア",
+     "group_chain": [
+      "q590_ガンマン",
+      "EM(7)",
+      "ハッキング中停止(9)"
+     ],
+     "scene_states": [
+      "0x311010fb"
+     ],
+     "params": {
+      "Lv": "38"
+     },
+     "area": "Desert Zone",
+     "area_source": "room_file",
+     "note": "ennemi du meme EmID/setType (combat de la quete ; la donnee vient a la fin de la quete)"
+    },
+    {
+     "objId": "emb004",
+     "setType": 1,
+     "kind": "layout",
+     "position": [
+      -1238.08,
+      -33.51,
+      -522.01
+     ],
+     "file": "st1/r150.dat",
+     "member": "r150_hap.pak",
+     "hap": "敵セット",
+     "action": "敵セットエリア",
+     "group_chain": [
+      "q590_ガンマン",
+      "EM(7)",
+      "ハッキング中停止(9)"
+     ],
+     "scene_states": [
+      "0x311010fb"
+     ],
+     "params": {
+      "Lv": "38"
+     },
+     "area": "Desert Zone",
+     "area_source": "room_file",
+     "note": "ennemi du meme EmID/setType (combat de la quete ; la donnee vient a la fin de la quete)"
+    },
+    {
+     "objId": "emb004",
+     "setType": 1,
+     "kind": "layout",
+     "position": [
+      -1243.2,
+      -33.51,
+      -526.58
+     ],
+     "file": "st1/r150.dat",
+     "member": "r150_hap.pak",
+     "hap": "敵セット",
+     "action": "敵セットエリア",
+     "group_chain": [
+      "q590_ガンマン",
+      "EM(7)",
+      "ハッキング中停止(9)"
+     ],
+     "scene_states": [
+      "0x311010fb"
+     ],
+     "params": {
+      "Lv": "38"
+     },
+     "area": "Desert Zone",
+     "area_source": "room_file",
+     "note": "ennemi du meme EmID/setType (combat de la quete ; la donnee vient a la fin de la quete)"
+    }
+   ],
+   "positions_total": 3
+  },
+  {
+   "SaveID": 161,
+   "name": "Zombie Clown",
+   "source": "logic_gaps",
+   "confidence": "high",
+   "unlock": [
+    {
+     "how": "quest completion",
+     "quest": "q660",
+     "quest_name": "Stamp Collecting",
+     "rule": "exe 0x3F8671 -> 0x8259D0 (QueID == '0x%03d' % quete)",
+     "quest_giver_positions": [
+      [
+       434.4938,
+       -0.2338,
+       298.2494
+      ]
+     ],
+     "confidence": "high"
+    }
+   ],
+   "positions": [
+    {
+     "objId": "emb052",
+     "kind": "layout",
+     "position": [
+      920.61,
+      -3.66,
+      309.22
+     ],
+     "file": "quest/q660.dat",
+     "member": "q660_f0c72e17_grp.pak",
+     "hap": "ピエロゾンビの群",
+     "action": "敵セットエリア-追加のピエロゾンビ",
+     "group_chain": [
+      "遊園地地下の時のみ有効",
+      "q660/RUN_1_進行中",
+      "進行不能になるまで_q660",
+      "クエストを破棄するまで_q660",
+      "ハッキング中停止_q660"
+     ],
+     "scene_states": [
+      "NOT 0x871b12b4",
+      "q660/CLR",
+      "q660/RUN_1"
+     ],
+     "params": {
+      "Lv": "20",
+      "Lv_B": "42"
+     },
+     "area": "Amusement Park",
+     "area_source": "name_keyword",
+     "note": "ennemi du meme EmID/setType (combat de la quete ; la donnee vient a la fin de la quete)"
+    },
+    {
+     "objId": "emb052",
+     "kind": "layout",
+     "position": [
+      923.28,
+      -3.66,
+      309.22
+     ],
+     "file": "quest/q660.dat",
+     "member": "q660_f0c72e17_grp.pak",
+     "hap": "ピエロゾンビの群",
+     "action": "敵セットエリア-追加のピエロゾンビ",
+     "group_chain": [
+      "遊園地地下の時のみ有効",
+      "q660/RUN_1_進行中",
+      "進行不能になるまで_q660",
+      "クエストを破棄するまで_q660",
+      "ハッキング中停止_q660"
+     ],
+     "scene_states": [
+      "NOT 0x871b12b4",
+      "q660/CLR",
+      "q660/RUN_1"
+     ],
+     "params": {
+      "Lv": "20",
+      "Lv_B": "42"
+     },
+     "area": "Amusement Park",
+     "area_source": "name_keyword",
+     "note": "ennemi du meme EmID/setType (combat de la quete ; la donnee vient a la fin de la quete)"
+    },
+    {
+     "objId": "emb052",
+     "kind": "layout",
+     "position": [
+      925.63,
+      -3.66,
+      309.22
+     ],
+     "file": "quest/q660.dat",
+     "member": "q660_f0c72e17_grp.pak",
+     "hap": "ピエロゾンビの群",
+     "action": "敵セットエリア-追加のピエロゾンビ",
+     "group_chain": [
+      "遊園地地下の時のみ有効",
+      "q660/RUN_1_進行中",
+      "進行不能になるまで_q660",
+      "クエストを破棄するまで_q660",
+      "ハッキング中停止_q660"
+     ],
+     "scene_states": [
+      "NOT 0x871b12b4",
+      "q660/CLR",
+      "q660/RUN_1"
+     ],
+     "params": {
+      "Lv": "20",
+      "Lv_B": "42"
+     },
+     "area": "Amusement Park",
+     "area_source": "name_keyword",
+     "note": "ennemi du meme EmID/setType (combat de la quete ; la donnee vient a la fin de la quete)"
+    },
+    {
+     "objId": "emb052",
+     "kind": "layout",
+     "position": [
+      928.52,
+      -3.66,
+      309.22
+     ],
+     "file": "quest/q660.dat",
+     "member": "q660_f0c72e17_grp.pak",
+     "hap": "ピエロゾンビの群",
+     "action": "敵セットエリア-追加のピエロゾンビ",
+     "group_chain": [
+      "遊園地地下の時のみ有効",
+      "q660/RUN_1_進行中",
+      "進行不能になるまで_q660",
+      "クエストを破棄するまで_q660",
+      "ハッキング中停止_q660"
+     ],
+     "scene_states": [
+      "NOT 0x871b12b4",
+      "q660/CLR",
+      "q660/RUN_1"
+     ],
+     "params": {
+      "Lv": "20",
+      "Lv_B": "42"
+     },
+     "area": "Amusement Park",
+     "area_source": "name_keyword",
+     "note": "ennemi du meme EmID/setType (combat de la quete ; la donnee vient a la fin de la quete)"
+    },
+    {
+     "objId": "emb052",
+     "kind": "layout",
+     "position": [
+      931.38,
+      -3.66,
+      309.22
+     ],
+     "file": "quest/q660.dat",
+     "member": "q660_f0c72e17_grp.pak",
+     "hap": "ピエロゾンビの群",
+     "action": "敵セットエリア-追加のピエロゾンビ",
+     "group_chain": [
+      "遊園地地下の時のみ有効",
+      "q660/RUN_1_進行中",
+      "進行不能になるまで_q660",
+      "クエストを破棄するまで_q660",
+      "ハッキング中停止_q660"
+     ],
+     "scene_states": [
+      "NOT 0x871b12b4",
+      "q660/CLR",
+      "q660/RUN_1"
+     ],
+     "params": {
+      "Lv": "20",
+      "Lv_B": "42"
+     },
+     "area": "Amusement Park",
+     "area_source": "name_keyword",
+     "note": "ennemi du meme EmID/setType (combat de la quete ; la donnee vient a la fin de la quete)"
+    },
+    {
+     "objId": "emb052",
+     "kind": "layout",
+     "position": [
+      934.49,
+      -3.66,
+      309.22
+     ],
+     "file": "quest/q660.dat",
+     "member": "q660_f0c72e17_grp.pak",
+     "hap": "ピエロゾンビの群",
+     "action": "敵セットエリア-追加のピエロゾンビ",
+     "group_chain": [
+      "遊園地地下の時のみ有効",
+      "q660/RUN_1_進行中",
+      "進行不能になるまで_q660",
+      "クエストを破棄するまで_q660",
+      "ハッキング中停止_q660"
+     ],
+     "scene_states": [
+      "NOT 0x871b12b4",
+      "q660/CLR",
+      "q660/RUN_1"
+     ],
+     "params": {
+      "Lv": "20",
+      "Lv_B": "42"
+     },
+     "area": "Amusement Park",
+     "area_source": "name_keyword",
+     "note": "ennemi du meme EmID/setType (combat de la quete ; la donnee vient a la fin de la quete)"
+    },
+    {
+     "objId": "emb052",
+     "kind": "layout",
+     "position": [
+      937.5,
+      -3.66,
+      309.22
+     ],
+     "file": "quest/q660.dat",
+     "member": "q660_f0c72e17_grp.pak",
+     "hap": "ピエロゾンビの群",
+     "action": "敵セットエリア-追加のピエロゾンビ",
+     "group_chain": [
+      "遊園地地下の時のみ有効",
+      "q660/RUN_1_進行中",
+      "進行不能になるまで_q660",
+      "クエストを破棄するまで_q660",
+      "ハッキング中停止_q660"
+     ],
+     "scene_states": [
+      "NOT 0x871b12b4",
+      "q660/CLR",
+      "q660/RUN_1"
+     ],
+     "params": {
+      "Lv": "20",
+      "Lv_B": "42"
+     },
+     "area": "Amusement Park",
+     "area_source": "name_keyword",
+     "note": "ennemi du meme EmID/setType (combat de la quete ; la donnee vient a la fin de la quete)"
+    },
+    {
+     "objId": "emb052",
+     "kind": "layout",
+     "position": [
+      857.66,
+      1.19,
+      309.21
+     ],
+     "file": "quest/q660.dat",
+     "member": "q660_f0c72e17_grp.pak",
+     "hap": "ピエロゾンビの群",
+     "action": "敵セットエリア-追加のピエロゾンビ",
+     "group_chain": [
+      "遊園地地下の時のみ有効",
+      "q660/RUN_1_進行中",
+      "進行不能になるまで_q660",
+      "クエストを破棄するまで_q660",
+      "ハッキング中停止_q660"
+     ],
+     "scene_states": [
+      "NOT 0x871b12b4",
+      "q660/CLR",
+      "q660/RUN_1"
+     ],
+     "params": {
+      "Lv": "20",
+      "Lv_B": "42"
+     },
+     "area": "Amusement Park",
+     "area_source": "name_keyword",
+     "note": "ennemi du meme EmID/setType (combat de la quete ; la donnee vient a la fin de la quete)"
+    },
+    {
+     "objId": "emb052",
+     "kind": "layout",
+     "position": [
+      855.31,
+      1.11,
+      309.22
+     ],
+     "file": "quest/q660.dat",
+     "member": "q660_f0c72e17_grp.pak",
+     "hap": "ピエロゾンビの群",
+     "action": "敵セットエリア-追加のピエロゾンビ",
+     "group_chain": [
+      "遊園地地下の時のみ有効",
+      "q660/RUN_1_進行中",
+      "進行不能になるまで_q660",
+      "クエストを破棄するまで_q660",
+      "ハッキング中停止_q660"
+     ],
+     "scene_states": [
+      "NOT 0x871b12b4",
+      "q660/CLR",
+      "q660/RUN_1"
+     ],
+     "params": {
+      "Lv": "20",
+      "Lv_B": "42"
+     },
+     "area": "Amusement Park",
+     "area_source": "name_keyword",
+     "note": "ennemi du meme EmID/setType (combat de la quete ; la donnee vient a la fin de la quete)"
+    },
+    {
+     "objId": "emb052",
+     "kind": "layout",
+     "position": [
+      852.42,
+      1.12,
+      309.22
+     ],
+     "file": "quest/q660.dat",
+     "member": "q660_f0c72e17_grp.pak",
+     "hap": "ピエロゾンビの群",
+     "action": "敵セットエリア-追加のピエロゾンビ",
+     "group_chain": [
+      "遊園地地下の時のみ有効",
+      "q660/RUN_1_進行中",
+      "進行不能になるまで_q660",
+      "クエストを破棄するまで_q660",
+      "ハッキング中停止_q660"
+     ],
+     "scene_states": [
+      "NOT 0x871b12b4",
+      "q660/CLR",
+      "q660/RUN_1"
+     ],
+     "params": {
+      "Lv": "20",
+      "Lv_B": "42"
+     },
+     "area": "Amusement Park",
+     "area_source": "name_keyword",
+     "note": "ennemi du meme EmID/setType (combat de la quete ; la donnee vient a la fin de la quete)"
+    },
+    {
+     "objId": "emb052",
+     "kind": "layout",
+     "position": [
+      849.56,
+      1.15,
+      309.23
+     ],
+     "file": "quest/q660.dat",
+     "member": "q660_f0c72e17_grp.pak",
+     "hap": "ピエロゾンビの群",
+     "action": "敵セットエリア-追加のピエロゾンビ",
+     "group_chain": [
+      "遊園地地下の時のみ有効",
+      "q660/RUN_1_進行中",
+      "進行不能になるまで_q660",
+      "クエストを破棄するまで_q660",
+      "ハッキング中停止_q660"
+     ],
+     "scene_states": [
+      "NOT 0x871b12b4",
+      "q660/CLR",
+      "q660/RUN_1"
+     ],
+     "params": {
+      "Lv": "20",
+      "Lv_B": "42"
+     },
+     "area": "Amusement Park",
+     "area_source": "name_keyword",
+     "note": "ennemi du meme EmID/setType (combat de la quete ; la donnee vient a la fin de la quete)"
+    },
+    {
+     "objId": "emb052",
+     "kind": "layout",
+     "position": [
+      846.45,
+      1.15,
+      309.23
+     ],
+     "file": "quest/q660.dat",
+     "member": "q660_f0c72e17_grp.pak",
+     "hap": "ピエロゾンビの群",
+     "action": "敵セットエリア-追加のピエロゾンビ",
+     "group_chain": [
+      "遊園地地下の時のみ有効",
+      "q660/RUN_1_進行中",
+      "進行不能になるまで_q660",
+      "クエストを破棄するまで_q660",
+      "ハッキング中停止_q660"
+     ],
+     "scene_states": [
+      "NOT 0x871b12b4",
+      "q660/CLR",
+      "q660/RUN_1"
+     ],
+     "params": {
+      "Lv": "20",
+      "Lv_B": "42"
+     },
+     "area": "Amusement Park",
+     "area_source": "name_keyword",
+     "note": "ennemi du meme EmID/setType (combat de la quete ; la donnee vient a la fin de la quete)"
+    }
+   ],
+   "positions_total": 23
+  }
+ ],
+ "changes_logic_gaps": "tools/logic_gaps_enemies.py : 30/30 donnees sans placement resolues (deblocage par mort selon la regle de l'exe 0x8257C0 avec masque setFlag, action hap EmListUnlockAction 0xC168700D, fin de quete QueID, etats q400, fin A, attaque EMP). Les entrees resolues sont dans records_resolved_logic_gaps (source 'logic_gaps') ; records_without_placement ne garde que les non resolues. Les placements de cette passe viennent des *_hap.pak (source de verite) ; le reste du fichier (placements, by_area) n'est pas regenere."
 }

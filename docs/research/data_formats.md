@@ -282,7 +282,7 @@ a la fois via le cache de `extract_research`.
   Ending_E..Z en 0x85ff90 (initialisation, pas un declencheur).
 - C/D : exe 0x863730 : SceneState select/9S -> ending_C, select/A2 -> ending_D ; p300 340_C_Tower_9Swin (CEnd) /
   340_D_Tower_A2win (DEnd) ; INVERSE du web (A2 -> C) ; titre affiche non trace.
-- Non resolu : W (aucun setBadEnd 0 trouve), invite Pod 153 (fin E), saut de fin de la route B vers pf10.
+- (Resolu depuis : voir "Lacunes de logique resolues" en fin de fichier.) Ancien etat : W, invite Pod 153 (fin E), saut de fin de la route B vers pf10 non resolus.
 
 ## Positions monde (tools/world_positions.py -> world_positions.json)
 
@@ -344,7 +344,7 @@ value = id d'entite}}}`.
   ft_AP_T2 (ni les re_tower_* / re_SC_2Bdie).
 - Peche : zones = objets `bga104` (BehaviorFishingArea), 18 haps de zones. Tables =
   `core/core.dat:FishParam.csv` (`indice, etfXXX, poids`, indices 0-8 et 20 remplis). NON resolu : quel indice
-  s'applique a quelle zone (champs +0x3ec8/+0x3ecc de l'objet de peche, RVA 0x59bf30, aucun parametre dans le hap)
+  s'applique a quelle zone (RESOLU : voir "Lacunes de logique resolues") (champs +0x3ec8/+0x3ecc de l'objet de peche, RVA 0x59bf30, aucun parametre dans le hap)
   et la correspondance etfXXX -> fish_NN (8001-8041, noms `CORE_FISH_NN`). etf040/etf041 choisis selon le
   personnage (cle 0x10200).
 - Objets uniques : 67 dans des coffres/points (MaxNum 1, armes, programmes de Pod : skill_act_ride, _hold,
@@ -352,3 +352,236 @@ value = id d'entite}}}`.
 - `Layout.lay` (117 cellules wd) : decors bg/bh et quelques ba (ba0000, ba010x, ba55xx...) sans ItemTable ; aucun
   coffre ni point de collecte. Archives ba/, em/, bg/, bh/, it/, et/, um/ : ni hap ni script (modeles, motions,
   col, ObjectParam.bxm de rendu seulement).
+
+## Lacunes resolues (tools/world_gaps.py -> world_gaps_resolved.json)
+
+Relancer apres `world_positions.py` : `python tools/world_gaps.py [--refresh]` (collecte en cache
+`%TEMP%/nier_research_cache/world_gaps.pkl`, memes 588 fichiers ; ajoute `gaps_resolved` dans
+`world_positions.json` : `quest_npcs.qXXX`, `shops[]`, `access_points[]`, `summary.gaps_resolved`).
+
+### Mecanique des declencheurs (mruby + hap)
+- `update` de chaque script appelle `event_trigger(label, entites, evenement[, condition])` : label `m/ev0` = methode
+  `m_ev0` ; entites = noms de variables de l'action script separes par des virgules ; condition = etats
+  (`q070/REQ`, `!auto/blocked`, `q540/REQ,q540/RUN_1`). Evenements vus : ON_TALK, TALK (zone 'talk'), HIT /
+  HITOUT (zone), DONE, ON_CHECK, ON_HACKING_CLEAR, FIND_PL, ACTIVE/STOP/BACK.
+- Variables d'action : code 0xd8efbb45 = entite placee (tout fichier), **0xa6aaf7a4 = action hap du meme fichier**
+  (zone, bloc de condition, ou l'action script elle-meme pour `this`). Entite `this` + evenement `xxx` = recu par
+  `Action.signal "xxx 0"` d'une action hap ; les conditions hap `INSIDE`/`OUTSIDE`/`ON_ROUTE_END` referencent la
+  zone ou l'entite par id.
+- Graphe : `call(:m)`, `call_fiber('m')`, choix `sele_ex` dont les etiquettes `ev1` designent `<prefixe>_ev1`.
+- Etats poses aussi par hap (`SceneStateSystem.set qXXX/RUN_1`) et par la lecture d'un mail (MailTable
+  `StateBefore -> StateAfter`), le mail etant envoye par `send_mail(N)` ou par l'exe.
+- `QuestState.mount` (core_hap 'クエストマウント', groupe DLC_installed, p200/p300) monte q080 (si !q080_DONE),
+  q085 (apres q080_DONE), q095 (apres q090/q091/q092_DONE). Formats exe `%s/REQ`, `q%03d_%d_%d/REQ`.
+- Les zones INSIDE de q401/q403 (0x7d07b30a, 0x9984d6fc, 0xfa8d73a0) ne sont definies que dans
+  `quest/q400_hap.z` (perime) : index de secours `action_index_z`, marque `stale_hap_z`.
+
+### Donneurs de quete (16 lacunes)
+| Quete | Declencheur de RUN_1 | Position | Conf. |
+|---|---|---|---|
+| q070 | zone TALK '会話予期-クエスト開始' (r160, cabane) si q070/REQ ; machine emb050 'animalrobo' | (423.5, -32.8, -586.5) | high |
+| q085 | lecture du mail 35 (unknownletter) envoye par quest/q080 (monte si DLC) | mail | high |
+| q095 | mail 36 envoye par l'exe 0x8d59a0 (drapeaux 0x1b63-0x1b65) ; lecture -> q095_readMail -> RUN_1 | mail | high |
+| q150 | Jackass pl2030 (r150) ON_ROUTE_END -> q150_talk2 | (-158.3, 11.8, 13.1) | high |
+| q162 | zone HIT area_talk_start (appel Pod/6O) | (-42.6, -16.8, 506.9) | high |
+| q170 | dans '通信発生エリア' et hors de la zone du terminal X (CC/CRb/CS) -> mail 3, X en panne | (-42.6, -16.8, 506.9) | high |
+| q171 | zone du camp (Route A) -> mail 30 ; lecture -> RUN_1 | (249.7, 9.4, 648.8) | high |
+| q181 | sortie de la zone du camp (Route B, apres q180_FIN) -> mail 10 + RUN_1 | (249.7, 9.4, 648.8) | high |
+| q221 | petite zone du village de Pascal -> dialogue des enfants machines + choix | (467.2, 14.8, -34.9) | high |
+| q360 | piratage d'une machine em0050 robo1/2/3 | (201.5, 20.2, 326.5) ... | high |
+| q401/q403 | INSIDE d'une des 3 zones 'クエスト受託エリア' (q400_hap.z seulement) | (224.0, -3.3, 516.2) ... | medium |
+| q540 | zone HIT mail_area1 -> mail 6 (A) / 12 (B) ; lecture = REQ -> RUN_1 | (166.0, -43.5, 484.5) | high |
+| q561 | parler a Devola pl1040 / Popola pl1050 (r110) si q561/REQ | (269.3, 9.5, 666.3) | high |
+| q900 | Emil pl1010 (quest/q900) ON_ROUTE_END -> q900_talk1 | (125.9, 1.2, -155.5) | high |
+| q920 | aucun etat q920/* : maison d'Emil, examiner it0000 (ON_CHECK) -> theft_talk -> emil_itemsteele | (332.4, -248.1, 414.8) | medium |
+
+### Magasins
+- Emil (`st2/r200.dat:r200_d52e3bf5_scp.bin`, declencheur ON_TALK `emile_fast,emile_slow,emile_first`) :
+  `shop_branch` = emile_slow.ready? ou emile_first.ready? -> `shop_slow`, sinon `shop_fast` ; `shop_slow` :
+  etat `emil_normal` -> shop_Emile sinon **shop_chipEmile** ; `shop_fast` : emil_normal -> **shop_rareEmile** sinon
+  **shop_rareChipEmile**. `emil_normal` = `random_DONE_a0` (DONE de la 'ランダムコマンドエリア', centre (90, -95.5,
+  340)) : `rand(2)` 0 -> pose, 1 -> retire (50/50). Emil lent (256.7, 0.2, 512.1), premiere rencontre (-83.7, 3.2,
+  191.0), Emil rapide (28.3, -0.1, 539.5) ; tous pl1010 (positions de depart, Emil se deplace).
+- shop_CS_Grocery / shop_CD_Grocery : NON RESOLUS. Aucun `shop(...)` ni commande hap ; l'exe n'a que deux tables de
+  noms (RVA 0xf65130, 11 noms dont CS ; 0xf65190, 12 noms dont CF et CD) lues par 0x8ef780 (calcul de prix). Les arenes
+  q091/q092 n'ouvrent que shop_Upgrade ; seul q090 ouvre shop_CF_Grocery. Probablement inutilises.
+
+### Terminaux ft_AP_C / ft_AP_T / ft_AP_T2
+NON RESOLUS : aucune reference dans les haps (.pak et .z), scripts, Layout.lay ni objets 'ファストトラベル出現位置'
+(0xfbac492d) des 588 fichiers ; dans l'exe seulement les initialiseurs crc32 0x105a90 / 0x109ee0. Seul terminal du
+parc : ft_AP (r130, 647.6, 13.4, 387.1). Terminaux coupes (textes CORE_MAP_TRANS_0011..0013 restes).
+
+## Lacunes de logique resolues (tools/logic_gaps.py -> logic_gaps_resolved.json)
+
+Relancer : `python tools/logic_gaps.py [fishing|endings|keyitems|enemies]` (un module a la fois).
+
+## Peche : tables par zone et poissons (tools/logic_gaps_fishing.py)
+
+Relancer : `python tools/logic_gaps_fishing.py [--out f.json]` (ou `run()`). Statique, exe v1.04 + `FishParam.csv` +
+`*_hap.pak`/`*_grp.pak` (les bga105 de r130/r150/r200 n'existent que dans les hap.z perimes).
+- Chargement : 0x81e180 -> gestionnaire global 0x1251668 ; analyseur 0x7fa460 : majuscules, ligne commencant par
+  `,` ou `/` ignoree (donc `,etf032,10,` n'est PAS chargee), `indice (0..29), ETFxxxx (hexa), poids (min 1)`,
+  30 entrees max ; table i : ids +0xa8+i*0xf8, poids +0x120+i*0xf8, nombre +0x198+i*0xf8.
+- Zones : objets `bga104` (BehaviorFishingArea, vtable 0xc80028 ; 0x645130 : objId 0xca104 -> liste +0x58,
+  0xca105 = `bga105` -> liste +0x90). Table de base = **setType du volume bga104** : 0x4b5191 -> 0x642ee0
+  ([peche+0x3ec8] = [zone+0x590]) ; [obj+0x590] = setInfo+0x70 (0x853b60), setInfo+0x70 = setType (DEDUIT :
+  ordre setType/setRtn/setFlag de l'analyseur de layout 0x3e96c0 ; setType absent = 0). Coherence : setType des
+  bga104 = 0..8 = tables remplies 0..8 ; seule la table 1 (setType 1 = mer de la Cite engloutie) a etf040 (Pod B),
+  seule la table 6 (setType 6 = conduites d'eau) a etf042 (Iron Pipe), table 3 (setType 3 = champ petrolier) a Oil Sardine (poids 100).
+- Surcouche : [peche+0x3ecc] = setType du premier `bga105` dont le cercle contient le flotteur (0x6c2177 ->
+  0x7e0a10), -1 sinon. 0x7e0b20 : b >= 0 -> table b+10, plus la table de base si b+10 < 20. Seuls bga105 en
+  donnees d'execution : r170 `釣りポイント_浅瀬` (hauts-fonds), 6 volumes setType 10 -> **table 20 seule**.
+- Tirage : poids / somme (0x59bf30). etf040 exclu si bit 0x400000 de [0x14948a0], etf042 si bit 0x200000 = bits
+  41/42 du tableau "deja peche" 0x149489c (mis par 0x628e10) : Pod B et Iron Pipe une seule fois. etf040 ->
+  objId 0x4f041 si objId du joueur == 0x10200 (0x59c1dc), meme recompense.
+- etf -> objet : table de sauts 0x6c4354 (objId-0x4f000 -> indice), 0x628e10 : indice 0..40 -> addItem(8001+indice)
+  (0x6290ed) ; 41 -> Pod B (own_podB / GET_POD_B) ; 42 -> arme 1013 Iron Pipe (0x629045). Ordre = etf000..009,
+  010..01a, 020..02e, 030..034 -> fish_1..fish_41 (etf015 = fish_16 Mackerel, conforme a la fin K). Textes d'aide
+  coherents (riviere / mer / machine aquatique / dechet).
+- Zones (setType -> table) : r100/r200 commun vallee 7, riviere ville 5 (x2), riviere foret 0, conduite 6 ;
+  r100 riviere 5 ; r130 4 ; r150 oasis 8, petrole 3 ; r160 riviere foret 0 ; r170 riviere 5, conduite 5, mer 1,
+  hauts-fonds bga105 -> 20 ; r200 conduite 6 (x2), riviere ville 5 (x2) ; r502 2.
+- Ouvert : copie layout -> setInfo+0x70 non lue (setType deduit) ; role de [+0x3ec0] (= [zone+0x59c]) et de setRtn ;
+  identite du personnage 0x10200.
+
+## Fins W / E / B / C-D (tools/logic_gaps_endings.py)
+
+`python tools/logic_gaps_endings.py [--out F.json] [--flow ph3/p300.dat REGEX]` (un .dat a la fois, `run()` -> dict ; sortie par defaut %TEMP%/lg_endings.json).
+
+### Table StateBind (core/corehap.dat:core_hap.pak)
+- Arbre YAX `StateBind` (balises : nom 0x0389b783, entree 0x22b35429) : phase -> sous-phase -> `StateOn`, `StateOff`,
+  `QuestOn`, `QuestOff`, `Item` (ex. `*-item_uq_accessKey_1` = retrait), `Level`. Lu par l'exe 0x35b780.
+- Prefixes (0x354bb0) : `X` / `*X` = nouvelle plage a partir de cette sous-phase (0x341ac0) ; `!X` = ferme la plage
+  ouverte de X (fin = indice de la sous-phase, 0x354ec1..0x354f1f) ; `[cond] X` = conditionnel. Ordre = ordre de
+  pXXX_sub.bxm (A et B entrelaces). Difference `*X` / `X` non tracee.
+- Arbres `SceneState` (11, 15..19) : nom d'etat -> description japonaise (ex. `select/9S` = '最終決戦で9Sを選択した',
+  `ending_C` = 'Cエンド見た').
+
+### Fin W
+- Machine d'etats du game over 0x83d800 (etat [0x11eac1c], table 0x83dd58). Etat 2 : 0x7e00a0() donne le type :
+  6 (ou 7 si [0x1029c30] < 0) si SceneState `RobotMt_Prologue/A` | `tutorial_STG` | `RobotMt_Boss/A` ; 4 si
+  `tower_continue` ; 5 si `Collapse_BK` ; sinon 3. Etat 6 = 0x83dc4b : [0x11eac20] 1 -> Ending_U, 0 -> Ending_W.
+  Aucun setBadEnd 0 : 0 est la valeur par defaut. Etat 7 = saut 0xf00 'START'.
+- Plages (StateBind p100) : tutorial_STG mis par les scripts de dialogue du vol STG 00_30/00_40/00_50_A
+  (`set_scene_state`), efface en 00_50 ; RobotMt_Prologue/A de 00_60_A (premier controle de 2B) a 00_80_A, de 00_85_A a
+  05_10_A, puis 05_20/30/40_A ; RobotMt_Boss/A de 05_00_A a 05_40. Force a faux sur toute la route B. Efface en p200
+  00_AB_Ruined_City et p300 00_CD_Bunker_2B. Ouvert : bornes inclusives ou non (00_80_A).
+
+### Fin E (invite du Pod 153)
+- pf31 / p300 350_CD_TrueEnd_STG, script `pf31_d2ca712b_scp.bin` : `global_start_text_a0` (Pod 153 'Requesting
+  temporary halt to perform data check.') -> `M3060_S7500_S0070_001_sele` "Accept the Pod's request?" Oui/Non.
+  Non -> signal check_no, generique normal, sortie BackTitle_CD. Oui -> `_y0` (stop_roll, BGM_Stop_Ending, dialogue
+  042/153) -> Oui/Non -> `_y1` signal question_yes -> STG. Mort : 'GIVE UP HERE?' / lose_0..4 / 'RESCUE OFFER RECEIVED
+  FROM <others>' ; abandon -> 'フェーズジャンプ_諦め' BackTitle_CD ; reussite -> 'フェーズジャンプ_STGクリア' ->
+  360_CD_TrueEnd_FIN.
+- 360 : script `7de5c329` (suppression : 6 confirmations, signal pod_delete, 'All of your data has been deleted.'),
+  succes 19 'The Minds That Emerged', titre CREDIT_END_TITLE_05 par 0x89ae00(4) (0x85eac3).
+
+### Fin B -> generique
+- p200 200_80_AB_Ruined_City_end (groupe B '80_HDイベント', hap 'イベント再生(2)') : evenement puis saut direct p300
+  00_CD_Bunker_2B (pas d'EndRoll_B). p300 hap 流れ(17) (repos au Bunker) 'フェーズジャンプ_f10' -> pf10 BackTitle_B ;
+  pf10 流れ(3) : ending_B + succes 11. Exe 0x85c271 : bit de fin 1 ; titre B = 0x89ae00(1) (0x83de77).
+
+### C contre D
+- 335_CD_Tower_sele9S : le joueur joue 9S contre A2 (`オブジェ配置_敵A2`) -> 340_C_Tower_9Swin (StateOn select/9S, CEnd).
+  335_CD_Tower_seleA2 : A2 contre 9S -> 340_D_Tower_A2win (select/A2, DEnd). Choix 'M3060_S0806_G0100/0110_300_sele'
+  (9S / A2) dans les scripts 802d17e9 / fca61b8d.
+- Fin du generique (0x863730) : select/9S -> SceneState `ending_C` + succes n 17 'Leaving for the New World' ;
+  select/A2 -> `ending_D` + succes n 18 'Beautiful World' (+ archive 'Machine Research Report', 0x863edc). Masque des
+  fins 0x9ccd50 : A 0x1, B 0x2, C 0x4, D 0x8, CD(E) 0x10. => pour le jeu, 9S = C et A2 = D (le web dit l'inverse).
+- EndRoll_CD (0x85c2bf) pose le bit 2 si Route/C, 3 si Route/D ; Route/D n'est jamais mis (StateBind n'a que
+  `*Route/C` en 00_10_CD ; l'exe ne fait que tester Route/D).
+- Titre affiche A/C/D non trace : 0x89ae00 (UIEndRollRoute, [ui+0x90] -> CREDIT_END_TITLE_%02d, ids UI 0xfe/0xff)
+  n'est appele que pour B, E et les fins pf30.
+- Succes : `MiscState.unlockAchievement N` (natif 0x3aff50) = sprintf('%x') puis strtol base 10 : '0x10' = 10 ;
+  indice exe = N-1 ; N <= 12 debloque aussi les precedents. Noms = `CORE_ACHIEVEMENT_HELP_NN`.
+
+## Objets cles : Scanner et Elevator Key (tools/logic_gaps_keyitems.py)
+
+`python tools/logic_gaps_keyitems.py --out <json>` (un .dat a la fois, ~quelques s avec le cache).
+
+### A170 Scanner (skill_act_sonar, 2024) - confiance haute
+- Seule table qui le contient : `QuestRewordData.drp` id **105** (2024 x1, poids 100). Absent de BoxData,
+  CommonEmDropData, UniqueEmDropData, des addItem de scripts et de l'exe (pas de chaine `skill_act_sonar`).
+- `getReWard('105')` : `ph2/p200.dat:p200_58623dde_scp.bin`, methode `dp_ans1` (choix 1 de `dp_talk1`/`dp_talk2`,
+  Devola pl1040 / Popola pl1050, Camp de la Resistance st1/r110 (269.3, 9.5, 666.3) ; le choix 2 reboucle sur
+  `dp_talk2`). Hap `流れ(2)` / action `..M1070_S0020_コピー都市探し`, groupe `A(Ｂルートは通らない)` sous la
+  sous-phase `100_A_Submerge_City_2B` (route A, ch 08-01). Ensuite `area_sonerTalk`, `item_sccaner` actives (tutoriel).
+- Deuxieme source : boutique `shop_Upgrade` (PNJ Bunker `bk_npc_ns1`, pl2060) : en vente aux etats Shop_upgrade/3 et /4.
+  Etats poses par le hap `StateBind` de `core/corehap.dat:core_hap.pak` (listes StateOn par sous-phase) :
+  `00_00_B_RobotM_Pro_RobotBrother` : `[Route/A] *Shop_upgrade/1`, `[Route/B] *Shop_upgrade/4` ;
+  `00_AB_Ruined_City` : A -> /2, B -> /4 ; `110_00_A_Copy_City` : A -> /3 ; `00_CD_Bunker_2B` : /4.
+  Donc : route A = Devola/Popola en 08-01 ou boutique Bunker a partir de la Copied City ; routes B et C/D = boutique
+  Bunker des le debut.
+
+### Elevator Key (item_uq_mallKey) et ascenseurs - confiance haute (semantique de l'invite : moyenne)
+- Gestionnaire global d'ascenseur RVA 0x13df730 (mise a jour 0x8291c0, appelee par 0x763450). Mis en place par
+  `hap::LoopElevatorAction` (vtable 0xc43bc0, slot 9 = 0x3a1f90 -> 0x810730(mgr, cabine, porte0, porte1)) ;
+  `ElevatorAction` (vtable 0xc43ae8) ; commandes `lockEv` (0x38ec10 -> 0x800b70, [mgr+0x1c]=1) / `unlockEv`
+  (0x3b00a0 -> 0x801080, [mgr+0x1c]=0).
+- Cabine = entite **ba0200** (classe `Ba0200`, vtable 0xc565c0, fabrique indice 682 createFn 0x44a100).
+  Id d'ascenseur = `[Ba0200+0x590]` copie en `[mgr+8]` (0x8109be) = **setType** de la cabine placee (coherent pour
+  les 12 placements).
+- Table de sauts 0x82ab18 (id -> scene state de deblocage teste par 0x8291c0 via 0x495a70) : 1 R1_ElevatorUnlock_entrance,
+  2 R2_ElevatorUnlock_exit, 3 CC_Opening, 5 Wev_lock_FU, 7 Wev_lock_AP, 8 Forest_C_ElevatorUnlock (+Serious_FC,
+  Runaway), 9 Submerge_C_ElevatorUnlock (+Serious_SC, Runaway), 10 Desert_C_ElevatorUnlock (+Serious_DT, Runaway),
+  12 ShoppingMall_ElevatorUnlock ; 4, 6, 11 sans variable.
+- Placements ba0200 (setType) : 1 qb60 entree salle du gourou (-418.5, 1.0, 436.7) ; 2 qb60 sortie salle du boss
+  (-445.2, 47.9, 212.3) ; 3 qb70 Copied City (325, -117, 406) ; 5 qb31 foret (676.2, -59.5, -339.6) ; 6 qb32
+  (602.2, -68.8, 860.4) ; 7 qb30 parc (745.5, 19.4, 295.3) ; 8 qb90 ascenseur en boucle (549.3, -25.2, -591.4) ;
+  9 qb85 colisee (369.6, -80.6, 782.1) ; 10 qb80 (-1169.0, -34.8, -354.3) ; 11 qb00 donjon souterrain
+  (262.0, -21.8, 366.1) ; **12 qb95 'ascenseur vers la chambre de Kaine' (115.64, -4.78, -192.67)** ; sans setType :
+  qb50 theatre (836.2, 1.3, 302.8) et (835.6, 13.3, 302.4).
+- Test de la cle : 0x8344b0 (seul appelant 0x829c29 dans 0x8291c0) : si `[mgr+0x1c]` (verrouille) et id == 12,
+  `count(item_uq_mallKey) > 0` (0x7e3210 nom -> id, 0x7e3b90 nombre, inventaire 0xf56120) -> saut, sinon
+  `0x8c76b0(obj, 1)` (invite type 4 = verrouille ; 0 -> type 3 + appui = depart). Aucun autre test de la cle.
+- Deblocage reel (donnees) : `quest/qb95` hap `鍵の使用` (groupe `エレベーターの鍵を開ける`, jeton scene state
+  crc32 0x17f27aa1 = **q330/RUN_5**) place le point de controle bga102 `key` (115.65, 8.17, -189.31) ;
+  `q330_ee317264_scp.bin:key_ON_CHECK_ev0` -> `set_scene_state ShoppingMall_ElevatorUnlock`. q330/RUN_5 est pose par
+  `flower_ON_CHECK_run_N` (4e Lunar Tear) dans les scripts q330 de zone qui font aussi `finish` -> getReWard 224
+  (Elevator Key). StateBind remet `ShoppingMall_ElevatorUnlock` si `q330_DONE` (00_00_B, 00_AB_Ruined_City, 00_CD_Bunker_2B).
+  Pour l'AP : le verrou est l'etat q330/RUN_5, pas la possession de la cle (l'exe ne teste la cle que pour l'invite).
+- Limite outil : `world_positions.pak_groups` ne lit pas un bloc de groupes NON compresse (cas qb95 : taille stockee
+  = taille decompressee, YAX brut a l'offset) -> conditions manquantes ; `raw_groups()` le gere.
+
+## Donnees d'unite sans placement (tools/logic_gaps_enemies.py)
+
+Relancer : `python tools/logic_gaps_enemies.py [--out F.json] [--update-enemies]` (module : `run()`). Parcourt tous
+les `*.pak` (hap.pak = source de verite + grp.pak) de ph*, phf, quest, st*, core/corehap.dat et des 255 cellules wd.
+Resultat : 30/30 donnees resolues (26 high, 4 medium = EMP). `enemies_by_area.json` : `records_resolved_logic_gaps`
+(source 'logic_gaps'), `records_without_placement` vide, note `changes_logic_gaps`.
+
+### Deblocage dans l'exe (v1.04)
+- Ligne EmList lue par 0x7F9640 (0x34 o, tableau [0xF59238], nombre [0xF59240]) : +0x0c SaveID, +0x10 EmID, +0x18
+  setType, +0x1c **masque setFlag** (EmList setFlag 0 -> 0x10 bouclier, 1 -> 0x10000010 bouclier EM, -1 -> 0),
+  +0x20 QueID, +0x24 mode (bDie 1/bTalk 0 -> 0 mort ; bDie 0/bTalk 1 -> 1 dialogue ; sinon -1 evenement seul).
+- 0x8257C0 = enregistrement : TOUTES les lignes qui correspondent (pas d'arret) : EmID egal, setType egal,
+  `(setFlag du placement & masque) == masque`. Un em0010 a setFlag 0x10 debloque Medium Biped ET (Shield) ; em0000
+  setType 2 recoit toujours 0x10. Mort : lignes de mode 0 seulement, exclus em1030 st6, em5000 st1/5, em6000 st1/2,
+  emb010, emb041/051/061. (L'ancien appariement 1 ligne + setFlag ignore de rf_enemies etait faux.)
+- 0x825780 (mort, 6 classes d'ennemis) : setType force a 10 si [ennemi+0x2C32C] != 0 (mis par 0x53FCCD et
+  0x69646F, etats d'attaque) -> donnees 'EMP Attack Machines' (107-110). Aucun setType 10 dans les donnees.
+- `hap::EmListUnlockAction` (vtable 0xC445C0, 0x3A04C0 ; action hap code **0xC168700D**, nom `敵図鑑解放`,
+  champs ObjId/setType/setFlag) : 28 actions. pl1000 : rien si l'etat `pascal/memorylost`.
+- Fin de quete (0x3F8671 -> 0x8259D0) : lignes dont QueID == `'0x%03d' % numero` (QueID 0x590 = q590).
+- Etat de quete (0x3F1CA7 -> 0x825AE0) : q400/RUN_1 -> 150, RUN_2 -> 150+151, DONE -> 150+151+152 ; q070/DONE.
+- Saut vers pf10 (0x85C160) : EndRoll_A / BackTitle_A -> em5000 setType 5 et 6 (117, 118) ; fins C/D ->
+  em1030 st6 (select/9S) ou em1040 st6 (select/A2), em8002, em8020 st2, em8010 st6.
+
+### Resultat par donnee
+- Variantes bouclier (3, 9, 10, 35, 36, 52, 53) et Medium Flyer 46-48 : ennemis poses (setFlag 0x10 / 0x10000010,
+  setType 1/2/3 du p300 `enemy_3F(3)` Resource Recovery Unit 240_*_CD), mort. 129 Hegel = meme ligne que 128
+  (boss du desert p300 81/82_CD_1_DesertBoss_A2).
+- 72 Pascal (pl1000) : action p300 `最後の選択`, 120_*_CD_2_RobotM_*_A2 (Abandoned Factory, routes C/D), sauf
+  effacement de memoire. 73 Pascal (pl1001) : p200 `流れ(2)` 100_A_Submerge_City_2B. 114 Adam (vaisseau) : p200
+  `Aルート`/`Bルート` 10_20/10_30_AB_Alien_Ship. 145 21O : p300 `9S再起動` 250_CD_Unknown_9S.
+- Quetes : 77 Big/Little Sister -> q110 Lost Girl ; 81 High-speed Machine -> q300 Speed Star (emb033 de
+  q300_hap.pak) ; 124 Ernst -> q440 Treasure Hunt at the Castle (bg2081 r160) ; 156-158 Gunman -> q590 Heritage of
+  the Past (r150 `敵セット` vers (-1245, -33, -515)) ; 161 Zombie Clown -> q660 Stamp Collecting (q660, Amusement
+  Park) ; 151/152 -> etats q400 (Vengeful Warrior).
+- 117/118 Eve (Final Battle) : fin A (EndRoll_A / BackTitle_A). 107-110 EMP : medium (mecanisme exe, pas de lieu
+  dans les donnees).
+
+### Limite trouvee
+rf_enemies.py saute les `*_hap.pak` quand un `*_hap.z` existe (297 fichiers ont les deux) : des placements manquent
+dans enemies_by_area.json (ex. emb033 q300, Gunman r150). Seules les 30 donnees ont ete recalculees depuis les .pak.

@@ -79,6 +79,38 @@
    "NON_BG:ba0203": 2,
    "bh": 117,
    "NON_BG:bh0100": 117
+  },
+  "gaps_resolved": {
+   "quests": {
+    "q070": "high",
+    "q095": "high",
+    "q150": "high",
+    "q162": "high",
+    "q170": "high",
+    "q181": "high",
+    "q221": "high",
+    "q360": "high",
+    "q540": "high",
+    "q561": "high",
+    "q900": "high",
+    "q085": "high",
+    "q171": "high",
+    "q401": "medium",
+    "q403": "medium",
+    "q920": "medium"
+   },
+   "shops": {
+    "shop_chipEmile": "high",
+    "shop_rareEmile": "high",
+    "shop_rareChipEmile": "high",
+    "shop_CS_Grocery": "unresolved",
+    "shop_CD_Grocery": "unresolved"
+   },
+   "access_points": {
+    "ft_AP_C": "unresolved",
+    "ft_AP_T": "unresolved",
+    "ft_AP_T2": "unresolved"
+   }
   }
  },
  "chests": [
@@ -190360,7 +190392,29 @@
    ],
    "placed_in_quest_files": [],
    "named_haps": [],
-   "confidence": "medium"
+   "confidence": "medium",
+   "gaps_resolved": {
+    "start_mechanism": "area_talk",
+    "confidence": "high",
+    "summary": "Foret (r160) : zone 'talk' '会話予期-クエスト開始' devant la cabane ; TALK quand q070/REQ -> q070/RUN_1. Donneur = machine de la cabane emb050 'animalrobo' (NameTag animallike) placee par quest/q070 (400.17, -20.14, -559.93).",
+    "start_positions": [
+     {
+      "kind": "area",
+      "name": "talk_area1 (会話予期-クエスト開始)",
+      "position": [
+       423.4878,
+       -32.7719,
+       -586.4862
+      ],
+      "scale": [
+       16.4311,
+       29.4149,
+       16.4311
+      ]
+     }
+    ],
+    "resolved_in": "world_gaps_resolved.json"
+   }
   },
   "q071": {
    "english_name": "Animal Care",
@@ -191067,7 +191121,14 @@
    "quest_script_entities": [],
    "placed_in_quest_files": [],
    "named_haps": [],
-   "confidence": "unresolved"
+   "confidence": "unresolved",
+   "gaps_resolved": {
+    "start_mechanism": "mail",
+    "confidence": "high",
+    "summary": "Mail 35 (expediteur 'unknownletter') envoye par quest/q080 (hap 'メール送信' -> this_q080_mailSend : send_mail 35, q085/REQ) ; q080 est monte par core_hap 'クエストマウント' (groupe 'DLC_installed', p200/p300). Lecture du mail (q080Mail/OPEN) -> hap q080 '会話発生させられたら発生' -> q085/RUN_1. Pas de PNJ ; cibles = 3 marques (desert, ville inondee, foret).",
+    "start_positions": [],
+    "resolved_in": "world_gaps_resolved.json"
+   }
   },
   "q086": {
    "english_name": null,
@@ -209140,7 +209201,14 @@
    ],
    "placed_in_quest_files": [],
    "named_haps": [],
-   "confidence": "medium"
+   "confidence": "medium",
+   "gaps_resolved": {
+    "start_mechanism": "mail",
+    "confidence": "high",
+    "summary": "Mail 36 (unknownletter) envoye par l'exe (RVA 0x8d59a0 : si les drapeaux 0x1b63, 0x1b64, 0x1b65 sont mis -> mail 0x24, etat q095Mail/CLOSE, 'you_got_mail') ; q095 est monte par core_hap 'クエストマウント' quand q090/q091/q092 DONE. Lecture (q095Mail/OPEN) -> signal q095_readMail -> hap q095 'メール受信' : q095/RUN_1. Pas de PNJ.",
+    "start_positions": [],
+    "resolved_in": "world_gaps_resolved.json"
+   }
   },
   "q100": {
    "english_name": "Robo Dojo—White Belt",
@@ -217169,7 +217237,41 @@
    ],
    "placed_in_quest_files": [],
    "named_haps": [],
-   "confidence": "medium"
+   "confidence": "medium",
+   "gaps_resolved": {
+    "start_mechanism": "npc_route_end",
+    "confidence": "high",
+    "summary": "Jackass (pl2030, NameTag 'jackas', st1/r150 hap 'NPC_砂レジ(2)', camp du desert) : quand elle arrive au bout de son trajet (ON_ROUTE_END, hap q150 'NPC移動') -> signal q150_talk2 -> q150/RUN_1 (dialogue de depart).",
+    "start_positions": [
+     {
+      "kind": "area",
+      "name": "行動制限",
+      "position": [
+       -166.8164,
+       12.2875,
+       -17.9018
+      ],
+      "scale": [
+       8.7358,
+       17.0348,
+       4.3275
+      ],
+      "via": "条件コマンド"
+     },
+     {
+      "kind": "entity",
+      "name": "pl2030",
+      "position": [
+       -158.2612,
+       11.7558,
+       13.1096
+      ],
+      "file": "st1/r150.dat",
+      "via": "条件コマンド"
+     }
+    ],
+    "resolved_in": "world_gaps_resolved.json"
+   }
   },
   "q160": {
    "english_name": "Improving Communications",
@@ -217597,7 +217699,29 @@
    ],
    "placed_in_quest_files": [],
    "named_haps": [],
-   "confidence": "medium"
+   "confidence": "medium",
+   "gaps_resolved": {
+    "start_mechanism": "area",
+    "confidence": "high",
+    "summary": "Zone HIT 'area_talk_start' (ville en ruines, pres de l'usine) si !auto/blocked -> q162/RUN_1 (dialogue Pod/operatrice). Pas de PNJ ; bk_ope_6O (Bunker) parle seulement si !q162/REQ.",
+    "start_positions": [
+     {
+      "kind": "area",
+      "name": "area_talk_start (エリア)",
+      "position": [
+       -42.6373,
+       -16.8247,
+       506.8697
+      ],
+      "scale": [
+       32.8023,
+       48.897,
+       5.2612
+      ]
+     }
+    ],
+    "resolved_in": "world_gaps_resolved.json"
+   }
   },
   "q170": {
    "english_name": "Terminal Repairs",
@@ -217681,7 +217805,105 @@
    ],
    "placed_in_quest_files": [],
    "named_haps": [],
-   "confidence": "medium"
+   "confidence": "medium",
+   "gaps_resolved": {
+    "start_mechanism": "area",
+    "confidence": "high",
+    "summary": "Apres q162 DONE : etre DANS la zone 'エリア_通信発生エリア' (meme zone que q162, -42.6, -16.8, 506.9) et HORS de la zone du terminal X (X = ft_CC, ft_CRb ou ft_CS, active) -> signal q170_talk1 -> send_mail 3 + q170/RUN_1 ; le terminal X passe en panne (setvar 'ft_X false', etat q170_ft/X_break). Pas de PNJ.",
+    "start_positions": [
+     {
+      "kind": "area",
+      "name": "エリア_CC",
+      "position": [
+       -8.9847,
+       -32.0326,
+       340.4108
+      ],
+      "scale": [
+       54.8924,
+       66.707,
+       79.2895
+      ],
+      "via": "条件コマンド＿ft_CC"
+     },
+     {
+      "kind": "area",
+      "name": "エリア_通信発生エリア",
+      "position": [
+       -42.6373,
+       -16.8247,
+       506.8697
+      ],
+      "scale": [
+       32.8023,
+       48.897,
+       5.2612
+      ],
+      "via": "条件コマンド＿ft_CC"
+     },
+     {
+      "kind": "area",
+      "name": "エリア_CRb",
+      "position": [
+       -57.2106,
+       -2.5889,
+       541.2468
+      ],
+      "scale": [
+       41.9899,
+       28.6879,
+       79.2895
+      ],
+      "via": "条件コマンド＿ft_CRb"
+     },
+     {
+      "kind": "area",
+      "name": "エリア_通信発生エリア",
+      "position": [
+       -42.6373,
+       -16.8247,
+       506.8697
+      ],
+      "scale": [
+       32.8023,
+       48.897,
+       5.2612
+      ],
+      "via": "条件コマンド＿ft_CRb"
+     },
+     {
+      "kind": "area",
+      "name": "エリア_CS",
+      "position": [
+       134.6638,
+       -11.792,
+       92.8105
+      ],
+      "scale": [
+       41.9899,
+       77.4289,
+       79.2895
+      ],
+      "via": "条件コマンド＿ft_CS"
+     },
+     {
+      "kind": "area",
+      "name": "エリア_通信発生エリア",
+      "position": [
+       -42.6373,
+       -16.8247,
+       506.8697
+      ],
+      "scale": [
+       32.8023,
+       48.897,
+       5.2612
+      ],
+      "via": "条件コマンド＿ft_CS"
+     }
+    ],
+    "resolved_in": "world_gaps_resolved.json"
+   }
   },
   "q171": {
    "english_name": "Find a Present",
@@ -217925,7 +218147,30 @@
     }
    ],
    "named_haps": [],
-   "confidence": "low"
+   "confidence": "low",
+   "gaps_resolved": {
+    "start_mechanism": "mail",
+    "confidence": "high",
+    "summary": "Route A, q171/REQ : entrer dans la zone du camp de la Resistance -> send_mail 30 (q171Mail/CLOSE) ; lecture du mail (q171Mail/OPEN) -> signal q171_talk1 -> q171/RUN_1. Pas de PNJ.",
+    "start_positions": [
+     {
+      "kind": "area_in_hap",
+      "name": "エリア_レジキャン",
+      "position": [
+       249.6595,
+       9.3615,
+       648.7742
+      ],
+      "scale": [
+       52.0499,
+       22.4249,
+       47.1005
+      ],
+      "hap": "流れ(25)"
+     }
+    ],
+    "resolved_in": "world_gaps_resolved.json"
+   }
   },
   "q180": {
    "english_name": "Data Analysis Freak",
@@ -219000,7 +219245,30 @@
     }
    ],
    "named_haps": [],
-   "confidence": "medium"
+   "confidence": "medium",
+   "gaps_resolved": {
+    "start_mechanism": "area_auto",
+    "confidence": "high",
+    "summary": "Route B, q181/REQ, apres q180_FIN : SORTIR de la zone du camp de la Resistance (hors Bunker, pas de dialogue en cours) -> signal q181_talk1 -> send_mail 10 + q181/RUN_1. Pas de PNJ (operateur 21O par mail).",
+    "start_positions": [
+     {
+      "kind": "area_in_hap",
+      "name": "エリア_レジキャン",
+      "position": [
+       249.6595,
+       9.3615,
+       648.7742
+      ],
+      "scale": [
+       52.0499,
+       22.4249,
+       47.1005
+      ],
+      "hap": "流れ"
+     }
+    ],
+    "resolved_in": "world_gaps_resolved.json"
+   }
   },
   "q200": {
    "english_name": null,
@@ -221479,7 +221747,41 @@
     }
    ],
    "named_haps": [],
-   "confidence": "medium"
+   "confidence": "medium",
+   "gaps_resolved": {
+    "start_mechanism": "area_talk",
+    "confidence": "high",
+    "summary": "Village de Pascal, q221/REQ : entrer dans la petite zone '流れ(2)' (467.19, 14.81, -34.91 ; marque de quete 469.10, 14.94, -30.32) -> signal q221_start -> this_q221_start_ev0 (dialogue des enfants machines 'robochild(ren)' + choix sele_ex) -> ev1/ev2 -> q221/RUN_1.",
+    "start_positions": [
+     {
+      "kind": "area_in_hap",
+      "name": "汎用マークロケーション",
+      "position": [
+       469.0968,
+       14.936,
+       -30.3193
+      ],
+      "scale": null,
+      "hap": "流れ(2)"
+     },
+     {
+      "kind": "area_in_hap",
+      "name": "エリア",
+      "position": [
+       467.186,
+       14.8051,
+       -34.9078
+      ],
+      "scale": [
+       2.3694,
+       5.8151,
+       2.6446
+      ],
+      "hap": "流れ(2)"
+     }
+    ],
+    "resolved_in": "world_gaps_resolved.json"
+   }
   },
   "q222": {
    "english_name": "Storage Element",
@@ -227206,7 +227508,45 @@
    ],
    "placed_in_quest_files": [],
    "named_haps": [],
-   "confidence": "medium"
+   "confidence": "medium",
+   "gaps_resolved": {
+    "start_mechanism": "hacking",
+    "confidence": "high",
+    "summary": "Pirater (ON_HACKING_CLEAR) une des 3 machines em0050 robo1/robo2/robo3 de quest/q360 -> hack_branch -> clear_first -> q360/RUN_1.",
+    "start_positions": [
+     {
+      "kind": "entity",
+      "name": "robo1 (em0050)",
+      "position": [
+       201.5157,
+       20.2173,
+       326.5226
+      ],
+      "file": "quest/q360.dat"
+     },
+     {
+      "kind": "entity",
+      "name": "robo2 (em0050)",
+      "position": [
+       165.7649,
+       49.6504,
+       106.0934
+      ],
+      "file": "quest/q360.dat"
+     },
+     {
+      "kind": "entity",
+      "name": "robo3 (em0050)",
+      "position": [
+       176.904,
+       12.6989,
+       436.8602
+      ],
+      "file": "quest/q360.dat"
+     }
+    ],
+    "resolved_in": "world_gaps_resolved.json"
+   }
   },
   "q400": {
    "english_name": "The Vengeful Warrior",
@@ -227580,7 +227920,66 @@
    "quest_script_entities": [],
    "placed_in_quest_files": [],
    "named_haps": [],
-   "confidence": "unresolved"
+   "confidence": "unresolved",
+   "gaps_resolved": {
+    "start_mechanism": "area",
+    "confidence": "medium",
+    "summary": "Hap '進行制御(14)' : condition INSIDE des 3 zones 0x7d07b30a / 0x9984d6fc / 0xfa8d73a0 -> signal q401_talk2 -> q401/RUN_1. Ces zones ne sont definies que dans quest/q400_hap.z (perime, 'クエスト受託エリア' ville / 'desert' / 'ville inondee', 15x10x15) : absentes de tous les .pak. Pas de PNJ donneur.",
+    "start_positions": [
+     {
+      "kind": "area",
+      "name": "エリア_大ハイキョ都市クエスト受託エリア",
+      "position": [
+       224.03,
+       -3.2868,
+       516.1697
+      ],
+      "scale": [
+       10.0,
+       10.0,
+       10.0
+      ],
+      "via": "条件コマンド_クエスト受託",
+      "defined_in": "quest/q400.dat",
+      "source": "stale_hap_z (action absente des .pak)"
+     },
+     {
+      "kind": "area",
+      "name": "エリア_砂漠クエスト受託エリア",
+      "position": [
+       -7.0584,
+       -2.4279,
+       581.2863
+      ],
+      "scale": [
+       10.0,
+       10.0,
+       10.0
+      ],
+      "via": "条件コマンド_クエスト受託",
+      "defined_in": "quest/q400.dat",
+      "source": "stale_hap_z (action absente des .pak)"
+     },
+     {
+      "kind": "area",
+      "name": "エリア_水没都市クエスト受託エリア",
+      "position": [
+       225.5924,
+       -0.7553,
+       421.6161
+      ],
+      "scale": [
+       10.0,
+       10.0,
+       10.0
+      ],
+      "via": "条件コマンド_クエスト受託",
+      "defined_in": "quest/q400.dat",
+      "source": "stale_hap_z (action absente des .pak)"
+     }
+    ],
+    "resolved_in": "world_gaps_resolved.json"
+   }
   },
   "q403": {
    "english_name": "The Vengeful Warrior's Finale",
@@ -227589,7 +227988,66 @@
    "quest_script_entities": [],
    "placed_in_quest_files": [],
    "named_haps": [],
-   "confidence": "unresolved"
+   "confidence": "unresolved",
+   "gaps_resolved": {
+    "start_mechanism": "area",
+    "confidence": "medium",
+    "summary": "Comme q401 (memes 3 zones de q400_hap.z) : hap '進行制御(15)' -> signal q403_talk2 -> q403/RUN_1.",
+    "start_positions": [
+     {
+      "kind": "area",
+      "name": "エリア_大ハイキョ都市クエスト受託エリア",
+      "position": [
+       224.03,
+       -3.2868,
+       516.1697
+      ],
+      "scale": [
+       10.0,
+       10.0,
+       10.0
+      ],
+      "via": "条件コマンド_クエスト受託",
+      "defined_in": "quest/q400.dat",
+      "source": "stale_hap_z (action absente des .pak)"
+     },
+     {
+      "kind": "area",
+      "name": "エリア_砂漠クエスト受託エリア",
+      "position": [
+       -7.0584,
+       -2.4279,
+       581.2863
+      ],
+      "scale": [
+       10.0,
+       10.0,
+       10.0
+      ],
+      "via": "条件コマンド_クエスト受託",
+      "defined_in": "quest/q400.dat",
+      "source": "stale_hap_z (action absente des .pak)"
+     },
+     {
+      "kind": "area",
+      "name": "エリア_水没都市クエスト受託エリア",
+      "position": [
+       225.5924,
+       -0.7553,
+       421.6161
+      ],
+      "scale": [
+       10.0,
+       10.0,
+       10.0
+      ],
+      "via": "条件コマンド_クエスト受託",
+      "defined_in": "quest/q400.dat",
+      "source": "stale_hap_z (action absente des .pak)"
+     }
+    ],
+    "resolved_in": "world_gaps_resolved.json"
+   }
   },
   "q410": {
    "english_name": "11B's Memento",
@@ -235617,7 +236075,29 @@
    ],
    "placed_in_quest_files": [],
    "named_haps": [],
-   "confidence": "medium"
+   "confidence": "medium",
+   "gaps_resolved": {
+    "start_mechanism": "mail",
+    "confidence": "high",
+    "summary": "q540/REQ : zone HIT 'mail_area1' -> play_a1 (Route A : send_mail 6, 6O) ou play_b1 (Route B : send_mail 12, 21O) ; MailTable : lecture du mail = q540/REQ -> q540/RUN_1. Pas de PNJ.",
+    "start_positions": [
+     {
+      "kind": "area",
+      "name": "mail_area1 (エリア-メール受信エリア)",
+      "position": [
+       166.0374,
+       -43.5175,
+       484.529
+      ],
+      "scale": [
+       29.3213,
+       78.1948,
+       28.2218
+      ]
+     }
+    ],
+    "resolved_in": "world_gaps_resolved.json"
+   }
   },
   "q550": {
    "english_name": "Reconnaissance Squad",
@@ -238463,7 +238943,35 @@
     }
    ],
    "named_haps": [],
-   "confidence": "medium"
+   "confidence": "medium",
+   "gaps_resolved": {
+    "start_mechanism": "npc_talk",
+    "confidence": "high",
+    "summary": "Parler a Devola (pl1040) ou Popola (pl1050) au camp de la Resistance (st1/r110) quand q561/REQ -> q561_talk1_a2 -> q561_talk1_ok -> q561/RUN_1.",
+    "start_positions": [
+     {
+      "kind": "entity",
+      "name": "devol (pl1040)",
+      "position": [
+       269.2615,
+       9.4577,
+       666.2866
+      ],
+      "file": "st1/r110.dat"
+     },
+     {
+      "kind": "entity",
+      "name": "popol (pl1050)",
+      "position": [
+       268.7249,
+       9.4509,
+       666.6911
+      ],
+      "file": "st1/r110.dat"
+     }
+    ],
+    "resolved_in": "world_gaps_resolved.json"
+   }
   },
   "q562": {
    "english_name": "The Twins' Request",
@@ -252280,7 +252788,52 @@
     }
    ],
    "named_haps": [],
-   "confidence": "medium"
+   "confidence": "medium",
+   "gaps_resolved": {
+    "start_mechanism": "npc_route_end",
+    "confidence": "high",
+    "summary": "Emil (pl1010, entite du hap 'エミール' de quest/q900) au bout de son trajet (ON_ROUTE_END) -> signal q900_talk1 -> q900/RUN_1 ; eml_1 ON_TALK quand q900/REQ.",
+    "start_positions": [
+     {
+      "kind": "area",
+      "name": "オブジェ配置エリア",
+      "position": [
+       125.9161,
+       1.153,
+       -155.5435
+      ],
+      "scale": [
+       103.1432,
+       74.9134,
+       103.1432
+      ],
+      "via": "条件コマンド"
+     },
+     {
+      "kind": "area",
+      "name": "カメラ注視",
+      "position": [
+       141.4216,
+       2.0058,
+       -136.3747
+      ],
+      "scale": null,
+      "via": "条件コマンド"
+     },
+     {
+      "kind": "entity",
+      "name": "pl1010",
+      "position": [
+       125.9161,
+       1.153,
+       -155.5435
+      ],
+      "file": "quest/q900.dat",
+      "via": "条件コマンド"
+     }
+    ],
+    "resolved_in": "world_gaps_resolved.json"
+   }
   },
   "q910": {
    "english_name": null,
@@ -253054,7 +253607,52 @@
     }
    ],
    "named_haps": [],
-   "confidence": "low"
+   "confidence": "low",
+   "gaps_resolved": {
+    "start_mechanism": "examine",
+    "confidence": "medium",
+    "summary": "Aucun etat q920/* dans les scripts/hap : la quete suit des etats emil_*. Maison d'Emil (sous-sol) : examiner (ON_CHECK) l'objet place (it0000) du hap '住居初回侵入' -> signal theft_talk (si emil_queststart, pose par r200 first_end apres la 1re rencontre) -> emil_itemsteele ; ensuite parler a Emil (r200 emile_* ON_TALK si emil_itemsteele) puis combat.",
+    "start_positions": [
+     {
+      "kind": "entity",
+      "name": "it0000",
+      "position": [
+       332.3734,
+       -248.1113,
+       414.8433
+      ],
+      "file": "quest/q920.dat",
+      "via": "条件コマンド"
+     },
+     {
+      "kind": "area_in_hap",
+      "name": "エリア",
+      "position": [
+       308.7595,
+       -253.7428,
+       386.0849
+      ],
+      "scale": [
+       19.6951,
+       22.2963,
+       1.5561
+      ],
+      "hap": "住居初回侵入"
+     },
+     {
+      "kind": "area_in_hap",
+      "name": "オブジェ配置",
+      "position": [
+       332.3734,
+       -248.1113,
+       414.8433
+      ],
+      "scale": null,
+      "hap": "住居初回侵入"
+     }
+    ],
+    "resolved_in": "world_gaps_resolved.json"
+   }
   },
   "qa00": {
    "english_name": null,
@@ -277858,7 +278456,24 @@
      }
     }
    ],
-   "confidence": "low"
+   "confidence": "low",
+   "gaps_resolved": {
+    "confidence": "high",
+    "resolved_in": "world_gaps_resolved.json",
+    "summary": "r200_d52e3bf5_scp.bin shop_branch : si emile_slow.ready? ou emile_first.ready? -> shop_slow, sinon (Emil rapide 'emile_fast') -> shop_fast. shop_slow : 'emil_normal'.on? -> shop_Emile, sinon shop_chipEmile. shop_fast : 'emil_normal'.on? -> shop_rareEmile, sinon shop_rareChipEmile. emil_normal : random_DONE_a0 (DONE de la 'ランダムコマンドエリア') -> rand(2) : 0 -> set_scene_state emil_normal, 1 -> reset (50/50).",
+    "npc_positions": [
+     [
+      256.6775,
+      0.1587,
+      512.0787
+     ],
+     [
+      -83.6572,
+      3.1506,
+      190.9906
+     ]
+    ]
+   }
   },
   {
    "shop": "shop_rareEmile",
@@ -278476,7 +279091,19 @@
      }
     }
    ],
-   "confidence": "low"
+   "confidence": "low",
+   "gaps_resolved": {
+    "confidence": "high",
+    "resolved_in": "world_gaps_resolved.json",
+    "summary": "r200_d52e3bf5_scp.bin shop_branch : si emile_slow.ready? ou emile_first.ready? -> shop_slow, sinon (Emil rapide 'emile_fast') -> shop_fast. shop_slow : 'emil_normal'.on? -> shop_Emile, sinon shop_chipEmile. shop_fast : 'emil_normal'.on? -> shop_rareEmile, sinon shop_rareChipEmile. emil_normal : random_DONE_a0 (DONE de la 'ランダムコマンドエリア') -> rand(2) : 0 -> set_scene_state emil_normal, 1 -> reset (50/50).",
+    "npc_positions": [
+     [
+      28.308,
+      -0.1276,
+      539.4855
+     ]
+    ]
+   }
   },
   {
    "shop": "shop_rareChipEmile",
@@ -279094,7 +279721,19 @@
      }
     }
    ],
-   "confidence": "low"
+   "confidence": "low",
+   "gaps_resolved": {
+    "confidence": "high",
+    "resolved_in": "world_gaps_resolved.json",
+    "summary": "r200_d52e3bf5_scp.bin shop_branch : si emile_slow.ready? ou emile_first.ready? -> shop_slow, sinon (Emil rapide 'emile_fast') -> shop_fast. shop_slow : 'emil_normal'.on? -> shop_Emile, sinon shop_chipEmile. shop_fast : 'emil_normal'.on? -> shop_rareEmile, sinon shop_rareChipEmile. emil_normal : random_DONE_a0 (DONE de la 'ランダムコマンドエリア') -> rand(2) : 0 -> set_scene_state emil_normal, 1 -> reset (50/50).",
+    "npc_positions": [
+     [
+      28.308,
+      -0.1276,
+      539.4855
+     ]
+    ]
+   }
   },
   {
    "shop": "shop_Upgrade",
@@ -281206,14 +281845,26 @@
    "shop_id": 56,
    "english_name": "Arena Trader",
    "references": [],
-   "confidence": "unresolved"
+   "confidence": "unresolved",
+   "gaps_resolved": {
+    "confidence": "unresolved",
+    "resolved_in": "world_gaps_resolved.json",
+    "summary": "seules references : tables de pointeurs de noms de magasin en RVA 0xf65130 (11 noms, contient shop_CS_Grocery) et 0xf65190 (12 noms, contient shop_CF_Grocery et shop_CD_Grocery), lues par RVA 0x8ef780 (comparaison du magasin courant pour un calcul de prix). Aucun appel shop(...) ni commande hap : les arenes q091/q092 n'ouvrent que shop_Upgrade (q091 sc_f15) ; seul q090 ouvre shop_CF_Grocery (lobby_em0106_shop). Magasins probablement inutilises (coupes).",
+    "npc_positions": []
+   }
   },
   {
    "shop": "shop_CD_Grocery",
    "shop_id": 57,
    "english_name": "Masked Trader",
    "references": [],
-   "confidence": "unresolved"
+   "confidence": "unresolved",
+   "gaps_resolved": {
+    "confidence": "unresolved",
+    "resolved_in": "world_gaps_resolved.json",
+    "summary": "seules references : tables de pointeurs de noms de magasin en RVA 0xf65130 (11 noms, contient shop_CS_Grocery) et 0xf65190 (12 noms, contient shop_CF_Grocery et shop_CD_Grocery), lues par RVA 0x8ef780 (comparaison du magasin courant pour un calcul de prix). Aucun appel shop(...) ni commande hap : les arenes q091/q092 n'ouvrent que shop_Upgrade (q091 sc_f15) ; seul q090 ouvre shop_CF_Grocery (lobby_em0106_shop). Magasins probablement inutilises (coupes).",
+    "npc_positions": []
+   }
   },
   {
    "shop": "shop_TEST_Grocery",
@@ -282254,7 +282905,12 @@
    "text_key": "CORE_MAP_TRANS_0011",
    "is_access_point": true,
    "terminals": [],
-   "confidence": "unresolved"
+   "confidence": "unresolved",
+   "gaps_resolved": {
+    "confidence": "unresolved",
+    "resolved_in": "world_gaps_resolved.json",
+    "summary": "chaine referencee uniquement par les initialiseurs de tables crc32 RVA 0x105a90 et 0x109ee0 (bit de terminal / texte CORE_MAP_TRANS) ; aucun objet ba1100 ni 'ファストトラベル出現位置' (code 0xfbac492d) ne porte ce codeName. Seul terminal du parc : ft_AP (r130, 647.59, 13.37, 387.15). Terminal coupe."
+   }
   },
   {
    "code": "ft_AP_T2",
@@ -282262,7 +282918,12 @@
    "text_key": "CORE_MAP_TRANS_0012",
    "is_access_point": true,
    "terminals": [],
-   "confidence": "unresolved"
+   "confidence": "unresolved",
+   "gaps_resolved": {
+    "confidence": "unresolved",
+    "resolved_in": "world_gaps_resolved.json",
+    "summary": "chaine referencee uniquement par les initialiseurs de tables crc32 RVA 0x105a90 et 0x109ee0 (bit de terminal / texte CORE_MAP_TRANS) ; aucun objet ba1100 ni 'ファストトラベル出現位置' (code 0xfbac492d) ne porte ce codeName. Seul terminal du parc : ft_AP (r130, 647.59, 13.37, 387.15). Terminal coupe."
+   }
   },
   {
    "code": "ft_AP_T",
@@ -282270,7 +282931,12 @@
    "text_key": "CORE_MAP_TRANS_0013",
    "is_access_point": true,
    "terminals": [],
-   "confidence": "unresolved"
+   "confidence": "unresolved",
+   "gaps_resolved": {
+    "confidence": "unresolved",
+    "resolved_in": "world_gaps_resolved.json",
+    "summary": "chaine referencee uniquement par les initialiseurs de tables crc32 RVA 0x105a90 et 0x109ee0 (bit de terminal / texte CORE_MAP_TRANS) ; aucun objet ba1100 ni 'ファストトラベル出現位置' (code 0xfbac492d) ne porte ce codeName. Seul terminal du parc : ft_AP (r130, 647.59, 13.37, 387.15). Terminal coupe."
+   }
   },
   {
    "code": "ft_PV",

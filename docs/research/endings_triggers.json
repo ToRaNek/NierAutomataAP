@@ -318,11 +318,11 @@
    ],
    "is_joke": false,
    "kind": "main",
-   "confidence": "medium",
-   "trigger_en_unofficial": "phf/pf10 hap '流れ(3)' (flow 3) 'コマンド送信_クリアB' (send command: clear B) sets SceneState ending_B and unlocks achievement 0x11 (inside the credits phase pf10).",
+   "confidence": "high",
+   "trigger_en_unofficial": "p200 200_80_AB_Ruined_City_end (Route/B group '80_HDイベント', hap 'イベント再生(2)'): HD event then direct jump to p300 00_CD_Bunker_2B (no EndRoll_B). p300 00_CD_Bunker_2B hap '流れ(17)' (Bunker brief respite) 'フェーズジャンプ_f10' -> pf10 BackTitle_B; pf10 '流れ(3)' sets ending_B + achievement 11 'A New Battle Begins'. exe 0x85c271: BackTitle_B -> ending bit 1; title CREDIT_END_TITLE_02 via 0x89ae00(1) (0x83de77).",
    "where": "pf10 credits, reached from p200 end of Route B (10-05 v2 'The Beginning of Battle')",
    "web_check": "agree (beat Route B)",
-   "unresolved": "the p200 Route/B jump into pf10 was not isolated (no EndRoll_B subphase; the B credits flow is pf10)"
+   "unresolved": null
   },
   {
    "letter": "C",
@@ -404,11 +404,11 @@
    ],
    "is_joke": false,
    "kind": "main",
-   "confidence": "medium",
+   "confidence": "high (internal flags)",
    "trigger_en_unofficial": "p300 hap '流れ(26)' (group 340_9S勝利 = 9S wins) action 'フェーズジャンプ_CEnd' -> pf10 EndRoll_CD. Path: 332_CD_Tower_Talk '流れ' 'フェーズジャンプ_9Ssele' -> 335_CD_Tower_sele9S -> 'フェーズジャンプ_9Swin' -> 340_C_Tower_9Swin. exe fn 0x863730: SceneState 'select/9S' set -> sets 'ending_C' (select/A2 -> ending_D). Script p300_987be645 (in 流れ(26)) tests 'ending_D on?' (other ending already seen -> 'フェーズジャンプ_TrueEnd' to pf31).",
    "where": "ph3/p300 17-09 -> 17-10 v1 (9S's Final Moments)",
-   "web_check": "DISAGREE: web says choosing A2 gives C and 9S gives D; internal data names the 9S-select/9S-win branch 'C' (subphase 340_C_, CEnd, select/9S -> ending_C)",
-   "unresolved": "which CREDIT_END_TITLE is displayed for each branch was not traced; release behaviour may follow the web (A2 -> C)"
+   "web_check": "DISAGREE, data settled: the game records choosing 9S as ending_C (exe 0x863730: select/9S -> SceneState ending_C 'saw C end', achievement 17 'Leaving for the New World'; ending mask 0x9ccd50 ending_C=0x4, ending_D=0x8). web_reference.md says the opposite.",
+   "unresolved": "on-screen title for C/D not traced: 0x89ae00 (UIEndRollRoute CREDIT_END_TITLE_%02d) is only called for B, E and pf30 endings; A/C/D titles likely baked into the credits/movie"
   },
   {
    "letter": "D",
@@ -518,11 +518,11 @@
    ],
    "is_joke": false,
    "kind": "main",
-   "confidence": "medium",
+   "confidence": "high (internal flags)",
    "trigger_en_unofficial": "p300 hap '流れ(14)' (group 340_A2勝利 = A2 wins) 'フェーズジャンプ_DEnd' -> pf10 EndRoll_CD (copy in quest/qaef '流れ(27)'). Path: 'フェーズジャンプ_A2sele' -> 335_CD_Tower_seleA2 -> 'フェーズジャンプ_A2win' -> 340_D_Tower_A2win (-> 345_D_Tower_A2win_9Shack). exe: select/A2 -> ending_D. Script p300_10112854 (in 流れ(14)) tests 'ending_C on?' before 'フェーズジャンプ_TrueEnd'.",
    "where": "ph3/p300 17-09 -> 17-10 v2 (A2's Final Moments)",
-   "web_check": "DISAGREE (see C): web says 9S -> D",
-   "unresolved": "see C"
+   "web_check": "DISAGREE, data settled: the game records choosing A2 as ending_D (exe 0x863730: select/A2 -> SceneState ending_D 'saw D end', achievement 18 'Beautiful World'; ending mask 0x9ccd50 ending_C=0x4, ending_D=0x8). web_reference.md says the opposite.",
+   "unresolved": "on-screen title for C/D not traced: 0x89ae00 (UIEndRollRoute CREDIT_END_TITLE_%02d) is only called for B, E and pf30 endings; A/C/D titles likely baked into the credits/movie"
   },
   {
    "letter": "E",
@@ -780,11 +780,11 @@
    ],
    "is_joke": false,
    "kind": "main",
-   "confidence": "medium",
-   "trigger_en_unofficial": "No Ending_E jump (pf30 Ending_E is commented '未使用' = unused). True ending: at the end of the C or D branch, 'フェーズジャンプ_TrueEnd' -> pf31 'start' (credits shoot-'em-up), the scripts testing the other ending (ending_C / ending_D 'on?'); pf31/p300 '流れ(27)' 'フェーズジャンプ_STGクリア' (STG cleared) -> p300 360_CD_TrueEnd_FIN, 'フェーズジャンプ_諦め' (give up) -> pf10 BackTitle_CD.",
+   "confidence": "high",
+   "trigger_en_unofficial": "After the 2nd of C/D: 'フェーズジャンプ_TrueEnd' -> pf31 (350_CD_TrueEnd_STG). Script pf31_d2ca712b global_start_text_a0: Pod 153 'Requesting temporary halt to perform data check.' -> \"Accept the Pod's request?\" Yes/No. No -> credits continue, exit BackTitle_CD. Yes -> Pod 042/153 talk -> 'do you still wish for them to survive?' Yes -> credits shmup (death: 'GIVE UP HERE?' / 'RESCUE OFFER RECEIVED...'); give up -> BackTitle_CD; clear -> p300 360_CD_TrueEnd_FIN (achievement 19 'The Minds That Emerged', title CREDIT_END_TITLE_05 via 0x89ae00(4)) then save-deletion script 7de5c329 (6 confirmations, signal pod_delete).",
    "where": "ph3/p300 340_x -> phf/pf31 -> 350/360_CD_TrueEnd",
    "web_check": "agree (after C and D, credits shmup)",
-   "unresolved": "the Pod 153 'Yes/No' prompt itself was not located; the 'other ending seen' reading of the 'on?' tests is inferred"
+   "unresolved": null
   },
   {
    "letter": "F",
@@ -3348,11 +3348,11 @@
    ],
    "is_joke": true,
    "kind": "joke",
-   "confidence": "medium",
-   "trigger_en_unofficial": "exe game-over handler 0x83dc4b: if [0x11eac20] == 0 -> Ending_W. pf30 comment: AB prologue, die at the Abandoned Factory.",
+   "confidence": "high",
+   "trigger_en_unofficial": "Game over while SceneState RobotMt_Prologue/A, tutorial_STG or RobotMt_Boss/A is set: exe 0x7e00a0 (game-over kind) returns 6, value [0x11eac20] stays 0 (default, reset at 0x83d91c) -> 0x83dc4b -> pf30 Ending_W. No setBadEnd 0 exists. States (core_hap.pak StateBind): Route A prologue flight STG 00_30..00_50_A (tutorial_STG, set by the STG dialogue scripts), factory from 00_60_A (2B control) to 00_80_A, 00_85_A..05_10_A, 05_20/30/40_A, boss 05_00_A..05_40_A (RobotMt_Boss/A). Forced off on Route B (9S prologue).",
    "where": "prologue p100 (per pf30 comment)",
-   "web_check": "agree (die in the prologue)",
-   "unresolved": "no ContinueState.setBadEnd 0 found in hap/scripts of ph*/phf/st*/quest/core: how state 6/value 0 is reached in the prologue was not traced"
+   "web_check": "agree (die during the 2B prologue, incl. the flight-unit STG)",
+   "unresolved": "exact inclusion of the StateBind range bounds (00_80_A_RobotM_Pro_1stArea); meaning of [0x1029c30] (<0 -> back to START instead)"
   },
   {
    "letter": "X",
@@ -3619,5 +3619,14 @@
     "60_00_OrganizePapers"
    ]
   }
- ]
+ ],
+ "changes_logic_gaps": {
+  "source": "tools/logic_gaps_endings.py (2026-11-24)",
+  "changes": [
+   "W: trigger resolved (exe 0x7e00a0 + StateBind ranges), confidence medium -> high",
+   "B: credits jump resolved (p200 200_80 -> p300 00_CD_Bunker_2B -> pf10 BackTitle_B)",
+   "C/D: settled on internal flags (9S -> ending_C / achievement 17, A2 -> ending_D / achievement 18); displayed title still not traced",
+   "E: Pod 153 Yes/No prompt located (pf31_d2ca712b global_start_text_a0 / y0 / y1) and branches mapped"
+  ]
+ }
 }
