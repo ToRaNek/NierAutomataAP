@@ -19,7 +19,7 @@ from typing import Optional
 SPACE_KERNING = 36
 LINE_MAX = 256  # lettres u16 par ligne (zone dediee)
 EXTRA_KEYS = 64
-POOL_SIZE = 0x100000
+POOL_SIZE = 0x10000  # 64 Ko : suffit pour les textes (16 lignes x 512 o) ; plus grand introuvable parfois
 
 
 def key_hash(key: str) -> int:
@@ -96,7 +96,7 @@ def _find(mem, needle: bytes) -> list[int]:
 class CoreText:
     """Fichier MCD des menus en memoire ; set_text() remplace le texte d'une cle (restaurable)."""
 
-    def __init__(self, mem, probe_key: str = "CORE_ITEM_NAME_931"):
+    def __init__(self, mem, probe_key: str = "CORE_ITEM_NAME_931", at: Optional[int] = None):
         self.mem = mem
         self.base: Optional[int] = None
         self._orig: dict[int, bytes] = {}
@@ -317,30 +317,42 @@ class CoreText:
 
 
 class MenuTexts:
-    """Le jeu consulte plusieurs fichiers MCD (CORE + additionnel : ex. noms des teintures 880..).
-    set_text() modifie la cle dans chaque fichier qui la contient."""
+    """Le jeu consulte plusieurs fichiers MCD (CORE, additionnel, DLC...) et prend le premier qui contient la
+    cle. CORE a toutes les lettres ; les autres seulement celles de leurs textes. Pour chaque cle : si CORE
+    la contient, on ecrit dans CORE et on la masque ailleurs (verifie : le jeu passe alors au fichier suivant),
+    sinon on ecrit dans chaque fichier qui la contient."""
 
-    def __init__(self, mem, probes=("CORE_ITEM_NAME_931", "CORE_ITEM_NAME_880")):
+    def __init__(self, mem, keys=("CORE_ITEM_NAME_931",)):
+        self.mem = mem
         self.files: list[CoreText] = []
-        for p in probes:
-            f = CoreText(mem, p)
+        for key in keys:
+            self._discover(key)
+
+    def _discover(self, key: str) -> None:
+        for hit in _find(self.mem, key.encode() + bytes(1)):
+            if any(f.base <= hit < f.base + 0x800000 for f in self.files):
+                continue
+            f = CoreText(self.mem, key, at=hit)
             if f.ok and all(f.base != g.base for g in self.files):
                 self.files.append(f)
-        # (emprunt de glyphes abandonne : le jeu dessine chaque fichier avec sa propre texture)
 
     @property
     def ok(self) -> bool:
         return bool(self.files)
 
     def set_text(self, key: str, text: str, width: int = 0) -> bool:
-        """Ecrit la cle dans chaque fichier qui la contient. Un fichier ne contient que les lettres de ses
-        propres textes : lettre absente -> autre casse, sans accent, sinon '?'.
-        (Verifie : le jeu garde en cache ses tables de cles, add_key/hide_key ne sont pas pris en compte.)"""
-        done = False
-        for f in self.files:
-            if key in f.keys:
-                done = f.set_text(key, text, width) or done
-        return done
+        if not any(key in f.keys for f in self.files):
+            self._discover(key)
+        owners = [f for f in self.files if key in f.keys]
+        if not owners:
+            return False
+        core = next((f for f in owners if f.base == self.files[0].base), None)
+        if core is not None:
+            for f in owners:
+                if f is not core:
+                    f.hide_key(key)
+            return core.set_text(key, text, width)
+        return any([f.set_text(key, text, width) for f in owners])
 
     def restore(self) -> None:
         for f in self.files:
