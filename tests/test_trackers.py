@@ -128,3 +128,28 @@ def test_refound_weapon_after_reload_not_recounted():
     t.scan({0x3F5})                           # rechargement : retrouvee
     assert t.scan({0x3F5}) == ([0x3F5], None)  # retiree mais pas recomptee
     assert s.weapons_found == 1
+
+
+from nier_automata.game.trackers import ItemTracker
+
+
+def test_item_baseline_not_checked():
+    s = st()
+    assert ItemTracker(s, enabled_ids={540, 601}).scan({540}) == []
+    assert s.item_baseline == {540}
+
+
+def test_new_material_checked_once():
+    s = st()
+    t = ItemTracker(s, enabled_ids={540, 601})
+    t.scan({540})
+    assert t.scan({540, 601}) == [601]
+    assert t.scan({540, 601}) == []
+    assert s.items_found == {601}
+
+
+def test_disabled_item_ignored():
+    s = st()
+    t = ItemTracker(s, enabled_ids={601})
+    t.scan(set())
+    assert t.scan({0}) == []

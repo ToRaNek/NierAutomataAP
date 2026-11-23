@@ -67,3 +67,20 @@ class StoryTracker:
         self.state.story_codes.add(code)
         n = len(self.state.story_codes)
         return n if n <= self.max_count else None
+
+
+class ItemTracker:
+    """Premier ramassage de chaque objet active. La 1re lecture sert de reference (pas de check)."""
+
+    def __init__(self, state: ClientState, enabled_ids: set[int]):
+        self.state = state
+        self.enabled_ids = enabled_ids
+
+    def scan(self, owned_item_ids: set[int]) -> list[int]:
+        owned = owned_item_ids & self.enabled_ids
+        if self.state.item_baseline is None:
+            self.state.item_baseline = set(owned)
+            return []
+        new = sorted(owned - self.state.item_baseline - self.state.items_found)
+        self.state.items_found.update(new)
+        return new

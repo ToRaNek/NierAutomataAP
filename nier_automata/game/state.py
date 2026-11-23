@@ -28,6 +28,8 @@ class ClientState:
     ap_weapons: set[int] = field(default_factory=set)
     story_codes: set[str] = field(default_factory=set)
     found_weapon_ids: set[int] = field(default_factory=set)
+    item_baseline: Optional[set[int]] = None
+    items_found: set[int] = field(default_factory=set)
 
     def to_dict(self) -> dict:
         return {
@@ -38,6 +40,8 @@ class ClientState:
             "ap_weapons": sorted(self.ap_weapons),
             "story_codes": sorted(self.story_codes),
             "found_weapon_ids": sorted(self.found_weapon_ids),
+            "item_baseline": None if self.item_baseline is None else sorted(self.item_baseline),
+            "items_found": sorted(self.items_found),
         }
 
     def to_json(self) -> str:
@@ -67,4 +71,6 @@ class ClientState:
                    sent_locations=set(d["sent_locations"]),
                    weapons_found=d["weapons_found"], ap_weapons=set(d["ap_weapons"]),
                    story_codes=set(d.get("story_codes", [])),
-                   found_weapon_ids=set(d.get("found_weapon_ids", [])))
+                   found_weapon_ids=set(d.get("found_weapon_ids", [])),
+                   item_baseline=None if d.get("item_baseline") is None else set(d["item_baseline"]),
+                   items_found=set(d.get("items_found", [])))

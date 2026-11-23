@@ -49,3 +49,17 @@ def test_phase_code_first_two_tokens():
 
 def test_goal_prefix():
     assert GOAL_PHASE_PREFIX == "58_AB_BossArea_Fall"
+
+
+def test_filler_never_material():
+    from nier_automata.data.items_data import MATERIALS
+    assert len(MATERIALS) == 71
+    assert not set(FILLER_ITEMS.values()) & set(MATERIALS.values())
+
+
+def test_item_location_codes_unique():
+    from nier_automata.data.tables import item_location
+    locs = location_name_to_id()
+    assert item_location("Iron Ore") == "Item: Iron Ore"
+    assert item_location("Iron Ore") in locs
+    assert len(set(locs.values())) == len(locs)

@@ -14,6 +14,10 @@ class FakeGame:
         self.items: dict[str, int] = {}
         self.capacity = capacity
         self.ingame = True
+        self.owned = set()
+
+    def owned_items(self):
+        return set(self.owned)
 
     def in_game(self):
         return self.ingame
@@ -170,3 +174,13 @@ def test_accepts_new_game_on_first_link():
     tr = make_trackers(s, story_checks=5, weapon_checks=3)
     r = tick(FakeGame(), s, [], tr, GOAL)
     assert not r.refused
+
+
+def test_tick_sends_item_location():
+    s, tr = setup(story_codes={"00_60"})
+    g = FakeGame()
+    g.owned = {540}
+    tick(g, s, [], tr, GOAL)
+    g.owned = {540, 601}
+    r = tick(g, s, [], tr, GOAL)
+    assert LOCS["Item: Iron Ore"] in r.locations

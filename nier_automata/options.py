@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from Options import PerGameCommonOptions, Range
+from Options import DefaultOnToggle, PerGameCommonOptions, Range
 
 from .data.tables import MAX_STORY, MAX_WEAPON_CHECKS
 
@@ -22,7 +22,13 @@ class WeaponChecks(Range):
     default = 8
 
 
+class ItemChecks(DefaultOnToggle):
+    """Le premier ramassage de chaque materiau (coffre, ennemi, sol) envoie un check "Item: <nom>"."""
+    display_name = "Item Checks"
+
+
 @dataclass
 class NierAutomataOptions(PerGameCommonOptions):
     story_checks: StoryChecks
     weapon_checks: WeaponChecks
+    item_checks: ItemChecks

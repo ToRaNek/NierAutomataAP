@@ -2,10 +2,10 @@ from BaseClasses import Item, ItemClassification, Location, LocationProgressType
 from worlds.AutoWorld import WebWorld, World
 from worlds.LauncherComponents import Component, Type, components, launch_subprocess
 
-from .data.items_data import FILLER_ITEMS
+from .data.items_data import FILLER_ITEMS, MATERIALS
 from .data.phases import GOAL_PHASE_PREFIX
 from .data.tables import (
-    GOAL_LOCATION, item_name_to_id, location_name_to_id, story_location, weapon_location,
+    GOAL_LOCATION, item_location, item_name_to_id, location_name_to_id, story_location, weapon_location,
 )
 from .data.weapons import STARTING_WEAPONS, WEAPONS
 from .options import NierAutomataOptions
@@ -49,13 +49,15 @@ class NierAutomataWorld(World):
     def _location_names(self) -> list[str]:
         names = [story_location(n) for n in range(1, self.options.story_checks.value + 1)]
         names += [weapon_location(n) for n in range(1, self.options.weapon_checks.value + 1)]
+        if self.options.item_checks:
+            names += [item_location(m) for m in MATERIALS]
         return names
 
     def create_regions(self) -> None:
         menu = Region("Menu", self.player, self.multiworld)
         for name in self._location_names():
             loc = NierLocation(self.player, name, self.location_name_to_id[name], menu)
-            if name.startswith("Weapon Found"):
+            if name.startswith(("Weapon Found", "Item: ")):
                 # Peut etre inatteignable (peu d'armes en route A) : jamais d'objet de progression ici.
                 loc.progress_type = LocationProgressType.EXCLUDED
             menu.locations.append(loc)
@@ -86,5 +88,6 @@ class NierAutomataWorld(World):
         return {
             "story_checks": self.options.story_checks.value,
             "weapon_checks": self.options.weapon_checks.value,
+            "item_checks": bool(self.options.item_checks),
             "goal_phase_prefix": GOAL_PHASE_PREFIX,
         }

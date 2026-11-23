@@ -75,6 +75,9 @@ class NierGame:
     def phase(self) -> str:
         return read_cstr(self.mem, self._off["currentPhase"])
 
+    def owned_items(self) -> set[int]:
+        return {s.item_id for s in self._items.read_all()}
+
     def owned_weapons(self) -> set[int]:
         return {s.item_id for s in self._weapons.read_all()}
 

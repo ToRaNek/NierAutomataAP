@@ -42,7 +42,8 @@ class NierContext(CommonContext):
             path = state_path(seed, self.slot)
             self.state = ClientState.load(path) or new_state(seed, self.slot)
             self.state_file = path
-            self.trackers = make_trackers(self.state, sd.get("story_checks", 12), sd.get("weapon_checks", 8))
+            self.trackers = make_trackers(self.state, sd.get("story_checks", 12), sd.get("weapon_checks", 8),
+                                          sd.get("item_checks", False))
             self.goal_prefix = sd.get("goal_phase_prefix", GOAL_PHASE_PREFIX)
             logger.info("Connecte. Etat local : %s", path)
             # Renvoyer les checks merites que le serveur n'a pas (coupure pendant un envoi).
