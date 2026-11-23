@@ -2,14 +2,15 @@ from nier_automata.data.abilities import ABILITY_PATCHES
 from nier_automata.game.abilities import AbilityLock
 from nier_automata.game.memory import FakeMemory
 
-DJ = ABILITY_PATCHES["Double Jump"]
-AD = ABILITY_PATCHES["Air Dash"]
+DJ, DJ2 = ABILITY_PATCHES["Double Jump"]
+AD, = ABILITY_PATCHES["Air Dash"]
 
 
 def mem_with_originals():
     m = FakeMemory()
-    for p in ABILITY_PATCHES.values():
-        m.write(m.base + p.rva, p.original)
+    for patches in ABILITY_PATCHES.values():
+        for p in patches:
+            m.write(m.base + p.rva, p.original)
     return m
 
 
@@ -24,6 +25,7 @@ def test_locks_abilities_not_received():
     m = mem_with_originals()
     AbilityLock(m, randomized={"Double Jump", "Air Dash"}).sync(received=set())
     assert m.read(m.base + DJ.rva, 1) == DJ.locked
+    assert m.read(m.base + DJ2.rva, 1) == DJ2.locked
     assert m.read(m.base + AD.rva, 6) == AD.locked
 
 
