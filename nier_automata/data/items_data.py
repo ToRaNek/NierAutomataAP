@@ -19,6 +19,7 @@ TRAP_ITEMS: dict[str, tuple[str, int]] = {
     "Damage Trap (5%)": ("damage", 5),
     "Damage Trap (10%)": ("damage", 10),
     "Money Trap": ("money", 10),
+    "Enemy Trap": ("spawn", 3),
 }
 
 # Quantite donnee par objet recu.

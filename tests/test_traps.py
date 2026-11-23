@@ -24,3 +24,7 @@ def test_trap_items_registered():
     ids = item_name_to_id()
     assert {"Damage Trap (5%)", "Damage Trap (10%)", "Money Trap"} <= set(TRAP_ITEMS)
     assert all(name in ids for name in TRAP_ITEMS)
+
+
+def test_enemy_trap_registered():
+    assert TRAP_ITEMS["Enemy Trap"] == ("spawn", 3)

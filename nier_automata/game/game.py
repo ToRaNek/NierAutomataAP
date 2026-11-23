@@ -138,6 +138,12 @@ class NierGame:
 
     def apply_trap(self, kind: str, percent: int) -> bool:
         """False = pas applicable maintenant (pas d'entite) : le client reessaie au tour suivant."""
+        if kind == "spawn":
+            from .spawner import spawn_enemies
+            pos = struct.unpack("<3f", self.mem.read(self.mem.base + self._off["playerLocation"], 12))
+            if spawn_enemies(self.mem, pos, count=percent):
+                return True
+            kind, percent = "damage", 10  # aucun ennemi charge dans la zone : degats a la place
         if kind == "money":
             funds = read_u32(self.mem, self._off["funds"])
             self.mem.write(self.mem.base + self._off["funds"], struct.pack("<I", funds_after_trap(funds, percent)))
