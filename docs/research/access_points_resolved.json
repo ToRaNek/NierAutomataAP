@@ -1,0 +1,2243 @@
+{
+ "note": "Correspondance LUE dans l'exe v1.04 (pas deduite). Cle de texte = CORE_MAP_TRANS_%04d(indice+1) ou indice = position du crc32(codeName) dans le tableau 0x13FD4A0 rempli par 0x109EE0. Les entrees 23-27 (re_*) sont des points de reprise de la Tour/p200, pas des points d'acces.",
+ "unlock_model": {
+  "visible_in_transport_menu": "le bit d'activation est mis (0x7F82D0 ; ft_BK toujours) : mis par 0x818040 lors de la premiere interaction avec le terminal (comportement ba1100 0x604BD0, evenement 'ba1100_warp_device_first_boot') ou par 0x7623D0 pour ft_RC/ft_CC",
+  "terminal_usable": "variable 'ft_XX' vraie dans la table de variables 0xF23540 (nom -> octet). Ecrite par MiscState.setvar \"ft_XX true|false\" (gestionnaire 0x3AEBD0, meme table via 0x358540) et FastTravel.enableTransporter (0x324CB0) ; lue par FastTravel.transporterIsEnabled (0x3587F0 -> 0x327FF0). Fausse = terminal en panne : destination grisee avec CORE_PM_TM_HELP_13 'Unavailable due to signal interference.' (confiance haute)",
+  "first_activation": "le terminal ba1100 (0x604BD0, etat 0) appelle FastTravel.transporterIsReadyToUnlock (0x358800) : vrai si la variable est vraie, sinon depend d'un etat de l'objet terminal (bit 21 de [obj+0x1C] puis 0x3DF840(obj+0x140)) - vraisemblablement la condition 'ennemis du 敵発生機_ft_XX elimines' (q170 : condition transporterIsReadyToUnlock suivie du dialogue '敵撃破会話'), NON verifie. Si faux : evenement 0x8132D7F8 (refus). Si vrai et bit pas encore mis : evenement 'ba1100_warp_device_first_boot' puis 0x818040 (bit).",
+  "unlock_notes_caveat": "unlock_notes = references directes (haute confiance sur leur existence) ; l'ordre et les declencheurs des actions hap ne sont pas resolus (scripts *_scp.bin non decodes)",
+  "hap_actions": "chaque terminal place a une action 'ファストトラベル条件リセット' (code 0x5797C250, parametre codeName) et souvent un generateur d'ennemis '敵発生機_ft_XX' (code 0x6F0FB5BD)",
+  "global_locks": {
+   "WarpLock": "aucune destination (0x8BC580)",
+   "Electronic_Lock": "aucune destination (0x8BC580)",
+   "TerminalLock": "seule ft_RC est proposee (si sa variable est vraie)",
+   "WarpPartialLock": "seules ft_BK, ft_RC, ft_CC, ft_CRb, ft_CS, ft_PV restent selectionnables ; les autres : CORE_PM_TM_HELP_11 'You cannot travel outside of the mission area.'",
+   "lock_ft_PV": "ft_PV grisee (CORE_PM_TM_HELP_15)",
+   "Pascal_Terminal_txt": "ft_PV grisee (CORE_PM_TM_HELP_13)"
+  },
+  "activation_bitfield": {
+   "rva": "0x14957e0",
+   "order": "bit n = dword[n>>5] & (0x80000000 >> (n&31))",
+   "note": "numero de bit = valeur de 0x7E43C0 (0..21, 12 inutilise ; ft_BK sans bit)"
+  }
+ },
+ "functions": {
+  "0x109ee0": "initialiseur statique : crc32 de 27 codes (22 ft_ + 5 re_*) -> 0x13FD4A0",
+  "0x105a90": "initialiseur statique : crc32 de 21 codes ft_ (sans ft_BK) -> 0x13EC770",
+  "0x86f0d0": "codeName -> cle CORE_MAP_TRANS_%04d (indice+1), cas ft_PV/UI_namePV",
+  "0x86f250": "numero -> cle de texte (14: UI_namePV, 23-26: CORE_MAP_AREA_090, 27: CORE_MAP_TRANS_0021)",
+  "0x86fd90": "codeName -> numero 1..27 ou -1",
+  "0x7e43c0": "codeName -> numero de bit d'activation",
+  "0x7f82d0": "terminal active ? (ft_BK toujours vrai)",
+  "0x818040": "active le terminal (met le bit)",
+  "0x604bd0": "machine a etats du terminal ba1100 (vtable 0xCA4108)",
+  "0x8bc580": "construit la liste des destinations du menu Transport",
+  "0x7623d0": "forcage de ft_RC / ft_CC selon la phase",
+  "0x28ee00": "crc32 (zlib) d'une chaine C"
+ },
+ "access_points": [
+  {
+   "index": 0,
+   "number": 1,
+   "code": "ft_BK",
+   "crc32": "0x70ac9e29",
+   "hash_slot": "0x13fd4a0",
+   "text_key": "CORE_MAP_TRANS_0001",
+   "english_name": "Bunker",
+   "text_key_rule": null,
+   "is_access_point": true,
+   "activation_bit": null,
+   "activation_bit_rva": null,
+   "always_active": true,
+   "allowed_under_WarpPartialLock": true,
+   "confidence": "high",
+   "evidence": "0x109EE0 stocke crc32('ft_BK') dans 0x13fd4a0 = 0x13FD4A0+4*0 ; 0x86F0D0 cherche le hachage du codeName dans ce tableau (27 entrees) et formate CORE_MAP_TRANS_%04d avec indice+1 = 1",
+   "placed_entities": [
+    {
+     "objId": "ba1000",
+     "file": "quest/qb40.dat",
+     "position": [
+      -20.866901,
+      -41.465683,
+      -7.603981
+     ],
+     "hap": "設置物",
+     "action": "オブジェ配置_転送装置"
+    },
+    {
+     "objId": "ba1000",
+     "file": "quest/qb40.dat",
+     "position": [
+      -18.132168,
+      -42.733414,
+      -7.603096
+     ],
+     "hap": "設置物",
+     "action": "オブジェ配置_転送装置"
+    },
+    {
+     "objId": "ba1000",
+     "file": "quest/qb40.dat",
+     "position": [
+      -15.335762,
+      -43.808838,
+      -7.603271
+     ],
+     "hap": "設置物",
+     "action": "オブジェ配置_転送装置"
+    },
+    {
+     "objId": "ba1000",
+     "file": "quest/qb40.dat",
+     "position": [
+      44.755402,
+      -12.361977,
+      -7.606552
+     ],
+     "hap": "設置物",
+     "action": "オブジェ配置_転送装置"
+    },
+    {
+     "objId": "ba1000",
+     "file": "quest/qb40.dat",
+     "position": [
+      45.465546,
+      -9.364647,
+      -7.6045
+     ],
+     "hap": "設置物",
+     "action": "オブジェ配置_転送装置"
+    },
+    {
+     "objId": "ba1000",
+     "file": "quest/qb40.dat",
+     "position": [
+      45.984482,
+      -6.383717,
+      -7.604912
+     ],
+     "hap": "設置物",
+     "action": "オブジェ配置_転送装置"
+    }
+   ],
+   "hap_references": [
+    {
+     "file": "ph2/p200.dat",
+     "member": "p200_hap.z",
+     "token": "ft_BK",
+     "hap": "流れ",
+     "action": "メモリセーブ",
+     "comment": null,
+     "labels": [],
+     "line": "<pointName>ft_BK</pointName>"
+    },
+    {
+     "file": "ph3/p300.dat",
+     "member": "p300_hap.z",
+     "token": "ft_BK",
+     "hap": "バンカーセーブ禁止",
+     "action": "コマンド送信",
+     "comment": null,
+     "labels": [
+      "MiscState.setvar"
+     ],
+     "line": "<args>\"ft_BK false\"</args>"
+    },
+    {
+     "file": "ph3/p300.dat",
+     "member": "p300_hap.z",
+     "token": "ft_BK",
+     "hap": "..M3000_S0410_GM",
+     "action": "メモリセーブ",
+     "comment": null,
+     "labels": [],
+     "line": "<pointName>ft_BK</pointName>"
+    },
+    {
+     "file": "ph3/p300.dat",
+     "member": "p300_hap.z",
+     "token": "ft_BK",
+     "hap": "..M3000_S0410_GM",
+     "action": "メモリセーブ",
+     "comment": null,
+     "labels": [],
+     "line": "<pointName>ft_BK</pointName>"
+    },
+    {
+     "file": "quest/qb40.dat",
+     "member": "qb40_hap.z",
+     "token": "ft_BK",
+     "hap": "設置物",
+     "action": "オブジェ配置_転送装置",
+     "comment": null,
+     "labels": [],
+     "line": "<body>ft_BK</body>"
+    },
+    {
+     "file": "quest/qb40.dat",
+     "member": "qb40_hap.z",
+     "token": "ft_BK",
+     "hap": "設置物",
+     "action": "オブジェ配置_転送装置",
+     "comment": null,
+     "labels": [],
+     "line": "<body>ft_BK</body>"
+    },
+    {
+     "file": "quest/qb40.dat",
+     "member": "qb40_hap.z",
+     "token": "ft_BK",
+     "hap": "設置物",
+     "action": "オブジェ配置_転送装置",
+     "comment": null,
+     "labels": [],
+     "line": "<body>ft_BK</body>"
+    },
+    {
+     "file": "quest/qb40.dat",
+     "member": "qb40_hap.z",
+     "token": "ft_BK",
+     "hap": "設置物",
+     "action": "オブジェ配置_転送装置",
+     "comment": null,
+     "labels": [],
+     "line": "<body>ft_BK</body>"
+    },
+    {
+     "file": "quest/qb40.dat",
+     "member": "qb40_hap.z",
+     "token": "ft_BK",
+     "hap": "設置物",
+     "action": "オブジェ配置_転送装置",
+     "comment": null,
+     "labels": [],
+     "line": "<body>ft_BK</body>"
+    },
+    {
+     "file": "quest/qb40.dat",
+     "member": "qb40_hap.z",
+     "token": "ft_BK",
+     "hap": "設置物",
+     "action": "オブジェ配置_転送装置",
+     "comment": null,
+     "labels": [],
+     "line": "<body>ft_BK</body>"
+    },
+    {
+     "file": "core/corehap.dat",
+     "member": "core_hap.pak",
+     "token": "ft_BK",
+     "offset": 121381
+    },
+    {
+     "file": "core/corehap.dat",
+     "member": "core_hap.pak",
+     "token": "ft_BK",
+     "offset": 155037
+    }
+   ],
+   "unlock_notes": "Toujours actif (0x7F82D0 retourne 1, pas de bit). p300 'バンカーセーブ禁止' : setvar ft_BK false (route C/D). Place dans qb40 (6 ba1000)."
+  },
+  {
+   "index": 1,
+   "number": 2,
+   "code": "ft_RC",
+   "crc32": "0x34b5044a",
+   "hash_slot": "0x13fd4a4",
+   "text_key": "CORE_MAP_TRANS_0002",
+   "english_name": "Resistance Camp",
+   "text_key_rule": null,
+   "is_access_point": true,
+   "activation_bit": 0,
+   "activation_bit_rva": {
+    "word": "0x14957e0",
+    "mask": "0x80000000"
+   },
+   "always_active": false,
+   "allowed_under_WarpPartialLock": true,
+   "confidence": "high",
+   "evidence": "0x109EE0 stocke crc32('ft_RC') dans 0x13fd4a4 = 0x13FD4A0+4*1 ; 0x86F0D0 cherche le hachage du codeName dans ce tableau (27 entrees) et formate CORE_MAP_TRANS_%04d avec indice+1 = 2",
+   "placed_entities": [
+    {
+     "objId": "ba1000",
+     "file": "st1/r110.dat",
+     "position": [
+      243.287323,
+      9.455211,
+      671.591858
+     ],
+     "hap": "設置物",
+     "action": "オブジェ配置"
+    }
+   ],
+   "hap_references": [
+    {
+     "file": "ph2/p200.dat",
+     "member": "p200_hap.z",
+     "token": "ft_RC",
+     "hap": "セーブ制御",
+     "action": "コマンド送信",
+     "comment": null,
+     "labels": [
+      "MiscState.setvar"
+     ],
+     "line": "<args>\"ft_RC false\"</args>"
+    },
+    {
+     "file": "ph2/p200.dat",
+     "member": "p200_hap.z",
+     "token": "ft_RC",
+     "hap": "転送端末ロック処理",
+     "action": "複数コマンド送信",
+     "comment": null,
+     "labels": [
+      "MiscState.setvar"
+     ],
+     "line": "<args>\"ft_RC false\"</args>"
+    },
+    {
+     "file": "ph2/p200.dat",
+     "member": "p200_hap.z",
+     "token": "ft_RC",
+     "hap": "流れ(2)",
+     "action": "..M1070_S0020_コピー都市探し",
+     "comment": "デポルポポル会話",
+     "labels": [],
+     "line": "<name>ft_RC</name>"
+    },
+    {
+     "file": "ph2/p200.dat",
+     "member": "p200_hap.z",
+     "token": "ft_RC",
+     "hap": "流れ(2)",
+     "action": "コマンド送信_レジキャン端末故障",
+     "comment": null,
+     "labels": [
+      "MiscState.setvar"
+     ],
+     "line": "<args>\"ft_RC false\"</args>"
+    },
+    {
+     "file": "ph2/p200.dat",
+     "member": "p200_hap.z",
+     "token": "ft_RC",
+     "hap": "流れ(2)",
+     "action": "コマンド送信_レジキャン端末復旧",
+     "comment": null,
+     "labels": [
+      "MiscState.setvar"
+     ],
+     "line": "<args>\"ft_RC true\"</args>"
+    },
+    {
+     "file": "ph2/p200.dat",
+     "member": "p200_hap.z",
+     "token": "ft_RC",
+     "hap": "..M1090_S0230_GM",
+     "action": "メモリセーブ",
+     "comment": null,
+     "labels": [],
+     "line": "<pointName>ft_RC</pointName>"
+    },
+    {
+     "file": "ph2/p200.dat",
+     "member": "p200_hap.z",
+     "token": "ft_RC",
+     "hap": "..M1090_S0230_GM",
+     "action": "メモリセーブ",
+     "comment": null,
+     "labels": [],
+     "line": "<pointName>ft_RC</pointName>"
+    },
+    {
+     "file": "ph2/p200.dat",
+     "member": "p200_hap.z",
+     "token": "ft_RC",
+     "hap": "..M1090_S0230_GM",
+     "action": "メモリセーブ",
+     "comment": null,
+     "labels": [],
+     "line": "<pointName>ft_RC</pointName>"
+    },
+    {
+     "file": "ph2/p200.dat",
+     "member": "p200_hap.z",
+     "token": "ft_RC",
+     "hap": "..M1090_S0240_GM",
+     "action": "メモリセーブ",
+     "comment": null,
+     "labels": [],
+     "line": "<pointName>ft_RC</pointName>"
+    },
+    {
+     "file": "ph2/p200.dat",
+     "member": "p200_hap.z",
+     "token": "ft_RC",
+     "hap": "..M1090_S0240_GM",
+     "action": "メモリセーブ",
+     "comment": null,
+     "labels": [],
+     "line": "<pointName>ft_RC</pointName>"
+    },
+    {
+     "file": "ph2/p200.dat",
+     "member": "p200_hap.z",
+     "token": "ft_RC",
+     "hap": "..M1090_S0120_GM_a",
+     "action": "メモリセーブ",
+     "comment": null,
+     "labels": [],
+     "line": "<pointName>ft_RC</pointName>"
+    },
+    {
+     "file": "ph2/p200.dat",
+     "member": "p200_hap.z",
+     "token": "ft_RC",
+     "hap": "..M1090_S0120_GM_a",
+     "action": "メモリセーブ",
+     "comment": null,
+     "labels": [],
+     "line": "<pointName>ft_RC</pointName>"
+    },
+    {
+     "file": "ph2/p200.dat",
+     "member": "p200_hap.z",
+     "token": "ft_RC",
+     "hap": "..M1090_S0210_GM",
+     "action": "メモリセーブ",
+     "comment": null,
+     "labels": [],
+     "line": "<pointName>ft_RC</pointName>"
+    },
+    {
+     "file": "ph2/p200.dat",
+     "member": "p200_hap.z",
+     "token": "ft_RC",
+     "hap": "..M1090_S0210_GM",
+     "action": "メモリセーブ",
+     "comment": null,
+     "labels": [],
+     "line": "<pointName>ft_RC</pointName>"
+    },
+    {
+     "file": "ph2/p200.dat",
+     "member": "p200_hap.z",
+     "token": "ft_RC",
+     "hap": "..M1090_S0210_GM",
+     "action": "メモリセーブ",
+     "comment": null,
+     "labels": [],
+     "line": "<pointName>ft_RC</pointName>"
+    },
+    {
+     "file": "ph2/p200.dat",
+     "member": "p200_hap.z",
+     "token": "ft_RC",
+     "hap": "..M1090_S0210_GM",
+     "action": "メモリセーブ",
+     "comment": null,
+     "labels": [],
+     "line": "<pointName>ft_RC</pointName>"
+    },
+    {
+     "file": "ph2/p200.dat",
+     "member": "p200_hap.z",
+     "token": "ft_RC",
+     "hap": "..M1090_S0130_GM_a",
+     "action": "メモリセーブ",
+     "comment": null,
+     "labels": [],
+     "line": "<pointName>ft_RC</pointName>"
+    },
+    {
+     "file": "ph2/p200.dat",
+     "member": "p200_hap.z",
+     "token": "ft_RC",
+     "hap": "リーダー制御",
+     "action": "メモリセーブ",
+     "comment": null,
+     "labels": [],
+     "line": "<pointName>ft_RC</pointName>"
+    },
+    {
+     "file": "st1/r110.dat",
+     "member": "r110_hap.z",
+     "token": "ft_RC",
+     "hap": "設置物",
+     "action": "オブジェ配置",
+     "comment": null,
+     "labels": [],
+     "line": "<body>ft_RC</body>"
+    },
+    {
+     "file": "core/corehap.dat",
+     "member": "core_hap.pak",
+     "token": "ft_RC",
+     "offset": 170439
+    }
+   ],
+   "unlock_notes": "0x7623D0 force enableTransporter ft_RC + bit si (phase==p100 et sous-phase >= '40_AB_Resistance_Camp_Leader') ou phase p200/p300. p200 流れ(2) : panne 'レジキャン端末故障' puis 'レジキャン端末復旧' (true). p200 '転送端末ロック処理' et 'セーブ制御' : false. Seule destination permise sous TerminalLock."
+  },
+  {
+   "index": 2,
+   "number": 3,
+   "code": "ft_CC",
+   "crc32": "0x676c275a",
+   "hash_slot": "0x13fd4a8",
+   "text_key": "CORE_MAP_TRANS_0003",
+   "english_name": "City Ruins: Center",
+   "text_key_rule": null,
+   "is_access_point": true,
+   "activation_bit": 1,
+   "activation_bit_rva": {
+    "word": "0x14957e0",
+    "mask": "0x40000000"
+   },
+   "always_active": false,
+   "allowed_under_WarpPartialLock": true,
+   "confidence": "high",
+   "evidence": "0x109EE0 stocke crc32('ft_CC') dans 0x13fd4a8 = 0x13FD4A0+4*2 ; 0x86F0D0 cherche le hachage du codeName dans ce tableau (27 entrees) et formate CORE_MAP_TRANS_%04d avec indice+1 = 3",
+   "placed_entities": [
+    {
+     "objId": "ba1100",
+     "file": "st1/r100.dat",
+     "position": [
+      -9.810495,
+      1.583737,
+      327.413361
+     ],
+     "hap": "自販機＿中央エリア",
+     "action": "オブジェ配置_自販機＿中央エリア"
+    },
+    {
+     "objId": "ba1100",
+     "file": "st2/r200.dat",
+     "position": [
+      -9.810495,
+      1.583737,
+      327.413361
+     ],
+     "hap": "ファストトラベルまわり",
+     "action": "オブジェ配置"
+    },
+    {
+     "objId": "ba1100",
+     "file": "core/corehap.dat:core_hap.pak",
+     "position": [
+      -9.810495,
+      1.583737,
+      327.413361
+     ],
+     "hap": "自販機_陥没付近",
+     "action": null
+    }
+   ],
+   "hap_references": [
+    {
+     "file": "ph2/p200.dat",
+     "member": "p200_hap.z",
+     "token": "ft_CC",
+     "hap": "転送端末ロック処理",
+     "action": "複数コマンド送信",
+     "comment": null,
+     "labels": [
+      "MiscState.setvar"
+     ],
+     "line": "<args>\"ft_CC false\"</args>"
+    },
+    {
+     "file": "quest/q170.dat",
+     "member": "q170_hap.z",
+     "token": "ft_CC",
+     "hap": null,
+     "action": null,
+     "comment": null,
+     "labels": [],
+     "line": "<name>ft_CC</name>"
+    },
+    {
+     "file": "quest/q170.dat",
+     "member": "q170_hap.z",
+     "token": "ft_CC",
+     "hap": "流れ(7)",
+     "action": "コマンド送信_端末故障",
+     "comment": null,
+     "labels": [
+      "MiscState.setvar"
+     ],
+     "line": "<args>\"ft_CC false\"</args>"
+    },
+    {
+     "file": "quest/q170.dat",
+     "member": "q170_hap.z",
+     "token": "ft_CC",
+     "hap": "流れ(7)",
+     "action": "条件コマンド_敵撃破会話",
+     "comment": null,
+     "labels": [
+      "Action.signal",
+      "DISABLE",
+      "DONE",
+      "FastTravel.transporterIsReadyToUnlock"
+     ],
+     "line": "<args>ft_CC</args>"
+    },
+    {
+     "file": "st1/r100.dat",
+     "member": "r100_hap.z",
+     "token": "ft_CC",
+     "hap": "自販機＿中央エリア",
+     "action": "オブジェ配置_自販機＿中央エリア",
+     "comment": null,
+     "labels": [],
+     "line": "<body>ft_CC</body>"
+    },
+    {
+     "file": "st1/r100.dat",
+     "member": "r100_hap.z",
+     "token": "ft_CC",
+     "hap": "自販機＿中央エリア",
+     "action": "ファストトラベル条件リセット",
+     "comment": null,
+     "labels": [],
+     "line": "<codeName>ft_CC</codeName>"
+    },
+    {
+     "file": "st1/r100.dat",
+     "member": "r100_hap.z",
+     "token": "ft_CC",
+     "hap": "自販機＿中央エリア",
+     "action": "敵発生機_ft_CC",
+     "comment": null,
+     "labels": [],
+     "line": "<name>敵発生機_ft_CC</name>"
+    },
+    {
+     "file": "st2/r200.dat",
+     "member": "r200_hap.z",
+     "token": "ft_CC",
+     "hap": "ファストトラベルまわり",
+     "action": "オブジェ配置",
+     "comment": null,
+     "labels": [],
+     "line": "<body>ft_CC</body>"
+    },
+    {
+     "file": "st2/r200.dat",
+     "member": "r200_hap.z",
+     "token": "ft_CC",
+     "hap": "ファストトラベルまわり",
+     "action": "ファストトラベル条件リセット",
+     "comment": null,
+     "labels": [],
+     "line": "<codeName>ft_CC</codeName>"
+    },
+    {
+     "file": "st2/r200.dat",
+     "member": "r200_hap.z",
+     "token": "ft_CC",
+     "hap": "ファストトラベルまわり",
+     "action": "敵発生機_ft_CC",
+     "comment": null,
+     "labels": [],
+     "line": "<name>敵発生機_ft_CC</name>"
+    }
+   ],
+   "unlock_notes": "0x7623D0 force enableTransporter ft_CC + bit si la sous-phase courante == '100_A_Submerge_City_2B'. q170 (Terminal Repairs) 流れ(7) : panne puis condition transporterIsReadyToUnlock ft_CC. p200 : false."
+  },
+  {
+   "index": 3,
+   "number": 4,
+   "code": "ft_CRb",
+   "crc32": "0xa9be1824",
+   "hash_slot": "0x13fd4ac",
+   "text_key": "CORE_MAP_TRANS_0004",
+   "english_name": "City Ruins: Near Factory",
+   "text_key_rule": null,
+   "is_access_point": true,
+   "activation_bit": 2,
+   "activation_bit_rva": {
+    "word": "0x14957e0",
+    "mask": "0x20000000"
+   },
+   "always_active": false,
+   "allowed_under_WarpPartialLock": true,
+   "confidence": "high",
+   "evidence": "0x109EE0 stocke crc32('ft_CRb') dans 0x13fd4ac = 0x13FD4A0+4*3 ; 0x86F0D0 cherche le hachage du codeName dans ce tableau (27 entrees) et formate CORE_MAP_TRANS_%04d avec indice+1 = 4",
+   "placed_entities": [
+    {
+     "objId": "ba1100",
+     "file": "core/corehap.dat:core_hap.pak",
+     "position": [
+      -83.118835,
+      0.175064,
+      548.511536
+     ],
+     "hap": "自販機＿ロボット山入り口",
+     "action": null
+    }
+   ],
+   "hap_references": [
+    {
+     "file": "quest/q170.dat",
+     "member": "q170_hap.z",
+     "token": "ft_CRb",
+     "hap": null,
+     "action": null,
+     "comment": null,
+     "labels": [],
+     "line": "<name>ft_CRb</name>"
+    },
+    {
+     "file": "quest/q170.dat",
+     "member": "q170_hap.z",
+     "token": "ft_CRb",
+     "hap": "流れ(8)",
+     "action": "コマンド送信_端末故障",
+     "comment": null,
+     "labels": [
+      "MiscState.setvar"
+     ],
+     "line": "<args>\"ft_CRb false\"</args>"
+    },
+    {
+     "file": "quest/q170.dat",
+     "member": "q170_hap.z",
+     "token": "ft_CRb",
+     "hap": "流れ(8)",
+     "action": "条件コマンド_敵撃破会話",
+     "comment": null,
+     "labels": [
+      "Action.signal",
+      "DISABLE",
+      "DONE",
+      "FastTravel.transporterIsReadyToUnlock"
+     ],
+     "line": "<args>ft_CRb</args>"
+    }
+   ],
+   "unlock_notes": "q170 (Terminal Repairs) 流れ(8) : panne puis condition transporterIsReadyToUnlock ft_CRb. Place seulement dans core_hap.pak."
+  },
+  {
+   "index": 4,
+   "number": 5,
+   "code": "ft_CS",
+   "crc32": "0x7adb373e",
+   "hash_slot": "0x13fd4b0",
+   "text_key": "CORE_MAP_TRANS_0005",
+   "english_name": "City Ruins: Near the Tower",
+   "text_key_rule": null,
+   "is_access_point": true,
+   "activation_bit": 3,
+   "activation_bit_rva": {
+    "word": "0x14957e0",
+    "mask": "0x10000000"
+   },
+   "always_active": false,
+   "allowed_under_WarpPartialLock": true,
+   "confidence": "high",
+   "evidence": "0x109EE0 stocke crc32('ft_CS') dans 0x13fd4b0 = 0x13FD4A0+4*4 ; 0x86F0D0 cherche le hachage du codeName dans ce tableau (27 entrees) et formate CORE_MAP_TRANS_%04d avec indice+1 = 5",
+   "placed_entities": [
+    {
+     "objId": "ba1100",
+     "file": "core/corehap.dat:core_hap.pak",
+     "position": [
+      97.253029,
+      0.441439,
+      91.512794
+     ],
+     "hap": "自販機＿ショッピングモール付近",
+     "action": null
+    }
+   ],
+   "hap_references": [
+    {
+     "file": "quest/q170.dat",
+     "member": "q170_hap.z",
+     "token": "ft_CS",
+     "hap": null,
+     "action": null,
+     "comment": null,
+     "labels": [],
+     "line": "<name>ft_CS</name>"
+    },
+    {
+     "file": "quest/q170.dat",
+     "member": "q170_hap.z",
+     "token": "ft_CS",
+     "hap": "流れ(13)",
+     "action": "コマンド送信_端末故障",
+     "comment": null,
+     "labels": [
+      "MiscState.setvar"
+     ],
+     "line": "<args>\"ft_CS false\"</args>"
+    },
+    {
+     "file": "quest/q170.dat",
+     "member": "q170_hap.z",
+     "token": "ft_CS",
+     "hap": "流れ(13)",
+     "action": "条件コマンド_敵撃破会話",
+     "comment": null,
+     "labels": [
+      "Action.signal",
+      "DISABLE",
+      "DONE",
+      "FastTravel.transporterIsReadyToUnlock"
+     ],
+     "line": "<args>ft_CS</args>"
+    }
+   ],
+   "unlock_notes": "q170 (Terminal Repairs) 流れ(13) : panne puis condition transporterIsReadyToUnlock ft_CS. Place seulement dans core_hap.pak."
+  },
+  {
+   "index": 5,
+   "number": 6,
+   "code": "ft_DC",
+   "crc32": "0x282db19d",
+   "hash_slot": "0x13fd4b4",
+   "text_key": "CORE_MAP_TRANS_0006",
+   "english_name": "Desert: Camp",
+   "text_key_rule": null,
+   "is_access_point": true,
+   "activation_bit": 4,
+   "activation_bit_rva": {
+    "word": "0x14957e0",
+    "mask": "0x8000000"
+   },
+   "always_active": false,
+   "allowed_under_WarpPartialLock": false,
+   "confidence": "high",
+   "evidence": "0x109EE0 stocke crc32('ft_DC') dans 0x13fd4b4 = 0x13FD4A0+4*5 ; 0x86F0D0 cherche le hachage du codeName dans ce tableau (27 entrees) et formate CORE_MAP_TRANS_%04d avec indice+1 = 6",
+   "placed_entities": [
+    {
+     "objId": "ba1100",
+     "file": "st1/r150.dat",
+     "position": [
+      -177.609299,
+      11.795318,
+      22.331329
+     ],
+     "hap": "砂漠入口",
+     "action": "オブジェ配置"
+    }
+   ],
+   "hap_references": [
+    {
+     "file": "ph1/p100.dat",
+     "member": "p100_hap.z",
+     "token": "ft_DC",
+     "hap": "シナリオ(5)",
+     "action": "メモリセーブ",
+     "comment": null,
+     "labels": [],
+     "line": "<pointName>ft_DC</pointName>"
+    },
+    {
+     "file": "ph1/p100.dat",
+     "member": "p100_hap.z",
+     "token": "ft_DC",
+     "hap": "シナリオ",
+     "action": "メモリセーブ",
+     "comment": null,
+     "labels": [],
+     "line": "<pointName>ft_DC</pointName>"
+    },
+    {
+     "file": "ph1/p100.dat",
+     "member": "p100_hap.z",
+     "token": "ft_DC",
+     "hap": "大砂漠シナリオ",
+     "action": "メモリセーブ",
+     "comment": null,
+     "labels": [],
+     "line": "<pointName>ft_DC</pointName>"
+    },
+    {
+     "file": "ph1/p100.dat",
+     "member": "p100_hap.z",
+     "token": "ft_DC",
+     "hap": "シナリオ(7)",
+     "action": "メモリセーブ",
+     "comment": null,
+     "labels": [],
+     "line": "<pointName>ft_DC</pointName>"
+    },
+    {
+     "file": "ph1/p100.dat",
+     "member": "p100_hap.z",
+     "token": "ft_DC",
+     "hap": "シナリオ(2)",
+     "action": "メモリセーブ",
+     "comment": null,
+     "labels": [],
+     "line": "<pointName>ft_DC</pointName>"
+    },
+    {
+     "file": "ph1/p100.dat",
+     "member": "p100_hap.z",
+     "token": "ft_DC",
+     "hap": "シナリオ(4)",
+     "action": "メモリセーブ",
+     "comment": null,
+     "labels": [],
+     "line": "<pointName>ft_DC</pointName>"
+    },
+    {
+     "file": "ph1/p100.dat",
+     "member": "p100_hap.z",
+     "token": "ft_DC",
+     "hap": "シナリオ",
+     "action": "メモリセーブ",
+     "comment": null,
+     "labels": [],
+     "line": "<pointName>ft_DC</pointName>"
+    },
+    {
+     "file": "ph1/p100.dat",
+     "member": "p100_hap.z",
+     "token": "ft_DC",
+     "hap": "スクリプト(14)",
+     "action": "メモリセーブ",
+     "comment": "@ここではmemsaveなし",
+     "labels": [],
+     "line": "<pointName>ft_DC</pointName>"
+    },
+    {
+     "file": "ph1/p100.dat",
+     "member": "p100_hap.z",
+     "token": "ft_DC",
+     "hap": "シナリオ(8)",
+     "action": "メモリセーブ",
+     "comment": null,
+     "labels": [],
+     "line": "<pointName>ft_DC</pointName>"
+    },
+    {
+     "file": "ph1/p100.dat",
+     "member": "p100_hap.z",
+     "token": "ft_DC",
+     "hap": "大砂漠紹介イベント",
+     "action": "メモリセーブ",
+     "comment": null,
+     "labels": [],
+     "line": "<pointName>ft_DC</pointName>"
+    },
+    {
+     "file": "ph1/p100.dat",
+     "member": "p100_hap.z",
+     "token": "ft_DC",
+     "hap": "シナリオ(3)",
+     "action": "メモリセーブ",
+     "comment": null,
+     "labels": [],
+     "line": "<pointName>ft_DC</pointName>"
+    },
+    {
+     "file": "ph1/p100.dat",
+     "member": "p100_hap.z",
+     "token": "ft_DC",
+     "hap": "団地_逃げるEM_ボスエリア前",
+     "action": "メモリセーブ",
+     "comment": "!メモリセーブ!",
+     "labels": [],
+     "line": "<pointName>ft_DC</pointName>"
+    },
+    {
+     "file": "ph1/p100.dat",
+     "member": "p100_hap.z",
+     "token": "ft_DC",
+     "hap": "団地_逃げるEM_駐車場",
+     "action": "メモリセーブ",
+     "comment": "!メモリセーブ!",
+     "labels": [],
+     "line": "<pointName>ft_DC</pointName>"
+    },
+    {
+     "file": "ph1/p100.dat",
+     "member": "p100_hap.z",
+     "token": "ft_DC",
+     "hap": "団地_逃げるEM_通路",
+     "action": "メモリセーブ",
+     "comment": "!メモリセーブ!",
+     "labels": [],
+     "line": "<pointName>ft_DC</pointName>"
+    },
+    {
+     "file": "ph1/p100.dat",
+     "member": "p100_hap.z",
+     "token": "ft_DC",
+     "hap": "砂漠の機械生命体",
+     "action": "メモリセーブ",
+     "comment": "!メモリセーブ!",
+     "labels": [],
+     "line": "<pointName>ft_DC</pointName>"
+    },
+    {
+     "file": "ph1/p100.dat",
+     "member": "p100_hap.z",
+     "token": "ft_DC",
+     "hap": "砂漠の機械生命体",
+     "action": "メモリセーブ",
+     "comment": "!メモリセーブ!",
+     "labels": [],
+     "line": "<pointName>ft_DC</pointName>"
+    },
+    {
+     "file": "ph1/p100.dat",
+     "member": "p100_hap.z",
+     "token": "ft_DC",
+     "hap": "砂漠の機械生命体",
+     "action": "メモリセーブ",
+     "comment": "!メモリセーブ!",
+     "labels": [],
+     "line": "<pointName>ft_DC</pointName>"
+    },
+    {
+     "file": "ph1/p100.dat",
+     "member": "p100_hap.z",
+     "token": "ft_DC",
+     "hap": "砂漠の機械生命体",
+     "action": "メモリセーブ",
+     "comment": null,
+     "labels": [],
+     "line": "<pointName>ft_DC</pointName>"
+    },
+    {
+     "file": "ph1/p100.dat",
+     "member": "p100_hap.z",
+     "token": "ft_DC",
+     "hap": "砂漠の機械生命体",
+     "action": "メモリセーブ",
+     "comment": null,
+     "labels": [],
+     "line": "<pointName>ft_DC</pointName>"
+    },
+    {
+     "file": "ph2/p200.dat",
+     "member": "p200_hap.z",
+     "token": "ft_DC",
+     "hap": "転送端末ロック処理",
+     "action": "複数コマンド送信",
+     "comment": null,
+     "labels": [
+      "MiscState.setvar"
+     ],
+     "line": "<args>\"ft_DC false\"</args>"
+    },
+    {
+     "file": "st1/r150.dat",
+     "member": "r150_hap.z",
+     "token": "ft_DC",
+     "hap": "砂漠入口",
+     "action": "オブジェ配置",
+     "comment": "砂漠キャンプ",
+     "labels": [],
+     "line": "<body>ft_DC</body>"
+    },
+    {
+     "file": "st1/r150.dat",
+     "member": "r150_hap.z",
+     "token": "ft_DC",
+     "hap": "砂漠入口",
+     "action": "ファストトラベル条件リセット",
+     "comment": null,
+     "labels": [],
+     "line": "<codeName>ft_DC</codeName>"
+    },
+    {
+     "file": "core/corehap.dat",
+     "member": "core_hap.pak",
+     "token": "ft_DC",
+     "offset": 138037
+    }
+   ],
+   "unlock_notes": "Place r150 (砂漠入口). p200 '転送端末ロック処理' : false. Point de 'メモリセーブ' de p100."
+  },
+  {
+   "index": 6,
+   "number": 7,
+   "code": "ft_DI",
+   "crc32": "0xc8f85883",
+   "hash_slot": "0x13fd4b8",
+   "text_key": "CORE_MAP_TRANS_0007",
+   "english_name": "Desert: Center",
+   "text_key_rule": null,
+   "is_access_point": true,
+   "activation_bit": 5,
+   "activation_bit_rva": {
+    "word": "0x14957e0",
+    "mask": "0x4000000"
+   },
+   "always_active": false,
+   "allowed_under_WarpPartialLock": false,
+   "confidence": "high",
+   "evidence": "0x109EE0 stocke crc32('ft_DI') dans 0x13fd4b8 = 0x13FD4A0+4*6 ; 0x86F0D0 cherche le hachage du codeName dans ce tableau (27 entrees) et formate CORE_MAP_TRANS_%04d avec indice+1 = 7",
+   "placed_entities": [
+    {
+     "objId": "ba1100",
+     "file": "st1/r150.dat",
+     "position": [
+      -1014.423828,
+      -4.638937,
+      -549.4552
+     ],
+     "hap": "砂漠内部",
+     "action": "オブジェ配置"
+    }
+   ],
+   "hap_references": [
+    {
+     "file": "ph2/p200.dat",
+     "member": "p200_hap.z",
+     "token": "ft_DI",
+     "hap": "転送端末ロック処理",
+     "action": "複数コマンド送信",
+     "comment": null,
+     "labels": [
+      "MiscState.setvar"
+     ],
+     "line": "<args>\"ft_DI false\"</args>"
+    },
+    {
+     "file": "st1/r150.dat",
+     "member": "r150_hap.z",
+     "token": "ft_DI",
+     "hap": "砂漠内部",
+     "action": "オブジェ配置",
+     "comment": "砂漠内部",
+     "labels": [],
+     "line": "<body>ft_DI</body>"
+    },
+    {
+     "file": "st1/r150.dat",
+     "member": "r150_hap.z",
+     "token": "ft_DI",
+     "hap": "砂漠内部",
+     "action": "ファストトラベル条件リセット",
+     "comment": null,
+     "labels": [],
+     "line": "<codeName>ft_DI</codeName>"
+    }
+   ],
+   "unlock_notes": "Place r150 (砂漠内部). p200 '転送端末ロック処理' : false."
+  },
+  {
+   "index": 7,
+   "number": 8,
+   "code": "ft_DO",
+   "crc32": "0x219bfdb6",
+   "hash_slot": "0x13fd4bc",
+   "text_key": "CORE_MAP_TRANS_0008",
+   "english_name": "Desert: Oil Field",
+   "text_key_rule": null,
+   "is_access_point": true,
+   "activation_bit": 6,
+   "activation_bit_rva": {
+    "word": "0x14957e0",
+    "mask": "0x2000000"
+   },
+   "always_active": false,
+   "allowed_under_WarpPartialLock": false,
+   "confidence": "high",
+   "evidence": "0x109EE0 stocke crc32('ft_DO') dans 0x13fd4bc = 0x13FD4A0+4*7 ; 0x86F0D0 cherche le hachage du codeName dans ce tableau (27 entrees) et formate CORE_MAP_TRANS_%04d avec indice+1 = 8",
+   "placed_entities": [
+    {
+     "objId": "ba1100",
+     "file": "st1/r150.dat",
+     "position": [
+      -891.817078,
+      -10.525623,
+      -73.726013
+     ],
+     "hap": "砂漠油田",
+     "action": "オブジェ配置"
+    }
+   ],
+   "hap_references": [
+    {
+     "file": "st1/r150.dat",
+     "member": "r150_hap.z",
+     "token": "ft_DO",
+     "hap": "砂漠油田",
+     "action": "オブジェ配置",
+     "comment": "砂漠内部",
+     "labels": [],
+     "line": "<body>ft_DO</body>"
+    },
+    {
+     "file": "st1/r150.dat",
+     "member": "r150_hap.z",
+     "token": "ft_DO",
+     "hap": "砂漠油田",
+     "action": "ファストトラベル条件リセット",
+     "comment": null,
+     "labels": [],
+     "line": "<codeName>ft_DO</codeName>"
+    }
+   ]
+  },
+  {
+   "index": 8,
+   "number": 9,
+   "code": "ft_DD",
+   "crc32": "0xb649243e",
+   "hash_slot": "0x13fd4c0",
+   "text_key": "CORE_MAP_TRANS_0009",
+   "english_name": "Desert: Housing Complex",
+   "text_key_rule": null,
+   "is_access_point": true,
+   "activation_bit": 7,
+   "activation_bit_rva": {
+    "word": "0x14957e0",
+    "mask": "0x1000000"
+   },
+   "always_active": false,
+   "allowed_under_WarpPartialLock": false,
+   "confidence": "high",
+   "evidence": "0x109EE0 stocke crc32('ft_DD') dans 0x13fd4c0 = 0x13FD4A0+4*8 ; 0x86F0D0 cherche le hachage du codeName dans ce tableau (27 entrees) et formate CORE_MAP_TRANS_%04d avec indice+1 = 9",
+   "placed_entities": [
+    {
+     "objId": "ba1100",
+     "file": "st1/r150.dat",
+     "position": [
+      -109.194,
+      -83.11055,
+      -815.082581
+     ],
+     "hap": "砂漠団地",
+     "action": "オブジェ配置"
+    }
+   ],
+   "hap_references": [
+    {
+     "file": "st1/r150.dat",
+     "member": "r150_hap.z",
+     "token": "ft_DD",
+     "hap": "砂漠団地",
+     "action": "オブジェ配置",
+     "comment": "砂漠内部",
+     "labels": [],
+     "line": "<body>ft_DD</body>"
+    },
+    {
+     "file": "st1/r150.dat",
+     "member": "r150_hap.z",
+     "token": "ft_DD",
+     "hap": "砂漠団地",
+     "action": "ファストトラベル条件リセット",
+     "comment": null,
+     "labels": [],
+     "line": "<codeName>ft_DD</codeName>"
+    }
+   ]
+  },
+  {
+   "index": 9,
+   "number": 10,
+   "code": "ft_AP",
+   "crc32": "0xd1e40406",
+   "hash_slot": "0x13fd4c4",
+   "text_key": "CORE_MAP_TRANS_0010",
+   "english_name": "Park Ruins: Attraction Sq.",
+   "text_key_rule": null,
+   "is_access_point": true,
+   "activation_bit": 8,
+   "activation_bit_rva": {
+    "word": "0x14957e0",
+    "mask": "0x800000"
+   },
+   "always_active": false,
+   "allowed_under_WarpPartialLock": false,
+   "confidence": "high",
+   "evidence": "0x109EE0 stocke crc32('ft_AP') dans 0x13fd4c4 = 0x13FD4A0+4*9 ; 0x86F0D0 cherche le hachage du codeName dans ce tableau (27 entrees) et formate CORE_MAP_TRANS_%04d avec indice+1 = 10",
+   "placed_entities": [
+    {
+     "objId": "ba1100",
+     "file": "st1/r130.dat",
+     "position": [
+      665.108704,
+      13.366321,
+      373.622253
+     ],
+     "hap": "遊園地",
+     "action": "オブジェ配置_飛行機遊具前"
+    }
+   ],
+   "hap_references": [
+    {
+     "file": "ph2/p200.dat",
+     "member": "p200_hap.z",
+     "token": "ft_AP",
+     "hap": "転送端末ロック処理",
+     "action": "複数コマンド送信",
+     "comment": null,
+     "labels": [
+      "MiscState.setvar"
+     ],
+     "line": "<args>\"ft_AP false\"</args>"
+    },
+    {
+     "file": "st1/r130.dat",
+     "member": "r130_hap.z",
+     "token": "ft_AP",
+     "hap": "遊園地",
+     "action": "オブジェ配置_飛行機遊具前",
+     "comment": null,
+     "labels": [],
+     "line": "<body>ft_AP</body>"
+    },
+    {
+     "file": "st1/r130.dat",
+     "member": "r130_hap.z",
+     "token": "ft_AP",
+     "hap": "遊園地",
+     "action": "ファストトラベル条件リセット",
+     "comment": null,
+     "labels": [],
+     "line": "<codeName>ft_AP</codeName>"
+    },
+    {
+     "file": "core/corehap.dat",
+     "member": "core_hap.pak",
+     "token": "ft_AP",
+     "offset": 117396
+    },
+    {
+     "file": "core/corehap.dat",
+     "member": "core_hap.pak",
+     "token": "ft_AP",
+     "offset": 166482
+    }
+   ],
+   "unlock_notes": "Place r130 (遊園地, 飛行機遊具前). p200 : false. 0x39FCF0 (DLC q095 'Mysterious Invitation') lit l'objet ft_AP."
+  },
+  {
+   "index": 10,
+   "number": 11,
+   "code": "ft_AP_C",
+   "crc32": "0xc218f135",
+   "hash_slot": "0x13fd4c8",
+   "text_key": "CORE_MAP_TRANS_0011",
+   "english_name": "Park Ruins: Coaster",
+   "text_key_rule": null,
+   "is_access_point": true,
+   "activation_bit": 9,
+   "activation_bit_rva": {
+    "word": "0x14957e0",
+    "mask": "0x400000"
+   },
+   "always_active": false,
+   "allowed_under_WarpPartialLock": false,
+   "confidence": "high",
+   "evidence": "0x109EE0 stocke crc32('ft_AP_C') dans 0x13fd4c8 = 0x13FD4A0+4*10 ; 0x86F0D0 cherche le hachage du codeName dans ce tableau (27 entrees) et formate CORE_MAP_TRANS_%04d avec indice+1 = 11",
+   "placed_entities": [],
+   "hap_references": [],
+   "unlock_notes": "Aucune reference trouvee dans les hap.z ni core_hap.pak (placement ailleurs : non trouve)."
+  },
+  {
+   "index": 11,
+   "number": 12,
+   "code": "ft_AP_T2",
+   "crc32": "0x4927e649",
+   "hash_slot": "0x13fd4cc",
+   "text_key": "CORE_MAP_TRANS_0012",
+   "english_name": "Park Ruins: Above Theater",
+   "text_key_rule": null,
+   "is_access_point": true,
+   "activation_bit": 11,
+   "activation_bit_rva": {
+    "word": "0x14957e0",
+    "mask": "0x100000"
+   },
+   "always_active": false,
+   "allowed_under_WarpPartialLock": false,
+   "confidence": "high",
+   "evidence": "0x109EE0 stocke crc32('ft_AP_T2') dans 0x13fd4cc = 0x13FD4A0+4*11 ; 0x86F0D0 cherche le hachage du codeName dans ce tableau (27 entrees) et formate CORE_MAP_TRANS_%04d avec indice+1 = 12",
+   "placed_entities": [],
+   "hap_references": [],
+   "unlock_notes": "Aucune reference trouvee dans les hap.z ni core_hap.pak (placement ailleurs : non trouve)."
+  },
+  {
+   "index": 12,
+   "number": 13,
+   "code": "ft_AP_T",
+   "crc32": "0x41cb74f2",
+   "hash_slot": "0x13fd4d0",
+   "text_key": "CORE_MAP_TRANS_0013",
+   "english_name": "Park Ruins: Theater",
+   "text_key_rule": null,
+   "is_access_point": true,
+   "activation_bit": 10,
+   "activation_bit_rva": {
+    "word": "0x14957e0",
+    "mask": "0x200000"
+   },
+   "always_active": false,
+   "allowed_under_WarpPartialLock": false,
+   "confidence": "high",
+   "evidence": "0x109EE0 stocke crc32('ft_AP_T') dans 0x13fd4d0 = 0x13FD4A0+4*12 ; 0x86F0D0 cherche le hachage du codeName dans ce tableau (27 entrees) et formate CORE_MAP_TRANS_%04d avec indice+1 = 13",
+   "placed_entities": [],
+   "hap_references": [],
+   "unlock_notes": "Aucune reference trouvee dans les hap.z ni core_hap.pak (placement ailleurs : non trouve)."
+  },
+  {
+   "index": 13,
+   "number": 14,
+   "code": "ft_PV",
+   "crc32": "0x6b5e8223",
+   "hash_slot": "0x13fd4d4",
+   "text_key": "CORE_MAP_TRANS_0014",
+   "english_name": "Pascal's Village",
+   "text_key_rule": "CORE_MAP_TRANS_0014 si la variable UI_namePV est vraie, sinon CORE_SUB_MAP_AREA_111 ('???')",
+   "is_access_point": true,
+   "activation_bit": 17,
+   "activation_bit_rva": {
+    "word": "0x14957e0",
+    "mask": "0x4000"
+   },
+   "always_active": false,
+   "allowed_under_WarpPartialLock": true,
+   "confidence": "high",
+   "evidence": "0x109EE0 stocke crc32('ft_PV') dans 0x13fd4d4 = 0x13FD4A0+4*13 ; 0x86F0D0 cherche le hachage du codeName dans ce tableau (27 entrees) et formate CORE_MAP_TRANS_%04d avec indice+1 = 14",
+   "placed_entities": [],
+   "hap_references": [
+    {
+     "file": "ph2/p200.dat",
+     "member": "p200_hap.z",
+     "token": "ft_PV",
+     "hap": "セーブ制御",
+     "action": "コマンド送信",
+     "comment": null,
+     "labels": [
+      "MiscState.setvar"
+     ],
+     "line": "<args>\"ft_PV false\"</args>"
+    },
+    {
+     "file": "ph2/p200.dat",
+     "member": "p200_hap.z",
+     "token": "ft_PV",
+     "hap": "転送端末ロック処理",
+     "action": "複数コマンド送信",
+     "comment": null,
+     "labels": [
+      "MiscState.setvar"
+     ],
+     "line": "<args>\"ft_PV false\"</args>"
+    },
+    {
+     "file": "core/corehap.dat",
+     "member": "core_hap.pak",
+     "token": "ft_PV",
+     "offset": 163451
+    }
+   ],
+   "unlock_notes": "Nom '???' (CORE_SUB_MAP_AREA_111) tant que la variable UI_namePV est fausse (0x86F0D0/0x86F250). Grisee si lock_ft_PV (HELP_15) ou Pascal_Terminal_txt (HELP_13) (0x8BC580). p200 : false. Placement : seulement une chaine dans core_hap.pak."
+  },
+  {
+   "index": 14,
+   "number": 15,
+   "code": "ft_FC",
+   "crc32": "0x1a1bd31f",
+   "hash_slot": "0x13fd4d8",
+   "text_key": "CORE_MAP_TRANS_0015",
+   "english_name": "Forest Zone: Center",
+   "text_key_rule": null,
+   "is_access_point": true,
+   "activation_bit": 18,
+   "activation_bit_rva": {
+    "word": "0x14957e0",
+    "mask": "0x2000"
+   },
+   "always_active": false,
+   "allowed_under_WarpPartialLock": false,
+   "confidence": "high",
+   "evidence": "0x109EE0 stocke crc32('ft_FC') dans 0x13fd4d8 = 0x13FD4A0+4*14 ; 0x86F0D0 cherche le hachage du codeName dans ce tableau (27 entrees) et formate CORE_MAP_TRANS_%04d avec indice+1 = 15",
+   "placed_entities": [
+    {
+     "objId": "ba1100",
+     "file": "st1/r160.dat",
+     "position": [
+      223.13089,
+      -0.541363,
+      -461.076904
+     ],
+     "hap": "森",
+     "action": "オブジェ配置-森部分"
+    }
+   ],
+   "hap_references": [
+    {
+     "file": "ph2/p200.dat",
+     "member": "p200_hap.z",
+     "token": "ft_FC",
+     "hap": "転送端末ロック処理",
+     "action": "複数コマンド送信",
+     "comment": null,
+     "labels": [
+      "MiscState.setvar"
+     ],
+     "line": "<args>\"ft_FC false\"</args>"
+    },
+    {
+     "file": "st1/r160.dat",
+     "member": "r160_hap.z",
+     "token": "ft_FC",
+     "hap": "森",
+     "action": "オブジェ配置-森部分",
+     "comment": null,
+     "labels": [],
+     "line": "<body>ft_FC</body>"
+    },
+    {
+     "file": "st1/r160.dat",
+     "member": "r160_hap.z",
+     "token": "ft_FC",
+     "hap": "森",
+     "action": "ファストトラベル条件リセット",
+     "comment": null,
+     "labels": [],
+     "line": "<codeName>ft_FC</codeName>"
+    },
+    {
+     "file": "st1/r160.dat",
+     "member": "r160_hap.z",
+     "token": "ft_FC",
+     "hap": "森",
+     "action": "敵発生機_ft_FC",
+     "comment": null,
+     "labels": [],
+     "line": "<name>敵発生機_ft_FC</name>"
+    },
+    {
+     "file": "core/corehap.dat",
+     "member": "core_hap.pak",
+     "token": "ft_FC",
+     "offset": 130228
+    },
+    {
+     "file": "core/corehap.dat",
+     "member": "core_hap.pak",
+     "token": "ft_FC",
+     "offset": 136488
+    },
+    {
+     "file": "core/corehap.dat",
+     "member": "core_hap.pak",
+     "token": "ft_FC",
+     "offset": 171591
+    }
+   ],
+   "unlock_notes": "Place r160 (森). p200 '転送端末ロック処理' : false."
+  },
+  {
+   "index": 15,
+   "number": 16,
+   "code": "ft_FC2",
+   "crc32": "0x97c7a82b",
+   "hash_slot": "0x13fd4dc",
+   "text_key": "CORE_MAP_TRANS_0016",
+   "english_name": "Forest Castle: Front",
+   "text_key_rule": null,
+   "is_access_point": true,
+   "activation_bit": 19,
+   "activation_bit_rva": {
+    "word": "0x14957e0",
+    "mask": "0x1000"
+   },
+   "always_active": false,
+   "allowed_under_WarpPartialLock": false,
+   "confidence": "high",
+   "evidence": "0x109EE0 stocke crc32('ft_FC2') dans 0x13fd4dc = 0x13FD4A0+4*15 ; 0x86F0D0 cherche le hachage du codeName dans ce tableau (27 entrees) et formate CORE_MAP_TRANS_%04d avec indice+1 = 16",
+   "placed_entities": [
+    {
+     "objId": "ba1100",
+     "file": "st1/r160.dat",
+     "position": [
+      836.993469,
+      -21.32983,
+      -213.411011
+     ],
+     "hap": "城前",
+     "action": "オブジェ配置-城前"
+    }
+   ],
+   "hap_references": [
+    {
+     "file": "st1/r160.dat",
+     "member": "r160_hap.z",
+     "token": "ft_FC2",
+     "hap": "城前",
+     "action": "オブジェ配置-城前",
+     "comment": null,
+     "labels": [],
+     "line": "<body>ft_FC2</body>"
+    },
+    {
+     "file": "st1/r160.dat",
+     "member": "r160_hap.z",
+     "token": "ft_FC2",
+     "hap": "城前",
+     "action": "ファストトラベル条件リセット",
+     "comment": null,
+     "labels": [],
+     "line": "<codeName>ft_FC2</codeName>"
+    },
+    {
+     "file": "st1/r160.dat",
+     "member": "r160_hap.z",
+     "token": "ft_FC2",
+     "hap": "城前",
+     "action": "敵発生機_ft_FC2",
+     "comment": null,
+     "labels": [],
+     "line": "<name>敵発生機_ft_FC2</name>"
+    }
+   ]
+  },
+  {
+   "index": 16,
+   "number": 17,
+   "code": "ft_FC3",
+   "crc32": "0xe0c098bd",
+   "hash_slot": "0x13fd4e0",
+   "text_key": "CORE_MAP_TRANS_0017",
+   "english_name": "Forest Castle: Royal Chamber",
+   "text_key_rule": null,
+   "is_access_point": true,
+   "activation_bit": 20,
+   "activation_bit_rva": {
+    "word": "0x14957e0",
+    "mask": "0x800"
+   },
+   "always_active": false,
+   "allowed_under_WarpPartialLock": false,
+   "confidence": "high",
+   "evidence": "0x109EE0 stocke crc32('ft_FC3') dans 0x13fd4e0 = 0x13FD4A0+4*16 ; 0x86F0D0 cherche le hachage du codeName dans ce tableau (27 entrees) et formate CORE_MAP_TRANS_%04d avec indice+1 = 17",
+   "placed_entities": [
+    {
+     "objId": "ba1100",
+     "file": "st1/r160.dat",
+     "position": [
+      1002.915039,
+      10.768871,
+      -381.575531
+     ],
+     "hap": "王室前",
+     "action": "オブジェ配置-王室前"
+    }
+   ],
+   "hap_references": [
+    {
+     "file": "st1/r160.dat",
+     "member": "r160_hap.z",
+     "token": "ft_FC3",
+     "hap": "王室前",
+     "action": "オブジェ配置-王室前",
+     "comment": null,
+     "labels": [],
+     "line": "<body>ft_FC3</body>"
+    },
+    {
+     "file": "st1/r160.dat",
+     "member": "r160_hap.z",
+     "token": "ft_FC3",
+     "hap": "王室前",
+     "action": "ファストトラベル条件リセット",
+     "comment": null,
+     "labels": [],
+     "line": "<codeName>ft_FC3</codeName>"
+    },
+    {
+     "file": "st1/r160.dat",
+     "member": "r160_hap.z",
+     "token": "ft_FC3",
+     "hap": "王室前",
+     "action": "敵発生機_ft_FC3",
+     "comment": null,
+     "labels": [],
+     "line": "<name>敵発生機_ft_FC3</name>"
+    },
+    {
+     "file": "core/corehap.dat",
+     "member": "core_hap.pak",
+     "token": "ft_FC3",
+     "offset": 142200
+    }
+   ]
+  },
+  {
+   "index": 17,
+   "number": 18,
+   "code": "ft_RME",
+   "crc32": "0xdc0a6a96",
+   "hash_slot": "0x13fd4e4",
+   "text_key": "CORE_MAP_TRANS_0018",
+   "english_name": "Factory: Entrance",
+   "text_key_rule": null,
+   "is_access_point": true,
+   "activation_bit": 13,
+   "activation_bit_rva": {
+    "word": "0x14957e0",
+    "mask": "0x40000"
+   },
+   "always_active": false,
+   "allowed_under_WarpPartialLock": false,
+   "confidence": "high",
+   "evidence": "0x109EE0 stocke crc32('ft_RME') dans 0x13fd4e4 = 0x13FD4A0+4*17 ; 0x86F0D0 cherche le hachage du codeName dans ce tableau (27 entrees) et formate CORE_MAP_TRANS_%04d avec indice+1 = 18",
+   "placed_entities": [
+    {
+     "objId": "ba1100",
+     "file": "st1/r120.dat",
+     "position": [
+      -441.755219,
+      -19.418234,
+      621.065247
+     ],
+     "hap": "ファストトラベルまわり",
+     "action": "オブジェ配置"
+    }
+   ],
+   "hap_references": [
+    {
+     "file": "ph2/p200.dat",
+     "member": "p200_hap.z",
+     "token": "ft_RME",
+     "hap": "セーブ関連-司祭のお出迎え",
+     "action": "メモリセーブ",
+     "comment": null,
+     "labels": [],
+     "line": "<pointName>ft_RME</pointName>"
+    },
+    {
+     "file": "ph2/p200.dat",
+     "member": "p200_hap.z",
+     "token": "ft_RME",
+     "hap": "..M1090_S0100_GM_a",
+     "action": "メモリセーブ",
+     "comment": null,
+     "labels": [],
+     "line": "<pointName>ft_RME</pointName>"
+    },
+    {
+     "file": "ph2/p200.dat",
+     "member": "p200_hap.z",
+     "token": "ft_RME",
+     "hap": "..M1090_S0100_GM_a",
+     "action": "メモリセーブ",
+     "comment": null,
+     "labels": [],
+     "line": "<pointName>ft_RME</pointName>"
+    },
+    {
+     "file": "st1/r120.dat",
+     "member": "r120_hap.z",
+     "token": "ft_RME",
+     "hap": "ファストトラベルまわり",
+     "action": "オブジェ配置",
+     "comment": "ロボット山入口",
+     "labels": [],
+     "line": "<body>ft_RME</body>"
+    },
+    {
+     "file": "st1/r120.dat",
+     "member": "r120_hap.z",
+     "token": "ft_RME",
+     "hap": "ファストトラベルまわり",
+     "action": "ファストトラベル条件リセット",
+     "comment": null,
+     "labels": [],
+     "line": "<codeName>ft_RME</codeName>"
+    },
+    {
+     "file": "st1/r120.dat",
+     "member": "r120_hap.z",
+     "token": "ft_RME",
+     "hap": "ファストトラベルまわり",
+     "action": "敵発生機_ft_RME",
+     "comment": null,
+     "labels": [],
+     "line": "<name>敵発生機_ft_RME</name>"
+    },
+    {
+     "file": "core/corehap.dat",
+     "member": "core_hap.pak",
+     "token": "ft_RME",
+     "offset": 153251
+    }
+   ],
+   "unlock_notes": "Place r120 (ロボット山入口). Point de 'メモリセーブ' de p200."
+  },
+  {
+   "index": 18,
+   "number": 19,
+   "code": "ft_RMI2",
+   "crc32": "0xafd0cd1a",
+   "hash_slot": "0x13fd4e8",
+   "text_key": "CORE_MAP_TRANS_0019",
+   "english_name": "Factory: Hangar",
+   "text_key_rule": null,
+   "is_access_point": true,
+   "activation_bit": 14,
+   "activation_bit_rva": {
+    "word": "0x14957e0",
+    "mask": "0x20000"
+   },
+   "always_active": false,
+   "allowed_under_WarpPartialLock": false,
+   "confidence": "high",
+   "evidence": "0x109EE0 stocke crc32('ft_RMI2') dans 0x13fd4e8 = 0x13FD4A0+4*18 ; 0x86F0D0 cherche le hachage du codeName dans ce tableau (27 entrees) et formate CORE_MAP_TRANS_%04d avec indice+1 = 19",
+   "placed_entities": [
+    {
+     "objId": "ba1100",
+     "file": "st5/r520.dat",
+     "position": [
+      -504.709503,
+      -298.651581,
+      482.691803
+     ],
+     "hap": "開始地点",
+     "action": "オブジェ配置-開始地点"
+    }
+   ],
+   "hap_references": [
+    {
+     "file": "st5/r520.dat",
+     "member": "r520_hap.z",
+     "token": "ft_RMI2",
+     "hap": "開始地点",
+     "action": "オブジェ配置-開始地点",
+     "comment": null,
+     "labels": [],
+     "line": "<body>ft_RMI2</body>"
+    },
+    {
+     "file": "st5/r520.dat",
+     "member": "r520_hap.z",
+     "token": "ft_RMI2",
+     "hap": "開始地点",
+     "action": "ファストトラベル条件リセット",
+     "comment": null,
+     "labels": [],
+     "line": "<codeName>ft_RMI2</codeName>"
+    },
+    {
+     "file": "st5/r520.dat",
+     "member": "r520_hap.z",
+     "token": "ft_RMI2",
+     "hap": "開始地点",
+     "action": "敵発生機_ft_RMI2",
+     "comment": null,
+     "labels": [],
+     "line": "<name>敵発生機_ft_RMI2</name>"
+    }
+   ],
+   "unlock_notes": "Place r520 (開始地点). 0x2FE220 traite ft_RMI/ft_RMI2 a part."
+  },
+  {
+   "index": 19,
+   "number": 20,
+   "code": "ft_RMI",
+   "crc32": "0xd5bc26bd",
+   "hash_slot": "0x13fd4ec",
+   "text_key": "CORE_MAP_TRANS_0020",
+   "english_name": "Factory: Furnace",
+   "text_key_rule": null,
+   "is_access_point": true,
+   "activation_bit": 15,
+   "activation_bit_rva": {
+    "word": "0x14957e0",
+    "mask": "0x10000"
+   },
+   "always_active": false,
+   "allowed_under_WarpPartialLock": false,
+   "confidence": "high",
+   "evidence": "0x109EE0 stocke crc32('ft_RMI') dans 0x13fd4ec = 0x13FD4A0+4*19 ; 0x86F0D0 cherche le hachage du codeName dans ce tableau (27 entrees) et formate CORE_MAP_TRANS_%04d avec indice+1 = 20",
+   "placed_entities": [
+    {
+     "objId": "ba1100",
+     "file": "st5/r520.dat",
+     "position": [
+      -617.506714,
+      -133.146622,
+      207.370682
+     ],
+     "hap": "ボス前",
+     "action": "オブジェ配置-ボス前"
+    }
+   ],
+   "hap_references": [
+    {
+     "file": "ph2/p200.dat",
+     "member": "p200_hap.z",
+     "token": "ft_RMI",
+     "hap": "セーブ関連-地下大型多脚戦工場",
+     "action": "メモリセーブ",
+     "comment": null,
+     "labels": [],
+     "line": "<pointName>ft_RMI</pointName>"
+    },
+    {
+     "file": "ph2/p200.dat",
+     "member": "p200_hap.z",
+     "token": "ft_RMI",
+     "hap": "セーブ関連-地下工場停止後",
+     "action": "メモリセーブ",
+     "comment": null,
+     "labels": [],
+     "line": "<pointName>ft_RMI</pointName>"
+    },
+    {
+     "file": "st5/r520.dat",
+     "member": "r520_hap.z",
+     "token": "ft_RMI",
+     "hap": "ボス前",
+     "action": "オブジェ配置-ボス前",
+     "comment": "ロボット山内部",
+     "labels": [],
+     "line": "<body>ft_RMI</body>"
+    },
+    {
+     "file": "st5/r520.dat",
+     "member": "r520_hap.z",
+     "token": "ft_RMI",
+     "hap": "ボス前",
+     "action": "ファストトラベル条件リセット",
+     "comment": null,
+     "labels": [],
+     "line": "<codeName>ft_RMI</codeName>"
+    },
+    {
+     "file": "st5/r520.dat",
+     "member": "r520_hap.z",
+     "token": "ft_RMI",
+     "hap": "ボス前",
+     "action": "敵セットエリア_ft_RMI",
+     "comment": null,
+     "labels": [],
+     "line": "<name>敵セットエリア_ft_RMI</name>"
+    }
+   ],
+   "unlock_notes": "Place r520 (ボス前). 0x2FE220 traite ft_RMI/ft_RMI2 a part."
+  },
+  {
+   "index": 20,
+   "number": 21,
+   "code": "ft_SC",
+   "crc32": "0x2dae350b",
+   "hash_slot": "0x13fd4f0",
+   "text_key": "CORE_MAP_TRANS_0021",
+   "english_name": "Flooded City: Coast",
+   "text_key_rule": null,
+   "is_access_point": true,
+   "activation_bit": 21,
+   "activation_bit_rva": {
+    "word": "0x14957e0",
+    "mask": "0x400"
+   },
+   "always_active": false,
+   "allowed_under_WarpPartialLock": false,
+   "confidence": "high",
+   "evidence": "0x109EE0 stocke crc32('ft_SC') dans 0x13fd4f0 = 0x13FD4A0+4*20 ; 0x86F0D0 cherche le hachage du codeName dans ce tableau (27 entrees) et formate CORE_MAP_TRANS_%04d avec indice+1 = 21",
+   "placed_entities": [
+    {
+     "objId": "ba1100",
+     "file": "st1/r170.dat",
+     "position": [
+      469.011322,
+      -62.47649,
+      634.009583
+     ],
+     "hap": "ファストトラベルまわり",
+     "action": "オブジェ配置"
+    }
+   ],
+   "hap_references": [
+    {
+     "file": "ph2/p200.dat",
+     "member": "p200_hap.z",
+     "token": "ft_SC",
+     "hap": "転送端末ロック処理",
+     "action": "複数コマンド送信",
+     "comment": null,
+     "labels": [
+      "MiscState.setvar"
+     ],
+     "line": "<args>\"ft_SC false\"</args>"
+    },
+    {
+     "file": "ph2/p200.dat",
+     "member": "p200_hap.z",
+     "token": "ft_SC",
+     "hap": "流れ(2)",
+     "action": "コマンド送信_水没都市端末故障",
+     "comment": null,
+     "labels": [
+      "MiscState.setvar"
+     ],
+     "line": "<args>\"ft_SC false\"</args>"
+    },
+    {
+     "file": "ph2/p200.dat",
+     "member": "p200_hap.z",
+     "token": "ft_SC",
+     "hap": "流れ(2)",
+     "action": "条件コマンド_アクセスポイント修復",
+     "comment": "アクセスポイントを修復したら会話発生",
+     "labels": [
+      "Action.signal",
+      "DONE",
+      "FastTravel.transporterIsEnabled"
+     ],
+     "line": "<args>ft_SC</args>"
+    },
+    {
+     "file": "st1/r170.dat",
+     "member": "r170_hap.z",
+     "token": "ft_SC",
+     "hap": "ファストトラベルまわり",
+     "action": "オブジェ配置",
+     "comment": null,
+     "labels": [],
+     "line": "<body>ft_SC</body>"
+    },
+    {
+     "file": "st1/r170.dat",
+     "member": "r170_hap.z",
+     "token": "ft_SC",
+     "hap": "ファストトラベル検証",
+     "action": "ファストトラベル条件リセット",
+     "comment": "水没都市怪獣撃破後のファストトラベル制限用",
+     "labels": [],
+     "line": "<codeName>ft_SC</codeName>"
+    }
+   ],
+   "unlock_notes": "Place r170. p200 流れ(2) : panne '水没都市端末故障' puis condition transporterIsEnabled ft_SC ('アクセスポイントを修復したら会話発生'). r170 'ファストトラベル条件リセット' commente '水没都市怪獣撃破後のファストトラベル制限用'. p200 : false."
+  },
+  {
+   "index": 21,
+   "number": 22,
+   "code": "ft_AS",
+   "crc32": "0x48ed55bc",
+   "hash_slot": "0x13fd4f4",
+   "text_key": "CORE_MAP_TRANS_0022",
+   "english_name": "City Ruins: Cave",
+   "text_key_rule": null,
+   "is_access_point": true,
+   "activation_bit": 16,
+   "activation_bit_rva": {
+    "word": "0x14957e0",
+    "mask": "0x8000"
+   },
+   "always_active": false,
+   "allowed_under_WarpPartialLock": false,
+   "confidence": "high",
+   "evidence": "0x109EE0 stocke crc32('ft_AS') dans 0x13fd4f4 = 0x13FD4A0+4*21 ; 0x86F0D0 cherche le hachage du codeName dans ce tableau (27 entrees) et formate CORE_MAP_TRANS_%04d avec indice+1 = 22",
+   "placed_entities": [
+    {
+     "objId": "ba1100",
+     "file": "st2/r200.dat",
+     "position": [
+      202.508957,
+      -105.585838,
+      343.414886
+     ],
+     "hap": "ファストトラベルまわり(2)",
+     "action": "オブジェ配置"
+    }
+   ],
+   "hap_references": [
+    {
+     "file": "ph2/p200.dat",
+     "member": "p200_hap.z",
+     "token": "ft_AS",
+     "hap": "転送端末ロック処理",
+     "action": "複数コマンド送信",
+     "comment": null,
+     "labels": [
+      "MiscState.setvar"
+     ],
+     "line": "<args>\"ft_AS false\"</args>"
+    },
+    {
+     "file": "ph2/p200.dat",
+     "member": "p200_hap.z",
+     "token": "ft_AS",
+     "hap": "流れ(2)",
+     "action": "コマンド送信_エイリアンシップ端末故障",
+     "comment": null,
+     "labels": [
+      "MiscState.setvar"
+     ],
+     "line": "<args>\"ft_AS false\"</args>"
+    },
+    {
+     "file": "ph2/p200.dat",
+     "member": "p200_hap.z",
+     "token": "ft_AS",
+     "hap": "流れ(2)",
+     "action": "条件コマンド_アクセスポイント修復",
+     "comment": "アクセスポイントを修復したら会話発生",
+     "labels": [
+      "Action.signal",
+      "DONE",
+      "FastTravel.transporterIsEnabled"
+     ],
+     "line": "<args>ft_AS</args>"
+    },
+    {
+     "file": "st2/r200.dat",
+     "member": "r200_hap.z",
+     "token": "ft_AS",
+     "hap": "ファストトラベルまわり(2)",
+     "action": "オブジェ配置",
+     "comment": null,
+     "labels": [],
+     "line": "<body>ft_AS</body>"
+    },
+    {
+     "file": "st2/r200.dat",
+     "member": "r200_hap.z",
+     "token": "ft_AS",
+     "hap": "ファストトラベルまわり(2)",
+     "action": "ファストトラベル条件リセット",
+     "comment": null,
+     "labels": [],
+     "line": "<codeName>ft_AS</codeName>"
+    },
+    {
+     "file": "st2/r200.dat",
+     "member": "r200_hap.z",
+     "token": "ft_AS",
+     "hap": "ファストトラベルまわり(2)",
+     "action": "敵発生機_ft_AS",
+     "comment": null,
+     "labels": [],
+     "line": "<name>敵発生機_ft_AS</name>"
+    },
+    {
+     "file": "core/corehap.dat",
+     "member": "core_hap.pak",
+     "token": "ft_AS",
+     "offset": 145799
+    }
+   ],
+   "unlock_notes": "Place r200. p200 流れ(2) : panne 'エイリアンシップ端末故障' puis condition transporterIsEnabled ft_AS. p200 : false."
+  },
+  {
+   "index": 22,
+   "number": 23,
+   "code": "re_tower_start",
+   "crc32": "0x3a2305e2",
+   "hash_slot": "0x13fd4f8",
+   "text_key": "CORE_MAP_AREA_090",
+   "english_name": "The Tower",
+   "text_key_rule": "CORE_MAP_AREA_090 (0x86F250)",
+   "is_access_point": false,
+   "activation_bit": null,
+   "activation_bit_rva": null,
+   "always_active": false,
+   "allowed_under_WarpPartialLock": false,
+   "confidence": "high",
+   "evidence": "0x109EE0 stocke crc32('re_tower_start') dans 0x13fd4f8 = 0x13FD4A0+4*22 ; 0x86F0D0 cherche le hachage du codeName dans ce tableau (27 entrees) et formate CORE_MAP_TRANS_%04d avec indice+1 = 23",
+   "placed_entities": [],
+   "hap_references": [],
+   "note": "point de reprise (non affiche comme point d'acces)"
+  },
+  {
+   "index": 23,
+   "number": 24,
+   "code": "re_tower_cathedral",
+   "crc32": "0xaa3fc0f0",
+   "hash_slot": "0x13fd4fc",
+   "text_key": "CORE_MAP_AREA_090",
+   "english_name": "The Tower",
+   "text_key_rule": "CORE_MAP_AREA_090 (0x86F250)",
+   "is_access_point": false,
+   "activation_bit": null,
+   "activation_bit_rva": null,
+   "always_active": false,
+   "allowed_under_WarpPartialLock": false,
+   "confidence": "high",
+   "evidence": "0x109EE0 stocke crc32('re_tower_cathedral') dans 0x13fd4fc = 0x13FD4A0+4*23 ; 0x86F0D0 cherche le hachage du codeName dans ce tableau (27 entrees) et formate CORE_MAP_TRANS_%04d avec indice+1 = 24",
+   "placed_entities": [],
+   "hap_references": [],
+   "note": "point de reprise (non affiche comme point d'acces)"
+  },
+  {
+   "index": 24,
+   "number": 25,
+   "code": "re_tower_library",
+   "crc32": "0x1ab879f8",
+   "hash_slot": "0x13fd500",
+   "text_key": "CORE_MAP_AREA_090",
+   "english_name": "The Tower",
+   "text_key_rule": "CORE_MAP_AREA_090 (0x86F250)",
+   "is_access_point": false,
+   "activation_bit": null,
+   "activation_bit_rva": null,
+   "always_active": false,
+   "allowed_under_WarpPartialLock": false,
+   "confidence": "high",
+   "evidence": "0x109EE0 stocke crc32('re_tower_library') dans 0x13fd500 = 0x13FD4A0+4*24 ; 0x86F0D0 cherche le hachage du codeName dans ce tableau (27 entrees) et formate CORE_MAP_TRANS_%04d avec indice+1 = 25",
+   "placed_entities": [],
+   "hap_references": [],
+   "note": "point de reprise (non affiche comme point d'acces)"
+  },
+  {
+   "index": 25,
+   "number": 26,
+   "code": "re_tower_elevator",
+   "crc32": "0x6292565b",
+   "hash_slot": "0x13fd504",
+   "text_key": "CORE_MAP_AREA_090",
+   "english_name": "The Tower",
+   "text_key_rule": "CORE_MAP_AREA_090 (0x86F250)",
+   "is_access_point": false,
+   "activation_bit": null,
+   "activation_bit_rva": null,
+   "always_active": false,
+   "allowed_under_WarpPartialLock": false,
+   "confidence": "high",
+   "evidence": "0x109EE0 stocke crc32('re_tower_elevator') dans 0x13fd504 = 0x13FD4A0+4*25 ; 0x86F0D0 cherche le hachage du codeName dans ce tableau (27 entrees) et formate CORE_MAP_TRANS_%04d avec indice+1 = 26",
+   "placed_entities": [],
+   "hap_references": [],
+   "note": "point de reprise (non affiche comme point d'acces)"
+  },
+  {
+   "index": 26,
+   "number": 27,
+   "code": "re_SC_2Bdie",
+   "crc32": "0x28bb673b",
+   "hash_slot": "0x13fd508",
+   "text_key": "CORE_MAP_TRANS_0021",
+   "english_name": "Flooded City: Coast",
+   "text_key_rule": "CORE_MAP_TRANS_0021 (0x86F250)",
+   "is_access_point": false,
+   "activation_bit": null,
+   "activation_bit_rva": null,
+   "always_active": false,
+   "allowed_under_WarpPartialLock": false,
+   "confidence": "high",
+   "evidence": "0x109EE0 stocke crc32('re_SC_2Bdie') dans 0x13fd508 = 0x13FD4A0+4*26 ; 0x86F0D0 cherche le hachage du codeName dans ce tableau (27 entrees) et formate CORE_MAP_TRANS_%04d avec indice+1 = 27",
+   "placed_entities": [],
+   "hap_references": [],
+   "note": "point de reprise (non affiche comme point d'acces)"
+  }
+ ],
+ "hap_lock_references": [
+  {
+   "file": "ph2/p200.dat",
+   "member": "p200_hap.z",
+   "token": "BehaviorTransporterBa",
+   "hap": "転送端末ブロック用ＮＰＣ",
+   "action": "コマンド送信_転送端末ロック",
+   "comment": null,
+   "labels": [
+    "BehaviorTransporterBa.lock"
+   ],
+   "line": "<label>BehaviorTransporterBa.lock</label>"
+  }
+ ]
+}

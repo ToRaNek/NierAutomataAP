@@ -1,0 +1,202 @@
+{
+ "note": "Cle de nom = CORE_ACT_SKILL_NAME_%02d avec UniqueID - 2000 (0x7D0). Verifie aux 3 sites qui formatent cette chaine ; 0x86E4B0 est le switch par categorie (0x86FDD0) qui donne le nom de tout objet.",
+ "format_string_rva": "0xce8488",
+ "sites": [
+  {
+   "rva": "0x7daacb",
+   "function": "0x7daa90",
+   "index_expr": "r9d, [rdx - 0x7d0]"
+  },
+  {
+   "rva": "0x7e9631",
+   "function": "0x7e9530",
+   "index_expr": "r9d, [rbx - 0x7d0]"
+  },
+  {
+   "rva": "0x86e5ed",
+   "function": "0x86e4b0",
+   "index_expr": "r9d, [rbx - 0x7d0]"
+  }
+ ],
+ "programs": [
+  {
+   "unique_id": 2001,
+   "internal_name": "skill_act_spear",
+   "text_index": 1,
+   "name_key": "CORE_ACT_SKILL_NAME_01",
+   "english_name": "R010: Laser",
+   "help_key": "CORE_ACT_SKILL_HELP_01",
+   "english_help": "Fires a powerful laser in the\ndirection that the Pod is facing.",
+   "confidence": "high"
+  },
+  {
+   "unique_id": 2002,
+   "internal_name": "skill_act_illusion",
+   "text_index": 2,
+   "name_key": "CORE_ACT_SKILL_NAME_02",
+   "english_name": "R020: Mirage",
+   "help_key": "CORE_ACT_SKILL_HELP_02",
+   "english_help": "Analyzes all enemies in a fixed\nradius, allowing combatants to\ndeliver a series of deadly slashes\nto all who are caught within.",
+   "confidence": "high"
+  },
+  {
+   "unique_id": 2003,
+   "internal_name": "skill_act_hand",
+   "text_index": 3,
+   "name_key": "CORE_ACT_SKILL_NAME_03",
+   "english_name": "R030: Hammer",
+   "help_key": "CORE_ACT_SKILL_HELP_03",
+   "english_help": "Summons a mass of energy that\nunleashes a devastating blow\nupon its target.",
+   "confidence": "high"
+  },
+  {
+   "unique_id": 2004,
+   "internal_name": "skill_act_dance",
+   "text_index": 4,
+   "name_key": "CORE_ACT_SKILL_NAME_04",
+   "english_name": "R040: Blade",
+   "help_key": "CORE_ACT_SKILL_HELP_04",
+   "english_help": "Spins a Pod around the player at\nhigh speed, wreaking havoc on\nany enemies it touches.",
+   "confidence": "high"
+  },
+  {
+   "unique_id": 2005,
+   "internal_name": "skill_act_execution",
+   "text_index": 5,
+   "name_key": "CORE_ACT_SKILL_NAME_05",
+   "english_name": "R050: Spear",
+   "help_key": "CORE_ACT_SKILL_HELP_05",
+   "english_help": "Produces a mass of energy that\nsprouts from the ground in the\nshape of deadly spears.",
+   "confidence": "high"
+  },
+  {
+   "unique_id": 2006,
+   "internal_name": "skill_act_gluttony",
+   "text_index": 6,
+   "name_key": "CORE_ACT_SKILL_NAME_06",
+   "english_name": "R070: M Shield",
+   "help_key": "CORE_ACT_SKILL_HELP_06",
+   "english_help": "Deploys a protective barrier that\nblocks projectile attacks.",
+   "confidence": "high"
+  },
+  {
+   "unique_id": 2007,
+   "internal_name": "skill_act_barrier",
+   "text_index": 7,
+   "name_key": "CORE_ACT_SKILL_NAME_07",
+   "english_name": "A060: P Shield",
+   "help_key": "CORE_ACT_SKILL_HELP_07",
+   "english_help": "Deploys a protective barrier that\nblocks melee attacks.",
+   "confidence": "high"
+  },
+  {
+   "unique_id": 2008,
+   "internal_name": "skill_act_lash",
+   "text_index": 8,
+   "name_key": "CORE_ACT_SKILL_NAME_08",
+   "english_name": "A080: Wave",
+   "help_key": "CORE_ACT_SKILL_HELP_08",
+   "english_help": "Generates a powerful shock wave\nby slamming a Pod to the ground\nfrom an elevated height.",
+   "confidence": "high"
+  },
+  {
+   "unique_id": 2009,
+   "internal_name": "skill_act_wire",
+   "text_index": 9,
+   "name_key": "CORE_ACT_SKILL_NAME_09",
+   "english_name": "A090: Wire",
+   "help_key": "CORE_ACT_SKILL_HELP_09",
+   "english_help": "Fires a wire in the direction that\nthe Pod is facing. If it hits a foe,\nit launches the combatant right to\nthe target for an up-close assault.",
+   "confidence": "high"
+  },
+  {
+   "unique_id": 2010,
+   "internal_name": "skill_act_fixedBattery",
+   "text_index": 10,
+   "name_key": "CORE_ACT_SKILL_NAME_10",
+   "english_name": "A100: Decoy",
+   "help_key": "CORE_ACT_SKILL_HELP_10",
+   "english_help": "Creates an image of the user,\ndrawing the attention of foes\nand firing upon them with\nthe Pod's ranged attack.",
+   "confidence": "high"
+  },
+  {
+   "unique_id": 2011,
+   "internal_name": "skill_act_slowBomb",
+   "text_index": 11,
+   "name_key": "CORE_ACT_SKILL_NAME_11",
+   "english_name": "A110: Slow",
+   "help_key": "CORE_ACT_SKILL_HELP_11",
+   "english_help": "Creates a field that distorts time,\nslowing down all enemies that\nenter its vicinity.",
+   "confidence": "high"
+  },
+  {
+   "unique_id": 2012,
+   "internal_name": "skill_act_repair",
+   "text_index": 12,
+   "name_key": "CORE_ACT_SKILL_NAME_12",
+   "english_name": "A120: Repair",
+   "help_key": "CORE_ACT_SKILL_HELP_12",
+   "english_help": "Emits a temporary beam \ncapable of healing the \ncombatants as long as they \nremain within its radius.",
+   "confidence": "high"
+  },
+  {
+   "unique_id": 2015,
+   "internal_name": "skill_act_smallBomb",
+   "text_index": 15,
+   "name_key": "CORE_ACT_SKILL_NAME_15",
+   "english_name": "A130: Bomb",
+   "help_key": "CORE_ACT_SKILL_HELP_15",
+   "english_help": "Throws a volley of small\nexplosive charges over a set\nperiod of time.",
+   "confidence": "high"
+  },
+  {
+   "unique_id": 2019,
+   "internal_name": "skill_act_gravityBomb",
+   "text_index": 19,
+   "name_key": "CORE_ACT_SKILL_NAME_19",
+   "english_name": "A140: Gravity",
+   "help_key": "CORE_ACT_SKILL_HELP_19",
+   "english_help": "Unleashes a blast that sucks in\nany enemies in the vicinity.",
+   "confidence": "high"
+  },
+  {
+   "unique_id": 2021,
+   "internal_name": "skill_act_hold",
+   "text_index": 21,
+   "name_key": "CORE_ACT_SKILL_NAME_21",
+   "english_name": "A150: Volt",
+   "help_key": "CORE_ACT_SKILL_HELP_21",
+   "english_help": "Restrains and shocks one nearby\nenemy, causing continuous\ndamage over a set period of time.",
+   "confidence": "high"
+  },
+  {
+   "unique_id": 2022,
+   "internal_name": "skill_act_ride",
+   "text_index": 22,
+   "name_key": "CORE_ACT_SKILL_NAME_22",
+   "english_name": "A160: Missile",
+   "help_key": "CORE_ACT_SKILL_HELP_22",
+   "english_help": "Allows a combatant to ride atop\na Pod—with a certain degree of\ndirectional control—as it rushes\nforward into the fray.",
+   "confidence": "high"
+  },
+  {
+   "unique_id": 2024,
+   "internal_name": "skill_act_sonar",
+   "text_index": 24,
+   "name_key": "CORE_ACT_SKILL_NAME_24",
+   "english_name": "A170: Scanner",
+   "help_key": "CORE_ACT_SKILL_HELP_24",
+   "english_help": "Emits ultrasonic waves to \nscan the surroundings \nin search of hidden items.",
+   "confidence": "high"
+  }
+ ],
+ "unused_text_indices": [
+  13,
+  14,
+  16,
+  17,
+  18,
+  20,
+  23
+ ]
+}

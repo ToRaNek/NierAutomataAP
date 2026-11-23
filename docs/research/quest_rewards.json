@@ -1,0 +1,10121 @@
+{
+ "_source": "tools/resolve_quests.py ; getReWard(\"NNN\") dans les *_scp.bin (mruby) -> id de table DQR",
+ "_notes": [
+  "main_reward_ids = ids < 100 ou tables avec argent/EXP (recompense de fin de quete ; l'exe passe un drapeau 'id < 100' a 0x7cbcd0). Autres ids >= 100 = objets d'etape / DLC.",
+  "item_mode 'all' : tout est donne ; sinon tirage pondere (poids = pourcentage).",
+  "money / exp : montants ; argent multiplie par le bonus de chance G de l'exe (0x7cac0e)."
+ ],
+ "quests": {
+  "ph1/p100.dat": {
+   "english_name": null,
+   "main_reward_ids": [
+    109,
+    110
+   ],
+   "rewards": [
+    {
+     "reward_id": 107,
+     "called_from": [
+      "pascal_ON_TALK_ev1"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "ph1/p100.dat"
+     ],
+     "owner_evidence": [
+      "fichier de phase/salle"
+     ],
+     "items": [
+      {
+       "id": 851,
+       "name": "Fuel Filter",
+       "internal_name": "item_uq_filter",
+       "count": 1,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": null,
+     "exp": null
+    },
+    {
+     "reward_id": 108,
+     "called_from": [
+      "ane_ON_TALK_ev0"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "ph1/p100.dat"
+     ],
+     "owner_evidence": [
+      "fichier de phase/salle"
+     ],
+     "items": [
+      {
+       "id": 852,
+       "name": "Viscous Oil",
+       "internal_name": "item_uq_oil",
+       "count": 1,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": null,
+     "exp": null
+    },
+    {
+     "reward_id": 109,
+     "called_from": [
+      "gr_CT_none_a0"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "ph1/p100.dat"
+     ],
+     "owner_evidence": [
+      "fichier de phase/salle"
+     ],
+     "items": [
+      {
+       "id": 2,
+       "name": "Large Recovery",
+       "internal_name": "item_rec_L",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 102,
+       "name": "Melee Attack Up (L)",
+       "internal_name": "item_stUp_pAtk_M",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 122,
+       "name": "Melee Defense Up (L)",
+       "internal_name": "item_stUp_pDef_M",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 3085,
+       "name": "Offensive Heal +3",
+       "internal_name": "skill_psv_atkDrain_3",
+       "count": 1,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": [
+      5000
+     ],
+     "exp": null
+    },
+    {
+     "reward_id": 110,
+     "called_from": [
+      "gr_BD_none_a0"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "ph1/p100.dat"
+     ],
+     "owner_evidence": [
+      "fichier de phase/salle"
+     ],
+     "items": [
+      {
+       "id": 2,
+       "name": "Large Recovery",
+       "internal_name": "item_rec_L",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 112,
+       "name": "Ranged Attack Up (L)",
+       "internal_name": "item_stUp_sAtk_M",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 132,
+       "name": "Ranged Defense Up (L)",
+       "internal_name": "item_stUp_sDef_M",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 3013,
+       "name": "Down-Attack Up +3",
+       "internal_name": "skill_psv_downAtkUp_3",
+       "count": 1,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": [
+      5000
+     ],
+     "exp": null
+    }
+   ]
+  },
+  "ph2/p200.dat": {
+   "english_name": null,
+   "main_reward_ids": [
+    112,
+    113,
+    114,
+    115,
+    116,
+    117,
+    118
+   ],
+   "rewards": [
+    {
+     "reward_id": 100,
+     "called_from": [
+      "this_p200_140_shireiTalk_ev0"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "ph2/p200.dat"
+     ],
+     "owner_evidence": [
+      "fichier de phase/salle"
+     ],
+     "items": [
+      {
+       "id": 1161050,
+       "name": null,
+       "internal_name": "file_h_robo_5",
+       "count": 1,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": null,
+     "exp": null
+    },
+    {
+     "reward_id": 105,
+     "called_from": [
+      "dp_ans1"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "ph2/p200.dat"
+     ],
+     "owner_evidence": [
+      "fichier de phase/salle"
+     ],
+     "items": [
+      {
+       "id": 2024,
+       "name": null,
+       "internal_name": "skill_act_sonar",
+       "count": 1,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": null,
+     "exp": null
+    },
+    {
+     "reward_id": 112,
+     "called_from": [
+      "lynch1_ON_TALK_ev1"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "ph2/p200.dat"
+     ],
+     "owner_evidence": [
+      "fichier de phase/salle"
+     ],
+     "items": [
+      {
+       "id": 0,
+       "name": "Small Recovery",
+       "internal_name": "item_rec_S",
+       "count": 1,
+       "weight": 34
+      },
+      {
+       "id": 1,
+       "name": "Medium Recovery",
+       "internal_name": "item_rec_M",
+       "count": 1,
+       "weight": 33
+      },
+      {
+       "id": 2,
+       "name": "Large Recovery",
+       "internal_name": "item_rec_L",
+       "count": 1,
+       "weight": 33
+      }
+     ],
+     "item_mode": "random: 1 tirage(s) pondere(s) parmi 3",
+     "money": [
+      1000
+     ],
+     "exp": null
+    },
+    {
+     "reward_id": 113,
+     "called_from": [
+      "lynch2_ON_TALK_ev1"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "ph2/p200.dat"
+     ],
+     "owner_evidence": [
+      "fichier de phase/salle"
+     ],
+     "items": [
+      {
+       "id": 0,
+       "name": "Small Recovery",
+       "internal_name": "item_rec_S",
+       "count": 1,
+       "weight": 34
+      },
+      {
+       "id": 1,
+       "name": "Medium Recovery",
+       "internal_name": "item_rec_M",
+       "count": 1,
+       "weight": 33
+      },
+      {
+       "id": 2,
+       "name": "Large Recovery",
+       "internal_name": "item_rec_L",
+       "count": 1,
+       "weight": 33
+      }
+     ],
+     "item_mode": "random: 1 tirage(s) pondere(s) parmi 3",
+     "money": [
+      1000
+     ],
+     "exp": null
+    },
+    {
+     "reward_id": 114,
+     "called_from": [
+      "lynch3_ON_TALK_ev1"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "ph2/p200.dat"
+     ],
+     "owner_evidence": [
+      "fichier de phase/salle"
+     ],
+     "items": [
+      {
+       "id": 0,
+       "name": "Small Recovery",
+       "internal_name": "item_rec_S",
+       "count": 1,
+       "weight": 34
+      },
+      {
+       "id": 1,
+       "name": "Medium Recovery",
+       "internal_name": "item_rec_M",
+       "count": 1,
+       "weight": 33
+      },
+      {
+       "id": 2,
+       "name": "Large Recovery",
+       "internal_name": "item_rec_L",
+       "count": 1,
+       "weight": 33
+      }
+     ],
+     "item_mode": "random: 1 tirage(s) pondere(s) parmi 3",
+     "money": [
+      1000
+     ],
+     "exp": null
+    },
+    {
+     "reward_id": 115,
+     "called_from": [
+      "lynch4_ON_TALK_ev1"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "ph2/p200.dat"
+     ],
+     "owner_evidence": [
+      "fichier de phase/salle"
+     ],
+     "items": [
+      {
+       "id": 0,
+       "name": "Small Recovery",
+       "internal_name": "item_rec_S",
+       "count": 1,
+       "weight": 34
+      },
+      {
+       "id": 1,
+       "name": "Medium Recovery",
+       "internal_name": "item_rec_M",
+       "count": 1,
+       "weight": 33
+      },
+      {
+       "id": 2,
+       "name": "Large Recovery",
+       "internal_name": "item_rec_L",
+       "count": 1,
+       "weight": 33
+      }
+     ],
+     "item_mode": "random: 1 tirage(s) pondere(s) parmi 3",
+     "money": [
+      1000
+     ],
+     "exp": null
+    },
+    {
+     "reward_id": 116,
+     "called_from": [
+      "lynch5_ON_TALK_ev1"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "ph2/p200.dat"
+     ],
+     "owner_evidence": [
+      "fichier de phase/salle"
+     ],
+     "items": [
+      {
+       "id": 0,
+       "name": "Small Recovery",
+       "internal_name": "item_rec_S",
+       "count": 1,
+       "weight": 34
+      },
+      {
+       "id": 1,
+       "name": "Medium Recovery",
+       "internal_name": "item_rec_M",
+       "count": 1,
+       "weight": 33
+      },
+      {
+       "id": 2,
+       "name": "Large Recovery",
+       "internal_name": "item_rec_L",
+       "count": 1,
+       "weight": 33
+      }
+     ],
+     "item_mode": "random: 1 tirage(s) pondere(s) parmi 3",
+     "money": [
+      1000
+     ],
+     "exp": null
+    },
+    {
+     "reward_id": 117,
+     "called_from": [
+      "lynch6_ON_TALK_ev1"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "ph2/p200.dat"
+     ],
+     "owner_evidence": [
+      "fichier de phase/salle"
+     ],
+     "items": [
+      {
+       "id": 0,
+       "name": "Small Recovery",
+       "internal_name": "item_rec_S",
+       "count": 1,
+       "weight": 34
+      },
+      {
+       "id": 1,
+       "name": "Medium Recovery",
+       "internal_name": "item_rec_M",
+       "count": 1,
+       "weight": 33
+      },
+      {
+       "id": 2,
+       "name": "Large Recovery",
+       "internal_name": "item_rec_L",
+       "count": 1,
+       "weight": 33
+      }
+     ],
+     "item_mode": "random: 1 tirage(s) pondere(s) parmi 3",
+     "money": [
+      1000
+     ],
+     "exp": null
+    },
+    {
+     "reward_id": 118,
+     "called_from": [
+      "lynch7_ON_TALK_ev1"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "ph2/p200.dat"
+     ],
+     "owner_evidence": [
+      "fichier de phase/salle"
+     ],
+     "items": [
+      {
+       "id": 0,
+       "name": "Small Recovery",
+       "internal_name": "item_rec_S",
+       "count": 1,
+       "weight": 34
+      },
+      {
+       "id": 1,
+       "name": "Medium Recovery",
+       "internal_name": "item_rec_M",
+       "count": 1,
+       "weight": 33
+      },
+      {
+       "id": 2,
+       "name": "Large Recovery",
+       "internal_name": "item_rec_L",
+       "count": 1,
+       "weight": 33
+      }
+     ],
+     "item_mode": "random: 1 tirage(s) pondere(s) parmi 3",
+     "money": [
+      1000
+     ],
+     "exp": null
+    }
+   ]
+  },
+  "ph3/p300.dat": {
+   "english_name": null,
+   "main_reward_ids": [],
+   "rewards": [
+    {
+     "reward_id": 101,
+     "called_from": [
+      "area_keyget_HIT_a0"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "ph3/p300.dat"
+     ],
+     "owner_evidence": [
+      "fichier de phase/salle"
+     ],
+     "items": [
+      {
+       "id": 820,
+       "name": "Forest Access Key",
+       "internal_name": "item_uq_accessKey_1",
+       "count": 1,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": null,
+     "exp": null
+    },
+    {
+     "reward_id": 102,
+     "called_from": [
+      "ev1010_DONE_a0"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "ph3/p300.dat"
+     ],
+     "owner_evidence": [
+      "fichier de phase/salle"
+     ],
+     "items": [
+      {
+       "id": 821,
+       "name": "Ocean Access Key",
+       "internal_name": "item_uq_accessKey_2",
+       "count": 1,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": null,
+     "exp": null
+    },
+    {
+     "reward_id": 103,
+     "called_from": [
+      "auto_5_talk1"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "ph3/p300.dat"
+     ],
+     "owner_evidence": [
+      "fichier de phase/salle"
+     ],
+     "items": [
+      {
+       "id": 822,
+       "name": "Park Access Key",
+       "internal_name": "item_uq_accessKey_3",
+       "count": 1,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": null,
+     "exp": null
+    },
+    {
+     "reward_id": 107,
+     "called_from": [
+      "pascal_ON_TALK_ev2"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "ph3/p300.dat"
+     ],
+     "owner_evidence": [
+      "fichier de phase/salle"
+     ],
+     "items": [
+      {
+       "id": 851,
+       "name": "Fuel Filter",
+       "internal_name": "item_uq_filter",
+       "count": 1,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": null,
+     "exp": null
+    },
+    {
+     "reward_id": 122,
+     "called_from": [
+      "a9S_ON_TALK_ev0"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "ph3/p300.dat"
+     ],
+     "owner_evidence": [
+      "fichier de phase/salle"
+     ],
+     "items": [
+      {
+       "id": 102,
+       "name": "Melee Attack Up (L)",
+       "internal_name": "item_stUp_pAtk_M",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 2,
+       "name": "Large Recovery",
+       "internal_name": "item_rec_L",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 162,
+       "name": "Speed Salve (L)",
+       "internal_name": "item_sprDash_M",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 400,
+       "name": "E-Drug",
+       "internal_name": "item_dragA",
+       "count": 1,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": null,
+     "exp": null
+    },
+    {
+     "reward_id": 124,
+     "called_from": [
+      "this_archive124_a0"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "ph3/p300.dat"
+     ],
+     "owner_evidence": [
+      "fichier de phase/salle"
+     ],
+     "items": [
+      {
+       "id": 1090080,
+       "name": "[Top Secret] YoRHa Disposal",
+       "internal_name": "file_robo_8",
+       "count": 1,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": null,
+     "exp": null
+    },
+    {
+     "reward_id": 131,
+     "called_from": [
+      "deadpascal_DONE_p0"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "ph3/p300.dat"
+     ],
+     "owner_evidence": [
+      "fichier de phase/salle"
+     ],
+     "items": [
+      {
+       "id": 691,
+       "name": "Pascal's Core",
+       "internal_name": "item_mt_blackBox_pascal",
+       "count": 1,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": null,
+     "exp": null
+    }
+   ]
+  },
+  "q020": {
+   "english_name": "Sartre's Melancholy",
+   "main_reward_ids": [
+    0
+   ],
+   "rewards": [
+    {
+     "reward_id": 0,
+     "called_from": [
+      "sartre_navinpc_ON_TALK_3_ev0"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "quest/q020.dat"
+     ],
+     "owner_evidence": [
+      "fichier quest/qXXX.dat"
+     ],
+     "items": [
+      {
+       "id": 1,
+       "name": "Medium Recovery",
+       "internal_name": "item_rec_M",
+       "count": 2,
+       "weight": 100
+      },
+      {
+       "id": 510,
+       "name": "Beast Hide",
+       "internal_name": "item_mt_fell",
+       "count": 5,
+       "weight": 100
+      },
+      {
+       "id": 3139,
+       "name": "EXP Gain Up +3",
+       "internal_name": "skill_psv_expUp_3",
+       "count": 1,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": [
+      5000
+     ],
+     "exp": [
+      500
+     ]
+    },
+    {
+     "reward_id": 200,
+     "called_from": [
+      "under_girlnpc_ON_TALK_ev0"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "quest/q020.dat"
+     ],
+     "owner_evidence": [
+      "fichier quest/qXXX.dat"
+     ],
+     "items": [
+      {
+       "id": 700,
+       "name": "Letter for Sartre",
+       "internal_name": "item_uq_q020_letter",
+       "count": 1,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": null,
+     "exp": null
+    },
+    {
+     "reward_id": 201,
+     "called_from": [
+      "ap_npc1_ON_TALK_ev0"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "quest/q020.dat"
+     ],
+     "owner_evidence": [
+      "fichier quest/qXXX.dat"
+     ],
+     "items": [
+      {
+       "id": 701,
+       "name": "Beautiful Glass",
+       "internal_name": "item_uq_q020_glass",
+       "count": 1,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": null,
+     "exp": null
+    },
+    {
+     "reward_id": 202,
+     "called_from": [
+      "dd_npc1_ON_TALK_ev0"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "quest/q020.dat"
+     ],
+     "owner_evidence": [
+      "fichier quest/qXXX.dat"
+     ],
+     "items": [
+      {
+       "id": 702,
+       "name": "Machine Fossil",
+       "internal_name": "item_uq_q020_fossil",
+       "count": 1,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": null,
+     "exp": null
+    },
+    {
+     "reward_id": 203,
+     "called_from": [
+      "sartre_navinpc_ON_TALK_3_ev0"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "quest/q020.dat"
+     ],
+     "owner_evidence": [
+      "fichier quest/qXXX.dat"
+     ],
+     "items": [
+      {
+       "id": 703,
+       "name": "Sartre's Letter",
+       "internal_name": "item_uq_sartre_letter",
+       "count": 1,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": null,
+     "exp": null
+    }
+   ]
+  },
+  "q031": {
+   "english_name": "Machine Examination 1",
+   "main_reward_ids": [
+    3
+   ],
+   "rewards": [
+    {
+     "reward_id": 3,
+     "called_from": [
+      "fade_DONE_ev0"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "quest/q031.dat"
+     ],
+     "owner_evidence": [
+      "fichier quest/qXXX.dat"
+     ],
+     "items": [
+      {
+       "id": 1120010,
+       "name": "Engels 110-B Record 0005",
+       "internal_name": "file_eng_1",
+       "count": 1,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": [
+      3000
+     ],
+     "exp": [
+      500
+     ]
+    }
+   ]
+  },
+  "q032": {
+   "english_name": "Machine Examination 2",
+   "main_reward_ids": [
+    4
+   ],
+   "rewards": [
+    {
+     "reward_id": 4,
+     "called_from": [
+      "fade_DONE_ev0"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "quest/q032.dat"
+     ],
+     "owner_evidence": [
+      "fichier quest/qXXX.dat"
+     ],
+     "items": [
+      {
+       "id": 1120020,
+       "name": "Engels 110-B Record 0010",
+       "internal_name": "file_eng_2",
+       "count": 1,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": [
+      5000
+     ],
+     "exp": [
+      750
+     ]
+    },
+    {
+     "reward_id": 205,
+     "called_from": [
+      "eng_ON_TALK_ev8"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "st2/r200.dat"
+     ],
+     "owner_evidence": [
+      "etat q032/* teste dans la methode (st2/r200.dat)"
+     ],
+     "items": [
+      {
+       "id": 1120030,
+       "name": "Engels 110-B Record 0020",
+       "internal_name": "file_eng_3",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 3079,
+       "name": "Max HP Up +6",
+       "internal_name": "skill_psv_hpUp_6",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 3043,
+       "name": "Fast Cooldown +6",
+       "internal_name": "skill_psv_coolTimeDown_6",
+       "count": 1,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": null,
+     "exp": null
+    }
+   ]
+  },
+  "q040": {
+   "english_name": "Family Squabble",
+   "main_reward_ids": [
+    15
+   ],
+   "rewards": [
+    {
+     "reward_id": 15,
+     "called_from": [
+      "goal_DONE_ev1"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "quest/q040.dat"
+     ],
+     "owner_evidence": [
+      "fichier quest/qXXX.dat"
+     ],
+     "items": [
+      {
+       "id": 1,
+       "name": "Medium Recovery",
+       "internal_name": "item_rec_M",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 152,
+       "name": "Impact Bracer (L)",
+       "internal_name": "item_sprAmr_M",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 545,
+       "name": "Broken Battery",
+       "internal_name": "item_mt_battery_S",
+       "count": 3,
+       "weight": 100
+      },
+      {
+       "id": 3094,
+       "name": "Deadly Heal +3",
+       "internal_name": "skill_psv_defeatDrain_3",
+       "count": 1,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": [
+      10000
+     ],
+     "exp": [
+      750
+     ]
+    }
+   ]
+  },
+  "q070": {
+   "english_name": "Of Machines and Beasts",
+   "main_reward_ids": [
+    56
+   ],
+   "rewards": [
+    {
+     "reward_id": 56,
+     "called_from": [
+      "lasttalk1_DONE_ev3"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "quest/q070.dat"
+     ],
+     "owner_evidence": [
+      "fichier quest/qXXX.dat"
+     ],
+     "items": [
+      {
+       "id": 300,
+       "name": "Animal Bait",
+       "internal_name": "item_feed_S",
+       "count": 20,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": [
+      5000
+     ],
+     "exp": [
+      1150
+     ]
+    }
+   ]
+  },
+  "q071": {
+   "english_name": "Animal Care",
+   "main_reward_ids": [
+    13
+   ],
+   "rewards": [
+    {
+     "reward_id": 13,
+     "called_from": [
+      "fade1_DONE_ev2"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "quest/q071.dat"
+     ],
+     "owner_evidence": [
+      "fichier quest/qXXX.dat"
+     ],
+     "items": [
+      {
+       "id": 921,
+       "name": "Quality Sachet",
+       "internal_name": "item_uq_sachet_M",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 510,
+       "name": "Beast Hide",
+       "internal_name": "item_mt_fell",
+       "count": 5,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": [
+      3000
+     ],
+     "exp": [
+      600
+     ]
+    }
+   ]
+  },
+  "q072": {
+   "english_name": "Turf War",
+   "main_reward_ids": [
+    57
+   ],
+   "rewards": [
+    {
+     "reward_id": 57,
+     "called_from": [
+      "animalrobo1_ON_TALK_4_ev1"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "st1/r160.dat"
+     ],
+     "owner_evidence": [
+      "DEDUIT : salle de la foret (r160) ou leader1_DONE (q072) donne aussi un objet ; contenu (Auto-Heal +5) = recompense de Turf War selon web_reference"
+     ],
+     "items": [
+      {
+       "id": 3,
+       "name": "Full Recovery",
+       "internal_name": "item_rec_All",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 300,
+       "name": "Animal Bait",
+       "internal_name": "item_feed_S",
+       "count": 5,
+       "weight": 100
+      },
+      {
+       "id": 3105,
+       "name": "Auto-Heal +5",
+       "internal_name": "skill_psv_autoRec_5",
+       "count": 1,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": [
+      10000
+     ],
+     "exp": [
+      1750
+     ]
+    },
+    {
+     "reward_id": 222,
+     "called_from": [
+      "leader1_DONE_l2"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "st1/r160.dat"
+     ],
+     "owner_evidence": [
+      "etat q072/* teste dans la methode (st1/r160.dat)"
+     ],
+     "items": [
+      {
+       "id": 1160010,
+       "name": "Record of a Bestial Machine",
+       "internal_name": "file_h_animalRoboMemory",
+       "count": 1,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": null,
+     "exp": null
+    }
+   ]
+  },
+  "q090": {
+   "english_name": "Underground Colosseum",
+   "main_reward_ids": [],
+   "rewards": [
+    {
+     "reward_id": 530,
+     "called_from": [
+      "npc2_ON_TALK_trial1_a"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "quest/q090.dat"
+     ],
+     "owner_evidence": [
+      "fichier quest/qXXX.dat"
+     ],
+     "items": [
+      {
+       "id": 984,
+       "name": "Young Man's Outfit",
+       "internal_name": "item_uq_dlcCloth2",
+       "count": 1,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": null,
+     "exp": null
+    },
+    {
+     "reward_id": 531,
+     "called_from": [
+      "npc2_ON_TALK_trial1_b"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "quest/q090.dat"
+     ],
+     "owner_evidence": [
+      "fichier quest/qXXX.dat"
+     ],
+     "items": [
+      {
+       "id": 1,
+       "name": "Medium Recovery",
+       "internal_name": "item_rec_M",
+       "count": 3,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": null,
+     "exp": null
+    },
+    {
+     "reward_id": 532,
+     "called_from": [
+      "npc2_ON_TALK_trial2_a"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "quest/q090.dat"
+     ],
+     "owner_evidence": [
+      "fichier quest/qXXX.dat"
+     ],
+     "items": [
+      {
+       "id": 526,
+       "name": "Large Gear",
+       "internal_name": "item_mt_gear_M",
+       "count": 2,
+       "weight": 100
+      },
+      {
+       "id": 555,
+       "name": "New Bolt",
+       "internal_name": "item_mt_bolt_M",
+       "count": 2,
+       "weight": 100
+      },
+      {
+       "id": 551,
+       "name": "Pristine Cable",
+       "internal_name": "item_mt_cable_M",
+       "count": 2,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": null,
+     "exp": null
+    },
+    {
+     "reward_id": 533,
+     "called_from": [
+      "npc2_ON_TALK_trial2_b"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "quest/q090.dat"
+     ],
+     "owner_evidence": [
+      "fichier quest/qXXX.dat"
+     ],
+     "items": [
+      {
+       "id": 521,
+       "name": "Pristine Screw",
+       "internal_name": "item_mt_screw_M",
+       "count": 1,
+       "weight": 34
+      },
+      {
+       "id": 526,
+       "name": "Large Gear",
+       "internal_name": "item_mt_gear_M",
+       "count": 1,
+       "weight": 33
+      },
+      {
+       "id": 555,
+       "name": "New Bolt",
+       "internal_name": "item_mt_bolt_M",
+       "count": 1,
+       "weight": 34
+      },
+      {
+       "id": 560,
+       "name": "Clean Nut",
+       "internal_name": "item_mt_nats_M",
+       "count": 1,
+       "weight": 34
+      },
+      {
+       "id": 642,
+       "name": "Sturdy Socket",
+       "internal_name": "item_mt_socket_M",
+       "count": 1,
+       "weight": 34
+      },
+      {
+       "id": 551,
+       "name": "Pristine Cable",
+       "internal_name": "item_mt_cable_M",
+       "count": 1,
+       "weight": 33
+      },
+      {
+       "id": 546,
+       "name": "Large Battery",
+       "internal_name": "item_mt_battery_M",
+       "count": 1,
+       "weight": 34
+      },
+      {
+       "id": 687,
+       "name": "Moldavite",
+       "internal_name": "item_mt_moldavite",
+       "count": 1,
+       "weight": 34
+      },
+      {
+       "id": 688,
+       "name": "Meteorite",
+       "internal_name": "item_mt_meteorite",
+       "count": 1,
+       "weight": 30
+      }
+     ],
+     "item_mode": "random: 3 tirage(s) pondere(s) parmi 9",
+     "money": null,
+     "exp": null
+    },
+    {
+     "reward_id": 534,
+     "called_from": [
+      "npc2_ON_TALK_trial3_a"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "quest/q090.dat"
+     ],
+     "owner_evidence": [
+      "fichier quest/qXXX.dat"
+     ],
+     "items": [
+      {
+       "id": 3268,
+       "name": "Hijack Boost +6",
+       "internal_name": "skill_psv_ctrlTimeUp_6",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 3304,
+       "name": "Combust +6",
+       "internal_name": "skill_psv_burst_6",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 3295,
+       "name": "Stun +6",
+       "internal_name": "skill_psv_stan_6",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 3331,
+       "name": "Heal Drops Up +6",
+       "internal_name": "skill_psv_dropRecUp_6",
+       "count": 1,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": null,
+     "exp": null
+    },
+    {
+     "reward_id": 535,
+     "called_from": [
+      "npc2_ON_TALK_trial3_b"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "quest/q090.dat"
+     ],
+     "owner_evidence": [
+      "fichier quest/qXXX.dat"
+     ],
+     "items": [
+      {
+       "id": 581,
+       "name": "Elaborate Gadget",
+       "internal_name": "item_mt_machine_M",
+       "count": 1,
+       "weight": 25
+      },
+      {
+       "id": 621,
+       "name": "Plant Seed",
+       "internal_name": "item_mt_seed",
+       "count": 1,
+       "weight": 30
+      },
+      {
+       "id": 638,
+       "name": "Eagle Eggs",
+       "internal_name": "item_mt_eagleEgg",
+       "count": 1,
+       "weight": 30
+      },
+      {
+       "id": 684,
+       "name": "Tech Manual",
+       "internal_name": "item_mt_technicalBook",
+       "count": 1,
+       "weight": 30
+      },
+      {
+       "id": 629,
+       "name": "Tanning Agent",
+       "internal_name": "item_mt_tanningAgent",
+       "count": 1,
+       "weight": 30
+      },
+      {
+       "id": 630,
+       "name": "Filler Metal",
+       "internal_name": "item_mt_fillerMetal",
+       "count": 1,
+       "weight": 30
+      },
+      {
+       "id": 582,
+       "name": "Complex Gadget",
+       "internal_name": "item_mt_machine_L",
+       "count": 1,
+       "weight": 25
+      },
+      {
+       "id": 622,
+       "name": "Tree Sap",
+       "internal_name": "item_mt_sap",
+       "count": 1,
+       "weight": 25
+      },
+      {
+       "id": 637,
+       "name": "Giant Egg",
+       "internal_name": "item_mt_bigEgg",
+       "count": 1,
+       "weight": 25
+      },
+      {
+       "id": 685,
+       "name": "Thick Dictionary",
+       "internal_name": "item_mt_dictionary",
+       "count": 1,
+       "weight": 25
+      },
+      {
+       "id": 628,
+       "name": "Machine Oil",
+       "internal_name": "item_mt_oil",
+       "count": 1,
+       "weight": 25
+      }
+     ],
+     "item_mode": "random: 3 tirage(s) pondere(s) parmi 11",
+     "money": null,
+     "exp": null
+    },
+    {
+     "reward_id": 536,
+     "called_from": [
+      "npc2_ON_TALK_trial4_a"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "quest/q090.dat"
+     ],
+     "owner_evidence": [
+      "fichier quest/qXXX.dat"
+     ],
+     "items": [
+      {
+       "id": 3043,
+       "name": "Fast Cooldown +6",
+       "internal_name": "skill_psv_coolTimeDown_6",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 3115,
+       "name": "Evade Range Up +6",
+       "internal_name": "skill_psv_avoidLenUp_6",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 3124,
+       "name": "Moving Speed Up +6",
+       "internal_name": "skill_psv_moveSpdUp_6",
+       "count": 1,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": null,
+     "exp": null
+    },
+    {
+     "reward_id": 537,
+     "called_from": [
+      "npc2_ON_TALK_trial4_b"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "quest/q090.dat"
+     ],
+     "owner_evidence": [
+      "fichier quest/qXXX.dat"
+     ],
+     "items": [
+      {
+       "id": 3265,
+       "name": "Hijack Boost +3",
+       "internal_name": "skill_psv_ctrlTimeUp_3",
+       "count": 1,
+       "weight": 25
+      },
+      {
+       "id": 3292,
+       "name": "Stun +3",
+       "internal_name": "skill_psv_stan_3",
+       "count": 1,
+       "weight": 25
+      },
+      {
+       "id": 3301,
+       "name": "Combust +3",
+       "internal_name": "skill_psv_burst_3",
+       "count": 1,
+       "weight": 25
+      },
+      {
+       "id": 3328,
+       "name": "Heal Drops Up +3",
+       "internal_name": "skill_psv_dropRecUp_3",
+       "count": 1,
+       "weight": 25
+      }
+     ],
+     "item_mode": "random: 1 tirage(s) pondere(s) parmi 4",
+     "money": null,
+     "exp": null
+    },
+    {
+     "reward_id": 538,
+     "called_from": [
+      "npc2_ON_TALK_trial5_a"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "quest/q090.dat"
+     ],
+     "owner_evidence": [
+      "fichier quest/qXXX.dat"
+     ],
+     "items": [
+      {
+       "id": 3079,
+       "name": "Max HP Up +6",
+       "internal_name": "skill_psv_hpUp_6",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 3088,
+       "name": "Offensive Heal +6",
+       "internal_name": "skill_psv_atkDrain_6",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 3052,
+       "name": "Melee Defense +6",
+       "internal_name": "skill_psv_stDefUp_6",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 3061,
+       "name": "Ranged Defense +6",
+       "internal_name": "skill_psv_enDefUp_6",
+       "count": 1,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": null,
+     "exp": null
+    },
+    {
+     "reward_id": 539,
+     "called_from": [
+      "npc2_ON_TALK_trial5_b"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "quest/q090.dat"
+     ],
+     "owner_evidence": [
+      "fichier quest/qXXX.dat"
+     ],
+     "items": [
+      {
+       "id": 3076,
+       "name": "Max HP Up +3",
+       "internal_name": "skill_psv_hpUp_3",
+       "count": 1,
+       "weight": 34
+      },
+      {
+       "id": 3085,
+       "name": "Offensive Heal +3",
+       "internal_name": "skill_psv_atkDrain_3",
+       "count": 1,
+       "weight": 33
+      },
+      {
+       "id": 3103,
+       "name": "Auto-Heal +3",
+       "internal_name": "skill_psv_autoRec_3",
+       "count": 1,
+       "weight": 33
+      }
+     ],
+     "item_mode": "random: 1 tirage(s) pondere(s) parmi 3",
+     "money": null,
+     "exp": null
+    },
+    {
+     "reward_id": 540,
+     "called_from": [
+      "npc2_ON_TALK_trial6_a"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "quest/q090.dat"
+     ],
+     "owner_evidence": [
+      "fichier quest/qXXX.dat"
+     ],
+     "items": [
+      {
+       "id": 3196,
+       "name": "Overclock +6",
+       "internal_name": "skill_psv_witchTime_6",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 3034,
+       "name": "Ranged Attack Up +6",
+       "internal_name": "skill_psv_podAtkUp_6",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 3151,
+       "name": "Shock Wave +6",
+       "internal_name": "skill_psv_atkEffect_6",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 3025,
+       "name": "Critical Up +6",
+       "internal_name": "skill_psv_criticalUp_6",
+       "count": 1,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": null,
+     "exp": null
+    },
+    {
+     "reward_id": 541,
+     "called_from": [
+      "npc2_ON_TALK_trial6_b"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "quest/q090.dat"
+     ],
+     "owner_evidence": [
+      "fichier quest/qXXX.dat"
+     ],
+     "items": [
+      {
+       "id": 3031,
+       "name": "Ranged Attack Up +3",
+       "internal_name": "skill_psv_podAtkUp_3",
+       "count": 1,
+       "weight": 34
+      },
+      {
+       "id": 3148,
+       "name": "Shock Wave +3",
+       "internal_name": "skill_psv_atkEffect_3",
+       "count": 1,
+       "weight": 33
+      },
+      {
+       "id": 3112,
+       "name": "Evade Range Up +3",
+       "internal_name": "skill_psv_avoidLenUp_3",
+       "count": 1,
+       "weight": 33
+      }
+     ],
+     "item_mode": "random: 1 tirage(s) pondere(s) parmi 3",
+     "money": null,
+     "exp": null
+    },
+    {
+     "reward_id": 542,
+     "called_from": [
+      "npc2_ON_TALK_rankEX_a"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "quest/q090.dat"
+     ],
+     "owner_evidence": [
+      "fichier quest/qXXX.dat"
+     ],
+     "items": [
+      {
+       "id": 876,
+       "name": "Masamune Mask",
+       "internal_name": "item_uq_ExForest",
+       "count": 1,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": null,
+     "exp": null
+    },
+    {
+     "reward_id": 543,
+     "called_from": [
+      "npc2_ON_TALK_rankEX_b"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "quest/q090.dat"
+     ],
+     "owner_evidence": [
+      "fichier quest/qXXX.dat"
+     ],
+     "items": [
+      {
+       "id": 3079,
+       "name": "Max HP Up +6",
+       "internal_name": "skill_psv_hpUp_6",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 3052,
+       "name": "Melee Defense +6",
+       "internal_name": "skill_psv_stDefUp_6",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 3061,
+       "name": "Ranged Defense +6",
+       "internal_name": "skill_psv_enDefUp_6",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 3070,
+       "name": "Anti Chain Damage +6",
+       "internal_name": "skill_psv_damageInv_6",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 3088,
+       "name": "Offensive Heal +6",
+       "internal_name": "skill_psv_atkDrain_6",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 3169,
+       "name": "Damage Absorb +6",
+       "internal_name": "skill_psv_damageDrain_6",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 3196,
+       "name": "Overclock +6",
+       "internal_name": "skill_psv_witchTime_6",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 3043,
+       "name": "Fast Cooldown +6",
+       "internal_name": "skill_psv_coolTimeDown_6",
+       "count": 1,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": null,
+     "exp": null
+    }
+   ]
+  },
+  "q091": {
+   "english_name": "Gambler's Colosseum",
+   "main_reward_ids": [],
+   "rewards": [
+    {
+     "reward_id": 560,
+     "called_from": [
+      "npc2_ON_TALK_rankD_a"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "quest/q091.dat"
+     ],
+     "owner_evidence": [
+      "fichier quest/qXXX.dat"
+     ],
+     "items": [
+      {
+       "id": 681,
+       "name": "Lovely Choker",
+       "internal_name": "item_mt_choker",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 683,
+       "name": "Precious Earrings",
+       "internal_name": "item_mt_pierce",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 625,
+       "name": "Desert Rose",
+       "internal_name": "item_mt_rose",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 690,
+       "name": "Machine Core",
+       "internal_name": "item_mt_blackBox",
+       "count": 1,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": null,
+     "exp": null
+    },
+    {
+     "reward_id": 561,
+     "called_from": [
+      "npc2_ON_TALK_rankE_b"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "quest/q091.dat"
+     ],
+     "owner_evidence": [
+      "fichier quest/qXXX.dat"
+     ],
+     "items": [
+      {
+       "id": 640,
+       "name": "Shattered Earring",
+       "internal_name": "item_mt_earrings",
+       "count": 1,
+       "weight": 34
+      },
+      {
+       "id": 640,
+       "name": "Shattered Earring",
+       "internal_name": "item_mt_earrings",
+       "count": 1,
+       "weight": 33
+      },
+      {
+       "id": 641,
+       "name": "Drab Bracelet",
+       "internal_name": "item_mt_bracelet",
+       "count": 1,
+       "weight": 34
+      },
+      {
+       "id": 641,
+       "name": "Drab Bracelet",
+       "internal_name": "item_mt_bracelet",
+       "count": 1,
+       "weight": 33
+      },
+      {
+       "id": 681,
+       "name": "Lovely Choker",
+       "internal_name": "item_mt_choker",
+       "count": 1,
+       "weight": 33
+      },
+      {
+       "id": 683,
+       "name": "Precious Earrings",
+       "internal_name": "item_mt_pierce",
+       "count": 1,
+       "weight": 33
+      }
+     ],
+     "item_mode": "random: 2 tirage(s) pondere(s) parmi 6",
+     "money": null,
+     "exp": null
+    },
+    {
+     "reward_id": 562,
+     "called_from": [
+      "npc2_ON_TALK_rankE_a"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "quest/q091.dat"
+     ],
+     "owner_evidence": [
+      "fichier quest/qXXX.dat"
+     ],
+     "items": [
+      {
+       "id": 880,
+       "name": "White Hair",
+       "internal_name": "item_uq_hairSpray_A",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 881,
+       "name": "Black Hair",
+       "internal_name": "item_uq_hairSpray_B",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 882,
+       "name": "Brown Hair",
+       "internal_name": "item_uq_hairSpray_C",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 883,
+       "name": "Red Hair",
+       "internal_name": "item_uq_hairSpray_D",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 884,
+       "name": "Blue Hair",
+       "internal_name": "item_uq_hairSpray_E",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 885,
+       "name": "Green Hair",
+       "internal_name": "item_uq_hairSpray_F",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 886,
+       "name": "Purple Hair",
+       "internal_name": "item_uq_hairSpray_G",
+       "count": 1,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": null,
+     "exp": null
+    },
+    {
+     "reward_id": 563,
+     "called_from": [
+      "npc2_ON_TALK_rankD_b"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "quest/q091.dat"
+     ],
+     "owner_evidence": [
+      "fichier quest/qXXX.dat"
+     ],
+     "items": [
+      {
+       "id": 681,
+       "name": "Lovely Choker",
+       "internal_name": "item_mt_choker",
+       "count": 1,
+       "weight": 34
+      },
+      {
+       "id": 681,
+       "name": "Lovely Choker",
+       "internal_name": "item_mt_choker",
+       "count": 2,
+       "weight": 33
+      },
+      {
+       "id": 683,
+       "name": "Precious Earrings",
+       "internal_name": "item_mt_pierce",
+       "count": 1,
+       "weight": 34
+      },
+      {
+       "id": 683,
+       "name": "Precious Earrings",
+       "internal_name": "item_mt_pierce",
+       "count": 1,
+       "weight": 33
+      },
+      {
+       "id": 625,
+       "name": "Desert Rose",
+       "internal_name": "item_mt_rose",
+       "count": 1,
+       "weight": 33
+      }
+     ],
+     "item_mode": "random: 2 tirage(s) pondere(s) parmi 6",
+     "money": null,
+     "exp": null
+    },
+    {
+     "reward_id": 564,
+     "called_from": [
+      "npc2_ON_TALK_rankC_a"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "quest/q091.dat"
+     ],
+     "owner_evidence": [
+      "fichier quest/qXXX.dat"
+     ],
+     "items": [
+      {
+       "id": 3232,
+       "name": "Taunt Up +6",
+       "internal_name": "skill_psv_holdAction_6",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 3241,
+       "name": "Charge Attack +6",
+       "internal_name": "skill_psv_chargeAtk_6",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 3223,
+       "name": "Counter +6",
+       "internal_name": "skill_psv_counterAction_6",
+       "count": 1,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": null,
+     "exp": null
+    },
+    {
+     "reward_id": 565,
+     "called_from": [
+      "npc2_ON_TALK_rankC_b"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "quest/q091.dat"
+     ],
+     "owner_evidence": [
+      "fichier quest/qXXX.dat"
+     ],
+     "items": [
+      {
+       "id": 603,
+       "name": "Gold Ore",
+       "internal_name": "item_mt_ore_LL",
+       "count": 1,
+       "weight": 36
+      },
+      {
+       "id": 536,
+       "name": "Memory Alloy",
+       "internal_name": "item_mt_alloy_M",
+       "count": 1,
+       "weight": 36
+      },
+      {
+       "id": 570,
+       "name": "Machine Arm",
+       "internal_name": "item_mt_roboArm",
+       "count": 1,
+       "weight": 38
+      },
+      {
+       "id": 571,
+       "name": "Machine Leg",
+       "internal_name": "item_mt_roboLeg",
+       "count": 1,
+       "weight": 38
+      },
+      {
+       "id": 572,
+       "name": "Machine Torso",
+       "internal_name": "item_mt_roboBody",
+       "count": 1,
+       "weight": 38
+      },
+      {
+       "id": 573,
+       "name": "Machine Head",
+       "internal_name": "item_mt_roboHead",
+       "count": 1,
+       "weight": 38
+      },
+      {
+       "id": 639,
+       "name": "Black Pearl",
+       "internal_name": "item_mt_blackPearl",
+       "count": 1,
+       "weight": 38
+      },
+      {
+       "id": 633,
+       "name": "Amber",
+       "internal_name": "item_mt_amber",
+       "count": 1,
+       "weight": 38
+      }
+     ],
+     "item_mode": "random: 3 tirage(s) pondere(s) parmi 8",
+     "money": null,
+     "exp": null
+    },
+    {
+     "reward_id": 566,
+     "called_from": [
+      "npc2_ON_TALK_rankB_a"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "quest/q091.dat"
+     ],
+     "owner_evidence": [
+      "fichier quest/qXXX.dat"
+     ],
+     "items": [
+      {
+       "id": 887,
+       "name": "Ash Grey Hair",
+       "internal_name": "item_uq_hairSpray_H",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 888,
+       "name": "Golden Hair",
+       "internal_name": "item_uq_hairSpray_I",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 889,
+       "name": "Pastel Pink Hair",
+       "internal_name": "item_uq_hairSpray_J",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 890,
+       "name": "Light Blue Hair",
+       "internal_name": "item_uq_hairSpray_K",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 891,
+       "name": "Lime Green Hair",
+       "internal_name": "item_uq_hairSpray_L",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 892,
+       "name": "Light Purple Hair",
+       "internal_name": "item_uq_hairSpray_M",
+       "count": 1,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": null,
+     "exp": null
+    },
+    {
+     "reward_id": 567,
+     "called_from": [
+      "npc2_ON_TALK_rankB_b"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "quest/q091.dat"
+     ],
+     "owner_evidence": [
+      "fichier quest/qXXX.dat"
+     ],
+     "items": [
+      {
+       "id": 3228,
+       "name": "Taunt Up +2",
+       "internal_name": "skill_psv_holdAction_2",
+       "count": 1,
+       "weight": 34
+      },
+      {
+       "id": 3237,
+       "name": "Charge Attack +2",
+       "internal_name": "skill_psv_chargeAtk_2",
+       "count": 1,
+       "weight": 33
+      },
+      {
+       "id": 3219,
+       "name": "Counter +2",
+       "internal_name": "skill_psv_counterAction_2",
+       "count": 1,
+       "weight": 33
+      }
+     ],
+     "item_mode": "random: 1 tirage(s) pondere(s) parmi 3",
+     "money": null,
+     "exp": null
+    },
+    {
+     "reward_id": 568,
+     "called_from": [
+      "npc2_ON_TALK_rankA_a"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "quest/q091.dat"
+     ],
+     "owner_evidence": [
+      "fichier quest/qXXX.dat"
+     ],
+     "items": [
+      {
+       "id": 3007,
+       "name": "Weapon Attack Up +6",
+       "internal_name": "skill_psv_atkUp_6",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 3160,
+       "name": "Last Stand +6",
+       "internal_name": "skill_psv_berserk_6",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 3016,
+       "name": "Down-Attack Up +6",
+       "internal_name": "skill_psv_downAtkUp_6",
+       "count": 1,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": null,
+     "exp": null
+    },
+    {
+     "reward_id": 569,
+     "called_from": [
+      "npc2_ON_TALK_rankA_b"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "quest/q091.dat"
+     ],
+     "owner_evidence": [
+      "fichier quest/qXXX.dat"
+     ],
+     "items": [
+      {
+       "id": 3004,
+       "name": "Weapon Attack Up +3",
+       "internal_name": "skill_psv_atkUp_3",
+       "count": 1,
+       "weight": 34
+      },
+      {
+       "id": 3157,
+       "name": "Last Stand +3",
+       "internal_name": "skill_psv_berserk_3",
+       "count": 1,
+       "weight": 33
+      },
+      {
+       "id": 3022,
+       "name": "Critical Up +3",
+       "internal_name": "skill_psv_criticalUp_3",
+       "count": 1,
+       "weight": 33
+      }
+     ],
+     "item_mode": "random: 1 tirage(s) pondere(s) parmi 3",
+     "money": null,
+     "exp": null
+    },
+    {
+     "reward_id": 570,
+     "called_from": [
+      "npc2_ON_TALK_rankS_a"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "quest/q091.dat"
+     ],
+     "owner_evidence": [
+      "fichier quest/qXXX.dat"
+     ],
+     "items": [
+      {
+       "id": 983,
+       "name": "Revealing Outfit",
+       "internal_name": "item_uq_dlcCloth1",
+       "count": 1,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": null,
+     "exp": null
+    },
+    {
+     "reward_id": 571,
+     "called_from": [
+      "npc2_ON_TALK_rankS_b",
+      "vs_ex2_ON_TALK_second"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "quest/q091.dat"
+     ],
+     "owner_evidence": [
+      "fichier quest/qXXX.dat"
+     ],
+     "items": [
+      {
+       "id": 3202,
+       "name": "Resilience +3",
+       "internal_name": "skill_psv_superArmour_3",
+       "count": 1,
+       "weight": 34
+      },
+      {
+       "id": 3193,
+       "name": "Overclock +3",
+       "internal_name": "skill_psv_witchTime_3",
+       "count": 1,
+       "weight": 33
+      },
+      {
+       "id": 3040,
+       "name": "Fast Cooldown +3",
+       "internal_name": "skill_psv_coolTimeDown_3",
+       "count": 1,
+       "weight": 33
+      }
+     ],
+     "item_mode": "random: 1 tirage(s) pondere(s) parmi 3",
+     "money": null,
+     "exp": null
+    },
+    {
+     "reward_id": 572,
+     "called_from": [
+      "reward_ex_1"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "quest/q091.dat"
+     ],
+     "owner_evidence": [
+      "fichier quest/qXXX.dat"
+     ],
+     "items": [
+      {
+       "id": 893,
+       "name": "Neon White Hair",
+       "internal_name": "item_uq_hairSpray_N",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 894,
+       "name": "Neon Yellow Hair",
+       "internal_name": "item_uq_hairSpray_O",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 895,
+       "name": "Neon Pink Hair",
+       "internal_name": "item_uq_hairSpray_P",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 896,
+       "name": "Neon Blue Hair",
+       "internal_name": "item_uq_hairSpray_Q",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 897,
+       "name": "Neon Green Hair",
+       "internal_name": "item_uq_hairSpray_R",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 898,
+       "name": "Neon Purple Hair",
+       "internal_name": "item_uq_hairSpray_S",
+       "count": 1,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": null,
+     "exp": null
+    },
+    {
+     "reward_id": 573,
+     "called_from": [
+      "reward_ex_2"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "quest/q091.dat"
+     ],
+     "owner_evidence": [
+      "fichier quest/qXXX.dat"
+     ],
+     "items": [
+      {
+       "id": 3079,
+       "name": "Max HP Up +6",
+       "internal_name": "skill_psv_hpUp_6",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 3088,
+       "name": "Offensive Heal +6",
+       "internal_name": "skill_psv_atkDrain_6",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 3052,
+       "name": "Melee Defense +6",
+       "internal_name": "skill_psv_stDefUp_6",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 3061,
+       "name": "Ranged Defense +6",
+       "internal_name": "skill_psv_enDefUp_6",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 3205,
+       "name": "Resilience +6",
+       "internal_name": "skill_psv_superArmour_6",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 3178,
+       "name": "Vengeance +6",
+       "internal_name": "skill_psv_autoReflect_6",
+       "count": 1,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": null,
+     "exp": null
+    },
+    {
+     "reward_id": 574,
+     "called_from": [
+      "reward_ex_3"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "quest/q091.dat"
+     ],
+     "owner_evidence": [
+      "fichier quest/qXXX.dat"
+     ],
+     "items": [
+      {
+       "id": 3070,
+       "name": "Anti Chain Damage +6",
+       "internal_name": "skill_psv_damageInv_6",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 3169,
+       "name": "Damage Absorb +6",
+       "internal_name": "skill_psv_damageDrain_6",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 3187,
+       "name": "Reset +6",
+       "internal_name": "skill_psv_guts_6",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 3223,
+       "name": "Counter +6",
+       "internal_name": "skill_psv_counterAction_6",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 3196,
+       "name": "Overclock +6",
+       "internal_name": "skill_psv_witchTime_6",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 3043,
+       "name": "Fast Cooldown +6",
+       "internal_name": "skill_psv_coolTimeDown_6",
+       "count": 1,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": null,
+     "exp": null
+    },
+    {
+     "reward_id": 576,
+     "called_from": [
+      "reward_ex_4"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "quest/q091.dat"
+     ],
+     "owner_evidence": [
+      "fichier quest/qXXX.dat"
+     ],
+     "items": [
+      {
+       "id": 410,
+       "name": "Forbidden Fruit",
+       "internal_name": "item_fruits",
+       "count": 10,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": null,
+     "exp": null
+    },
+    {
+     "reward_id": 577,
+     "called_from": [
+      "reward_ex_loop"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "quest/q091.dat"
+     ],
+     "owner_evidence": [
+      "fichier quest/qXXX.dat"
+     ],
+     "items": [
+      {
+       "id": 410,
+       "name": "Forbidden Fruit",
+       "internal_name": "item_fruits",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 3007,
+       "name": "Weapon Attack Up +6",
+       "internal_name": "skill_psv_atkUp_6",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 3034,
+       "name": "Ranged Attack Up +6",
+       "internal_name": "skill_psv_podAtkUp_6",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 3025,
+       "name": "Critical Up +6",
+       "internal_name": "skill_psv_criticalUp_6",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 3151,
+       "name": "Shock Wave +6",
+       "internal_name": "skill_psv_atkEffect_6",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 3016,
+       "name": "Down-Attack Up +6",
+       "internal_name": "skill_psv_downAtkUp_6",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 3160,
+       "name": "Last Stand +6",
+       "internal_name": "skill_psv_berserk_6",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 3232,
+       "name": "Taunt Up +6",
+       "internal_name": "skill_psv_holdAction_6",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 3241,
+       "name": "Charge Attack +6",
+       "internal_name": "skill_psv_chargeAtk_6",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 3223,
+       "name": "Counter +6",
+       "internal_name": "skill_psv_counterAction_6",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 3124,
+       "name": "Moving Speed Up +6",
+       "internal_name": "skill_psv_moveSpdUp_6",
+       "count": 1,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": null,
+     "exp": null
+    },
+    {
+     "reward_id": 578,
+     "called_from": [
+      "reward_ex_1"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "quest/q091.dat"
+     ],
+     "owner_evidence": [
+      "fichier quest/qXXX.dat"
+     ],
+     "items": [
+      {
+       "id": 3007,
+       "name": "Weapon Attack Up +6",
+       "internal_name": "skill_psv_atkUp_6",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 3025,
+       "name": "Critical Up +6",
+       "internal_name": "skill_psv_criticalUp_6",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 3151,
+       "name": "Shock Wave +6",
+       "internal_name": "skill_psv_atkEffect_6",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 3034,
+       "name": "Ranged Attack Up +6",
+       "internal_name": "skill_psv_podAtkUp_6",
+       "count": 1,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": null,
+     "exp": null
+    },
+    {
+     "reward_id": 592,
+     "called_from": [
+      "vs_ex2_ON_TALK_first"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "quest/q091.dat"
+     ],
+     "owner_evidence": [
+      "fichier quest/qXXX.dat"
+     ],
+     "items": [
+      {
+       "id": 936,
+       "name": "Record: CEO",
+       "internal_name": "item_uq_music_7",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 961,
+       "name": "CEO Bullets",
+       "internal_name": "item_uq_gunSkin2",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 877,
+       "name": "Matsuda Mask",
+       "internal_name": "item_uq_matsudaMask",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 878,
+       "name": "Sato Mask",
+       "internal_name": "item_uq_satoMask",
+       "count": 1,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": null,
+     "exp": null
+    }
+   ]
+  },
+  "q092": {
+   "english_name": "Trial of Sand",
+   "main_reward_ids": [
+    503
+   ],
+   "rewards": [
+    {
+     "reward_id": 500,
+     "called_from": [
+      "npc2_ON_TALK_trial1_a"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "quest/q092.dat"
+     ],
+     "owner_evidence": [
+      "fichier quest/qXXX.dat"
+     ],
+     "items": [
+      {
+       "id": 102,
+       "name": "Melee Attack Up (L)",
+       "internal_name": "item_stUp_pAtk_M",
+       "count": 2,
+       "weight": 100
+      },
+      {
+       "id": 112,
+       "name": "Ranged Attack Up (L)",
+       "internal_name": "item_stUp_sAtk_M",
+       "count": 2,
+       "weight": 100
+      },
+      {
+       "id": 122,
+       "name": "Melee Defense Up (L)",
+       "internal_name": "item_stUp_pDef_M",
+       "count": 2,
+       "weight": 100
+      },
+      {
+       "id": 132,
+       "name": "Ranged Defense Up (L)",
+       "internal_name": "item_stUp_sDef_M",
+       "count": 2,
+       "weight": 100
+      },
+      {
+       "id": 142,
+       "name": "Skill Salve (L)",
+       "internal_name": "item_enCostDown_M",
+       "count": 2,
+       "weight": 100
+      },
+      {
+       "id": 152,
+       "name": "Impact Bracer (L)",
+       "internal_name": "item_sprAmr_M",
+       "count": 2,
+       "weight": 100
+      },
+      {
+       "id": 162,
+       "name": "Speed Salve (L)",
+       "internal_name": "item_sprDash_M",
+       "count": 2,
+       "weight": 100
+      },
+      {
+       "id": 332,
+       "name": "Large G Luck+",
+       "internal_name": "item_goldUp_M",
+       "count": 2,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": null,
+     "exp": null
+    },
+    {
+     "reward_id": 501,
+     "called_from": [
+      "npc2_ON_TALK_trial1_b"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "quest/q092.dat"
+     ],
+     "owner_evidence": [
+      "fichier quest/qXXX.dat"
+     ],
+     "items": [
+      {
+       "id": 1,
+       "name": "Medium Recovery",
+       "internal_name": "item_rec_M",
+       "count": 3,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": null,
+     "exp": null
+    },
+    {
+     "reward_id": 502,
+     "called_from": [
+      "npc2_ON_TALK_trial2_a"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "quest/q092.dat"
+     ],
+     "owner_evidence": [
+      "fichier quest/qXXX.dat"
+     ],
+     "items": [
+      {
+       "id": 601,
+       "name": "Iron Ore",
+       "internal_name": "item_mt_ore_M",
+       "count": 4,
+       "weight": 100
+      },
+      {
+       "id": 602,
+       "name": "Silver Ore",
+       "internal_name": "item_mt_ore_L",
+       "count": 3,
+       "weight": 100
+      },
+      {
+       "id": 610,
+       "name": "Dented Plate",
+       "internal_name": "item_mt_plate_S",
+       "count": 4,
+       "weight": 100
+      },
+      {
+       "id": 535,
+       "name": "Titanium Alloy",
+       "internal_name": "item_mt_alloy_S",
+       "count": 3,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": null,
+     "exp": null
+    },
+    {
+     "reward_id": 503,
+     "called_from": [
+      "npc2_ON_TALK_trial2_b"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "quest/q092.dat"
+     ],
+     "owner_evidence": [
+      "fichier quest/qXXX.dat"
+     ],
+     "items": [],
+     "item_mode": "all",
+     "money": [
+      1000
+     ],
+     "exp": null
+    },
+    {
+     "reward_id": 504,
+     "called_from": [
+      "npc2_ON_TALK_trial3_a"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "quest/q092.dat"
+     ],
+     "owner_evidence": [
+      "fichier quest/qXXX.dat"
+     ],
+     "items": [
+      {
+       "id": 603,
+       "name": "Gold Ore",
+       "internal_name": "item_mt_ore_LL",
+       "count": 2,
+       "weight": 100
+      },
+      {
+       "id": 536,
+       "name": "Memory Alloy",
+       "internal_name": "item_mt_alloy_M",
+       "count": 2,
+       "weight": 100
+      },
+      {
+       "id": 633,
+       "name": "Amber",
+       "internal_name": "item_mt_amber",
+       "count": 2,
+       "weight": 100
+      },
+      {
+       "id": 639,
+       "name": "Black Pearl",
+       "internal_name": "item_mt_blackPearl",
+       "count": 2,
+       "weight": 100
+      },
+      {
+       "id": 687,
+       "name": "Moldavite",
+       "internal_name": "item_mt_moldavite",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 688,
+       "name": "Meteorite",
+       "internal_name": "item_mt_meteorite",
+       "count": 1,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": null,
+     "exp": null
+    },
+    {
+     "reward_id": 505,
+     "called_from": [
+      "npc2_ON_TALK_trial3_b"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "quest/q092.dat"
+     ],
+     "owner_evidence": [
+      "fichier quest/qXXX.dat"
+     ],
+     "items": [
+      {
+       "id": 601,
+       "name": "Iron Ore",
+       "internal_name": "item_mt_ore_M",
+       "count": 1,
+       "weight": 33
+      },
+      {
+       "id": 610,
+       "name": "Dented Plate",
+       "internal_name": "item_mt_plate_S",
+       "count": 1,
+       "weight": 33
+      },
+      {
+       "id": 510,
+       "name": "Beast Hide",
+       "internal_name": "item_mt_fell",
+       "count": 1,
+       "weight": 33
+      },
+      {
+       "id": 540,
+       "name": "Broken Key",
+       "internal_name": "item_mt_mainspring_S",
+       "count": 1,
+       "weight": 33
+      },
+      {
+       "id": 643,
+       "name": "Warped Wire",
+       "internal_name": "item_mt_wire_S",
+       "count": 1,
+       "weight": 33
+      },
+      {
+       "id": 644,
+       "name": "Stretched Coil",
+       "internal_name": "item_mt_coil_S",
+       "count": 1,
+       "weight": 34
+      },
+      {
+       "id": 646,
+       "name": "Broken Circuit",
+       "internal_name": "item_mt_circuit_S",
+       "count": 1,
+       "weight": 34
+      },
+      {
+       "id": 680,
+       "name": "Crystal",
+       "internal_name": "item_mt_crystal",
+       "count": 1,
+       "weight": 33
+      },
+      {
+       "id": 686,
+       "name": "Pearl",
+       "internal_name": "item_mt_pearl",
+       "count": 1,
+       "weight": 34
+      }
+     ],
+     "item_mode": "random: 3 tirage(s) pondere(s) parmi 9",
+     "money": null,
+     "exp": null
+    },
+    {
+     "reward_id": 506,
+     "called_from": [
+      "npc2_ON_TALK_trial4_a"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "quest/q092.dat"
+     ],
+     "owner_evidence": [
+      "fichier quest/qXXX.dat"
+     ],
+     "items": [
+      {
+       "id": 3142,
+       "name": "EXP Gain Up +6",
+       "internal_name": "skill_psv_expUp_6",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 3133,
+       "name": "Drop Rate Up +6",
+       "internal_name": "skill_psv_itemDropUp_6",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 3187,
+       "name": "Reset +6",
+       "internal_name": "skill_psv_guts_6",
+       "count": 1,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": null,
+     "exp": null
+    },
+    {
+     "reward_id": 507,
+     "called_from": [
+      "npc2_ON_TALK_trial4_b"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "quest/q092.dat"
+     ],
+     "owner_evidence": [
+      "fichier quest/qXXX.dat"
+     ],
+     "items": [
+      {
+       "id": 3138,
+       "name": "EXP Gain Up +2",
+       "internal_name": "skill_psv_expUp_2",
+       "count": 1,
+       "weight": 25
+      },
+      {
+       "id": 3129,
+       "name": "Drop Rate Up +2",
+       "internal_name": "skill_psv_itemDropUp_2",
+       "count": 1,
+       "weight": 25
+      },
+      {
+       "id": 3183,
+       "name": "Reset +2",
+       "internal_name": "skill_psv_guts_2",
+       "count": 1,
+       "weight": 25
+      },
+      {
+       "id": 3120,
+       "name": "Moving Speed Up +2",
+       "internal_name": "skill_psv_moveSpdUp_2",
+       "count": 1,
+       "weight": 25
+      }
+     ],
+     "item_mode": "random: 1 tirage(s) pondere(s) parmi 4",
+     "money": null,
+     "exp": null
+    },
+    {
+     "reward_id": 508,
+     "called_from": [
+      "npc2_ON_TALK_trial5_a"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "quest/q092.dat"
+     ],
+     "owner_evidence": [
+      "fichier quest/qXXX.dat"
+     ],
+     "items": [
+      {
+       "id": 3070,
+       "name": "Anti Chain Damage +6",
+       "internal_name": "skill_psv_damageInv_6",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 3169,
+       "name": "Damage Absorb +6",
+       "internal_name": "skill_psv_damageDrain_6",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 3178,
+       "name": "Vengeance +6",
+       "internal_name": "skill_psv_autoReflect_6",
+       "count": 1,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": null,
+     "exp": null
+    },
+    {
+     "reward_id": 509,
+     "called_from": [
+      "npc2_ON_TALK_trial5_b"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "quest/q092.dat"
+     ],
+     "owner_evidence": [
+      "fichier quest/qXXX.dat"
+     ],
+     "items": [
+      {
+       "id": 3067,
+       "name": "Anti Chain Damage +3",
+       "internal_name": "skill_psv_damageInv_3",
+       "count": 1,
+       "weight": 34
+      },
+      {
+       "id": 3166,
+       "name": "Damage Absorb +3",
+       "internal_name": "skill_psv_damageDrain_3",
+       "count": 1,
+       "weight": 33
+      },
+      {
+       "id": 3175,
+       "name": "Vengeance +3",
+       "internal_name": "skill_psv_autoReflect_3",
+       "count": 1,
+       "weight": 33
+      }
+     ],
+     "item_mode": "random: 1 tirage(s) pondere(s) parmi 3",
+     "money": null,
+     "exp": null
+    },
+    {
+     "reward_id": 510,
+     "called_from": [
+      "npc2_ON_TALK_trial6_a"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "quest/q092.dat"
+     ],
+     "owner_evidence": [
+      "fichier quest/qXXX.dat"
+     ],
+     "items": [
+      {
+       "id": 994,
+       "name": "Sand Mask",
+       "internal_name": "item_uq_kingMask",
+       "count": 1,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": null,
+     "exp": null
+    },
+    {
+     "reward_id": 511,
+     "called_from": [
+      "npc2_ON_TALK_trial6_b"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "quest/q092.dat"
+     ],
+     "owner_evidence": [
+      "fichier quest/qXXX.dat"
+     ],
+     "items": [
+      {
+       "id": 3049,
+       "name": "Melee Defense +3",
+       "internal_name": "skill_psv_stDefUp_3",
+       "count": 1,
+       "weight": 34
+      },
+      {
+       "id": 3058,
+       "name": "Ranged Defense +3",
+       "internal_name": "skill_psv_enDefUp_3",
+       "count": 1,
+       "weight": 33
+      },
+      {
+       "id": 3013,
+       "name": "Down-Attack Up +3",
+       "internal_name": "skill_psv_downAtkUp_3",
+       "count": 1,
+       "weight": 33
+      }
+     ],
+     "item_mode": "random: 1 tirage(s) pondere(s) parmi 3",
+     "money": null,
+     "exp": null
+    },
+    {
+     "reward_id": 512,
+     "called_from": [
+      "reward_ex_1"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "quest/q092.dat"
+     ],
+     "owner_evidence": [
+      "fichier quest/qXXX.dat"
+     ],
+     "items": [
+      {
+       "id": 3160,
+       "name": "Last Stand +6",
+       "internal_name": "skill_psv_berserk_6",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 3016,
+       "name": "Down-Attack Up +6",
+       "internal_name": "skill_psv_downAtkUp_6",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 3241,
+       "name": "Charge Attack +6",
+       "internal_name": "skill_psv_chargeAtk_6",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 3124,
+       "name": "Moving Speed Up +6",
+       "internal_name": "skill_psv_moveSpdUp_6",
+       "count": 1,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": null,
+     "exp": null
+    },
+    {
+     "reward_id": 513,
+     "called_from": [
+      "reward_ex_2"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "quest/q092.dat"
+     ],
+     "owner_evidence": [
+      "fichier quest/qXXX.dat"
+     ],
+     "items": [
+      {
+       "id": 3079,
+       "name": "Max HP Up +6",
+       "internal_name": "skill_psv_hpUp_6",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 3088,
+       "name": "Offensive Heal +6",
+       "internal_name": "skill_psv_atkDrain_6",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 3106,
+       "name": "Auto-Heal +6",
+       "internal_name": "skill_psv_autoRec_6",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 3097,
+       "name": "Deadly Heal +6",
+       "internal_name": "skill_psv_defeatDrain_6",
+       "count": 1,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": null,
+     "exp": null
+    },
+    {
+     "reward_id": 514,
+     "called_from": [
+      "reward_ex_3"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "quest/q092.dat"
+     ],
+     "owner_evidence": [
+      "fichier quest/qXXX.dat"
+     ],
+     "items": [
+      {
+       "id": 3007,
+       "name": "Weapon Attack Up +6",
+       "internal_name": "skill_psv_atkUp_6",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 3034,
+       "name": "Ranged Attack Up +6",
+       "internal_name": "skill_psv_podAtkUp_6",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 3025,
+       "name": "Critical Up +6",
+       "internal_name": "skill_psv_criticalUp_6",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 3052,
+       "name": "Melee Defense +6",
+       "internal_name": "skill_psv_stDefUp_6",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 3061,
+       "name": "Ranged Defense +6",
+       "internal_name": "skill_psv_enDefUp_6",
+       "count": 1,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": null,
+     "exp": null
+    },
+    {
+     "reward_id": 515,
+     "called_from": [
+      "reward_ex_4"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "quest/q092.dat"
+     ],
+     "owner_evidence": [
+      "fichier quest/qXXX.dat"
+     ],
+     "items": [
+      {
+       "id": 3070,
+       "name": "Anti Chain Damage +6",
+       "internal_name": "skill_psv_damageInv_6",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 3169,
+       "name": "Damage Absorb +6",
+       "internal_name": "skill_psv_damageDrain_6",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 3187,
+       "name": "Reset +6",
+       "internal_name": "skill_psv_guts_6",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 3178,
+       "name": "Vengeance +6",
+       "internal_name": "skill_psv_autoReflect_6",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 3115,
+       "name": "Evade Range Up +6",
+       "internal_name": "skill_psv_avoidLenUp_6",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 3205,
+       "name": "Resilience +6",
+       "internal_name": "skill_psv_superArmour_6",
+       "count": 1,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": null,
+     "exp": null
+    },
+    {
+     "reward_id": 516,
+     "called_from": [
+      "reward_ex_5"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "quest/q092.dat"
+     ],
+     "owner_evidence": [
+      "fichier quest/qXXX.dat"
+     ],
+     "items": [
+      {
+       "id": 875,
+       "name": "Proof of Oath",
+       "internal_name": "item_uq_ExSand",
+       "count": 1,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": null,
+     "exp": null
+    },
+    {
+     "reward_id": 517,
+     "called_from": [
+      "reward_ex_6"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "quest/q092.dat"
+     ],
+     "owner_evidence": [
+      "fichier quest/qXXX.dat"
+     ],
+     "items": [
+      {
+       "id": 3007,
+       "name": "Weapon Attack Up +6",
+       "internal_name": "skill_psv_atkUp_6",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 3025,
+       "name": "Critical Up +6",
+       "internal_name": "skill_psv_criticalUp_6",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 3160,
+       "name": "Last Stand +6",
+       "internal_name": "skill_psv_berserk_6",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 3151,
+       "name": "Shock Wave +6",
+       "internal_name": "skill_psv_atkEffect_6",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 3232,
+       "name": "Taunt Up +6",
+       "internal_name": "skill_psv_holdAction_6",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 3187,
+       "name": "Reset +6",
+       "internal_name": "skill_psv_guts_6",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 3178,
+       "name": "Vengeance +6",
+       "internal_name": "skill_psv_autoReflect_6",
+       "count": 1,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": null,
+     "exp": null
+    },
+    {
+     "reward_id": 518,
+     "called_from": [
+      "npc2_ON_TALK_trial6_a"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "quest/q092.dat"
+     ],
+     "owner_evidence": [
+      "fichier quest/qXXX.dat"
+     ],
+     "items": [
+      {
+       "id": 985,
+       "name": "Destroyer Outfit",
+       "internal_name": "item_uq_dlcCloth3",
+       "count": 1,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": null,
+     "exp": null
+    }
+   ]
+  },
+  "q100": {
+   "english_name": "Robo Dojo—White Belt",
+   "main_reward_ids": [
+    5
+   ],
+   "rewards": [
+    {
+     "reward_id": 5,
+     "called_from": [
+      "q100_clear_talk"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "quest/q100.dat"
+     ],
+     "owner_evidence": [
+      "fichier quest/qXXX.dat"
+     ],
+     "items": [
+      {
+       "id": 0,
+       "name": "Small Recovery",
+       "internal_name": "item_rec_S",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 102,
+       "name": "Melee Attack Up (L)",
+       "internal_name": "item_stUp_pAtk_M",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 525,
+       "name": "Small Gear",
+       "internal_name": "item_mt_gear_S",
+       "count": 3,
+       "weight": 100
+      },
+      {
+       "id": 3001,
+       "name": "Weapon Attack Up",
+       "internal_name": "skill_psv_atkUp_0",
+       "count": 1,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": [
+      3000
+     ],
+     "exp": [
+      600
+     ]
+    }
+   ]
+  },
+  "q101": {
+   "english_name": "Robo Dojo—Brown Belt",
+   "main_reward_ids": [
+    6
+   ],
+   "rewards": [
+    {
+     "reward_id": 6,
+     "called_from": [
+      "q101_clear_talk"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "quest/q101.dat"
+     ],
+     "owner_evidence": [
+      "fichier quest/qXXX.dat"
+     ],
+     "items": [
+      {
+       "id": 1,
+       "name": "Medium Recovery",
+       "internal_name": "item_rec_M",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 122,
+       "name": "Melee Defense Up (L)",
+       "internal_name": "item_stUp_pDef_M",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 550,
+       "name": "Severed Cable",
+       "internal_name": "item_mt_cable_S",
+       "count": 3,
+       "weight": 100
+      },
+      {
+       "id": 3047,
+       "name": "Melee Defense +1",
+       "internal_name": "skill_psv_stDefUp_1",
+       "count": 1,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": [
+      3000
+     ],
+     "exp": [
+      1150
+     ]
+    }
+   ]
+  },
+  "q102": {
+   "english_name": "Robo Dojo—Black Belt",
+   "main_reward_ids": [
+    7
+   ],
+   "rewards": [
+    {
+     "reward_id": 7,
+     "called_from": [
+      "q102_clear_talk"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "quest/q102.dat"
+     ],
+     "owner_evidence": [
+      "fichier quest/qXXX.dat"
+     ],
+     "items": [
+      {
+       "id": 2,
+       "name": "Large Recovery",
+       "internal_name": "item_rec_L",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 112,
+       "name": "Ranged Attack Up (L)",
+       "internal_name": "item_stUp_sAtk_M",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 545,
+       "name": "Broken Battery",
+       "internal_name": "item_mt_battery_S",
+       "count": 3,
+       "weight": 100
+      },
+      {
+       "id": 3030,
+       "name": "Ranged Attack Up +2",
+       "internal_name": "skill_psv_podAtkUp_2",
+       "count": 1,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": [
+      5000
+     ],
+     "exp": [
+      1280
+     ]
+    }
+   ]
+  },
+  "q103": {
+   "english_name": "Robo Dojo—Red and White Belt",
+   "main_reward_ids": [
+    8
+   ],
+   "rewards": [
+    {
+     "reward_id": 8,
+     "called_from": [
+      "q103_clear_talk"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "quest/q103.dat"
+     ],
+     "owner_evidence": [
+      "fichier quest/qXXX.dat"
+     ],
+     "items": [
+      {
+       "id": 3,
+       "name": "Full Recovery",
+       "internal_name": "item_rec_All",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 132,
+       "name": "Ranged Defense Up (L)",
+       "internal_name": "item_stUp_sDef_M",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 520,
+       "name": "Stripped Screw",
+       "internal_name": "item_mt_screw_S",
+       "count": 3,
+       "weight": 100
+      },
+      {
+       "id": 3058,
+       "name": "Ranged Defense +3",
+       "internal_name": "skill_psv_enDefUp_3",
+       "count": 1,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": [
+      5000
+     ],
+     "exp": [
+      1500
+     ]
+    }
+   ]
+  },
+  "q104": {
+   "english_name": "Robo Dojo—Red Belt",
+   "main_reward_ids": [
+    9
+   ],
+   "rewards": [
+    {
+     "reward_id": 9,
+     "called_from": [
+      "this_q104_btl2_end_ev0"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "quest/q104.dat"
+     ],
+     "owner_evidence": [
+      "fichier quest/qXXX.dat"
+     ],
+     "items": [
+      {
+       "id": 583,
+       "name": "Powerup Part S",
+       "internal_name": "item_mt_refine_S",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 536,
+       "name": "Memory Alloy",
+       "internal_name": "item_mt_alloy_M",
+       "count": 5,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": [
+      10000
+     ],
+     "exp": [
+      2000
+     ]
+    }
+   ]
+  },
+  "q110": {
+   "english_name": "Lost Girl",
+   "main_reward_ids": [
+    10,
+    53
+   ],
+   "rewards": [
+    {
+     "reward_id": 10,
+     "called_from": [
+      "Ysister_ON_TALK_2_ev0"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "quest/q110.dat"
+     ],
+     "owner_evidence": [
+      "fichier quest/qXXX.dat"
+     ],
+     "items": [
+      {
+       "id": 873,
+       "name": "Pink Ribbon",
+       "internal_name": "item_uq_ribbon1",
+       "count": 1,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": null,
+     "exp": null
+    },
+    {
+     "reward_id": 53,
+     "called_from": [
+      "auto_4_talk6"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "quest/q110.dat"
+     ],
+     "owner_evidence": [
+      "fichier quest/qXXX.dat"
+     ],
+     "items": [
+      {
+       "id": 874,
+       "name": "Blue Ribbon",
+       "internal_name": "item_uq_ribbon2",
+       "count": 1,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": [
+      5000
+     ],
+     "exp": [
+      750
+     ]
+    }
+   ]
+  },
+  "q120": {
+   "english_name": "The Supply Trader's Request",
+   "main_reward_ids": [
+    16
+   ],
+   "rewards": [
+    {
+     "reward_id": 16,
+     "called_from": [
+      "q120_clearTalk"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "quest/q120.dat"
+     ],
+     "owner_evidence": [
+      "fichier quest/qXXX.dat"
+     ],
+     "items": [
+      {
+       "id": 1,
+       "name": "Medium Recovery",
+       "internal_name": "item_rec_M",
+       "count": 2,
+       "weight": 100
+      },
+      {
+       "id": 643,
+       "name": "Warped Wire",
+       "internal_name": "item_mt_wire_S",
+       "count": 3,
+       "weight": 100
+      },
+      {
+       "id": 633,
+       "name": "Amber",
+       "internal_name": "item_mt_amber",
+       "count": 2,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": [
+      3000
+     ],
+     "exp": [
+      50
+     ]
+    }
+   ]
+  },
+  "q121": {
+   "english_name": "The Manager's Request",
+   "main_reward_ids": [
+    17
+   ],
+   "rewards": [
+    {
+     "reward_id": 17,
+     "called_from": [
+      "rc_f4_ON_TALK_4_ev1"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "quest/q121.dat"
+     ],
+     "owner_evidence": [
+      "fichier quest/qXXX.dat"
+     ],
+     "items": [
+      {
+       "id": 1,
+       "name": "Medium Recovery",
+       "internal_name": "item_rec_M",
+       "count": 2,
+       "weight": 100
+      },
+      {
+       "id": 300,
+       "name": "Animal Bait",
+       "internal_name": "item_feed_S",
+       "count": 5,
+       "weight": 100
+      },
+      {
+       "id": 624,
+       "name": "Tree Seed",
+       "internal_name": "item_mt_nuts",
+       "count": 5,
+       "weight": 100
+      },
+      {
+       "id": 3067,
+       "name": "Anti Chain Damage +3",
+       "internal_name": "skill_psv_damageInv_3",
+       "count": 1,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": [
+      3000
+     ],
+     "exp": [
+      250
+     ]
+    }
+   ]
+  },
+  "q122": {
+   "english_name": "Camp Development",
+   "main_reward_ids": [
+    18
+   ],
+   "rewards": [
+    {
+     "reward_id": 18,
+     "called_from": [
+      "Ane_ON_TALK_2_ev0"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "quest/q122.dat"
+     ],
+     "owner_evidence": [
+      "fichier quest/qXXX.dat"
+     ],
+     "items": [
+      {
+       "id": 1,
+       "name": "Medium Recovery",
+       "internal_name": "item_rec_M",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 332,
+       "name": "Large G Luck+",
+       "internal_name": "item_goldUp_M",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 627,
+       "name": "Torn Book",
+       "internal_name": "item_mt_book",
+       "count": 5,
+       "weight": 100
+      },
+      {
+       "id": 634,
+       "name": "Natural Rubber",
+       "internal_name": "item_mt_rubber",
+       "count": 5,
+       "weight": 100
+      },
+      {
+       "id": 3013,
+       "name": "Down-Attack Up +3",
+       "internal_name": "skill_psv_downAtkUp_3",
+       "count": 1,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": [
+      5000
+     ],
+     "exp": [
+      320
+     ]
+    }
+   ]
+  },
+  "q123": {
+   "english_name": "Anemone's Past",
+   "main_reward_ids": [
+    19
+   ],
+   "rewards": [
+    {
+     "reward_id": 19,
+     "called_from": [
+      "Ane_ON_TALK_3_ev0"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "quest/q123.dat"
+     ],
+     "owner_evidence": [
+      "fichier quest/qXXX.dat"
+     ],
+     "items": [
+      {
+       "id": 583,
+       "name": "Powerup Part S",
+       "internal_name": "item_mt_refine_S",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 580,
+       "name": "Simple Gadget",
+       "internal_name": "item_mt_machine_S",
+       "count": 5,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": [
+      10000
+     ],
+     "exp": [
+      430
+     ]
+    }
+   ]
+  },
+  "q130": {
+   "english_name": "Amnesia",
+   "main_reward_ids": [
+    58
+   ],
+   "rewards": [
+    {
+     "reward_id": 58,
+     "called_from": [
+      "archive2_DONE_ev1"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "quest/q130.dat"
+     ],
+     "owner_evidence": [
+      "fichier quest/qXXX.dat"
+     ],
+     "items": [
+      {
+       "id": 2009,
+       "name": "A090: Wire (deduit)",
+       "internal_name": "skill_act_wire",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 102,
+       "name": "Melee Attack Up (L)",
+       "internal_name": "item_stUp_pAtk_M",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 112,
+       "name": "Ranged Attack Up (L)",
+       "internal_name": "item_stUp_sAtk_M",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 629,
+       "name": "Tanning Agent",
+       "internal_name": "item_mt_tanningAgent",
+       "count": 5,
+       "weight": 100
+      },
+      {
+       "id": 3085,
+       "name": "Offensive Heal +3",
+       "internal_name": "skill_psv_atkDrain_3",
+       "count": 1,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": [
+      5000
+     ],
+     "exp": [
+      1300
+     ]
+    }
+   ]
+  },
+  "q140": {
+   "english_name": "Resistance Disappearance",
+   "main_reward_ids": [
+    1
+   ],
+   "rewards": [
+    {
+     "reward_id": 1,
+     "called_from": [
+      "rc_m5_ON_TALK_ev0"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "quest/q140.dat"
+     ],
+     "owner_evidence": [
+      "fichier quest/qXXX.dat"
+     ],
+     "items": [
+      {
+       "id": 1,
+       "name": "Medium Recovery",
+       "internal_name": "item_rec_M",
+       "count": 2,
+       "weight": 100
+      },
+      {
+       "id": 632,
+       "name": "Pyrite",
+       "internal_name": "item_mt_pyrite",
+       "count": 5,
+       "weight": 100
+      },
+      {
+       "id": 686,
+       "name": "Pearl",
+       "internal_name": "item_mt_pearl",
+       "count": 3,
+       "weight": 100
+      },
+      {
+       "id": 3076,
+       "name": "Max HP Up +3",
+       "internal_name": "skill_psv_hpUp_3",
+       "count": 1,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": [
+      5000
+     ],
+     "exp": [
+      1200
+     ]
+    },
+    {
+     "reward_id": 204,
+     "called_from": [
+      "corpse_ON_CHECK_ev0"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "quest/q140.dat"
+     ],
+     "owner_evidence": [
+      "fichier quest/qXXX.dat"
+     ],
+     "items": [
+      {
+       "id": 715,
+       "name": "Memory Chip",
+       "internal_name": "item_uq_q140_memoryChip",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 716,
+       "name": "Man's Journal",
+       "internal_name": "item_uq_q140_diary",
+       "count": 1,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": null,
+     "exp": null
+    }
+   ]
+  },
+  "q150": {
+   "english_name": "Jackass's Research",
+   "main_reward_ids": [
+    11,
+    31
+   ],
+   "rewards": [
+    {
+     "reward_id": 11,
+     "called_from": [
+      "dt_f1_ON_TALK_20_ev0"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "quest/q150.dat"
+     ],
+     "owner_evidence": [
+      "fichier quest/qXXX.dat"
+     ],
+     "items": [
+      {
+       "id": 400,
+       "name": "E-Drug",
+       "internal_name": "item_dragA",
+       "count": 5,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": [
+      5000
+     ],
+     "exp": [
+      500
+     ]
+    },
+    {
+     "reward_id": 31,
+     "called_from": [
+      "dt_f1_ON_TALK_10_ev0",
+      "dt_f1_ON_TALK_14_ev0",
+      "dt_f1_ON_TALK_18_ev0",
+      "dt_f1_ON_TALK_6_ev0"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "quest/q150.dat"
+     ],
+     "owner_evidence": [
+      "fichier quest/qXXX.dat"
+     ],
+     "items": [
+      {
+       "id": 1,
+       "name": "Medium Recovery",
+       "internal_name": "item_rec_M",
+       "count": 1,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": [
+      1000
+     ],
+     "exp": [
+      100
+     ]
+    }
+   ]
+  },
+  "q160": {
+   "english_name": "Improving Communications",
+   "main_reward_ids": [
+    37
+   ],
+   "rewards": [
+    {
+     "reward_id": 37,
+     "called_from": [
+      "npc_leader_ON_TALK_ev1"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "quest/q160.dat"
+     ],
+     "owner_evidence": [
+      "fichier quest/qXXX.dat"
+     ],
+     "items": [
+      {
+       "id": 1,
+       "name": "Medium Recovery",
+       "internal_name": "item_rec_M",
+       "count": 3,
+       "weight": 100
+      },
+      {
+       "id": 580,
+       "name": "Simple Gadget",
+       "internal_name": "item_mt_machine_S",
+       "count": 5,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": [
+      3000
+     ],
+     "exp": [
+      320
+     ]
+    }
+   ]
+  },
+  "q162": {
+   "english_name": "Investigating Communications",
+   "main_reward_ids": [
+    47
+   ],
+   "rewards": [
+    {
+     "reward_id": 47,
+     "called_from": [
+      "unlock_DONE_a0"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "quest/q162.dat"
+     ],
+     "owner_evidence": [
+      "fichier quest/qXXX.dat"
+     ],
+     "items": [
+      {
+       "id": 10,
+       "name": null,
+       "internal_name": "none",
+       "count": 1,
+       "weight": 0
+      }
+     ],
+     "item_mode": "random: 0 tirage(s) pondere(s) parmi 1",
+     "money": null,
+     "exp": [
+      320
+     ]
+    }
+   ]
+  },
+  "q170": {
+   "english_name": "Terminal Repairs",
+   "main_reward_ids": [
+    20
+   ],
+   "rewards": [
+    {
+     "reward_id": 20,
+     "called_from": [
+      "mail 4"
+     ],
+     "source": [
+      "piece jointe du mail 4 (q170/DONE)"
+     ],
+     "files": [
+      "core/coregm.dat"
+     ],
+     "owner_evidence": [
+      "MailTable QuestId"
+     ],
+     "items": [
+      {
+       "id": 1,
+       "name": "Medium Recovery",
+       "internal_name": "item_rec_M",
+       "count": 2,
+       "weight": 100
+      },
+      {
+       "id": 580,
+       "name": "Simple Gadget",
+       "internal_name": "item_mt_machine_S",
+       "count": 3,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": [
+      3000
+     ],
+     "exp": [
+      600
+     ]
+    }
+   ]
+  },
+  "q171": {
+   "english_name": "Find a Present",
+   "main_reward_ids": [
+    21
+   ],
+   "rewards": [
+    {
+     "reward_id": 21,
+     "called_from": [
+      "mail 5"
+     ],
+     "source": [
+      "piece jointe du mail 5 (q171/DONE)"
+     ],
+     "files": [
+      "core/coregm.dat"
+     ],
+     "owner_evidence": [
+      "MailTable QuestId"
+     ],
+     "items": [
+      {
+       "id": 1050,
+       "name": "Type-4O Sword",
+       "internal_name": "weapon_sf_sword",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 2015,
+       "name": "A130: Bomb (deduit)",
+       "internal_name": "skill_act_smallBomb",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 633,
+       "name": "Amber",
+       "internal_name": "item_mt_amber",
+       "count": 4,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": [
+      5000
+     ],
+     "exp": [
+      800
+     ]
+    }
+   ]
+  },
+  "q180": {
+   "english_name": "Data Analysis Freak",
+   "main_reward_ids": [
+    26
+   ],
+   "rewards": [
+    {
+     "reward_id": 26,
+     "called_from": [
+      "mail 9"
+     ],
+     "source": [
+      "piece jointe du mail 9 (q180/DONE)"
+     ],
+     "files": [
+      "core/coregm.dat"
+     ],
+     "owner_evidence": [
+      "MailTable QuestId"
+     ],
+     "items": [
+      {
+       "id": 1,
+       "name": "Medium Recovery",
+       "internal_name": "item_rec_M",
+       "count": 2,
+       "weight": 100
+      },
+      {
+       "id": 684,
+       "name": "Tech Manual",
+       "internal_name": "item_mt_technicalBook",
+       "count": 3,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": [
+      3000
+     ],
+     "exp": [
+      1150
+     ]
+    }
+   ]
+  },
+  "q181": {
+   "english_name": "Data Analysis Freak 2",
+   "main_reward_ids": [
+    27
+   ],
+   "rewards": [
+    {
+     "reward_id": 27,
+     "called_from": [
+      "mail 11"
+     ],
+     "source": [
+      "piece jointe du mail 11 (q181/DONE)"
+     ],
+     "files": [
+      "core/coregm.dat"
+     ],
+     "owner_evidence": [
+      "MailTable QuestId"
+     ],
+     "items": [
+      {
+       "id": 1240,
+       "name": "Type-4O Blade",
+       "internal_name": "weapon_sf_large_sword",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 2011,
+       "name": "A110: Slow (deduit)",
+       "internal_name": "skill_act_slowBomb",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 639,
+       "name": "Black Pearl",
+       "internal_name": "item_mt_blackPearl",
+       "count": 4,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": [
+      5000
+     ],
+     "exp": [
+      1430
+     ]
+    }
+   ]
+  },
+  "q210": {
+   "english_name": "Lord of the Valley",
+   "main_reward_ids": [
+    48
+   ],
+   "rewards": [
+    {
+     "reward_id": 48,
+     "called_from": [
+      "npc_hakamori_ON_TALK_3_ev0"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "quest/q210.dat"
+     ],
+     "owner_evidence": [
+      "fichier quest/qXXX.dat"
+     ],
+     "items": [
+      {
+       "id": 536,
+       "name": "Memory Alloy",
+       "internal_name": "item_mt_alloy_M",
+       "count": 4,
+       "weight": 100
+      },
+      {
+       "id": 560,
+       "name": "Clean Nut",
+       "internal_name": "item_mt_nats_M",
+       "count": 6,
+       "weight": 100
+      },
+      {
+       "id": 3157,
+       "name": "Last Stand +3",
+       "internal_name": "skill_psv_berserk_3",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 3175,
+       "name": "Vengeance +3",
+       "internal_name": "skill_psv_autoReflect_3",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 3229,
+       "name": "Taunt Up +3",
+       "internal_name": "skill_psv_holdAction_3",
+       "count": 1,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": [
+      5000
+     ],
+     "exp": [
+      1500
+     ]
+    }
+   ]
+  },
+  "q220": {
+   "english_name": "Vanquish the Bad Bot",
+   "main_reward_ids": [
+    42
+   ],
+   "rewards": [
+    {
+     "reward_id": 42,
+     "called_from": [
+      "pascal_ON_TALK_3_ev0"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "quest/q220.dat"
+     ],
+     "owner_evidence": [
+      "fichier quest/qXXX.dat"
+     ],
+     "items": [
+      {
+       "id": 1,
+       "name": "Medium Recovery",
+       "internal_name": "item_rec_M",
+       "count": 2,
+       "weight": 100
+      },
+      {
+       "id": 536,
+       "name": "Memory Alloy",
+       "internal_name": "item_mt_alloy_M",
+       "count": 2,
+       "weight": 100
+      },
+      {
+       "id": 642,
+       "name": "Sturdy Socket",
+       "internal_name": "item_mt_socket_M",
+       "count": 3,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": [
+      3000
+     ],
+     "exp": [
+      1600
+     ]
+    }
+   ]
+  },
+  "q221": {
+   "english_name": "Play with Us!",
+   "main_reward_ids": [
+    43
+   ],
+   "rewards": [
+    {
+     "reward_id": 43,
+     "called_from": [
+      "q221_npc1_3_ON_TALK_ev0"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "quest/q221.dat"
+     ],
+     "owner_evidence": [
+      "fichier quest/qXXX.dat"
+     ],
+     "items": [
+      {
+       "id": 602,
+       "name": "Silver Ore",
+       "internal_name": "item_mt_ore_L",
+       "count": 5,
+       "weight": 100
+      },
+      {
+       "id": 621,
+       "name": "Plant Seed",
+       "internal_name": "item_mt_seed",
+       "count": 5,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": [
+      3000
+     ],
+     "exp": [
+      2000
+     ]
+    }
+   ]
+  },
+  "q222": {
+   "english_name": "Storage Element",
+   "main_reward_ids": [
+    44
+   ],
+   "rewards": [
+    {
+     "reward_id": 44,
+     "called_from": [
+      "pascal_ON_TALK_3_ev0"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "quest/q222.dat"
+     ],
+     "owner_evidence": [
+      "fichier quest/qXXX.dat"
+     ],
+     "items": [
+      {
+       "id": 3,
+       "name": "Full Recovery",
+       "internal_name": "item_rec_All",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 688,
+       "name": "Meteorite",
+       "internal_name": "item_mt_meteorite",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 687,
+       "name": "Moldavite",
+       "internal_name": "item_mt_moldavite",
+       "count": 2,
+       "weight": 100
+      },
+      {
+       "id": 631,
+       "name": "Dye",
+       "internal_name": "item_mt_dye",
+       "count": 3,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": [
+      10000
+     ],
+     "exp": [
+      2000
+     ]
+    },
+    {
+     "reward_id": 216,
+     "called_from": [
+      "this_q222_talk1_a0"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "quest/q222.dat"
+     ],
+     "owner_evidence": [
+      "fichier quest/qXXX.dat"
+     ],
+     "items": [
+      {
+       "id": 840,
+       "name": "Storage Element",
+       "internal_name": "item_uq_q222_pascalReq_2",
+       "count": 1,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": null,
+     "exp": null
+    }
+   ]
+  },
+  "q250": {
+   "english_name": "Idiot Savant",
+   "main_reward_ids": [
+    59
+   ],
+   "rewards": [
+    {
+     "reward_id": 59,
+     "called_from": [
+      "up_baka_ON_HACKING_CLEAR_ev1"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "st1/r140.dat"
+     ],
+     "owner_evidence": [
+      "etat q250/* teste dans la methode (st1/r140.dat)"
+     ],
+     "items": [
+      {
+       "id": 573,
+       "name": "Machine Head",
+       "internal_name": "item_mt_roboHead",
+       "count": 2,
+       "weight": 100
+      },
+      {
+       "id": 572,
+       "name": "Machine Torso",
+       "internal_name": "item_mt_roboBody",
+       "count": 2,
+       "weight": 100
+      },
+      {
+       "id": 571,
+       "name": "Machine Leg",
+       "internal_name": "item_mt_roboLeg",
+       "count": 2,
+       "weight": 100
+      },
+      {
+       "id": 570,
+       "name": "Machine Arm",
+       "internal_name": "item_mt_roboArm",
+       "count": 2,
+       "weight": 100
+      },
+      {
+       "id": 690,
+       "name": "Machine Core",
+       "internal_name": "item_mt_blackBox",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 3268,
+       "name": "Hijack Boost +6",
+       "internal_name": "skill_psv_ctrlTimeUp_6",
+       "count": 1,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": [
+      10000
+     ],
+     "exp": [
+      1300
+     ]
+    }
+   ]
+  },
+  "q290": {
+   "english_name": "Game Dev Machine Lv.1",
+   "main_reward_ids": [
+    32
+   ],
+   "rewards": [
+    {
+     "reward_id": 32,
+     "called_from": [
+      "this_q290_BUGFIND_TALK_ev0"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "quest/q290.dat"
+     ],
+     "owner_evidence": [
+      "fichier quest/qXXX.dat"
+     ],
+     "items": [
+      {
+       "id": 1,
+       "name": "Medium Recovery",
+       "internal_name": "item_rec_M",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 102,
+       "name": "Melee Attack Up (L)",
+       "internal_name": "item_stUp_pAtk_M",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 530,
+       "name": "Rusted Clump",
+       "internal_name": "item_mt_mass_S",
+       "count": 5,
+       "weight": 100
+      },
+      {
+       "id": 525,
+       "name": "Small Gear",
+       "internal_name": "item_mt_gear_S",
+       "count": 3,
+       "weight": 100
+      },
+      {
+       "id": 112,
+       "name": "Ranged Attack Up (L)",
+       "internal_name": "item_stUp_sAtk_M",
+       "count": 1,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": [
+      5000
+     ],
+     "exp": [
+      1150
+     ]
+    }
+   ]
+  },
+  "q291": {
+   "english_name": "Game Dev Machine Lv.2",
+   "main_reward_ids": [
+    33
+   ],
+   "rewards": [
+    {
+     "reward_id": 33,
+     "called_from": [
+      "this_q291_BUGFIND_TALK_ev0"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "quest/q290.dat"
+     ],
+     "owner_evidence": [
+      "nom de methode this_q291_BUGFIND_TALK_ev0 (quest/q290.dat)"
+     ],
+     "items": [
+      {
+       "id": 2,
+       "name": "Large Recovery",
+       "internal_name": "item_rec_L",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 122,
+       "name": "Melee Defense Up (L)",
+       "internal_name": "item_stUp_pDef_M",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 535,
+       "name": "Titanium Alloy",
+       "internal_name": "item_mt_alloy_S",
+       "count": 3,
+       "weight": 100
+      },
+      {
+       "id": 550,
+       "name": "Severed Cable",
+       "internal_name": "item_mt_cable_S",
+       "count": 3,
+       "weight": 100
+      },
+      {
+       "id": 551,
+       "name": "Pristine Cable",
+       "internal_name": "item_mt_cable_M",
+       "count": 3,
+       "weight": 100
+      },
+      {
+       "id": 132,
+       "name": "Ranged Defense Up (L)",
+       "internal_name": "item_stUp_sDef_M",
+       "count": 1,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": [
+      10000
+     ],
+     "exp": [
+      1430
+     ]
+    }
+   ]
+  },
+  "q292": {
+   "english_name": "Game Dev Machine Lv.3",
+   "main_reward_ids": [
+    34
+   ],
+   "rewards": [
+    {
+     "reward_id": 34,
+     "called_from": [
+      "this_q292_BUGFIND_TALK_ev0"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "quest/q290.dat"
+     ],
+     "owner_evidence": [
+      "nom de methode this_q292_BUGFIND_TALK_ev0 (quest/q290.dat)"
+     ],
+     "items": [
+      {
+       "id": 3266,
+       "name": "Hijack Boost +4",
+       "internal_name": "skill_psv_ctrlTimeUp_4",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 3293,
+       "name": "Stun +4",
+       "internal_name": "skill_psv_stan_4",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 3302,
+       "name": "Combust +4",
+       "internal_name": "skill_psv_burst_4",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 536,
+       "name": "Memory Alloy",
+       "internal_name": "item_mt_alloy_M",
+       "count": 3,
+       "weight": 100
+      },
+      {
+       "id": 635,
+       "name": "Rusty Bolt",
+       "internal_name": "item_mt_bolt_S",
+       "count": 3,
+       "weight": 100
+      },
+      {
+       "id": 555,
+       "name": "New Bolt",
+       "internal_name": "item_mt_bolt_M",
+       "count": 3,
+       "weight": 100
+      },
+      {
+       "id": 3329,
+       "name": "Heal Drops Up +4",
+       "internal_name": "skill_psv_dropRecUp_4",
+       "count": 1,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": [
+      10000
+     ],
+     "exp": [
+      1900
+     ]
+    }
+   ]
+  },
+  "q300": {
+   "english_name": "Speed Star",
+   "main_reward_ids": [
+    52
+   ],
+   "rewards": [
+    {
+     "reward_id": 52,
+     "called_from": [
+      "lace3_speedstar_ON_TALK_ev0"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "quest/q300.dat"
+     ],
+     "owner_evidence": [
+      "fichier quest/qXXX.dat"
+     ],
+     "items": [
+      {
+       "id": 162,
+       "name": "Speed Salve (L)",
+       "internal_name": "item_sprDash_M",
+       "count": 3,
+       "weight": 100
+      },
+      {
+       "id": 610,
+       "name": "Dented Plate",
+       "internal_name": "item_mt_plate_S",
+       "count": 4,
+       "weight": 100
+      },
+      {
+       "id": 635,
+       "name": "Rusty Bolt",
+       "internal_name": "item_mt_bolt_S",
+       "count": 3,
+       "weight": 100
+      },
+      {
+       "id": 555,
+       "name": "New Bolt",
+       "internal_name": "item_mt_bolt_M",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 3121,
+       "name": "Moving Speed Up +3",
+       "internal_name": "skill_psv_moveSpdUp_3",
+       "count": 1,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": [
+      10000
+     ],
+     "exp": [
+      750
+     ]
+    }
+   ]
+  },
+  "q330": {
+   "english_name": "Emil's Memories",
+   "main_reward_ids": [
+    50
+   ],
+   "rewards": [
+    {
+     "reward_id": 50,
+     "called_from": [
+      "ev1280_DONE_ev0"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "quest/q330.dat"
+     ],
+     "owner_evidence": [
+      "fichier quest/qXXX.dat"
+     ],
+     "items": [
+      {
+       "id": 992,
+       "name": "Lunar Tear",
+       "internal_name": "item_uq_floralDecoration",
+       "count": 1,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": null,
+     "exp": [
+      1550
+     ]
+    },
+    {
+     "reward_id": 224,
+     "called_from": [
+      "finish"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "quest/q330.dat"
+     ],
+     "owner_evidence": [
+      "fichier quest/qXXX.dat"
+     ],
+     "items": [
+      {
+       "id": 845,
+       "name": "Elevator Key",
+       "internal_name": "item_uq_mallKey",
+       "count": 1,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": null,
+     "exp": null
+    }
+   ]
+  },
+  "q340": {
+   "english_name": "Photographs",
+   "main_reward_ids": [
+    12
+   ],
+   "rewards": [
+    {
+     "reward_id": 12,
+     "called_from": [
+      "this_q340_clearTalk_ev0"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "quest/q340.dat"
+     ],
+     "owner_evidence": [
+      "fichier quest/qXXX.dat"
+     ],
+     "items": [
+      {
+       "id": 1,
+       "name": "Medium Recovery",
+       "internal_name": "item_rec_M",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 162,
+       "name": "Speed Salve (L)",
+       "internal_name": "item_sprDash_M",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 633,
+       "name": "Amber",
+       "internal_name": "item_mt_amber",
+       "count": 2,
+       "weight": 100
+      },
+      {
+       "id": 632,
+       "name": "Pyrite",
+       "internal_name": "item_mt_pyrite",
+       "count": 3,
+       "weight": 100
+      },
+      {
+       "id": 3238,
+       "name": "Charge Attack +3",
+       "internal_name": "skill_psv_chargeAtk_3",
+       "count": 1,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": [
+      5000
+     ],
+     "exp": [
+      500
+     ]
+    }
+   ]
+  },
+  "q403": {
+   "english_name": "The Vengeful Warrior's Finale",
+   "main_reward_ids": [
+    40
+   ],
+   "rewards": [
+    {
+     "reward_id": 40,
+     "called_from": [
+      "this_q403_talk6_a0"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "quest/q403.dat"
+     ],
+     "owner_evidence": [
+      "fichier quest/qXXX.dat"
+     ],
+     "items": [
+      {
+       "id": 0,
+       "name": "Small Recovery",
+       "internal_name": "item_rec_S",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 330,
+       "name": "Small G Luck+",
+       "internal_name": "item_goldUp_S",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 400,
+       "name": "E-Drug",
+       "internal_name": "item_dragA",
+       "count": 1,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": [
+      1000
+     ],
+     "exp": [
+      1000
+     ]
+    }
+   ]
+  },
+  "q410": {
+   "english_name": "11B's Memento",
+   "main_reward_ids": [
+    45
+   ],
+   "rewards": [
+    {
+     "reward_id": 45,
+     "called_from": [
+      "npc_16D_ON_TALK_3_ev2",
+      "npc_16D_ON_TALK_3_ev3"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "quest/q410.dat"
+     ],
+     "owner_evidence": [
+      "fichier quest/qXXX.dat"
+     ],
+     "items": [
+      {
+       "id": 122,
+       "name": "Melee Defense Up (L)",
+       "internal_name": "item_stUp_pDef_M",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 132,
+       "name": "Ranged Defense Up (L)",
+       "internal_name": "item_stUp_sDef_M",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 3052,
+       "name": "Melee Defense +6",
+       "internal_name": "skill_psv_stDefUp_6",
+       "count": 1,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": [
+      5000
+     ],
+     "exp": [
+      200
+     ]
+    },
+    {
+     "reward_id": 215,
+     "called_from": [
+      "npc_16D_ON_TALK_3_ev1"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "quest/q410.dat"
+     ],
+     "owner_evidence": [
+      "fichier quest/qXXX.dat"
+     ],
+     "items": [
+      {
+       "id": 1080,
+       "name": "YoRHa-issue Blade",
+       "internal_name": "weapon_yoruha_sword",
+       "count": 1,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": null,
+     "exp": null
+    }
+   ]
+  },
+  "q440": {
+   "english_name": "Treasure Hunt at the Castle",
+   "main_reward_ids": [
+    60
+   ],
+   "rewards": [
+    {
+     "reward_id": 60,
+     "called_from": [
+      "npc_ON_TALK_ev0"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "quest/q440.dat"
+     ],
+     "owner_evidence": [
+      "fichier quest/qXXX.dat"
+     ],
+     "items": [
+      {
+       "id": 2,
+       "name": "Large Recovery",
+       "internal_name": "item_rec_L",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 687,
+       "name": "Moldavite",
+       "internal_name": "item_mt_moldavite",
+       "count": 2,
+       "weight": 100
+      },
+      {
+       "id": 637,
+       "name": "Giant Egg",
+       "internal_name": "item_mt_bigEgg",
+       "count": 3,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": [
+      10000
+     ],
+     "exp": [
+      1280
+     ]
+    },
+    {
+     "reward_id": 223,
+     "called_from": [
+      "forest_king_ON_CHECK_ev5"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "quest/q440.dat"
+     ],
+     "owner_evidence": [
+      "fichier quest/qXXX.dat"
+     ],
+     "items": [
+      {
+       "id": 1040010,
+       "name": "Letter to the Forest King",
+       "internal_name": "file_h_letter",
+       "count": 1,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": null,
+     "exp": null
+    }
+   ]
+  },
+  "q500": {
+   "english_name": "The Wandering Couple",
+   "main_reward_ids": [
+    41,
+    66
+   ],
+   "rewards": [
+    {
+     "reward_id": 41,
+     "called_from": [
+      "this_q500_talk6_ev0"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "quest/q500.dat"
+     ],
+     "owner_evidence": [
+      "fichier quest/qXXX.dat"
+     ],
+     "items": [
+      {
+       "id": 2008,
+       "name": "A080: Wave (deduit)",
+       "internal_name": "skill_act_lash",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 3,
+       "name": "Full Recovery",
+       "internal_name": "item_rec_All",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 687,
+       "name": "Moldavite",
+       "internal_name": "item_mt_moldavite",
+       "count": 4,
+       "weight": 100
+      },
+      {
+       "id": 639,
+       "name": "Black Pearl",
+       "internal_name": "item_mt_blackPearl",
+       "count": 4,
+       "weight": 100
+      },
+      {
+       "id": 3193,
+       "name": "Overclock +3",
+       "internal_name": "skill_psv_witchTime_3",
+       "count": 1,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": [
+      10000
+     ],
+     "exp": [
+      750
+     ]
+    },
+    {
+     "reward_id": 66,
+     "called_from": [
+      "pv_f1_ON_TALK_3_ev2"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "quest/q500.dat"
+     ],
+     "owner_evidence": [
+      "fichier quest/qXXX.dat"
+     ],
+     "items": [
+      {
+       "id": 1,
+       "name": "Medium Recovery",
+       "internal_name": "item_rec_M",
+       "count": 3,
+       "weight": 100
+      },
+      {
+       "id": 686,
+       "name": "Pearl",
+       "internal_name": "item_mt_pearl",
+       "count": 5,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": [
+      5000
+     ],
+     "exp": [
+      200
+     ]
+    }
+   ]
+  },
+  "q520": {
+   "english_name": "Data on the Old World",
+   "main_reward_ids": [
+    25
+   ],
+   "rewards": [
+    {
+     "reward_id": 25,
+     "called_from": [
+      "pascal_ON_TALK_3_ev0"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "quest/q520.dat"
+     ],
+     "owner_evidence": [
+      "fichier quest/qXXX.dat"
+     ],
+     "items": [
+      {
+       "id": 2,
+       "name": "Large Recovery",
+       "internal_name": "item_rec_L",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 142,
+       "name": "Skill Salve (L)",
+       "internal_name": "item_enCostDown_M",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 560,
+       "name": "Clean Nut",
+       "internal_name": "item_mt_nats_M",
+       "count": 3,
+       "weight": 100
+      },
+      {
+       "id": 3331,
+       "name": "Heal Drops Up +6",
+       "internal_name": "skill_psv_dropRecUp_6",
+       "count": 1,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": [
+      3000
+     ],
+     "exp": [
+      1300
+     ]
+    }
+   ]
+  },
+  "q532": {
+   "english_name": "Culinary Researcher",
+   "main_reward_ids": [
+    46
+   ],
+   "rewards": [
+    {
+     "reward_id": 46,
+     "called_from": [
+      "fc_m1_ON_TALK_3_ev0"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "quest/q532.dat"
+     ],
+     "owner_evidence": [
+      "fichier quest/qXXX.dat"
+     ],
+     "items": [
+      {
+       "id": 2,
+       "name": "Large Recovery",
+       "internal_name": "item_rec_L",
+       "count": 2,
+       "weight": 100
+      },
+      {
+       "id": 102,
+       "name": "Melee Attack Up (L)",
+       "internal_name": "item_stUp_pAtk_M",
+       "count": 2,
+       "weight": 100
+      },
+      {
+       "id": 112,
+       "name": "Ranged Attack Up (L)",
+       "internal_name": "item_stUp_sAtk_M",
+       "count": 2,
+       "weight": 100
+      },
+      {
+       "id": 122,
+       "name": "Melee Defense Up (L)",
+       "internal_name": "item_stUp_pDef_M",
+       "count": 2,
+       "weight": 100
+      },
+      {
+       "id": 132,
+       "name": "Ranged Defense Up (L)",
+       "internal_name": "item_stUp_sDef_M",
+       "count": 2,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": [
+      5000
+     ],
+     "exp": [
+      600
+     ]
+    }
+   ]
+  },
+  "q540": {
+   "english_name": "YoRHa Betrayers",
+   "main_reward_ids": [
+    239
+   ],
+   "rewards": [
+    {
+     "reward_id": 239,
+     "called_from": [
+      "enemy_captain1_DONE_ev1",
+      "enemy_captain2_DONE_ev1",
+      "enemy_captain3_DONE_ev1"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "quest/q540.dat"
+     ],
+     "owner_evidence": [
+      "fichier quest/qXXX.dat"
+     ],
+     "items": [
+      {
+       "id": 1450,
+       "name": "Type-4O Lance",
+       "internal_name": "weapon_sf_lance",
+       "count": 1,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": [
+      10000
+     ],
+     "exp": [
+      400
+     ]
+    }
+   ]
+  },
+  "q550": {
+   "english_name": "Reconnaissance Squad",
+   "main_reward_ids": [
+    61,
+    236,
+    237,
+    238
+   ],
+   "rewards": [
+    {
+     "reward_id": 61,
+     "called_from": [
+      "npc1_ON_TALK_acv70_impl",
+      "npc1_ON_TALK_acv80_impl",
+      "npc1_ON_TALK_acv90_impl",
+      "npc1_ON_TALK_acv95_impl"
+     ],
+     "source": [
+      "getReWard(reward_item) : valeur 61 si etat q550/RUN_4"
+     ],
+     "files": [
+      "quest/q550.dat"
+     ],
+     "owner_evidence": [
+      "fichier quest/qXXX.dat"
+     ],
+     "items": [
+      {
+       "id": 90,
+       "name": "Cure All + Heal All",
+       "internal_name": "item_recAll",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 688,
+       "name": "Meteorite",
+       "internal_name": "item_mt_meteorite",
+       "count": 2,
+       "weight": 100
+      },
+      {
+       "id": 581,
+       "name": "Elaborate Gadget",
+       "internal_name": "item_mt_machine_M",
+       "count": 5,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": [
+      10000
+     ],
+     "exp": [
+      2500
+     ]
+    },
+    {
+     "reward_id": 236,
+     "called_from": [
+      "npc1_ON_TALK_acv70_impl",
+      "npc1_ON_TALK_acv80_impl",
+      "npc1_ON_TALK_acv90_impl",
+      "npc1_ON_TALK_acv95_impl"
+     ],
+     "source": [
+      "getReWard(reward_item) : valeur 236 si etat q550/RUN_1"
+     ],
+     "files": [
+      "quest/q550.dat"
+     ],
+     "owner_evidence": [
+      "fichier quest/qXXX.dat"
+     ],
+     "items": [
+      {
+       "id": 535,
+       "name": "Titanium Alloy",
+       "internal_name": "item_mt_alloy_S",
+       "count": 5,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": [
+      3000
+     ],
+     "exp": null
+    },
+    {
+     "reward_id": 237,
+     "called_from": [
+      "npc1_ON_TALK_acv70_impl",
+      "npc1_ON_TALK_acv80_impl",
+      "npc1_ON_TALK_acv90_impl",
+      "npc1_ON_TALK_acv95_impl"
+     ],
+     "source": [
+      "getReWard(reward_item) : valeur 237 si etat q550/RUN_2"
+     ],
+     "files": [
+      "quest/q550.dat"
+     ],
+     "owner_evidence": [
+      "fichier quest/qXXX.dat"
+     ],
+     "items": [
+      {
+       "id": 536,
+       "name": "Memory Alloy",
+       "internal_name": "item_mt_alloy_M",
+       "count": 5,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": [
+      5000
+     ],
+     "exp": null
+    },
+    {
+     "reward_id": 238,
+     "called_from": [
+      "npc1_ON_TALK_acv70_impl",
+      "npc1_ON_TALK_acv80_impl",
+      "npc1_ON_TALK_acv90_impl",
+      "npc1_ON_TALK_acv95_impl"
+     ],
+     "source": [
+      "getReWard(reward_item) : valeur 238 si etat q550/RUN_3"
+     ],
+     "files": [
+      "quest/q550.dat"
+     ],
+     "owner_evidence": [
+      "fichier quest/qXXX.dat"
+     ],
+     "items": [
+      {
+       "id": 555,
+       "name": "New Bolt",
+       "internal_name": "item_mt_bolt_M",
+       "count": 2,
+       "weight": 100
+      },
+      {
+       "id": 560,
+       "name": "Clean Nut",
+       "internal_name": "item_mt_nats_M",
+       "count": 2,
+       "weight": 100
+      },
+      {
+       "id": 642,
+       "name": "Sturdy Socket",
+       "internal_name": "item_mt_socket_M",
+       "count": 2,
+       "weight": 100
+      },
+      {
+       "id": 551,
+       "name": "Pristine Cable",
+       "internal_name": "item_mt_cable_M",
+       "count": 2,
+       "weight": 100
+      },
+      {
+       "id": 546,
+       "name": "Large Battery",
+       "internal_name": "item_mt_battery_M",
+       "count": 2,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": [
+      7000
+     ],
+     "exp": null
+    }
+   ]
+  },
+  "q560": {
+   "english_name": "Devola's Request",
+   "main_reward_ids": [
+    28
+   ],
+   "rewards": [
+    {
+     "reward_id": 28,
+     "called_from": [
+      "q560_talk2_9s",
+      "q560_talk2_a2"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "quest/q560.dat"
+     ],
+     "owner_evidence": [
+      "fichier quest/qXXX.dat"
+     ],
+     "items": [
+      {
+       "id": 2,
+       "name": "Large Recovery",
+       "internal_name": "item_rec_L",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 122,
+       "name": "Melee Defense Up (L)",
+       "internal_name": "item_stUp_pDef_M",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 132,
+       "name": "Ranged Defense Up (L)",
+       "internal_name": "item_stUp_sDef_M",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 623,
+       "name": "Pure Water",
+       "internal_name": "item_mt_water",
+       "count": 5,
+       "weight": 100
+      },
+      {
+       "id": 626,
+       "name": "Mushroom",
+       "internal_name": "item_mt_mushroom",
+       "count": 5,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": [
+      3000
+     ],
+     "exp": [
+      1670
+     ]
+    }
+   ]
+  },
+  "q561": {
+   "english_name": "Popola's Errand",
+   "main_reward_ids": [
+    29
+   ],
+   "rewards": [
+    {
+     "reward_id": 29,
+     "called_from": [
+      "q561_talk4"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "quest/q561.dat"
+     ],
+     "owner_evidence": [
+      "fichier quest/qXXX.dat"
+     ],
+     "items": [
+      {
+       "id": 3,
+       "name": "Full Recovery",
+       "internal_name": "item_rec_All",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 688,
+       "name": "Meteorite",
+       "internal_name": "item_mt_meteorite",
+       "count": 2,
+       "weight": 100
+      },
+      {
+       "id": 531,
+       "name": "Meteorite Shard",
+       "internal_name": "item_mt_mass_M",
+       "count": 2,
+       "weight": 100
+      },
+      {
+       "id": 603,
+       "name": "Gold Ore",
+       "internal_name": "item_mt_ore_LL",
+       "count": 2,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": [
+      5000
+     ],
+     "exp": [
+      2000
+     ]
+    }
+   ]
+  },
+  "q562": {
+   "english_name": "The Twins' Request",
+   "main_reward_ids": [
+    30
+   ],
+   "rewards": [
+    {
+     "reward_id": 30,
+     "called_from": [
+      "popol_ON_TALK_ev1",
+      "popol_ON_TALK_ev2"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "quest/q562.dat"
+     ],
+     "owner_evidence": [
+      "fichier quest/qXXX.dat"
+     ],
+     "items": [
+      {
+       "id": 170,
+       "name": "Popola's Booze",
+       "internal_name": "item_liquor",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 639,
+       "name": "Black Pearl",
+       "internal_name": "item_mt_blackPearl",
+       "count": 2,
+       "weight": 100
+      },
+      {
+       "id": 631,
+       "name": "Dye",
+       "internal_name": "item_mt_dye",
+       "count": 3,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": [
+      10000
+     ],
+     "exp": [
+      2050
+     ]
+    }
+   ]
+  },
+  "q590": {
+   "english_name": "Heritage of the Past",
+   "main_reward_ids": [
+    35,
+    36
+   ],
+   "rewards": [
+    {
+     "reward_id": 35,
+     "called_from": [
+      "q590_1_clear",
+      "q590_2_clear",
+      "q590_3_clear"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "quest/q590.dat"
+     ],
+     "owner_evidence": [
+      "fichier quest/qXXX.dat"
+     ],
+     "items": [
+      {
+       "id": 633,
+       "name": "Amber",
+       "internal_name": "item_mt_amber",
+       "count": 1,
+       "weight": 25
+      },
+      {
+       "id": 627,
+       "name": "Torn Book",
+       "internal_name": "item_mt_book",
+       "count": 1,
+       "weight": 25
+      },
+      {
+       "id": 684,
+       "name": "Tech Manual",
+       "internal_name": "item_mt_technicalBook",
+       "count": 1,
+       "weight": 25
+      },
+      {
+       "id": 685,
+       "name": "Thick Dictionary",
+       "internal_name": "item_mt_dictionary",
+       "count": 1,
+       "weight": 25
+      }
+     ],
+     "item_mode": "random: 1 tirage(s) pondere(s) parmi 4",
+     "money": [
+      5000
+     ],
+     "exp": [
+      100
+     ]
+    },
+    {
+     "reward_id": 36,
+     "called_from": [
+      "dt_m2_ON_TALK_3_ev4"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "quest/q590.dat"
+     ],
+     "owner_evidence": [
+      "fichier quest/qXXX.dat"
+     ],
+     "items": [
+      {
+       "id": 1440,
+       "name": "Spear of the Usurper",
+       "internal_name": "weapon_spear_of_the_usurper",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 685,
+       "name": "Thick Dictionary",
+       "internal_name": "item_mt_dictionary",
+       "count": 3,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": [
+      10000
+     ],
+     "exp": [
+      750
+     ]
+    }
+   ]
+  },
+  "q640": {
+   "english_name": "Retrieve the Confidential Intel",
+   "main_reward_ids": [
+    49
+   ],
+   "rewards": [
+    {
+     "reward_id": 49,
+     "called_from": [
+      "q640_m1_ON_TALK_3_ev1"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "quest/q640.dat"
+     ],
+     "owner_evidence": [
+      "fichier quest/qXXX.dat"
+     ],
+     "items": [
+      {
+       "id": 2019,
+       "name": "A140: Gravity (deduit)",
+       "internal_name": "skill_act_gravityBomb",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 2,
+       "name": "Large Recovery",
+       "internal_name": "item_rec_L",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 142,
+       "name": "Skill Salve (L)",
+       "internal_name": "item_enCostDown_M",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 332,
+       "name": "Large G Luck+",
+       "internal_name": "item_goldUp_M",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 610,
+       "name": "Dented Plate",
+       "internal_name": "item_mt_plate_S",
+       "count": 4,
+       "weight": 100
+      },
+      {
+       "id": 636,
+       "name": "Crushed Nut",
+       "internal_name": "item_mt_nats_S",
+       "count": 3,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": [
+      5000
+     ],
+     "exp": [
+      800
+     ]
+    },
+    {
+     "reward_id": 217,
+     "called_from": [
+      "this_q640_talk3_a1",
+      "this_q640_talk3_a2",
+      "this_q640_talk3_a3"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "quest/q640.dat"
+     ],
+     "owner_evidence": [
+      "fichier quest/qXXX.dat"
+     ],
+     "items": [
+      {
+       "id": 841,
+       "name": "Plug-in Chip",
+       "internal_name": "item_uq_q640_confidentialInfo",
+       "count": 1,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": null,
+     "exp": null
+    }
+   ]
+  },
+  "q650": {
+   "english_name": "Sorting Trouble",
+   "main_reward_ids": [
+    22
+   ],
+   "rewards": [
+    {
+     "reward_id": 22,
+     "called_from": [
+      "rc_delusion_ON_TALK_4_ev0"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "quest/q650.dat"
+     ],
+     "owner_evidence": [
+      "fichier quest/qXXX.dat"
+     ],
+     "items": [
+      {
+       "id": 1,
+       "name": "Medium Recovery",
+       "internal_name": "item_rec_M",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 142,
+       "name": "Skill Salve (L)",
+       "internal_name": "item_enCostDown_M",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 530,
+       "name": "Rusted Clump",
+       "internal_name": "item_mt_mass_S",
+       "count": 5,
+       "weight": 100
+      },
+      {
+       "id": 3112,
+       "name": "Evade Range Up +3",
+       "internal_name": "skill_psv_avoidLenUp_3",
+       "count": 1,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": [
+      3000
+     ],
+     "exp": [
+      350
+     ]
+    }
+   ]
+  },
+  "q651": {
+   "english_name": "Sorting Trouble 2",
+   "main_reward_ids": [
+    23
+   ],
+   "rewards": [
+    {
+     "reward_id": 23,
+     "called_from": [
+      "rc_delusion_ON_TALK_3_ev0"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "quest/q651.dat"
+     ],
+     "owner_evidence": [
+      "fichier quest/qXXX.dat"
+     ],
+     "items": [
+      {
+       "id": 3,
+       "name": "Full Recovery",
+       "internal_name": "item_rec_All",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 581,
+       "name": "Elaborate Gadget",
+       "internal_name": "item_mt_machine_M",
+       "count": 5,
+       "weight": 100
+      },
+      {
+       "id": 3130,
+       "name": "Drop Rate Up +3",
+       "internal_name": "skill_psv_itemDropUp_3",
+       "count": 1,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": [
+      5000
+     ],
+     "exp": [
+      1600
+     ]
+    }
+   ]
+  },
+  "q652": {
+   "english_name": "Sorting Trouble 3",
+   "main_reward_ids": [
+    24
+   ],
+   "rewards": [
+    {
+     "reward_id": 24,
+     "called_from": [
+      "rc_delusion_ON_TALK_2_ev0"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "quest/q652.dat"
+     ],
+     "owner_evidence": [
+      "fichier quest/qXXX.dat"
+     ],
+     "items": [
+      {
+       "id": 2012,
+       "name": "A120: Repair (deduit)",
+       "internal_name": "skill_act_repair",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 1080010,
+       "name": "Jackass's Bomb Recipe",
+       "internal_name": "file_h_bombRecipe",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 582,
+       "name": "Complex Gadget",
+       "internal_name": "item_mt_machine_L",
+       "count": 3,
+       "weight": 100
+      },
+      {
+       "id": 628,
+       "name": "Machine Oil",
+       "internal_name": "item_mt_oil",
+       "count": 3,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": [
+      10000
+     ],
+     "exp": [
+      1900
+     ]
+    }
+   ]
+  },
+  "q660": {
+   "english_name": "Stamp Collecting",
+   "main_reward_ids": [
+    62
+   ],
+   "rewards": [
+    {
+     "reward_id": 62,
+     "called_from": [
+      "reception1_ON_TALK_3_c1"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "quest/q660.dat"
+     ],
+     "owner_evidence": [
+      "fichier quest/qXXX.dat"
+     ],
+     "items": [
+      {
+       "id": 2,
+       "name": "Large Recovery",
+       "internal_name": "item_rec_L",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 683,
+       "name": "Precious Earrings",
+       "internal_name": "item_mt_pierce",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 646,
+       "name": "Broken Circuit",
+       "internal_name": "item_mt_circuit_S",
+       "count": 5,
+       "weight": 100
+      },
+      {
+       "id": 3040,
+       "name": "Fast Cooldown +3",
+       "internal_name": "skill_psv_coolTimeDown_3",
+       "count": 1,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": [
+      5000
+     ],
+     "exp": [
+      1150
+     ]
+    },
+    {
+     "reward_id": 213,
+     "called_from": [
+      "reception1_ON_TALK_s1"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "quest/q660.dat"
+     ],
+     "owner_evidence": [
+      "fichier quest/qXXX.dat"
+     ],
+     "items": [
+      {
+       "id": 834,
+       "name": "Stamp Card",
+       "internal_name": "item_uq_q660_stampCard",
+       "count": 1,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": null,
+     "exp": null
+    },
+    {
+     "reward_id": 214,
+     "called_from": [
+      "angry1_ON_TALK_s4",
+      "command_z1_DONE_z5",
+      "cry1_ON_TALK_s7",
+      "eerie1_ON_TALK_s5",
+      "laugh1_ON_TALK_s3",
+      "spirit1_ON_TALK_s6",
+      "staff1_ON_TALK_ev5"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "quest/q660.dat"
+     ],
+     "owner_evidence": [
+      "fichier quest/qXXX.dat"
+     ],
+     "items": [
+      {
+       "id": 833,
+       "name": "Stamp",
+       "internal_name": "item_uq_q660_stamp",
+       "count": 1,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": null,
+     "exp": null
+    }
+   ]
+  },
+  "q680": {
+   "english_name": "Parade Escort",
+   "main_reward_ids": [
+    51
+   ],
+   "rewards": [
+    {
+     "reward_id": 51,
+     "called_from": [
+      "npc1_ON_TALK_3_ev0"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "quest/q680.dat"
+     ],
+     "owner_evidence": [
+      "fichier quest/qXXX.dat"
+     ],
+     "items": [
+      {
+       "id": 2,
+       "name": "Large Recovery",
+       "internal_name": "item_rec_L",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 152,
+       "name": "Impact Bracer (L)",
+       "internal_name": "item_sprAmr_M",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 610,
+       "name": "Dented Plate",
+       "internal_name": "item_mt_plate_S",
+       "count": 4,
+       "weight": 100
+      },
+      {
+       "id": 645,
+       "name": "Dented Socket",
+       "internal_name": "item_mt_socket_S",
+       "count": 3,
+       "weight": 100
+      },
+      {
+       "id": 3184,
+       "name": "Reset +3",
+       "internal_name": "skill_psv_guts_3",
+       "count": 1,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": [
+      10000
+     ],
+     "exp": [
+      750
+     ]
+    }
+   ]
+  },
+  "q720": {
+   "english_name": "Gathering Keepsakes",
+   "main_reward_ids": [
+    14
+   ],
+   "rewards": [
+    {
+     "reward_id": 14,
+     "called_from": [
+      "rc_m1_ON_TALK_4_ev0"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "quest/q720.dat"
+     ],
+     "owner_evidence": [
+      "fichier quest/qXXX.dat"
+     ],
+     "items": [
+      {
+       "id": 3,
+       "name": "Full Recovery",
+       "internal_name": "item_rec_All",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 582,
+       "name": "Complex Gadget",
+       "internal_name": "item_mt_machine_L",
+       "count": 2,
+       "weight": 100
+      },
+      {
+       "id": 688,
+       "name": "Meteorite",
+       "internal_name": "item_mt_meteorite",
+       "count": 2,
+       "weight": 100
+      },
+      {
+       "id": 3079,
+       "name": "Max HP Up +6",
+       "internal_name": "skill_psv_hpUp_6",
+       "count": 1,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": [
+      10000
+     ],
+     "exp": [
+      1800
+     ]
+    },
+    {
+     "reward_id": 207,
+     "called_from": [
+      "corpse1_ON_CHECK_ev0"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "quest/q720.dat"
+     ],
+     "owner_evidence": [
+      "fichier quest/qXXX.dat"
+     ],
+     "items": [
+      {
+       "id": 740,
+       "name": "Rusty Dog Tag",
+       "internal_name": "item_uq_q720_memento_A",
+       "count": 1,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": null,
+     "exp": null
+    },
+    {
+     "reward_id": 208,
+     "called_from": [
+      "corpse2_ON_CHECK_a0"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "quest/q720.dat"
+     ],
+     "owner_evidence": [
+      "fichier quest/qXXX.dat"
+     ],
+     "items": [
+      {
+       "id": 741,
+       "name": "Dirty Dog Tag",
+       "internal_name": "item_uq_q720_memento_B",
+       "count": 1,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": null,
+     "exp": null
+    },
+    {
+     "reward_id": 209,
+     "called_from": [
+      "corpse3_ON_CHECK_a0"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "quest/q720.dat"
+     ],
+     "owner_evidence": [
+      "fichier quest/qXXX.dat"
+     ],
+     "items": [
+      {
+       "id": 742,
+       "name": "Damaged Dog Tag",
+       "internal_name": "item_uq_q720_memento_C",
+       "count": 1,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": null,
+     "exp": null
+    },
+    {
+     "reward_id": 210,
+     "called_from": [
+      "corpse4_ON_CHECK_a0"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "quest/q720.dat"
+     ],
+     "owner_evidence": [
+      "fichier quest/qXXX.dat"
+     ],
+     "items": [
+      {
+       "id": 743,
+       "name": "Bloody Dog Tag",
+       "internal_name": "item_uq_q720_memento_D",
+       "count": 1,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": null,
+     "exp": null
+    }
+   ]
+  },
+  "q770": {
+   "english_name": "The Weapon Dealer's Request",
+   "main_reward_ids": [
+    2,
+    54
+   ],
+   "rewards": [
+    {
+     "reward_id": 2,
+     "called_from": [
+      "reward_2B"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "quest/q770.dat"
+     ],
+     "owner_evidence": [
+      "fichier quest/qXXX.dat"
+     ],
+     "items": [
+      {
+       "id": 530,
+       "name": "Rusted Clump",
+       "internal_name": "item_mt_mass_S",
+       "count": 5,
+       "weight": 100
+      },
+      {
+       "id": 510,
+       "name": "Beast Hide",
+       "internal_name": "item_mt_fell",
+       "count": 5,
+       "weight": 100
+      },
+      {
+       "id": 680,
+       "name": "Crystal",
+       "internal_name": "item_mt_crystal",
+       "count": 5,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": [
+      5000
+     ],
+     "exp": [
+      50
+     ]
+    },
+    {
+     "reward_id": 54,
+     "called_from": [
+      "reward_9S"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "quest/q770.dat"
+     ],
+     "owner_evidence": [
+      "fichier quest/qXXX.dat"
+     ],
+     "items": [
+      {
+       "id": 600,
+       "name": "Copper Ore",
+       "internal_name": "item_mt_ore_S",
+       "count": 5,
+       "weight": 100
+      },
+      {
+       "id": 510,
+       "name": "Beast Hide",
+       "internal_name": "item_mt_fell",
+       "count": 5,
+       "weight": 100
+      },
+      {
+       "id": 680,
+       "name": "Crystal",
+       "internal_name": "item_mt_crystal",
+       "count": 5,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": [
+      5000
+     ],
+     "exp": [
+      50
+     ]
+    }
+   ]
+  },
+  "q800": {
+   "english_name": "The Recluse",
+   "main_reward_ids": [
+    63
+   ],
+   "rewards": [
+    {
+     "reward_id": 63,
+     "called_from": [
+      "ba0305_ON_HACKING_CLEAR_ev1"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "quest/q800.dat"
+     ],
+     "owner_evidence": [
+      "fichier quest/qXXX.dat"
+     ],
+     "items": [
+      {
+       "id": 0,
+       "name": "Small Recovery",
+       "internal_name": "item_rec_S",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 110,
+       "name": "Ranged Attack Up (S)",
+       "internal_name": "item_stUp_sAtk_S",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 570,
+       "name": "Machine Arm",
+       "internal_name": "item_mt_roboArm",
+       "count": 2,
+       "weight": 100
+      },
+      {
+       "id": 3112,
+       "name": "Evade Range Up +3",
+       "internal_name": "skill_psv_avoidLenUp_3",
+       "count": 1,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": [
+      3000
+     ],
+     "exp": [
+      1300
+     ]
+    }
+   ]
+  },
+  "q801": {
+   "english_name": "The Recluse Stays Home",
+   "main_reward_ids": [
+    64
+   ],
+   "rewards": [
+    {
+     "reward_id": 64,
+     "called_from": [
+      "ba0305_ON_HACKING_CLEAR_ev1"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "quest/q801.dat"
+     ],
+     "owner_evidence": [
+      "fichier quest/qXXX.dat"
+     ],
+     "items": [
+      {
+       "id": 1,
+       "name": "Medium Recovery",
+       "internal_name": "item_rec_M",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 112,
+       "name": "Ranged Attack Up (L)",
+       "internal_name": "item_stUp_sAtk_M",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 571,
+       "name": "Machine Leg",
+       "internal_name": "item_mt_roboLeg",
+       "count": 2,
+       "weight": 100
+      },
+      {
+       "id": 3202,
+       "name": "Resilience +3",
+       "internal_name": "skill_psv_superArmour_3",
+       "count": 1,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": [
+      5000
+     ],
+     "exp": [
+      1650
+     ]
+    }
+   ]
+  },
+  "q802": {
+   "english_name": "The Permanent Recluse",
+   "main_reward_ids": [
+    65
+   ],
+   "rewards": [
+    {
+     "reward_id": 65,
+     "called_from": [
+      "ba0305_ON_HACKING_CLEAR_ev1"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "st1/r140.dat"
+     ],
+     "owner_evidence": [
+      "etat q802/* teste dans la methode (st1/r140.dat)"
+     ],
+     "items": [
+      {
+       "id": 2,
+       "name": "Large Recovery",
+       "internal_name": "item_rec_L",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 142,
+       "name": "Skill Salve (L)",
+       "internal_name": "item_enCostDown_M",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 572,
+       "name": "Machine Torso",
+       "internal_name": "item_mt_roboBody",
+       "count": 2,
+       "weight": 100
+      },
+      {
+       "id": 573,
+       "name": "Machine Head",
+       "internal_name": "item_mt_roboHead",
+       "count": 2,
+       "weight": 100
+      },
+      {
+       "id": 3166,
+       "name": "Damage Absorb +3",
+       "internal_name": "skill_psv_damageDrain_3",
+       "count": 1,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": [
+      10000
+     ],
+     "exp": [
+      2000
+     ]
+    }
+   ]
+  },
+  "q911": {
+   "english_name": null,
+   "main_reward_ids": [],
+   "rewards": [
+    {
+     "reward_id": 106,
+     "called_from": [
+      "Ane_ON_TALK_ev0"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "ph3/p300.dat"
+     ],
+     "owner_evidence": [
+      "etat q911/* teste dans la methode (ph3/p300.dat)"
+     ],
+     "items": [
+      {
+       "id": 850,
+       "name": "Book: \"Pensées\"",
+       "internal_name": "item_uq_philosophyBook",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 603,
+       "name": "Gold Ore",
+       "internal_name": "item_mt_ore_LL",
+       "count": 1,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": null,
+     "exp": null
+    }
+   ]
+  },
+  "st1/r110.dat": {
+   "english_name": null,
+   "main_reward_ids": [],
+   "rewards": [
+    {
+     "reward_id": 125,
+     "called_from": [
+      "get_text_1"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "st1/r110.dat"
+     ],
+     "owner_evidence": [
+      "fichier de phase/salle"
+     ],
+     "items": [
+      {
+       "id": 1020050,
+       "name": "Resistance: Rose",
+       "internal_name": "file_pearlHarbor_5",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 1020060,
+       "name": "Resistance: Anemone",
+       "internal_name": "file_pearlHarbor_6",
+       "count": 1,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": null,
+     "exp": null
+    },
+    {
+     "reward_id": 126,
+     "called_from": [
+      "get_text_2"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "st1/r110.dat"
+     ],
+     "owner_evidence": [
+      "fichier de phase/salle"
+     ],
+     "items": [
+      {
+       "id": 1020010,
+       "name": "YoRHa: Gunner 16",
+       "internal_name": "file_pearlHarbor_1",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 1020020,
+       "name": "YoRHa: Scanner 21",
+       "internal_name": "file_pearlHarbor_2",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 1020030,
+       "name": "YoRHa: Attacker 4",
+       "internal_name": "file_pearlHarbor_3",
+       "count": 1,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": null,
+     "exp": null
+    },
+    {
+     "reward_id": 127,
+     "called_from": [
+      "get_text_3"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "st1/r110.dat"
+     ],
+     "owner_evidence": [
+      "fichier de phase/salle"
+     ],
+     "items": [
+      {
+       "id": 1020040,
+       "name": "YoRHa: Attacker 2",
+       "internal_name": "file_pearlHarbor_4",
+       "count": 1,
+       "weight": 100
+      },
+      {
+       "id": 1020070,
+       "name": "Pearl Harbor Descent Summary",
+       "internal_name": "file_pearlHarbor_7",
+       "count": 1,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": null,
+     "exp": null
+    },
+    {
+     "reward_id": 212,
+     "called_from": [
+      "popol_ON_TALK_ev0"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "st1/r110.dat"
+     ],
+     "owner_evidence": [
+      "fichier de phase/salle"
+     ],
+     "items": [
+      {
+       "id": 170,
+       "name": "Popola's Booze",
+       "internal_name": "item_liquor",
+       "count": 1,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": null,
+     "exp": null
+    },
+    {
+     "reward_id": 225,
+     "called_from": [
+      "rc_yr1_ON_TALK_2_ev3",
+      "rc_yr1_ON_TALK_ev3"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "st1/r110.dat"
+     ],
+     "owner_evidence": [
+      "fichier de phase/salle"
+     ],
+     "items": [
+      {
+       "id": 930,
+       "name": "Sound Data 1",
+       "internal_name": "item_uq_music_1",
+       "count": 1,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": null,
+     "exp": null
+    }
+   ]
+  },
+  "st1/r130.dat": {
+   "english_name": null,
+   "main_reward_ids": [],
+   "rewards": [
+    {
+     "reward_id": 300,
+     "called_from": [
+      "ap_npc23_ON_TALK_ev0",
+      "ap_npc8_ON_TALK_ev0"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "st1/r130.dat"
+     ],
+     "owner_evidence": [
+      "fichier de phase/salle"
+     ],
+     "items": [
+      {
+       "id": 640,
+       "name": "Shattered Earring",
+       "internal_name": "item_mt_earrings",
+       "count": 1,
+       "weight": 50
+      },
+      {
+       "id": 641,
+       "name": "Drab Bracelet",
+       "internal_name": "item_mt_bracelet",
+       "count": 1,
+       "weight": 30
+      },
+      {
+       "id": 681,
+       "name": "Lovely Choker",
+       "internal_name": "item_mt_choker",
+       "count": 1,
+       "weight": 10
+      },
+      {
+       "id": 683,
+       "name": "Precious Earrings",
+       "internal_name": "item_mt_pierce",
+       "count": 1,
+       "weight": 10
+      }
+     ],
+     "item_mode": "random: 1 tirage(s) pondere(s) parmi 4",
+     "money": null,
+     "exp": null
+    }
+   ]
+  },
+  "st1/r150.dat": {
+   "english_name": null,
+   "main_reward_ids": [
+    111
+   ],
+   "rewards": [
+    {
+     "reward_id": 111,
+     "called_from": [
+      "desert_resi_01_ON_TALK_3_ev0"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "st1/r150.dat"
+     ],
+     "owner_evidence": [
+      "fichier de phase/salle"
+     ],
+     "items": [
+      {
+       "id": 0,
+       "name": "Small Recovery",
+       "internal_name": "item_rec_S",
+       "count": 3,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": [
+      1000
+     ],
+     "exp": null
+    },
+    {
+     "reward_id": 301,
+     "called_from": [
+      "dt_f1_ON_TALK_ev0"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "st1/r150.dat"
+     ],
+     "owner_evidence": [
+      "fichier de phase/salle"
+     ],
+     "items": [
+      {
+       "id": 8016,
+       "name": null,
+       "internal_name": "fish_16",
+       "count": 1,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": null,
+     "exp": null
+    }
+   ]
+  },
+  "st1/r160.dat": {
+   "english_name": null,
+   "main_reward_ids": [],
+   "rewards": [
+    {
+     "reward_id": 123,
+     "called_from": [
+      "densetu_ON_TALK_ev4"
+     ],
+     "source": [
+      "getReWard"
+     ],
+     "files": [
+      "st1/r160.dat"
+     ],
+     "owner_evidence": [
+      "fichier de phase/salle"
+     ],
+     "items": [
+      {
+       "id": 1621,
+       "name": "Cruel Lament",
+       "internal_name": "weapon_black_combat",
+       "count": 1,
+       "weight": 100
+      }
+     ],
+     "item_mode": "all",
+     "money": null,
+     "exp": null
+    }
+   ]
+  }
+ },
+ "unreferenced_reward_ids": [
+  38,
+  39,
+  55,
+  119,
+  120,
+  121,
+  128,
+  129,
+  130,
+  132,
+  206,
+  211,
+  218,
+  219,
+  220,
+  221,
+  226,
+  227,
+  228,
+  229,
+  230,
+  231,
+  232,
+  233,
+  234,
+  235,
+  302,
+  400,
+  401,
+  402,
+  403,
+  404,
+  405,
+  575,
+  590,
+  591,
+  900,
+  901,
+  902,
+  903,
+  904,
+  905,
+  906,
+  907,
+  908,
+  909,
+  910,
+  911,
+  912,
+  913,
+  914,
+  915,
+  916,
+  917,
+  918,
+  919,
+  920,
+  921,
+  922,
+  923,
+  924,
+  925,
+  926,
+  927,
+  928,
+  929,
+  930,
+  931,
+  932,
+  933,
+  934,
+  935,
+  936,
+  937,
+  938
+ ],
+ "unreferenced_tables": {
+  "38": {
+   "reward_id": 38,
+   "items": [
+    {
+     "id": 0,
+     "name": "Small Recovery",
+     "internal_name": "item_rec_S",
+     "count": 1,
+     "weight": 100
+    },
+    {
+     "id": 330,
+     "name": "Small G Luck+",
+     "internal_name": "item_goldUp_S",
+     "count": 1,
+     "weight": 100
+    },
+    {
+     "id": 400,
+     "name": "E-Drug",
+     "internal_name": "item_dragA",
+     "count": 1,
+     "weight": 100
+    }
+   ],
+   "item_mode": "all",
+   "money": [
+    1000
+   ],
+   "exp": [
+    1000
+   ]
+  },
+  "39": {
+   "reward_id": 39,
+   "items": [
+    {
+     "id": 0,
+     "name": "Small Recovery",
+     "internal_name": "item_rec_S",
+     "count": 1,
+     "weight": 100
+    },
+    {
+     "id": 330,
+     "name": "Small G Luck+",
+     "internal_name": "item_goldUp_S",
+     "count": 1,
+     "weight": 100
+    },
+    {
+     "id": 400,
+     "name": "E-Drug",
+     "internal_name": "item_dragA",
+     "count": 1,
+     "weight": 100
+    }
+   ],
+   "item_mode": "all",
+   "money": [
+    1000
+   ],
+   "exp": [
+    1000
+   ]
+  },
+  "55": {
+   "reward_id": 55,
+   "items": [
+    {
+     "id": 1450,
+     "name": "Type-4O Lance",
+     "internal_name": "weapon_sf_lance",
+     "count": 1,
+     "weight": 100
+    }
+   ],
+   "item_mode": "all",
+   "money": [
+    10000
+   ],
+   "exp": [
+    400
+   ]
+  },
+  "119": {
+   "reward_id": 119,
+   "items": [
+    {
+     "id": 2,
+     "name": "Large Recovery",
+     "internal_name": "item_rec_L",
+     "count": 3,
+     "weight": 100
+    }
+   ],
+   "item_mode": "all",
+   "money": [
+    1000
+   ],
+   "exp": null
+  },
+  "120": {
+   "reward_id": 120,
+   "items": [
+    {
+     "id": 1030020,
+     "name": "Devola & Popola's Memories",
+     "internal_name": "file_memory_2",
+     "count": 1,
+     "weight": 100
+    }
+   ],
+   "item_mode": "all",
+   "money": null,
+   "exp": null
+  },
+  "121": {
+   "reward_id": 121,
+   "items": [
+    {
+     "id": 1130010,
+     "name": "Infant Machine's Memories",
+     "internal_name": "file_h_childMemory",
+     "count": 1,
+     "weight": 100
+    }
+   ],
+   "item_mode": "all",
+   "money": null,
+   "exp": null
+  },
+  "128": {
+   "reward_id": 128,
+   "items": [
+    {
+     "id": 1170120,
+     "name": "Project Gestalt Report 1",
+     "internal_name": "file_report_1",
+     "count": 1,
+     "weight": 100
+    }
+   ],
+   "item_mode": "all",
+   "money": null,
+   "exp": null
+  },
+  "129": {
+   "reward_id": 129,
+   "items": [
+    {
+     "id": 1170130,
+     "name": "Project Gestalt Report 2",
+     "internal_name": "file_report_2",
+     "count": 1,
+     "weight": 100
+    }
+   ],
+   "item_mode": "all",
+   "money": null,
+   "exp": null
+  },
+  "130": {
+   "reward_id": 130,
+   "items": [
+    {
+     "id": 1170140,
+     "name": "Project Gestalt Report 3",
+     "internal_name": "file_report_3",
+     "count": 1,
+     "weight": 100
+    }
+   ],
+   "item_mode": "all",
+   "money": null,
+   "exp": null
+  },
+  "132": {
+   "reward_id": 132,
+   "items": [
+    {
+     "id": 692,
+     "name": "Children's Cores",
+     "internal_name": "item_mt_blackBox_children",
+     "count": 1,
+     "weight": 100
+    }
+   ],
+   "item_mode": "all",
+   "money": null,
+   "exp": null
+  },
+  "206": {
+   "reward_id": 206,
+   "items": [
+    {
+     "id": 400,
+     "name": "E-Drug",
+     "internal_name": "item_dragA",
+     "count": 1,
+     "weight": 100
+    }
+   ],
+   "item_mode": "all",
+   "money": null,
+   "exp": null
+  },
+  "211": {
+   "reward_id": 211,
+   "items": [
+    {
+     "id": 300,
+     "name": "Animal Bait",
+     "internal_name": "item_feed_S",
+     "count": 1,
+     "weight": 100
+    }
+   ],
+   "item_mode": "all",
+   "money": null,
+   "exp": null
+  },
+  "218": {
+   "reward_id": 218,
+   "items": [
+    {
+     "id": 993,
+     "name": "Emil Mask",
+     "internal_name": "item_uq_emileMask",
+     "count": 1,
+     "weight": 100
+    }
+   ],
+   "item_mode": "all",
+   "money": null,
+   "exp": null
+  },
+  "219": {
+   "reward_id": 219,
+   "items": [
+    {
+     "id": 760,
+     "name": "Desert Photo",
+     "internal_name": "item_uq_q340_photo_1",
+     "count": 1,
+     "weight": 100
+    }
+   ],
+   "item_mode": "all",
+   "money": null,
+   "exp": null
+  },
+  "220": {
+   "reward_id": 220,
+   "items": [
+    {
+     "id": 761,
+     "name": "Amusement Park Photo",
+     "internal_name": "item_uq_q340_photo_2",
+     "count": 1,
+     "weight": 100
+    }
+   ],
+   "item_mode": "all",
+   "money": null,
+   "exp": null
+  },
+  "221": {
+   "reward_id": 221,
+   "items": [
+    {
+     "id": 762,
+     "name": "Forest Photo",
+     "internal_name": "item_uq_q340_photo_3",
+     "count": 1,
+     "weight": 100
+    }
+   ],
+   "item_mode": "all",
+   "money": null,
+   "exp": null
+  },
+  "226": {
+   "reward_id": 226,
+   "items": [
+    {
+     "id": 600,
+     "name": "Copper Ore",
+     "internal_name": "item_mt_ore_S",
+     "count": 1,
+     "weight": 100
+    }
+   ],
+   "item_mode": "all",
+   "money": null,
+   "exp": null
+  },
+  "227": {
+   "reward_id": 227,
+   "items": [
+    {
+     "id": 530,
+     "name": "Rusted Clump",
+     "internal_name": "item_mt_mass_S",
+     "count": 1,
+     "weight": 100
+    }
+   ],
+   "item_mode": "all",
+   "money": null,
+   "exp": null
+  },
+  "228": {
+   "reward_id": 228,
+   "items": [
+    {
+     "id": 646,
+     "name": "Broken Circuit",
+     "internal_name": "item_mt_circuit_S",
+     "count": 1,
+     "weight": 100
+    }
+   ],
+   "item_mode": "all",
+   "money": null,
+   "exp": null
+  },
+  "229": {
+   "reward_id": 229,
+   "items": [
+    {
+     "id": 602,
+     "name": "Silver Ore",
+     "internal_name": "item_mt_ore_L",
+     "count": 1,
+     "weight": 100
+    },
+    {
+     "id": 3010,
+     "name": "Down-Attack Up",
+     "internal_name": "skill_psv_downAtkUp_0",
+     "count": 1,
+     "weight": 100
+    }
+   ],
+   "item_mode": "all",
+   "money": null,
+   "exp": null
+  },
+  "230": {
+   "reward_id": 230,
+   "items": [
+    {
+     "id": 1,
+     "name": "Medium Recovery",
+     "internal_name": "item_rec_M",
+     "count": 1,
+     "weight": 100
+    }
+   ],
+   "item_mode": "all",
+   "money": null,
+   "exp": null
+  },
+  "231": {
+   "reward_id": 231,
+   "items": [
+    {
+     "id": 922,
+     "name": "Choice Sachet",
+     "internal_name": "item_uq_sachet_L",
+     "count": 1,
+     "weight": 100
+    }
+   ],
+   "item_mode": "all",
+   "money": null,
+   "exp": null
+  },
+  "232": {
+   "reward_id": 232,
+   "items": [
+    {
+     "id": 152,
+     "name": "Impact Bracer (L)",
+     "internal_name": "item_sprAmr_M",
+     "count": 1,
+     "weight": 100
+    },
+    {
+     "id": 162,
+     "name": "Speed Salve (L)",
+     "internal_name": "item_sprDash_M",
+     "count": 1,
+     "weight": 100
+    }
+   ],
+   "item_mode": "all",
+   "money": null,
+   "exp": null
+  },
+  "233": {
+   "reward_id": 233,
+   "items": [
+    {
+     "id": 688,
+     "name": "Meteorite",
+     "internal_name": "item_mt_meteorite",
+     "count": 1,
+     "weight": 100
+    },
+    {
+     "id": 3182,
+     "name": "Reset +1",
+     "internal_name": "skill_psv_guts_1",
+     "count": 1,
+     "weight": 100
+    }
+   ],
+   "item_mode": "all",
+   "money": null,
+   "exp": null
+  },
+  "234": {
+   "reward_id": 234,
+   "items": [
+    {
+     "id": 610,
+     "name": "Dented Plate",
+     "internal_name": "item_mt_plate_S",
+     "count": 1,
+     "weight": 100
+    },
+    {
+     "id": 636,
+     "name": "Crushed Nut",
+     "internal_name": "item_mt_nats_S",
+     "count": 1,
+     "weight": 100
+    }
+   ],
+   "item_mode": "all",
+   "money": null,
+   "exp": null
+  },
+  "235": {
+   "reward_id": 235,
+   "items": [
+    {
+     "id": 531,
+     "name": "Meteorite Shard",
+     "internal_name": "item_mt_mass_M",
+     "count": 1,
+     "weight": 100
+    },
+    {
+     "id": 3238,
+     "name": "Charge Attack +3",
+     "internal_name": "skill_psv_chargeAtk_3",
+     "count": 1,
+     "weight": 100
+    }
+   ],
+   "item_mode": "all",
+   "money": null,
+   "exp": null
+  },
+  "302": {
+   "reward_id": 302,
+   "items": [
+    {
+     "id": 0,
+     "name": "Small Recovery",
+     "internal_name": "item_rec_S",
+     "count": 1,
+     "weight": 55
+    },
+    {
+     "id": 1,
+     "name": "Medium Recovery",
+     "internal_name": "item_rec_M",
+     "count": 1,
+     "weight": 35
+    },
+    {
+     "id": 2,
+     "name": "Large Recovery",
+     "internal_name": "item_rec_L",
+     "count": 1,
+     "weight": 10
+    }
+   ],
+   "item_mode": "random: 1 tirage(s) pondere(s) parmi 3",
+   "money": null,
+   "exp": null
+  },
+  "400": {
+   "reward_id": 400,
+   "items": [
+    {
+     "id": 0,
+     "name": "Small Recovery",
+     "internal_name": "item_rec_S",
+     "count": 1,
+     "weight": 100
+    },
+    {
+     "id": 100,
+     "name": "Melee Attack Up (S)",
+     "internal_name": "item_stUp_pAtk_S",
+     "count": 1,
+     "weight": 100
+    },
+    {
+     "id": 110,
+     "name": "Ranged Attack Up (S)",
+     "internal_name": "item_stUp_sAtk_S",
+     "count": 1,
+     "weight": 100
+    },
+    {
+     "id": 120,
+     "name": "Melee Defense Up (S)",
+     "internal_name": "item_stUp_pDef_S",
+     "count": 1,
+     "weight": 100
+    },
+    {
+     "id": 130,
+     "name": "Ranged Defense Up (S)",
+     "internal_name": "item_stUp_sDef_S",
+     "count": 1,
+     "weight": 100
+    }
+   ],
+   "item_mode": "all",
+   "money": [
+    1000
+   ],
+   "exp": null
+  },
+  "401": {
+   "reward_id": 401,
+   "items": [
+    {
+     "id": 1,
+     "name": "Medium Recovery",
+     "internal_name": "item_rec_M",
+     "count": 1,
+     "weight": 100
+    },
+    {
+     "id": 140,
+     "name": "Skill Salve (S)",
+     "internal_name": "item_enCostDown_S",
+     "count": 1,
+     "weight": 100
+    },
+    {
+     "id": 150,
+     "name": "Impact Bracer (S)",
+     "internal_name": "item_sprAmr_S",
+     "count": 1,
+     "weight": 100
+    },
+    {
+     "id": 160,
+     "name": "Speed Salve (S)",
+     "internal_name": "item_sprDash_S",
+     "count": 1,
+     "weight": 100
+    },
+    {
+     "id": 330,
+     "name": "Small G Luck+",
+     "internal_name": "item_goldUp_S",
+     "count": 1,
+     "weight": 100
+    }
+   ],
+   "item_mode": "all",
+   "money": [
+    3000
+   ],
+   "exp": null
+  },
+  "402": {
+   "reward_id": 402,
+   "items": [
+    {
+     "id": 2,
+     "name": "Large Recovery",
+     "internal_name": "item_rec_L",
+     "count": 1,
+     "weight": 100
+    },
+    {
+     "id": 102,
+     "name": "Melee Attack Up (L)",
+     "internal_name": "item_stUp_pAtk_M",
+     "count": 1,
+     "weight": 100
+    },
+    {
+     "id": 112,
+     "name": "Ranged Attack Up (L)",
+     "internal_name": "item_stUp_sAtk_M",
+     "count": 1,
+     "weight": 100
+    },
+    {
+     "id": 122,
+     "name": "Melee Defense Up (L)",
+     "internal_name": "item_stUp_pDef_M",
+     "count": 1,
+     "weight": 100
+    },
+    {
+     "id": 132,
+     "name": "Ranged Defense Up (L)",
+     "internal_name": "item_stUp_sDef_M",
+     "count": 1,
+     "weight": 100
+    }
+   ],
+   "item_mode": "all",
+   "money": [
+    5000
+   ],
+   "exp": null
+  },
+  "403": {
+   "reward_id": 403,
+   "items": [
+    {
+     "id": 3,
+     "name": "Full Recovery",
+     "internal_name": "item_rec_All",
+     "count": 1,
+     "weight": 100
+    },
+    {
+     "id": 142,
+     "name": "Skill Salve (L)",
+     "internal_name": "item_enCostDown_M",
+     "count": 1,
+     "weight": 100
+    },
+    {
+     "id": 152,
+     "name": "Impact Bracer (L)",
+     "internal_name": "item_sprAmr_M",
+     "count": 1,
+     "weight": 100
+    },
+    {
+     "id": 162,
+     "name": "Speed Salve (L)",
+     "internal_name": "item_sprDash_M",
+     "count": 1,
+     "weight": 100
+    },
+    {
+     "id": 332,
+     "name": "Large G Luck+",
+     "internal_name": "item_goldUp_M",
+     "count": 1,
+     "weight": 100
+    }
+   ],
+   "item_mode": "all",
+   "money": [
+    10000
+   ],
+   "exp": null
+  },
+  "404": {
+   "reward_id": 404,
+   "items": [
+    {
+     "id": 582,
+     "name": "Complex Gadget",
+     "internal_name": "item_mt_machine_L",
+     "count": 1,
+     "weight": 100
+    },
+    {
+     "id": 581,
+     "name": "Elaborate Gadget",
+     "internal_name": "item_mt_machine_M",
+     "count": 2,
+     "weight": 100
+    },
+    {
+     "id": 580,
+     "name": "Simple Gadget",
+     "internal_name": "item_mt_machine_S",
+     "count": 3,
+     "weight": 100
+    }
+   ],
+   "item_mode": "all",
+   "money": [
+    20000
+   ],
+   "exp": null
+  },
+  "405": {
+   "reward_id": 405,
+   "items": [
+    {
+     "id": 3268,
+     "name": "Hijack Boost +6",
+     "internal_name": "skill_psv_ctrlTimeUp_6",
+     "count": 1,
+     "weight": 100
+    },
+    {
+     "id": 3295,
+     "name": "Stun +6",
+     "internal_name": "skill_psv_stan_6",
+     "count": 1,
+     "weight": 100
+    },
+    {
+     "id": 3304,
+     "name": "Combust +6",
+     "internal_name": "skill_psv_burst_6",
+     "count": 1,
+     "weight": 100
+    },
+    {
+     "id": 3331,
+     "name": "Heal Drops Up +6",
+     "internal_name": "skill_psv_dropRecUp_6",
+     "count": 1,
+     "weight": 100
+    }
+   ],
+   "item_mode": "all",
+   "money": [
+    50000
+   ],
+   "exp": null
+  },
+  "575": {
+   "reward_id": 575,
+   "items": [],
+   "item_mode": "all",
+   "money": [
+    100000
+   ],
+   "exp": null
+  },
+  "590": {
+   "reward_id": 590,
+   "items": [
+    {
+     "id": 936,
+     "name": "Record: CEO",
+     "internal_name": "item_uq_music_7",
+     "count": 1,
+     "weight": 100
+    }
+   ],
+   "item_mode": "all",
+   "money": null,
+   "exp": null
+  },
+  "591": {
+   "reward_id": 591,
+   "items": [
+    {
+     "id": 935,
+     "name": "Record: 3C3C1D119440927",
+     "internal_name": "item_uq_music_6",
+     "count": 1,
+     "weight": 100
+    }
+   ],
+   "item_mode": "all",
+   "money": null,
+   "exp": null
+  },
+  "900": {
+   "reward_id": 900,
+   "items": [],
+   "item_mode": "all",
+   "money": null,
+   "exp": null
+  },
+  "901": {
+   "reward_id": 901,
+   "items": [],
+   "item_mode": "all",
+   "money": null,
+   "exp": null
+  },
+  "902": {
+   "reward_id": 902,
+   "items": [],
+   "item_mode": "all",
+   "money": null,
+   "exp": null
+  },
+  "903": {
+   "reward_id": 903,
+   "items": [],
+   "item_mode": "all",
+   "money": null,
+   "exp": null
+  },
+  "904": {
+   "reward_id": 904,
+   "items": [],
+   "item_mode": "all",
+   "money": null,
+   "exp": null
+  },
+  "905": {
+   "reward_id": 905,
+   "items": [],
+   "item_mode": "all",
+   "money": null,
+   "exp": null
+  },
+  "906": {
+   "reward_id": 906,
+   "items": [],
+   "item_mode": "all",
+   "money": null,
+   "exp": null
+  },
+  "907": {
+   "reward_id": 907,
+   "items": [],
+   "item_mode": "all",
+   "money": null,
+   "exp": null
+  },
+  "908": {
+   "reward_id": 908,
+   "items": [],
+   "item_mode": "all",
+   "money": null,
+   "exp": null
+  },
+  "909": {
+   "reward_id": 909,
+   "items": [],
+   "item_mode": "all",
+   "money": null,
+   "exp": null
+  },
+  "910": {
+   "reward_id": 910,
+   "items": [],
+   "item_mode": "all",
+   "money": null,
+   "exp": null
+  },
+  "911": {
+   "reward_id": 911,
+   "items": [],
+   "item_mode": "all",
+   "money": null,
+   "exp": null
+  },
+  "912": {
+   "reward_id": 912,
+   "items": [
+    {
+     "id": 2001,
+     "name": null,
+     "internal_name": "skill_act_spear",
+     "count": 1,
+     "weight": 100
+    }
+   ],
+   "item_mode": "all",
+   "money": null,
+   "exp": null
+  },
+  "913": {
+   "reward_id": 913,
+   "items": [
+    {
+     "id": 2002,
+     "name": null,
+     "internal_name": "skill_act_illusion",
+     "count": 1,
+     "weight": 100
+    }
+   ],
+   "item_mode": "all",
+   "money": null,
+   "exp": null
+  },
+  "914": {
+   "reward_id": 914,
+   "items": [
+    {
+     "id": 2003,
+     "name": null,
+     "internal_name": "skill_act_hand",
+     "count": 1,
+     "weight": 100
+    }
+   ],
+   "item_mode": "all",
+   "money": null,
+   "exp": null
+  },
+  "915": {
+   "reward_id": 915,
+   "items": [
+    {
+     "id": 2004,
+     "name": null,
+     "internal_name": "skill_act_dance",
+     "count": 1,
+     "weight": 100
+    }
+   ],
+   "item_mode": "all",
+   "money": null,
+   "exp": null
+  },
+  "916": {
+   "reward_id": 916,
+   "items": [
+    {
+     "id": 2005,
+     "name": null,
+     "internal_name": "skill_act_execution",
+     "count": 1,
+     "weight": 100
+    }
+   ],
+   "item_mode": "all",
+   "money": null,
+   "exp": null
+  },
+  "917": {
+   "reward_id": 917,
+   "items": [
+    {
+     "id": 2006,
+     "name": null,
+     "internal_name": "skill_act_gluttony",
+     "count": 1,
+     "weight": 100
+    }
+   ],
+   "item_mode": "all",
+   "money": null,
+   "exp": null
+  },
+  "918": {
+   "reward_id": 918,
+   "items": [
+    {
+     "id": 7001,
+     "name": null,
+     "internal_name": "picEvent_1",
+     "count": 1,
+     "weight": 100
+    }
+   ],
+   "item_mode": "all",
+   "money": null,
+   "exp": null
+  },
+  "919": {
+   "reward_id": 919,
+   "items": [
+    {
+     "id": 7002,
+     "name": null,
+     "internal_name": "picEvent_2",
+     "count": 1,
+     "weight": 100
+    }
+   ],
+   "item_mode": "all",
+   "money": null,
+   "exp": null
+  },
+  "920": {
+   "reward_id": 920,
+   "items": [
+    {
+     "id": 7003,
+     "name": null,
+     "internal_name": "picEvent_3",
+     "count": 1,
+     "weight": 100
+    }
+   ],
+   "item_mode": "all",
+   "money": null,
+   "exp": null
+  },
+  "921": {
+   "reward_id": 921,
+   "items": [
+    {
+     "id": 7004,
+     "name": null,
+     "internal_name": "picEvent_4",
+     "count": 1,
+     "weight": 100
+    }
+   ],
+   "item_mode": "all",
+   "money": null,
+   "exp": null
+  },
+  "922": {
+   "reward_id": 922,
+   "items": [
+    {
+     "id": 7005,
+     "name": null,
+     "internal_name": "picEvent_5",
+     "count": 1,
+     "weight": 100
+    }
+   ],
+   "item_mode": "all",
+   "money": null,
+   "exp": null
+  },
+  "923": {
+   "reward_id": 923,
+   "items": [
+    {
+     "id": 7006,
+     "name": null,
+     "internal_name": "picEvent_6",
+     "count": 1,
+     "weight": 100
+    }
+   ],
+   "item_mode": "all",
+   "money": null,
+   "exp": null
+  },
+  "924": {
+   "reward_id": 924,
+   "items": [
+    {
+     "id": 7007,
+     "name": null,
+     "internal_name": "picEvent_7",
+     "count": 1,
+     "weight": 100
+    }
+   ],
+   "item_mode": "all",
+   "money": null,
+   "exp": null
+  },
+  "925": {
+   "reward_id": 925,
+   "items": [
+    {
+     "id": 1003,
+     "name": "Faith",
+     "internal_name": "weapon_japanese_sword",
+     "count": 1,
+     "weight": 100
+    }
+   ],
+   "item_mode": "all",
+   "money": null,
+   "exp": null
+  },
+  "926": {
+   "reward_id": 926,
+   "items": [
+    {
+     "id": 1013,
+     "name": "Iron Pipe",
+     "internal_name": "weapon_pipe",
+     "count": 1,
+     "weight": 100
+    }
+   ],
+   "item_mode": "all",
+   "money": null,
+   "exp": null
+  },
+  "927": {
+   "reward_id": 927,
+   "items": [
+    {
+     "id": 1020,
+     "name": "Beastbane",
+     "internal_name": "weapon_beastbain",
+     "count": 1,
+     "weight": 100
+    }
+   ],
+   "item_mode": "all",
+   "money": null,
+   "exp": null
+  },
+  "928": {
+   "reward_id": 928,
+   "items": [
+    {
+     "id": 1040,
+     "name": "Phoenix Dagger",
+     "internal_name": "weapon_phoenix_dagger",
+     "count": 1,
+     "weight": 100
+    }
+   ],
+   "item_mode": "all",
+   "money": null,
+   "exp": null
+  },
+  "929": {
+   "reward_id": 929,
+   "items": [
+    {
+     "id": 1030,
+     "name": "Ancient Overlord",
+     "internal_name": "weapon_ancient_overload",
+     "count": 1,
+     "weight": 100
+    }
+   ],
+   "item_mode": "all",
+   "money": null,
+   "exp": null
+  },
+  "930": {
+   "reward_id": 930,
+   "items": [
+    {
+     "id": 1050,
+     "name": "Type-4O Sword",
+     "internal_name": "weapon_sf_sword",
+     "count": 1,
+     "weight": 100
+    }
+   ],
+   "item_mode": "all",
+   "money": null,
+   "exp": null
+  },
+  "931": {
+   "reward_id": 931,
+   "items": [
+    {
+     "id": 1060,
+     "name": "Type-3 Sword",
+     "internal_name": "weapon_uncouth_sword",
+     "count": 1,
+     "weight": 100
+    }
+   ],
+   "item_mode": "all",
+   "money": null,
+   "exp": null
+  },
+  "932": {
+   "reward_id": 932,
+   "items": [
+    {
+     "id": 3003,
+     "name": "Weapon Attack Up +2",
+     "internal_name": "skill_psv_atkUp_2",
+     "count": 1,
+     "weight": 100
+    }
+   ],
+   "item_mode": "all",
+   "money": null,
+   "exp": null
+  },
+  "933": {
+   "reward_id": 933,
+   "items": [
+    {
+     "id": 3004,
+     "name": "Weapon Attack Up +3",
+     "internal_name": "skill_psv_atkUp_3",
+     "count": 1,
+     "weight": 100
+    }
+   ],
+   "item_mode": "all",
+   "money": null,
+   "exp": null
+  },
+  "934": {
+   "reward_id": 934,
+   "items": [
+    {
+     "id": 3005,
+     "name": "Weapon Attack Up +4",
+     "internal_name": "skill_psv_atkUp_4",
+     "count": 1,
+     "weight": 100
+    }
+   ],
+   "item_mode": "all",
+   "money": null,
+   "exp": null
+  },
+  "935": {
+   "reward_id": 935,
+   "items": [
+    {
+     "id": 3006,
+     "name": "Weapon Attack Up +5",
+     "internal_name": "skill_psv_atkUp_5",
+     "count": 1,
+     "weight": 100
+    }
+   ],
+   "item_mode": "all",
+   "money": null,
+   "exp": null
+  },
+  "936": {
+   "reward_id": 936,
+   "items": [
+    {
+     "id": 3007,
+     "name": "Weapon Attack Up +6",
+     "internal_name": "skill_psv_atkUp_6",
+     "count": 1,
+     "weight": 100
+    }
+   ],
+   "item_mode": "all",
+   "money": null,
+   "exp": null
+  },
+  "937": {
+   "reward_id": 937,
+   "items": [
+    {
+     "id": 3008,
+     "name": "Weapon Attack Up +7",
+     "internal_name": "skill_psv_atkUp_7",
+     "count": 1,
+     "weight": 100
+    }
+   ],
+   "item_mode": "all",
+   "money": null,
+   "exp": null
+  },
+  "938": {
+   "reward_id": 938,
+   "items": [
+    {
+     "id": 3009,
+     "name": "Weapon Attack Up +8",
+     "internal_name": "skill_psv_atkUp_8",
+     "count": 1,
+     "weight": 100
+    }
+   ],
+   "item_mode": "all",
+   "money": null,
+   "exp": null
+  }
+ },
+ "unresolved_calls": [],
+ "add_item_calls": [
+  {
+   "file": "ph1/p100.dat",
+   "script": "p100_47a5d6eb_scp.bin",
+   "method": "pascal_ON_TALK_ev3",
+   "call": "addItem",
+   "args": [
+    "item_uq_oil",
+    -1
+   ],
+   "quest_refs": []
+  },
+  {
+   "file": "ph1/p100.dat",
+   "script": "p100_47a5d6eb_scp.bin",
+   "method": "ane_ON_TALK_ev0",
+   "call": "addItem",
+   "args": [
+    "item_uq_filter",
+    -1
+   ],
+   "quest_refs": []
+  },
+  {
+   "file": "ph1/p100.dat",
+   "script": "p100_dfcc155d_scp.bin",
+   "method": "command1_DONE_s0",
+   "call": "addItem",
+   "args": [
+    "skill_act_spear"
+   ],
+   "quest_refs": []
+  },
+  {
+   "file": "ph3/p300.dat",
+   "script": "p300_e6cf440a_scp.bin",
+   "method": "pascal_ON_TALK_ev2",
+   "call": "addItem",
+   "args": [
+    "item_uq_pascalReq_3",
+    -1
+   ],
+   "quest_refs": []
+  },
+  {
+   "file": "ph3/p300.dat",
+   "script": "p300_e6cf440a_scp.bin",
+   "method": "this_q300_91_itemCheck_a1",
+   "call": "addItem",
+   "args": [
+    "item_uq_pascalReq_3",
+    1
+   ],
+   "quest_refs": []
+  },
+  {
+   "file": "quest/q020.dat",
+   "script": "q020_404eba3d_scp.bin",
+   "method": "present1",
+   "call": "addItem",
+   "args": [
+    "item_uq_q020_letter",
+    -1
+   ],
+   "quest_refs": []
+  },
+  {
+   "file": "quest/q020.dat",
+   "script": "q020_404eba3d_scp.bin",
+   "method": "present2",
+   "call": "addItem",
+   "args": [
+    "item_uq_q020_glass",
+    -1
+   ],
+   "quest_refs": []
+  },
+  {
+   "file": "quest/q020.dat",
+   "script": "q020_404eba3d_scp.bin",
+   "method": "present2_2",
+   "call": "addItem",
+   "args": [
+    "item_uq_q020_glass",
+    -1
+   ],
+   "quest_refs": []
+  },
+  {
+   "file": "quest/q020.dat",
+   "script": "q020_404eba3d_scp.bin",
+   "method": "present3",
+   "call": "addItem",
+   "args": [
+    "item_uq_q020_fossil",
+    -1
+   ],
+   "quest_refs": []
+  },
+  {
+   "file": "quest/q020.dat",
+   "script": "q020_404eba3d_scp.bin",
+   "method": "present3_2",
+   "call": "addItem",
+   "args": [
+    "item_uq_q020_fossil",
+    -1
+   ],
+   "quest_refs": []
+  },
+  {
+   "file": "quest/q121.dat",
+   "script": "q121_70545c1f_scp.bin",
+   "method": "rc_f4_ON_TALK_4_ev1",
+   "call": "addItem",
+   "args": [
+    "item_uq_q121_musicBox",
+    -1
+   ],
+   "quest_refs": [
+    "q121"
+   ]
+  },
+  {
+   "file": "quest/q123.dat",
+   "script": "q123_6fde04e_scp.bin",
+   "method": "Ane_ON_TALK_3_ev0",
+   "call": "addItem",
+   "args": [
+    "item_uq_q123_dataChip_A",
+    -1
+   ],
+   "quest_refs": [
+    "q123"
+   ]
+  },
+  {
+   "file": "quest/q123.dat",
+   "script": "q123_6fde04e_scp.bin",
+   "method": "Ane_ON_TALK_3_ev0",
+   "call": "addItem",
+   "args": [
+    "item_uq_q123_dataChip_B",
+    -1
+   ],
+   "quest_refs": [
+    "q123"
+   ]
+  },
+  {
+   "file": "quest/q123.dat",
+   "script": "q123_6fde04e_scp.bin",
+   "method": "Ane_ON_TALK_3_ev0",
+   "call": "addItem",
+   "args": [
+    "item_uq_q123_dataChip_C",
+    -1
+   ],
+   "quest_refs": [
+    "q123"
+   ]
+  },
+  {
+   "file": "quest/q123.dat",
+   "script": "q123_6fde04e_scp.bin",
+   "method": "Ane_ON_TALK_3_ev0",
+   "call": "addItem",
+   "args": [
+    "item_uq_q123_dataChip_D",
+    -1
+   ],
+   "quest_refs": [
+    "q123"
+   ]
+  },
+  {
+   "file": "quest/q123.dat",
+   "script": "q123_6fde04e_scp.bin",
+   "method": "Ane_ON_TALK_3_ev0",
+   "call": "addItem",
+   "args": [
+    "item_uq_q123_dataChip_E",
+    -1
+   ],
+   "quest_refs": [
+    "q123"
+   ]
+  },
+  {
+   "file": "quest/q221.dat",
+   "script": "q221_b113244a_scp.bin",
+   "method": "pv_sp_ON_TALK_3_ev0",
+   "call": "addItem",
+   "args": [
+    "item_uq_q221_pascalReq_1",
+    -5
+   ],
+   "quest_refs": [
+    "q221"
+   ]
+  },
+  {
+   "file": "quest/q222.dat",
+   "script": "q222_f8217e42_scp.bin",
+   "method": "pascal_ON_TALK_3_ev0",
+   "call": "addItem",
+   "args": [
+    "item_uq_q222_pascalReq_2",
+    -1
+   ],
+   "quest_refs": [
+    "q222"
+   ]
+  },
+  {
+   "file": "quest/q290.dat",
+   "script": "q290_e15f2fa1_scp.bin",
+   "method": "ap_npc13_ON_TALK_4_ev1",
+   "call": "addItem",
+   "args": [
+    "item_uq_q290_3colorCable_A",
+    -1
+   ],
+   "quest_refs": []
+  },
+  {
+   "file": "quest/q290.dat",
+   "script": "q290_e15f2fa1_scp.bin",
+   "method": "ap_npc13_ON_TALK_8_ev1",
+   "call": "addItem",
+   "args": [
+    "item_uq_q291_3colorCable_B",
+    -1
+   ],
+   "quest_refs": []
+  },
+  {
+   "file": "quest/q290.dat",
+   "script": "q290_e15f2fa1_scp.bin",
+   "method": "ap_npc13_ON_TALK_12_ev1",
+   "call": "addItem",
+   "args": [
+    "item_uq_q292_3colorCable_C",
+    -1
+   ],
+   "quest_refs": []
+  },
+  {
+   "file": "quest/q340.dat",
+   "script": "q340_5620eb59_scp.bin",
+   "method": "q340_1_clear",
+   "call": "addItem",
+   "args": [
+    "item_uq_q340_photo_1",
+    -1
+   ],
+   "quest_refs": []
+  },
+  {
+   "file": "quest/q340.dat",
+   "script": "q340_5620eb59_scp.bin",
+   "method": "q340_2_clear",
+   "call": "addItem",
+   "args": [
+    "item_uq_q340_photo_2",
+    -1
+   ],
+   "quest_refs": []
+  },
+  {
+   "file": "quest/q340.dat",
+   "script": "q340_5620eb59_scp.bin",
+   "method": "q340_3_clear",
+   "call": "addItem",
+   "args": [
+    "item_uq_q340_photo_3",
+    -1
+   ],
+   "quest_refs": []
+  },
+  {
+   "file": "quest/q340.dat",
+   "script": "q340_5620eb59_scp.bin",
+   "method": "getDsPhoto",
+   "call": "addItem",
+   "args": [
+    "item_uq_q340_photo_1",
+    1
+   ],
+   "quest_refs": []
+  },
+  {
+   "file": "quest/q340.dat",
+   "script": "q340_5620eb59_scp.bin",
+   "method": "getApPhoto",
+   "call": "addItem",
+   "args": [
+    "item_uq_q340_photo_2",
+    1
+   ],
+   "quest_refs": []
+  },
+  {
+   "file": "quest/q340.dat",
+   "script": "q340_5620eb59_scp.bin",
+   "method": "getFtPhoto",
+   "call": "addItem",
+   "args": [
+    "item_uq_q340_photo_3",
+    1
+   ],
+   "quest_refs": []
+  },
+  {
+   "file": "quest/q590.dat",
+   "script": "q590_13ffe891_scp.bin",
+   "method": "q590_1_clear",
+   "call": "addItem",
+   "args": [
+    "item_uq_q590_heritage_1",
+    -1
+   ],
+   "quest_refs": []
+  },
+  {
+   "file": "quest/q590.dat",
+   "script": "q590_13ffe891_scp.bin",
+   "method": "q590_2_clear",
+   "call": "addItem",
+   "args": [
+    "item_uq_q590_heritage_2",
+    -1
+   ],
+   "quest_refs": []
+  },
+  {
+   "file": "quest/q590.dat",
+   "script": "q590_13ffe891_scp.bin",
+   "method": "q590_3_clear",
+   "call": "addItem",
+   "args": [
+    "item_uq_q590_heritage_3",
+    -1
+   ],
+   "quest_refs": []
+  },
+  {
+   "file": "quest/q590.dat",
+   "script": "q590_13ffe891_scp.bin",
+   "method": "dt_m2_ON_TALK_3_ev4",
+   "call": "addItem",
+   "args": [
+    "item_uq_q590_heritage_4",
+    -1
+   ],
+   "quest_refs": [
+    "q590"
+   ]
+  },
+  {
+   "file": "quest/q640.dat",
+   "script": "q640_ccd60068_scp.bin",
+   "method": "q640_m1_ON_TALK_3_ev1",
+   "call": "addItem",
+   "args": [
+    "item_uq_q640_confidentialInfo",
+    -3
+   ],
+   "quest_refs": [
+    "q640"
+   ]
+  },
+  {
+   "file": "quest/q650.dat",
+   "script": "q650_96497077_scp.bin",
+   "method": "rc_delusion_ON_TALK_4_ev0",
+   "call": "addItem",
+   "args": [
+    "item_uq_q650_q651_importantThing",
+    -1
+   ],
+   "quest_refs": [
+    "q650"
+   ]
+  },
+  {
+   "file": "quest/q651.dat",
+   "script": "q651_87a1f20b_scp.bin",
+   "method": "rc_delusion_ON_TALK_3_ev0",
+   "call": "addItem",
+   "args": [
+    "item_uq_q650_q651_importantThing",
+    -2
+   ],
+   "quest_refs": [
+    "q651"
+   ]
+  },
+  {
+   "file": "quest/q652.dat",
+   "script": "q652_4e20ab43_scp.bin",
+   "method": "rc_delusion_ON_TALK_2_ev0",
+   "call": "addItem",
+   "args": [
+    "item_uq_importantThing",
+    -2
+   ],
+   "quest_refs": [
+    "q652"
+   ]
+  },
+  {
+   "file": "quest/q720.dat",
+   "script": "q720_bbe0d32e_scp.bin",
+   "method": "rc_m1_ON_TALK_4_ev0",
+   "call": "addItem",
+   "args": [
+    "item_uq_q720_memento_A",
+    -1
+   ],
+   "quest_refs": [
+    "q720"
+   ]
+  },
+  {
+   "file": "quest/q720.dat",
+   "script": "q720_bbe0d32e_scp.bin",
+   "method": "rc_m1_ON_TALK_4_ev0",
+   "call": "addItem",
+   "args": [
+    "item_uq_q720_memento_B",
+    -1
+   ],
+   "quest_refs": [
+    "q720"
+   ]
+  },
+  {
+   "file": "quest/q720.dat",
+   "script": "q720_bbe0d32e_scp.bin",
+   "method": "rc_m1_ON_TALK_4_ev0",
+   "call": "addItem",
+   "args": [
+    "item_uq_q720_memento_C",
+    -1
+   ],
+   "quest_refs": [
+    "q720"
+   ]
+  },
+  {
+   "file": "quest/q720.dat",
+   "script": "q720_bbe0d32e_scp.bin",
+   "method": "rc_m1_ON_TALK_4_ev0",
+   "call": "addItem",
+   "args": [
+    "item_uq_q720_memento_D",
+    -1
+   ],
+   "quest_refs": [
+    "q720"
+   ]
+  }
+ ],
+ "web_validation": {
+  "q020": {
+   "status": "match",
+   "found": [
+    "EXP Gain Up +3"
+   ],
+   "not_found": []
+  },
+  "q031": {
+   "status": "match",
+   "found": [
+    "Engels 110-B Record 0005"
+   ],
+   "not_found": []
+  },
+  "q032": {
+   "status": "match",
+   "found": [
+    "Fast Cooldown +6",
+    "Max HP Up +6"
+   ],
+   "not_found": []
+  },
+  "q040": {
+   "status": "match",
+   "found": [
+    "Deadly Heal +3",
+    "Impact Bracer (L)"
+   ],
+   "not_found": []
+  },
+  "q071": {
+   "status": "match",
+   "found": [
+    "Quality Sachet"
+   ],
+   "not_found": []
+  },
+  "q072": {
+   "status": "match",
+   "found": [
+    "Auto-Heal +5",
+    "Record of a Bestial Machine"
+   ],
+   "not_found": []
+  },
+  "q101": {
+   "status": "match",
+   "found": [
+    "Melee Defense +1"
+   ],
+   "not_found": []
+  },
+  "q102": {
+   "status": "match",
+   "found": [
+    "Ranged Attack Up +2"
+   ],
+   "not_found": []
+  },
+  "q103": {
+   "status": "match",
+   "found": [
+    "Ranged Defense +3"
+   ],
+   "not_found": []
+  },
+  "q104": {
+   "status": "match",
+   "found": [
+    "Powerup Part S"
+   ],
+   "not_found": []
+  },
+  "q110": {
+   "status": "match",
+   "found": [
+    "Pink Ribbon",
+    "Blue Ribbon"
+   ],
+   "not_found": []
+  },
+  "q121": {
+   "status": "match",
+   "found": [
+    "Anti Chain Damage +3"
+   ],
+   "not_found": []
+  },
+  "q122": {
+   "status": "match",
+   "found": [
+    "Down-Attack Up +3"
+   ],
+   "not_found": []
+  },
+  "q123": {
+   "status": "match",
+   "found": [
+    "Powerup Part S"
+   ],
+   "not_found": []
+  },
+  "q130": {
+   "status": "match",
+   "found": [
+    2009,
+    "Offensive Heal +3"
+   ],
+   "not_found": []
+  },
+  "q140": {
+   "status": "match",
+   "found": [
+    "Max HP Up +3"
+   ],
+   "not_found": []
+  },
+  "q150": {
+   "status": "match",
+   "found": [
+    "E-Drug"
+   ],
+   "not_found": []
+  },
+  "q160": {
+   "status": "match",
+   "found": [
+    "money=3000"
+   ],
+   "not_found": []
+  },
+  "q162": {
+   "status": "match",
+   "found": [
+    "exp=320"
+   ],
+   "not_found": []
+  },
+  "q171": {
+   "status": "match",
+   "found": [
+    "Type-4O Sword",
+    2015
+   ],
+   "not_found": []
+  },
+  "q181": {
+   "status": "match",
+   "found": [
+    "Type-4O Blade",
+    2011
+   ],
+   "not_found": []
+  },
+  "q210": {
+   "status": "match",
+   "found": [
+    "Vengeance +3",
+    "Last Stand +3",
+    "Taunt Up +3"
+   ],
+   "not_found": []
+  },
+  "q222": {
+   "status": "match",
+   "found": [
+    "money=10000"
+   ],
+   "not_found": []
+  },
+  "q240": {
+   "status": "missing",
+   "found": [],
+   "not_found": [
+    "Alien Mask",
+    "Choice Sachet"
+   ]
+  },
+  "q250": {
+   "status": "match",
+   "found": [
+    "Hijack Boost +6"
+   ],
+   "not_found": []
+  },
+  "q292": {
+   "status": "match",
+   "found": [
+    "Hijack Boost +4"
+   ],
+   "not_found": []
+  },
+  "q300": {
+   "status": "match",
+   "found": [
+    "Moving Speed Up +3"
+   ],
+   "not_found": []
+  },
+  "q330": {
+   "status": "match",
+   "found": [
+    "Elevator Key",
+    "Lunar Tear"
+   ],
+   "not_found": []
+  },
+  "q340": {
+   "status": "match",
+   "found": [
+    "Charge Attack +3"
+   ],
+   "not_found": []
+  },
+  "q410": {
+   "status": "match",
+   "found": [
+    "YoRHa-issue Blade",
+    "Melee Defense +6"
+   ],
+   "not_found": []
+  },
+  "q500": {
+   "status": "match",
+   "found": [
+    2008,
+    "Overclock +3"
+   ],
+   "not_found": []
+  },
+  "q520": {
+   "status": "match",
+   "found": [
+    "Heal Drops Up +6"
+   ],
+   "not_found": []
+  },
+  "q540": {
+   "status": "match",
+   "found": [
+    "Type-4O Lance"
+   ],
+   "not_found": []
+  },
+  "q550": {
+   "status": "partial",
+   "found": [
+    "Cure All + Heal All"
+   ],
+   "not_found": [
+    "money=17000"
+   ]
+  },
+  "q561": {
+   "status": "match",
+   "found": [
+    "Gold Ore",
+    "Meteorite"
+   ],
+   "not_found": []
+  },
+  "q562": {
+   "status": "match",
+   "found": [
+    "Popola's Booze"
+   ],
+   "not_found": []
+  },
+  "q590": {
+   "status": "match",
+   "found": [
+    "Spear of the Usurper"
+   ],
+   "not_found": []
+  },
+  "q640": {
+   "status": "match",
+   "found": [
+    2019,
+    "Large G Luck+"
+   ],
+   "not_found": []
+  },
+  "q650": {
+   "status": "match",
+   "found": [
+    "Evade Range Up +3"
+   ],
+   "not_found": []
+  },
+  "q651": {
+   "status": "match",
+   "found": [
+    "Drop Rate Up +3"
+   ],
+   "not_found": []
+  },
+  "q652": {
+   "status": "match",
+   "found": [
+    2012,
+    "Jackass's Bomb Recipe"
+   ],
+   "not_found": []
+  },
+  "q660": {
+   "status": "match",
+   "found": [
+    "Precious Earrings",
+    "Fast Cooldown +3"
+   ],
+   "not_found": []
+  },
+  "q680": {
+   "status": "match",
+   "found": [
+    "Reset +3"
+   ],
+   "not_found": []
+  },
+  "q720": {
+   "status": "match",
+   "found": [
+    "Max HP Up +6"
+   ],
+   "not_found": []
+  },
+  "q800": {
+   "status": "match",
+   "found": [
+    "Evade Range Up +3"
+   ],
+   "not_found": []
+  },
+  "q801": {
+   "status": "match",
+   "found": [
+    "Resilience +3"
+   ],
+   "not_found": []
+  },
+  "q802": {
+   "status": "match",
+   "found": [
+    "Damage Absorb +3"
+   ],
+   "not_found": []
+  }
+ }
+}
