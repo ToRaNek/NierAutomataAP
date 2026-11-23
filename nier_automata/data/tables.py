@@ -1,7 +1,7 @@
 """Tables noms <-> codes AP, sans dependance a Archipelago."""
 from __future__ import annotations
 
-from .items_data import FILLER_ITEMS, MATERIALS
+from .items_data import FILLER_ITEMS, FUNDS_ITEMS, MATERIALS
 from .weapons import WEAPONS
 
 BASE_CODE = 0x4E41_0000
@@ -28,6 +28,8 @@ def item_name_to_id() -> dict[str, int]:
         ids[name] = BASE_CODE + 0x100 + i
     for i, name in enumerate(FILLER_ITEMS):
         ids[name] = BASE_CODE + 0x200 + i
+    for i, name in enumerate(FUNDS_ITEMS):
+        ids[name] = BASE_CODE + 0x280 + i
     return ids
 
 

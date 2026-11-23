@@ -2,7 +2,7 @@ from BaseClasses import Item, ItemClassification, Location, LocationProgressType
 from worlds.AutoWorld import WebWorld, World
 from worlds.LauncherComponents import Component, Type, components, launch_subprocess
 
-from .data.items_data import FILLER_ITEMS, MATERIALS
+from .data.items_data import FILLER_ITEMS, FUNDS_ITEMS, MATERIALS
 from .data.phases import GOAL_PHASE_PREFIX
 from .data.tables import (
     GOAL_LOCATION, item_location, item_name_to_id, pool_weapon_count, location_name_to_id, story_location, weapon_location,
@@ -72,7 +72,7 @@ class NierAutomataWorld(World):
         return NierItem(name, cls, self.item_name_to_id[name], self.player)
 
     def get_filler_item_name(self) -> str:
-        return self.random.choice(list(FILLER_ITEMS))
+        return self.random.choice(list(FILLER_ITEMS) + list(FUNDS_ITEMS))
 
     def create_items(self) -> None:
         count = len(self._location_names())
@@ -92,5 +92,6 @@ class NierAutomataWorld(World):
             "weapon_checks": self.options.weapon_checks.value,
             "item_checks": bool(self.options.item_checks),
             "goal": self.options.goal.value,
+            "death_link": bool(self.options.death_link),
             "goal_phase_prefix": GOAL_PHASE_PREFIX,
         }

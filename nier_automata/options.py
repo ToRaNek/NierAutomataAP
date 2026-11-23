@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from Options import Choice, DefaultOnToggle, PerGameCommonOptions, Range
+from Options import Choice, DeathLink, DefaultOnToggle, PerGameCommonOptions, Range
 
 from .data.tables import MAX_STORY, MAX_WEAPON_CHECKS
 
@@ -43,3 +43,4 @@ class NierAutomataOptions(PerGameCommonOptions):
     weapon_checks: WeaponChecks
     item_checks: ItemChecks
     goal: Goal
+    death_link: DeathLink

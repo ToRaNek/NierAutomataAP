@@ -8,6 +8,7 @@ from CommonClient import CommonContext, get_base_parser, gui_enabled, logger, se
 from NetUtils import ClientStatus
 
 from .data.phases import GOAL_PHASE_PREFIX
+from .game.deathlink import DeathTracker
 from .game.game import NierGame, backup_saves
 from .game.loop import due_locations, make_trackers, new_state, tick
 from .game.state import ClientState, state_path
@@ -26,6 +27,8 @@ class NierContext(CommonContext):
         self.trackers = None
         self.goal_prefix = GOAL_PHASE_PREFIX
         self.goal = 1
+        self.deaths = DeathTracker()
+        self.death_link_on = False
         self.backed_up = False
         self.goal_sent = False
         self.last_status = ""
@@ -47,6 +50,9 @@ class NierContext(CommonContext):
                                           sd.get("item_checks", False))
             self.goal_prefix = sd.get("goal_phase_prefix", GOAL_PHASE_PREFIX)
             self.goal = sd.get("goal", 1)
+            self.death_link_on = bool(sd.get("death_link", False))
+            if self.death_link_on:
+                asyncio.create_task(self.update_death_link(True))
             logger.info("Connecte. Etat local : %s", path)
             # Renvoyer les checks merites que le serveur n'a pas (coupure pendant un envoi).
             missing = due_locations(self.state, self.trackers.story.max_count,
@@ -58,6 +64,12 @@ class NierContext(CommonContext):
         await super().connection_closed()
         self.state = None
         self.trackers = None
+
+    def on_deathlink(self, data: dict):
+        super().on_deathlink(data)
+        if self.nier.in_game() and self.nier.kill():
+            self.deaths.expect_death()
+            logger.info("DeathLink recu de %s : 2B meurt.", data.get("source", "?"))
 
     def run_gui(self):
         from kvui import GameManager
@@ -108,6 +120,8 @@ async def game_iteration(ctx: NierContext):
         await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
         ctx.goal_sent = True
         logger.info("Objectif atteint : victoire envoyee !")
+    if ctx.death_link_on and ctx.deaths.update(ctx.nier.hp()):
+        await ctx.send_death(f"{ctx.player_names.get(ctx.slot, '2B')} est mort(e) dans NieR:Automata")
     if ctx.state.to_json() != before:
         ctx.state.save(ctx.state_file)
 

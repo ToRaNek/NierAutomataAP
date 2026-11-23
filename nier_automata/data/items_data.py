@@ -11,6 +11,9 @@ FILLER_ITEMS: dict[str, int] = {
     "Cure All Status": 80,
 }
 
+# Argent recu (ajoute aux fonds, adresse "funds").
+FUNDS_ITEMS: dict[str, int] = {"500 G": 500, "1000 G": 1000, "2000 G": 2000}
+
 # Quantite donnee par objet recu.
 FILLER_QUANTITY: dict[str, int] = {"Small Recovery": 3, "Medium Recovery": 2}
 

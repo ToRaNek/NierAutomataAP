@@ -7,10 +7,13 @@ from datetime import datetime
 from pathlib import Path
 from typing import Optional
 
-from ..data.items_data import FILLER_ITEMS, FILLER_QUANTITY
+from ..data.items_data import FILLER_ITEMS, FILLER_QUANTITY, FUNDS_ITEMS
 from ..data.offsets import OFFSETS, detect_version
 from ..data.phases import MENU_PHASES
 from ..data.weapons import WEAPONS
+import struct
+
+from .deathlink import HP_OFFSET, add_funds
 from .inventory import item_table, weapon_table
 from .memory import ProcessMemory, read_cstr, read_u32
 
@@ -84,9 +87,29 @@ class NierGame:
     def give(self, name: str) -> bool:
         if name in WEAPONS:
             return self._weapons.add(WEAPONS[name], 1)
+        if name in FUNDS_ITEMS:
+            add_funds(self.mem, self._off["funds"], FUNDS_ITEMS[name])
+            return True
         if name in FILLER_ITEMS:
             return self._items.add(FILLER_ITEMS[name], FILLER_QUANTITY.get(name, 1))
         return True  # objet inconnu : ignore plutot que bloquer la file
 
     def remove_weapon(self, weapon_id: int) -> bool:
         return self._weapons.remove(weapon_id)
+
+    def _entity(self) -> Optional[int]:
+        p = struct.unpack("<Q", self.mem.read(self.mem.base + self._off["playerEntity"], 8))[0]
+        return p if 0x10000 < p < 0x7FFFFFFFFFFF else None
+
+    def hp(self) -> Optional[int]:
+        p = self._entity()
+        if p is None:
+            return None
+        return struct.unpack("<I", self.mem.read(p + HP_OFFSET, 4))[0]
+
+    def kill(self) -> bool:
+        p = self._entity()
+        if p is None:
+            return False
+        self.mem.write(p + HP_OFFSET, struct.pack("<I", 0))
+        return True
