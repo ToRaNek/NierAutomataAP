@@ -13,6 +13,7 @@ from .game import ap_items as apit
 from .game import notify
 from .data.tables import SHOP_PLACES_ORDER, ap_item_location as apit_loc, location_name_to_id, shop_location, spot_location
 from .game import shop as shopm
+from .game import mail as mailm
 
 LOC_IDS = location_name_to_id()
 from .data.items_data import FILLER_ITEMS
@@ -62,6 +63,22 @@ class NierContext(CommonContext):
                 rec = get("player")
                 self.ap_contents[get("location")] = (rec, self.item_names.lookup_in_slot(get("item"), rec))
                 self.ap_flags[get("location")] = get("flags")
+        if cmd == "PrintJSON" and args.get("type") == "Hint" and self.slot is not None and self.state is not None:
+            try:
+                it = args["item"]
+                get = (lambda k: it[k]) if isinstance(it, dict) else (lambda k: getattr(it, k))
+                receiver = args["receiving"]
+                if get("player") == self.slot and receiver != self.slot and not args.get("found"):
+                    hint = (self.item_names.lookup_in_slot(get("item"), receiver),
+                            self.player_names.get(receiver, "?"),
+                            self.location_names.lookup_in_slot(get("location"), self.slot))
+                    if hint not in self.state.hints:
+                        self.state.hints.append(hint)
+                        self.mail_hint_new = True
+                        self.mail_hint_unread = True
+                        logger.info("Indice pour %s : %s -> %s", hint[1], hint[0], hint[2])
+            except Exception as e:
+                logger.info("indice ignore : %r", e)
         if cmd == "PrintJSON" and args.get("type") in ("ItemSend", "ItemCheat") and self.slot is not None:
             try:
                 it = args["item"]
@@ -101,6 +118,12 @@ class NierContext(CommonContext):
             self.ap_flags = {}
             self.ap_prepared = None
             self.pickup_note = None
+            self.mailer = None
+            self.mail_pid = None
+            self.mail_checks_sig = None
+            self.mail_hint_new = bool(self.state.hints)
+            self.mail_hint_unread = False
+            self.mail_busy = False
             self.shop_checks = int(sd.get("shop_checks", 0))
             self.shop_price = int(sd.get("shop_price", 300))
             self.shop = None
@@ -226,6 +249,44 @@ async def ability_loop(ctx: NierContext):
                                   allowed=abilities_allowed(ctx.nier.phase()))
         except Exception:
             pass
+
+
+async def mail_step(ctx: NierContext):
+    """Mails Archipelago : liste des checks restants (n 31) et indices demandes par les autres (n 32)."""
+    if ctx.mail_busy:
+        return
+    mem = ctx.nier.mem
+    ctx.mail_busy = True
+    try:
+        if ctx.mail_pid != mem.pid:
+            ctx.mailer = mailm.Mailer(mem)
+            await asyncio.to_thread(ctx.mailer.ensure_mail, mailm.CHECKS_MAIL, "Archipelago")
+            ctx.mailer.set_title(mailm.CHECKS_MAIL, "Checks Archipelago")
+            ctx.mail_pid, ctx.mail_checks_sig = mem.pid, None
+            ctx.mail_hint_new = bool(ctx.state.hints)
+        mailer = ctx.mailer
+        remaining = sorted(ctx.location_names.lookup_in_slot(i, ctx.slot) for i in ctx.missing_locations)
+        if repr(remaining) != ctx.mail_checks_sig:
+            total = len(ctx.missing_locations) + len(ctx.checked_locations)
+            if await asyncio.to_thread(mailer.set_body, mailm.CHECKS_MAIL, mailm.checks_body(remaining, total)):
+                await asyncio.to_thread(mailer.send, mailm.CHECKS_MAIL)
+                ctx.mail_checks_sig = repr(remaining)
+        if ctx.mail_hint_new and ctx.state.hints:
+            who = ctx.state.hints[-1][1]
+            await asyncio.to_thread(mailer.ensure_mail, mailm.HINTS_MAIL, who)
+            mailer.set_sender(mailm.HINTS_MAIL, who)
+            mailer.set_title(mailm.HINTS_MAIL, f"Indice de {who}")
+            if await asyncio.to_thread(mailer.set_body, mailm.HINTS_MAIL, mailm.hints_body(ctx.state.hints)):
+                await asyncio.to_thread(mailer.send, mailm.HINTS_MAIL)
+                if ctx.mail_hint_unread:
+                    mailer.mark_unread(mailm.HINTS_MAIL)
+                ctx.mail_hint_new = ctx.mail_hint_unread = False
+                logger.info("Messagerie : indice de %s ajoute", who)
+        await asyncio.to_thread(mailer.poll_titles)
+    except (OSError, StopIteration) as e:
+        logger.info("Messagerie indisponible : %r", e)
+    finally:
+        ctx.mail_busy = False
 
 
 async def ground_step(ctx: NierContext):
@@ -412,6 +473,8 @@ async def game_iteration(ctx: NierContext):
         return
     ctx._status(f"Jeu detecte ({ctx.nier.version}), phase {ctx.nier.phase()}")
     await ground_step(ctx)
+    if not ctx.mail_busy:
+        asyncio.create_task(mail_step(ctx))
     await ap_items_step(ctx)
     bought = await shop_step(ctx)
     extra = sorted((due_locations(ctx.state, 0, 0) | set(bought)) - ctx.state.sent_locations)

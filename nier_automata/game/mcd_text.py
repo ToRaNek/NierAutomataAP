@@ -195,13 +195,22 @@ class CoreText:
         self._pool_used += (size + 15) & ~15
         return a
 
-    def set_text(self, key: str, text: str, width: int = 0) -> bool:
+    def font_of(self, key: str) -> Optional[int]:
+        """Police de la 1re lettre d'une cle (pour un texte d'origine vide)."""
+        for la in self._lines(key):
+            to = struct.unpack("<I", self.mem.read(la, 4))[0]
+            first = struct.unpack("<H", self.mem.read(self.base + to, 2))[0]
+            if first < len(self.symbols):
+                return self.symbols[first][0]
+        return None
+
+    def set_text(self, key: str, text: str, width: int = 0, font_from: str = "") -> bool:
         """Remplace le texte d'une cle. width>0 : coupe en lignes (au plus le nombre de lignes d'origine)."""
         lines = self._lines(key)
         if not lines:
             return False
         parts = wrap(text, width, len(lines)) if width else [text]
-        font = None
+        font = self.font_of(font_from) if font_from else None
         for i, la in enumerate(lines):
             raw = self.mem.read(la, 24)
             if la not in self._orig:
@@ -340,7 +349,7 @@ class MenuTexts:
     def ok(self) -> bool:
         return bool(self.files)
 
-    def set_text(self, key: str, text: str, width: int = 0) -> bool:
+    def set_text(self, key: str, text: str, width: int = 0, font_from: str = "") -> bool:
         if not any(key in f.keys for f in self.files):
             self._discover(key)
         owners = [f for f in self.files if key in f.keys]
@@ -351,8 +360,8 @@ class MenuTexts:
             for f in owners:
                 if f is not core:
                     f.hide_key(key)
-            return core.set_text(key, text, width)
-        return any([f.set_text(key, text, width) for f in owners])
+            return core.set_text(key, text, width, font_from)
+        return any([f.set_text(key, text, width, font_from) for f in owners])
 
     def restore(self) -> None:
         for f in self.files:

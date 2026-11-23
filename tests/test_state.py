@@ -66,3 +66,12 @@ def test_dynamic_spots_roundtrip(tmp_path):
     p = tmp_path / "s.json"
     s.save(p)
     assert ClientState.load(p).ap_dynamic_spots == [("30_AB", 1.5, 2.0, 3.0)]
+
+
+def test_hints_roundtrip(tmp_path):
+    from nier_automata.game.state import ClientState
+    s = ClientState(seed="S", slot=1, save_slot=None)
+    s.hints.append(("Grappin", "Niicotine", "AP Item: Desert #1"))
+    p = tmp_path / "s.json"
+    s.save(p)
+    assert ClientState.load(p).hints == [("Grappin", "Niicotine", "AP Item: Desert #1")]
