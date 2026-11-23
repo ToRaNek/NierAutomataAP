@@ -106,3 +106,9 @@ def test_attack_patches_verified_in_game_v104():
     ha, = ABILITY_PATCHES["Heavy Attack"]
     assert (la.rva, la.original, la.locked) == (0x47A389, bytes.fromhex("e8d24c0200"), bytes.fromhex("31c00f1f00"))
     assert (ha.rva, ha.original, ha.locked) == (0x47A355, bytes.fromhex("e8864c0200"), bytes.fromhex("31c00f1f00"))
+
+
+def test_pod_program_patches_verified_in_game_v104():
+    a, b = ABILITY_PATCHES["Pod Program"]
+    assert (a.rva, a.original, a.locked) == (0x529240, bytes.fromhex("e88b53f7ff"), bytes.fromhex("31c00f1f00"))
+    assert (b.rva, b.original, b.locked) == (0x5292AE, bytes.fromhex("e81d53f7ff"), bytes.fromhex("31c00f1f00"))

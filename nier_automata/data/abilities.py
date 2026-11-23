@@ -32,4 +32,10 @@ ABILITY_PATCHES: dict[str, tuple[CodePatch, ...]] = {
     # Lecture des boutons d'attaque (call 0x49F060 / 0x49EFE0) -> "non presse" (teste en jeu, dichotomie).
     "Light Attack": (CodePatch(0x47A389, bytes.fromhex("e8d24c0200"), bytes.fromhex("31c00f1f00")),),
     "Heavy Attack": (CodePatch(0x47A355, bytes.fromhex("e8864c0200"), bytes.fromhex("31c00f1f00")),),
+    # Bouton du programme de Pod (call 0x49E5D0), 2 lectures : ensemble, le Pod reste en place et
+    # ne lance pas le programme (teste en jeu avec le laser A140).
+    "Pod Program": (
+        CodePatch(0x529240, bytes.fromhex("e88b53f7ff"), bytes.fromhex("31c00f1f00")),
+        CodePatch(0x5292AE, bytes.fromhex("e81d53f7ff"), bytes.fromhex("31c00f1f00")),
+    ),
 }
