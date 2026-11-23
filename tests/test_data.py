@@ -81,3 +81,11 @@ def test_abilities_never_locked_in_prologue_or_flight():
     assert abilities_allowed("SIGNIN") is False
     assert abilities_allowed("") is False
     assert abilities_allowed("10_AB_City") is True
+
+
+def test_prologue_includes_factory_phases_beyond_00():
+    from nier_automata.data.phases import abilities_allowed, is_prologue
+    assert is_prologue("05_00_A_RobotM_Pro_ArmBoss_2nd")  # vu en jeu, toujours le prologue
+    assert is_prologue("00_90_A_RobotM_Pro_3rdArea")
+    assert not is_prologue("10_AB_City")
+    assert abilities_allowed("05_00_A_RobotM_Pro_ArmBoss_2nd") is False

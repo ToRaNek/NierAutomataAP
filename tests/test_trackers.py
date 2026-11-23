@@ -225,3 +225,24 @@ def test_chest_capped():
     t.update(2, "00_80", P2)
     assert t.update(2, "00_80", P2) is None
     assert s.chests_found == 1
+
+
+from nier_automata.game.trackers import LevelTracker
+
+
+def test_level_needs_two_reads():
+    s = st()
+    t = LevelTracker(s)
+    t.update(4)
+    assert s.max_level == 1
+    t.update(4)
+    assert s.max_level == 4
+
+
+def test_level_never_decreases_and_ignores_garbage():
+    s = st(max_level=4)
+    t = LevelTracker(s)
+    t.update(2); t.update(2)          # rechargement d'une ancienne save
+    t.update(5000); t.update(5000)    # valeur absurde (chargement)
+    t.update(0); t.update(0)
+    assert s.max_level == 4

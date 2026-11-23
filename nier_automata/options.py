@@ -47,6 +47,15 @@ class TrapPercentage(Range):
     default = 20
 
 
+class MaxLevelCheck(Range):
+    """Chaque niveau atteint envoie un check "Level N", du niveau 2 jusqu'a cette valeur (0 = desactive).
+    Monter de niveau est toujours possible : ces checks peuvent contenir des objets importants."""
+    display_name = "Max Level Check"
+    range_start = 0
+    range_end = 50
+    default = 20
+
+
 class ItemChecks(DefaultOnToggle):
     """Le premier ramassage de chaque materiau (coffre, ennemi, sol) envoie un check "Item: <nom>"."""
     display_name = "Item Checks"
@@ -68,6 +77,7 @@ class NierAutomataOptions(PerGameCommonOptions):
     weapon_checks: WeaponChecks
     item_checks: ItemChecks
     chest_checks: ChestChecks
+    max_level_check: MaxLevelCheck
     trap_percentage: TrapPercentage
     randomized_abilities: RandomizedAbilities
     goal: Goal

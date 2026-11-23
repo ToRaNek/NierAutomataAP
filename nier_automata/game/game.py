@@ -19,6 +19,10 @@ from .inventory import item_table, weapon_table
 from .memory import ProcessMemory, read_cstr, read_u32
 
 
+# Niveau du joueur dans l'entite (verifie en jeu v1.04 : niveau 4).
+LEVEL_OFFSET = 0x14BC
+
+
 def save_dir() -> Path:
     return Path(os.environ.get("USERPROFILE", Path.home())) / "Documents" / "My Games" / "NieR_Automata"
 
@@ -158,5 +162,14 @@ class NierGame:
             return None
         try:
             return struct.unpack("<I", self.mem.read(p + 0x14A8, 4))[0] == 0
+        except OSError:
+            return None
+
+    def level(self) -> Optional[int]:
+        p = self.entity()
+        if p is None:
+            return None
+        try:
+            return struct.unpack("<I", self.mem.read(p + LEVEL_OFFSET, 4))[0]
         except OSError:
             return None

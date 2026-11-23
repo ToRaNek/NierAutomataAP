@@ -58,3 +58,8 @@ def test_chest_counter_offset_v104():
 def test_playtime_offset_v104():
     # compteur d'images (60/s), verifie en jeu : 1 h 09 affichee = ~250 000
     assert OFFSETS["v1.04"]["playTimeFrames"] == 0x14990F4
+
+
+def test_level_offset_v104():
+    from nier_automata.game.game import LEVEL_OFFSET
+    assert LEVEL_OFFSET == 0x14BC  # verifie en jeu : niveau 4

@@ -20,6 +20,10 @@ def weapon_location(n: int) -> str:
     return f"Weapon Found #{n}"
 
 
+def level_location(n: int) -> str:
+    return f"Level {n}"
+
+
 def chest_location(n: int) -> str:
     return f"Chest #{n}"
 
@@ -55,6 +59,8 @@ def location_name_to_id() -> dict[str, int]:
         locs[item_location(name)] = BASE_CODE + 0x3000 + i
     for n in range(1, MAX_CHEST_CHECKS + 1):
         locs[chest_location(n)] = BASE_CODE + 0x4000 + n
+    for n in range(2, 100):
+        locs[level_location(n)] = BASE_CODE + 0x5000 + n
     return locs
 
 

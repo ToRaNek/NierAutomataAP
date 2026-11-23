@@ -127,3 +127,20 @@ class ChestTracker:
             return None
         self.state.chests_found += 1
         return self.state.chests_found
+
+
+MAX_LEVEL = 99
+
+
+class LevelTracker:
+    """Niveau max atteint (2 lectures identiques, valeurs 1..99 seulement, ne baisse jamais)."""
+
+    def __init__(self, state: ClientState):
+        self.state = state
+        self._prev: Optional[int] = None
+
+    def update(self, level: Optional[int]) -> None:
+        prev, self._prev = self._prev, level
+        if level is None or level != prev or not 1 <= level <= MAX_LEVEL:
+            return
+        self.state.max_level = max(self.state.max_level, level)

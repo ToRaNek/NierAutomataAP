@@ -221,3 +221,20 @@ def test_due_includes_chests():
     s.chests_found = 2
     due = due_locations(s, story_checks=5, weapon_checks=3, chest_checks=10)
     assert LOCS["Chest #1"] in due and LOCS["Chest #2"] in due and LOCS["Chest #3"] not in due
+
+
+def test_due_includes_levels():
+    s, _ = setup()
+    s.max_level = 4
+    due = due_locations(s, story_checks=5, weapon_checks=3, chest_checks=0, max_level_check=20)
+    assert {LOCS["Level 2"], LOCS["Level 3"], LOCS["Level 4"]} <= due
+    assert LOCS["Level 5"] not in due
+    assert LOCS["Level 4"] not in due_locations(s, 5, 3, 0, max_level_check=3)
+
+
+def test_first_link_accepted_anywhere_in_prologue():
+    from nier_automata.game.loop import new_state
+    s = new_state("S", 1)
+    tr = make_trackers(s, story_checks=5, weapon_checks=3)
+    r = tick(FakeGame(phase="05_00_A_RobotM_Pro_ArmBoss_2nd"), s, [], tr, GOAL)
+    assert not r.refused

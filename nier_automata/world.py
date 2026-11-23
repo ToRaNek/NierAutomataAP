@@ -5,7 +5,7 @@ from worlds.LauncherComponents import Component, Type, components, launch_subpro
 from .data.items_data import FILLER_ITEMS, FUNDS_ITEMS, MATERIALS, TRAP_ITEMS
 from .data.phases import GOAL_PHASE_PREFIX
 from .data.tables import (
-    GOAL_LOCATION, chest_location, item_location, item_name_to_id, pool_weapon_count, location_name_to_id, story_location, weapon_location,
+    GOAL_LOCATION, chest_location, item_location, level_location, item_name_to_id, pool_weapon_count, location_name_to_id, story_location, weapon_location,
 )
 from .data.weapons import STARTING_WEAPONS, WEAPONS
 from .options import NierAutomataOptions
@@ -50,6 +50,7 @@ class NierAutomataWorld(World):
         names = [story_location(n) for n in range(1, self.options.story_checks.value + 1)]
         names += [weapon_location(n) for n in range(1, self.options.weapon_checks.value + 1)]
         names += [chest_location(n) for n in range(1, self.options.chest_checks.value + 1)]
+        names += [level_location(n) for n in range(2, self.options.max_level_check.value + 1)]
         if self.options.item_checks:
             names += [item_location(m) for m in MATERIALS]
         return names
@@ -83,7 +84,8 @@ class NierAutomataWorld(World):
     def create_items(self) -> None:
         count = len(self._location_names())
         candidates = sorted(set(WEAPONS) - STARTING_WEAPONS)
-        open_locs = self.options.story_checks.value + self.options.chest_checks.value
+        open_locs = (self.options.story_checks.value + self.options.chest_checks.value
+                     + max(0, self.options.max_level_check.value - 1))
         abilities = sorted(self.options.randomized_abilities.value)
         n = pool_weapon_count(max(0, open_locs - len(abilities)), count, len(candidates))
         weapons = self.random.sample(candidates, n)
@@ -105,6 +107,7 @@ class NierAutomataWorld(World):
             "weapon_checks": self.options.weapon_checks.value,
             "item_checks": bool(self.options.item_checks),
             "chest_checks": self.options.chest_checks.value,
+            "max_level_check": self.options.max_level_check.value,
             "randomized_abilities": sorted(self.options.randomized_abilities.value),
             "goal": self.options.goal.value,
             "death_link": bool(self.options.death_link),
