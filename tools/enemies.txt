@@ -1,0 +1,4 @@
+0x1ca30ec8d80 .?AVEmBaseManagerImplement@@
+0x1ca31fa7fa0 .?AVEm0000@@
+0x1ca31fd43a0 .?AVEm0000@@
+0x1ca320007a0 .?AVEm0000@@
