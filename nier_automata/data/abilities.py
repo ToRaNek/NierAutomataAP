@@ -23,4 +23,7 @@ ABILITY_PATCHES: dict[str, tuple[CodePatch, ...]] = {
     ),
     # jne (esquive aerienne deja utilisee) -> jmp : l'esquive aerienne est toujours ignoree (teste en jeu)
     "Air Dash": (CodePatch(0x47E483, bytes.fromhex("0f8562020000"), bytes.fromhex("e96302000090")),),
+    # Debut du bloc setState(0x12 = esquive) -> jmp vers "aucune action" (xor eax,eax).
+    # Teste en jeu : bloque l'esquive au sol, en l'air et le sprint.
+    "Evade": (CodePatch(0x47E6BB, bytes.fromhex("488b"), bytes.fromhex("eb2e")),),
 }

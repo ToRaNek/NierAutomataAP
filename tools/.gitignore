@@ -1,1 +1,4 @@
 snaps/
+tools/bisect_state.json
+tools/bisect_targets.json
+tools/bisect_mode.txt

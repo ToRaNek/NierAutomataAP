@@ -58,3 +58,9 @@ def test_unlock_all_restores_originals():
     lock.unlock_all()
     assert m.read(m.base + DJ.rva, 1) == DJ.original
     assert m.read(m.base + AD.rva, 6) == AD.original
+
+
+def test_evade_patch_verified_in_game_v104():
+    ev, = ABILITY_PATCHES["Evade"]
+    # debut du bloc "passer en etat esquive 0x12" -> jmp vers "aucune action" (bloque esquive sol/air + sprint)
+    assert (ev.rva, ev.original, ev.locked) == (0x47E6BB, bytes.fromhex("488b"), bytes.fromhex("eb2e"))
