@@ -23,11 +23,20 @@ def weapon_location(n: int) -> str:
     return f"Weapon Found #{n}"
 
 
-MAX_AP_SPOTS = 300
+AP_PER_PHASE_MAX = 3
 
 
-def ap_item_location(n: int) -> str:
-    return f"AP Item #{n}"
+def ap_item_location(phase_index: int, k: int) -> str:
+    """AP Item au sol n k de la phase d'histoire `phase_index` (nom indicatif pour les indices)."""
+    return f"AP Item: {ROUTE_A[phase_index][1]} #{k}"
+
+
+def spot_location(spots, i: int) -> str:
+    """Nom du check de l'emplacement i (spots : [(cle de phase ROUTE_A, x, y, z)])."""
+    key = spots[i][0]
+    k = sum(1 for s in spots[:i + 1] if s[0] == key)
+    idx = next(j for j, (prefix, _) in enumerate(ROUTE_A) if prefix == key)
+    return ap_item_location(idx, k)
 
 
 # Magasins sur la route A (ordre fixe : il determine les codes).
@@ -85,8 +94,9 @@ def location_name_to_id() -> dict[str, int]:
         locs[chest_location(n)] = BASE_CODE + 0x4000 + n
     for n in range(2, 100):
         locs[level_location(n)] = BASE_CODE + 0x5000 + n
-    for n in range(1, MAX_AP_SPOTS + 1):
-        locs[ap_item_location(n)] = BASE_CODE + 0x6000 + n
+    for i in range(len(ROUTE_A)):
+        for k in range(1, AP_PER_PHASE_MAX + 1):
+            locs[ap_item_location(i, k)] = BASE_CODE + 0x6000 + i * 4 + k
     for i, place in enumerate(SHOP_PLACES_ORDER):
         for k in range(1, MAX_SHOP_SLOTS + 1):
             locs[shop_location(place, k)] = BASE_CODE + 0x7000 + i * 0x10 + k

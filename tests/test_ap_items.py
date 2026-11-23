@@ -53,11 +53,12 @@ def test_pickup_resolved_when_object_gone_and_marker_received():
 def test_due_includes_ap_items():
     from nier_automata.data.tables import location_name_to_id
     from nier_automata.game.loop import due_locations
-    s = st(ap_spots_collected={0, 2})
+    camp = "40_AB_Resistance_Camp_Leader"
+    s = st(ap_spots_collected={0, 2}, ap_dynamic_spots=[(camp, 0.0, 0, 0), (camp, 1.0, 0, 0), (camp, 2.0, 0, 0)])
     locs = location_name_to_id()
     due = due_locations(s, 0, 0)
-    assert {locs["AP Item #1"], locs["AP Item #3"]} <= due and locs["AP Item #2"] not in due
-
+    assert {locs["AP Item: Camp Resistance #1"], locs["AP Item: Camp Resistance #3"]} <= due
+    assert locs["AP Item: Camp Resistance #2"] not in due
 
 from nier_automata.game.ap_items import PICKUP_CARRIER, nearest_spawned, pickup_text
 
@@ -133,28 +134,74 @@ from nier_automata.game.ap_items import extend_spots
 
 
 def test_extend_spots_adds_spaced_new_spots_up_to_limit():
-    spots = [("30_AB", 0.0, 0.0, 0.0)]
+    camp = "40_AB_Resistance_Camp_Leader"
+    spots = [(camp, 0.0, 0.0, 0.0)]
     found = [(1.0, 0.0, 0.0), (50.0, 0.0, 0.0), (52.0, 0.0, 0.0), (120.0, 0.0, 0.0), (300.0, 0.0, 0.0)]
-    new = extend_spots(spots, found, "40_AB_Camp", limit=3, min_dist=25.0, offset=2.0, per_area=10)
-    assert new == [("40_AB_Camp", 52.0, 0.0, 0.0), ("40_AB_Camp", 122.0, 0.0, 0.0)]  # decales de 2 m, max 3
-
+    new = extend_spots(spots, found, camp, per_area=3, min_dist=25.0, offset=2.0)
+    assert new == [(camp, 52.0, 0.0, 0.0), (camp, 122.0, 0.0, 0.0)]  # decales de 2 m, 3 par phase au total
 
 def test_extend_spots_ignores_prologue_and_menus():
-    assert extend_spots([], [(0.0, 0.0, 0.0)], "00_60_A_RobotM_Pro_Tutorial", limit=5) == []
-    assert extend_spots([], [(0.0, 0.0, 0.0)], "SIGNIN", limit=5) == []
-
+    assert extend_spots([], [(0.0, 0.0, 0.0)], "00_60_A_RobotM_Pro_Tutorial") == []
+    assert extend_spots([], [(0.0, 0.0, 0.0)], "SIGNIN") == []
 
 def test_extend_spots_deterministic_order():
     found = [(100.0, 0.0, 0.0), (0.0, 0.0, 0.0)]
-    a = extend_spots([], found, "30_AB_x", limit=5)
-    b = extend_spots([], list(reversed(found)), "30_AB_x", limit=5)
+    a = extend_spots([], found, "40_AB_Resistance_Camp_Leader")
+    b = extend_spots([], list(reversed(found)), "40_AB_Resistance_Camp_Leader")
     assert a == b  # ordre de la memoire sans importance
-
 
 def test_extend_spots_spreads_along_route():
     found = [(float(x), 0.0, 0.0) for x in range(0, 1000, 10)]
-    new = extend_spots([], found, "40_AB_Resistance_Camp_Leader", limit=30, min_dist=60.0, per_area=3)
+    new = extend_spots([], found, "40_AB_Resistance_Camp_Leader", min_dist=60.0, per_area=3)
     assert len(new) == 3                                                  # au plus 3 par phase
     assert all(b[1] - a[1] >= 60.0 for a, b in zip(new, new[1:]))
-    more = extend_spots(new, found, "50_AB_Desert_temple", limit=30, min_dist=60.0, per_area=3)
+    more = extend_spots(new, found, "50_AB_Desert_temple", min_dist=60.0, per_area=3)
     assert len(more) == 3 and more[0][0] == "50_AB_Desert_temple"
+
+from nier_automata.data.tables import ap_item_location, spot_location
+from nier_automata.data.phases import ROUTE_A
+
+
+def test_ap_item_locations_named_by_story_phase():
+    assert ap_item_location(7, 1) == "AP Item: Camp Resistance #1"   # 8e phase (indice 7)
+
+
+def test_spot_location_counts_within_its_phase():
+    camp, desert = ROUTE_A[7][0], ROUTE_A[9][0]
+    spots = [(camp, 0.0, 0.0, 0.0), (desert, 1.0, 0.0, 0.0), (camp, 2.0, 0.0, 0.0)]
+    assert spot_location(spots, 0) == "AP Item: Camp Resistance #1"
+    assert spot_location(spots, 1) == "AP Item: Desert #1"
+    assert spot_location(spots, 2) == "AP Item: Camp Resistance #2"
+
+
+def test_extend_spots_keyed_by_route_phase_and_limited():
+    found = [(float(x), 0.0, 0.0) for x in range(0, 1000, 100)]
+    new = extend_spots([], found, "40_AB_Resistance_Camp_Leader", per_area=2, phase_limit=27)
+    assert [s[0] for s in new] == ["40_AB_Resistance_Camp_Leader"] * 2
+    assert extend_spots([], found, "40_AB_Resistance_Camp_Leader", per_area=2, phase_limit=5) == []  # au-dela
+    assert extend_spots([], found, "99_ZZ_Inconnu", per_area=2, phase_limit=27) == []              # hors route
+
+
+def test_fallback_spot_near_player_when_no_ground_item():
+    from nier_automata.game.ap_items import fallback_spot
+    s = fallback_spot([], "76_AB_Amusement_Park_Boss_x", (10.0, 0.0, 5.0), per_area=2, phase_limit=27)
+    assert s == ("76_AB_Amusement_Park_Boss", 12.0, 0.0, 5.0)
+    full = [("76_AB_Amusement_Park_Boss", 0.0, 0.0, 0.0)] * 2
+    assert fallback_spot(full, "76_AB_Amusement_Park_Boss_x", (10.0, 0.0, 5.0), per_area=2, phase_limit=27) is None
+
+
+def test_no_ap_items_in_prologue_or_flight_phases():
+    from nier_automata.data.phases import ap_phase_indices
+    names = [ROUTE_A[i][1] for i in ap_phase_indices(27)]
+    assert "Boss du prologue" not in names and "Vol vers la Terre" not in names
+    assert not any(n.startswith("Ville engloutie") for n in names)
+    assert "Camp Resistance" in names
+    assert extend_spots([], [(0.0, 0.0, 0.0)], "20_AB_buker_Aerial_battle") == []
+
+
+def test_fallback_fills_remaining_slots_spaced():
+    from nier_automata.game.ap_items import fallback_spot
+    camp = "40_AB_Resistance_Camp_Leader"
+    one = [(camp, 100.0, 0.0, 0.0)]
+    s = fallback_spot(one, camp, (10.0, 0.0, 5.0), per_area=2)
+    assert s == (camp, 14.0, 0.0, 5.0)   # decalage croissant : 2 m + 2 m par emplacement deja la

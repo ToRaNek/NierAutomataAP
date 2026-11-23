@@ -76,3 +76,13 @@ def route_index(phase: str) -> Optional[int]:
         if phase.startswith(prefix) and len(prefix) > best_len:
             best, best_len = i, len(prefix)
     return best
+
+
+# Pas d'AP Item au sol : prologue (pas encore de client actif sur la carte) et phases en unite volante.
+AP_EXCLUDED_PHASES = {"05_00_A_RobotM_Pro_ArmBoss", "20_AB_buker_Aerial_battle", "90_AB_Battle_Submerge_City",
+                      "91_AB_Battle_Submerge_City_2", "92_AB_Battle_Submerge_City_3"}
+
+
+def ap_phase_indices(phase_count: int) -> list[int]:
+    """Indices des phases (parmi les `phase_count` premieres) qui ont des AP Items au sol."""
+    return [i for i in range(min(phase_count, len(ROUTE_A))) if ROUTE_A[i][0] not in AP_EXCLUDED_PHASES]

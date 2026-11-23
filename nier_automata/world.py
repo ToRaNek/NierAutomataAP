@@ -8,6 +8,7 @@ from .data.tables import (
     GOAL_LOCATION, ap_item_location, chest_location, item_location, level_location, item_name_to_id, pool_weapon_count, location_name_to_id, story_location, weapon_location,
     SHOP_PLACES_ORDER, others_only, shop_location,
 )
+from .data.phases import ROUTE_A, ap_phase_indices
 from .data.weapons import STARTING_WEAPONS, WEAPONS
 from .options import NierAutomataOptions
 
@@ -47,6 +48,10 @@ class NierAutomataWorld(World):
     location_name_to_id = location_name_to_id()
     item_name_groups = {"Weapons": set(WEAPONS)}
 
+    def _ap_phase_count(self) -> int:
+        """Etapes d'histoire qui ont des AP Items : jusqu'a l'objectif (story_progress) ou toute la route A."""
+        return min(self.options.story_checks.value, len(ROUTE_A)) if self.options.goal.value == 0 else len(ROUTE_A)
+
     def _location_names(self) -> list[str]:
         names = [story_location(n) for n in range(1, self.options.story_checks.value + 1)]
         names += [weapon_location(n) for n in range(1, self.options.weapon_checks.value + 1)]
@@ -55,7 +60,8 @@ class NierAutomataWorld(World):
         if self.options.item_checks:
             names += [item_location(m) for m in MATERIALS]
         if self.options.ap_items:
-            names += [ap_item_location(i + 1) for i in range(self.options.ap_item_count.value)]
+            names += [ap_item_location(i, k) for i in ap_phase_indices(self._ap_phase_count())
+                      for k in range(1, self.options.ap_items_per_phase.value + 1)]
         names += [shop_location(p, k) for p in SHOP_PLACES_ORDER for k in range(1, self.options.shop_checks.value + 1)]
         return names
 
@@ -114,7 +120,8 @@ class NierAutomataWorld(World):
             "item_checks": bool(self.options.item_checks),
             "chest_checks": self.options.chest_checks.value,
             "ap_items": bool(self.options.ap_items),
-            "ap_item_count": self.options.ap_item_count.value,
+            "ap_items_per_phase": self.options.ap_items_per_phase.value,
+            "ap_phase_count": self._ap_phase_count(),
             "shop_checks": self.options.shop_checks.value,
             "shop_price": self.options.shop_price.value,
             "max_level_check": self.options.max_level_check.value,

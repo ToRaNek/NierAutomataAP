@@ -53,25 +53,46 @@ def pick_spots(path, min_dist: float = 40.0, per_area: int = 5):
     return out
 
 
-def extend_spots(spots, found, phase: str, limit: int, min_dist: float = 60.0, offset: float = 2.0,
-                 per_area: int = 3):
-    """Nouveaux emplacements a partir des objets poses par le jeu (sur le chemin du joueur) : decales de
-    `offset` m, a plus de `min_dist` m de tout emplacement existant, au plus `per_area` par phase de l'histoire
-    (repartis le long de la route) et `limit` au total. Ordre deterministe (tri par position)."""
+def _route_key(phase: str, phase_limit: int):
+    from ..data.phases import ROUTE_A, ap_phase_indices, route_index
     if not spawn_allowed(phase):
+        return None
+    i = route_index(phase)
+    if i is None or i not in ap_phase_indices(phase_limit):
+        return None
+    return ROUTE_A[i][0]
+
+
+def extend_spots(spots, found, phase: str, per_area: int = 2, phase_limit: int = 99,
+                 min_dist: float = 60.0, offset: float = 2.0):
+    """Nouveaux emplacements a partir des objets poses par le jeu dans la phase d'histoire courante (cle =
+    phase nommee de la route A, d'ou des checks "AP Item: <lieu> #k") : decales de `offset` m, a plus de
+    `min_dist` m de tout emplacement, au plus `per_area` par phase. Ordre deterministe (tri par position)."""
+    code = _route_key(phase, phase_limit)
+    if code is None:
         return []
-    code = phase
     taken = [(x, y, z) for _, x, y, z in spots]
     in_area = sum(1 for c, *_ in spots if c == code)
     new = []
     for x, y, z in sorted(found):
-        if len(spots) + len(new) >= limit or in_area + len(new) >= per_area:
+        if in_area + len(new) >= per_area:
             break
         p = (round(x + offset, 1), round(y, 1), round(z, 1))
         if all(math.dist(p, q) >= min_dist for q in taken):
             taken.append(p)
             new.append((code, *p))
     return new
+
+
+def fallback_spot(spots, phase: str, player_pos, per_area: int = 2, phase_limit: int = 99, offset: float = 2.0):
+    """Phase sans objet au sol (arene de boss...) : un emplacement a cote du joueur, pour que chaque check
+    "AP Item: <lieu> #k" reste faisable."""
+    code = _route_key(phase, phase_limit)
+    n = sum(1 for c, *_ in spots if c == code)
+    if code is None or n >= per_area:
+        return None
+    x, y, z = player_pos
+    return (code, round(x + offset + 2.0 * n, 1), round(y, 1), round(z, 1))
 
 
 def scan_ground_objects(mem) -> dict:

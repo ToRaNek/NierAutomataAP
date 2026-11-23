@@ -8,10 +8,10 @@ import urllib.parse
 from CommonClient import CommonContext, get_base_parser, gui_enabled, logger, server_loop
 from NetUtils import ClientStatus
 
-from .data.phases import GOAL_PHASE_PREFIX, abilities_allowed
+from .data.phases import GOAL_PHASE_PREFIX, abilities_allowed, ap_phase_indices
 from .game import ap_items as apit
 from .game import notify
-from .data.tables import SHOP_PLACES_ORDER, ap_item_location as apit_loc, location_name_to_id, shop_location
+from .data.tables import SHOP_PLACES_ORDER, ap_item_location as apit_loc, location_name_to_id, shop_location, spot_location
 from .game import shop as shopm
 
 LOC_IDS = location_name_to_id()
@@ -107,8 +107,10 @@ class NierContext(CommonContext):
             self.shop_pid = None
             self.shop_applied = None
             self.shop_described = None
-            self.ap_item_count = int(sd.get("ap_item_count", 0))
-            ground = [LOC_IDS[apit_loc(i + 1)] for i in range(self.ap_item_count)] if self.ap_items_on else []
+            self.ap_per_phase = int(sd.get("ap_items_per_phase", 0))
+            self.ap_phase_count = int(sd.get("ap_phase_count", 0))
+            ground = [LOC_IDS[apit_loc(i, k)] for i in ap_phase_indices(self.ap_phase_count)
+                      for k in range(1, self.ap_per_phase + 1)] if self.ap_items_on else []
             self.ap_ground_ids = set(ground)
             shops = [LOC_IDS[shop_location(p, k)] for p in SHOP_PLACES_ORDER for k in range(1, self.shop_checks + 1)]
             ids = [i for i in ground + shops if i in self.server_locations]
@@ -116,6 +118,7 @@ class NierContext(CommonContext):
                 asyncio.create_task(self.send_msgs([{"cmd": "LocationScouts", "locations": ids, "create_as_hint": 0}]))
             self.spots = apit.SpotTracker(self.state, self.state.ap_dynamic_spots)
             self.ap_discover_at = 0.0
+            self.ap_phase_since = 0.0
             self.ap_discovering = False
             self.ap_tracked = {}
             self.ap_pid = None
@@ -249,13 +252,23 @@ async def ground_step(ctx: NierContext):
 
 async def discover_spots(ctx: NierContext, mem, phase: str):
     """Releve les objets poses par le jeu autour du joueur et en fait de nouveaux emplacements d'AP Items."""
+    import time
     try:
         found = await asyncio.to_thread(apit.find_game_items, mem)
-        new = apit.extend_spots(ctx.state.ap_dynamic_spots, found, phase, ctx.ap_item_count)
+        spots = ctx.state.ap_dynamic_spots
+        new = apit.extend_spots(spots, found, phase, ctx.ap_per_phase, ctx.ap_phase_count)
+        ent = ctx.nier.entity()
+        if ent is not None:  # places restantes (phase courte, arene sans objet) : a cote du joueur
+            pos = struct.unpack("<3f", mem.read(ent + 0x50, 12))
+            while True:
+                fb = apit.fallback_spot(spots + new, phase, pos, ctx.ap_per_phase, ctx.ap_phase_count)
+                if fb is None:
+                    break
+                new.append(fb)
         if new:
-            ctx.state.ap_dynamic_spots.extend(new)
-            logger.info("AP Items : %d nouvel(s) emplacement(s) (%d/%d)", len(new),
-                        len(ctx.state.ap_dynamic_spots), ctx.ap_item_count)
+            spots.extend(new)
+            logger.info("AP Items : %s", ", ".join(spot_location(spots, len(spots) - len(new) + j)
+                                                   for j in range(len(new))))
     except OSError:
         pass
     finally:
@@ -265,7 +278,7 @@ async def discover_spots(ctx: NierContext, mem, phase: str):
 async def ap_items_step(ctx: NierContext):
     """Pose les AP Items de la zone, prepare leur message quand le joueur approche, detecte le ramassage.
     Les objets sont suivis eux-memes (vraie position, disparition au ramassage)."""
-    if not getattr(ctx, "ap_items_on", False) or not ctx.ap_item_count:
+    if not getattr(ctx, "ap_items_on", False) or not ctx.ap_per_phase:
         return
     spots = ctx.state.ap_dynamic_spots
     mem = ctx.nier.mem
@@ -289,7 +302,9 @@ async def ap_items_step(ctx: NierContext):
             ctx.spots.reset_session(); ctx.ap_tracked.clear()
         ctx.ap_phase = phase
         ctx.ap_discover_at = time.monotonic() + 5.0   # laisser la zone se charger
-    if (len(spots) < ctx.ap_item_count and not ctx.ap_discovering and time.monotonic() >= ctx.ap_discover_at):
+        ctx.ap_phase_since = time.monotonic()
+    if (not ctx.ap_discovering and time.monotonic() >= ctx.ap_discover_at
+            and apit.fallback_spot(spots, phase, (0.0, 0.0, 0.0), ctx.ap_per_phase, ctx.ap_phase_count)):
         ctx.ap_discovering = True
         ctx.ap_discover_at = time.monotonic() + 60.0
         asyncio.create_task(discover_spots(ctx, mem, phase))
@@ -316,7 +331,7 @@ async def ap_items_step(ctx: NierContext):
         if near is None:
             ctx.pickup_note.restore()
         else:
-            rec, name = ctx.ap_contents.get(LOC_IDS[apit_loc(near + 1)], (None, None))
+            rec, name = ctx.ap_contents.get(LOC_IDS[spot_location(spots, near)], (None, None))
             prefix, item = apit.pickup_text(ctx.slot, rec, name, ctx.player_names.get(rec, "?") if rec else None)
             ctx.pickup_note.prepare(prefix, item)
         ctx.ap_prepared = near

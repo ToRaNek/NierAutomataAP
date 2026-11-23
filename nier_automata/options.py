@@ -79,12 +79,13 @@ class ApItems(DefaultOnToggle):
     display_name = "AP Items"
 
 
-class ApItemCount(Range):
-    """Nombre d'AP Items au sol."""
-    display_name = "AP Item Count"
+class ApItemsPerPhase(Range):
+    """AP Items au sol par etape de l'histoire. Chaque check s'appelle "AP Item: <lieu> #k" (un indice dit
+    donc ou chercher). Avec l'objectif story_progress, seules les etapes jusqu'a l'objectif en ont."""
+    display_name = "AP Items Per Phase"
     range_start = 1
-    range_end = 100
-    default = 30
+    range_end = 3
+    default = 2
 
 
 class ItemChecks(Toggle):
@@ -108,7 +109,7 @@ class NierAutomataOptions(PerGameCommonOptions):
     weapon_checks: WeaponChecks
     item_checks: ItemChecks
     ap_items: ApItems
-    ap_item_count: ApItemCount
+    ap_items_per_phase: ApItemsPerPhase
     shop_checks: ShopChecks
     shop_price: ShopPrice
     chest_checks: ChestChecks
