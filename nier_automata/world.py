@@ -5,7 +5,7 @@ from worlds.LauncherComponents import Component, Type, components, launch_subpro
 from .data.items_data import FILLER_ITEMS, FUNDS_ITEMS, MATERIALS
 from .data.phases import GOAL_PHASE_PREFIX
 from .data.tables import (
-    GOAL_LOCATION, item_location, item_name_to_id, pool_weapon_count, location_name_to_id, story_location, weapon_location,
+    GOAL_LOCATION, chest_location, item_location, item_name_to_id, pool_weapon_count, location_name_to_id, story_location, weapon_location,
 )
 from .data.weapons import STARTING_WEAPONS, WEAPONS
 from .options import NierAutomataOptions
@@ -49,6 +49,7 @@ class NierAutomataWorld(World):
     def _location_names(self) -> list[str]:
         names = [story_location(n) for n in range(1, self.options.story_checks.value + 1)]
         names += [weapon_location(n) for n in range(1, self.options.weapon_checks.value + 1)]
+        names += [chest_location(n) for n in range(1, self.options.chest_checks.value + 1)]
         if self.options.item_checks:
             names += [item_location(m) for m in MATERIALS]
         return names
@@ -77,7 +78,8 @@ class NierAutomataWorld(World):
     def create_items(self) -> None:
         count = len(self._location_names())
         candidates = sorted(set(WEAPONS) - STARTING_WEAPONS)
-        n = pool_weapon_count(self.options.story_checks.value, count, len(candidates))
+        open_locs = self.options.story_checks.value + self.options.chest_checks.value
+        n = pool_weapon_count(open_locs, count, len(candidates))
         weapons = self.random.sample(candidates, n)
         pool = [self.create_item(w) for w in weapons]
         pool += [self.create_item(self.get_filler_item_name()) for _ in range(count - len(pool))]
@@ -91,6 +93,7 @@ class NierAutomataWorld(World):
             "story_checks": self.options.story_checks.value,
             "weapon_checks": self.options.weapon_checks.value,
             "item_checks": bool(self.options.item_checks),
+            "chest_checks": self.options.chest_checks.value,
             "goal": self.options.goal.value,
             "death_link": bool(self.options.death_link),
             "goal_phase_prefix": GOAL_PHASE_PREFIX,

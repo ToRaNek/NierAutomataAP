@@ -7,6 +7,7 @@ from .weapons import WEAPONS
 BASE_CODE = 0x4E41_0000
 MAX_STORY = 30
 MAX_WEAPON_CHECKS = 30
+MAX_CHEST_CHECKS = 60
 GOAL_LOCATION = "Story: Ending A"
 
 
@@ -16,6 +17,10 @@ def story_location(n: int) -> str:
 
 def weapon_location(n: int) -> str:
     return f"Weapon Found #{n}"
+
+
+def chest_location(n: int) -> str:
+    return f"Chest #{n}"
 
 
 def item_location(name: str) -> str:
@@ -41,6 +46,8 @@ def location_name_to_id() -> dict[str, int]:
         locs[weapon_location(n)] = BASE_CODE + 0x2000 + n
     for i, name in enumerate(MATERIALS):
         locs[item_location(name)] = BASE_CODE + 0x3000 + i
+    for n in range(1, MAX_CHEST_CHECKS + 1):
+        locs[chest_location(n)] = BASE_CODE + 0x4000 + n
     return locs
 
 

@@ -2,7 +2,7 @@ from dataclasses import dataclass
 
 from Options import Choice, DeathLink, DefaultOnToggle, PerGameCommonOptions, Range
 
-from .data.tables import MAX_STORY, MAX_WEAPON_CHECKS
+from .data.tables import MAX_CHEST_CHECKS, MAX_STORY, MAX_WEAPON_CHECKS
 
 
 class StoryChecks(Range):
@@ -20,6 +20,15 @@ class WeaponChecks(Range):
     range_start = 0
     range_end = MAX_WEAPON_CHECKS
     default = 8
+
+
+class ChestChecks(Range):
+    """Nombre de checks "Chest" : chaque coffre ouvert dans le jeu envoie un check.
+    La route A contient beaucoup de coffres : ces checks peuvent contenir des objets importants."""
+    display_name = "Chest Checks"
+    range_start = 0
+    range_end = MAX_CHEST_CHECKS
+    default = 15
 
 
 class ItemChecks(DefaultOnToggle):
@@ -42,5 +51,6 @@ class NierAutomataOptions(PerGameCommonOptions):
     story_checks: StoryChecks
     weapon_checks: WeaponChecks
     item_checks: ItemChecks
+    chest_checks: ChestChecks
     goal: Goal
     death_link: DeathLink

@@ -51,7 +51,7 @@ class NierContext(CommonContext):
             self.goal_sent = False
             self.deaths = DeathTracker()
             self.trackers = make_trackers(self.state, sd.get("story_checks", 12), sd.get("weapon_checks", 8),
-                                          sd.get("item_checks", False))
+                                          sd.get("item_checks", False), sd.get("chest_checks", 0))
             self.goal_prefix = sd.get("goal_phase_prefix", GOAL_PHASE_PREFIX)
             self.goal = sd.get("goal", 1)
             self.death_link_on = bool(sd.get("death_link", False))
@@ -60,7 +60,8 @@ class NierContext(CommonContext):
             logger.info("Connecte. Etat local : %s", path)
             # Renvoyer les checks merites que le serveur n'a pas (coupure pendant un envoi).
             missing = due_locations(self.state, self.trackers.story.max_count,
-                                    self.trackers.weapons.max_found) - set(args.get("checked_locations", []))
+                                    self.trackers.weapons.max_found,
+                                    self.trackers.chests.max_count) - set(args.get("checked_locations", []))
             if missing:
                 asyncio.create_task(self.send_msgs([{"cmd": "LocationChecks", "locations": sorted(missing)}]))
 

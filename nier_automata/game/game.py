@@ -78,6 +78,12 @@ class NierGame:
     def phase(self) -> str:
         return read_cstr(self.mem, self._off["currentPhase"])
 
+    def chest_counter(self) -> int:
+        return read_u32(self.mem, self._off["chestCounter"])
+
+    def position(self) -> tuple[float, float, float]:
+        return struct.unpack("<3f", self.mem.read(self.mem.base + self._off["playerLocation"], 12))
+
     def owned_items(self) -> set[int]:
         return {s.item_id for s in self._items.read_all()}
 

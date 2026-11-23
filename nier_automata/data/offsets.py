@@ -29,6 +29,10 @@ OFFSETS: dict[str, dict[str, int]] = {
         # Trouves en jeu le 2026-11-23 (1720 G et 512/1058 PV confirmes par ToRaNek).
         "funds": 0x148C830,
         "playerEntity": 0x1020C88,
+        # Compteur de coffres ouverts (0->1->2->3 sur 3 coffres, inchange au ramassage au sol).
+        "chestCounter": 0xF50F60,
+        # Temps de jeu en images (60/s), verifie : 1 h 09 = ~250 000.
+        "playTimeFrames": 0x14990F4,
     },
 }
 

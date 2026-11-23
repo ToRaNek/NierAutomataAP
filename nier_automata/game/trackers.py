@@ -90,3 +90,40 @@ class ItemTracker:
         new = sorted((owned & prev) - self.state.item_baseline - self.state.items_found)
         self.state.items_found.update(new)
         return new
+
+
+CHEST_SPOT_RADIUS = 4.0
+
+
+class ChestTracker:
+    """Compteur de coffres du jeu : chaque hausse confirmee (2 lectures) = un coffre.
+    Un coffre est identifie par (code de phase, x, z) pour ne pas recompter apres un rechargement."""
+
+    def __init__(self, state: ClientState, max_count: int):
+        self.state = state
+        self.max_count = max_count
+        self._last: Optional[int] = None
+        self._prev: Optional[int] = None
+
+    def _known(self, code: str, pos) -> bool:
+        x, _, z = pos
+        return any(c == code and abs(x - sx) <= CHEST_SPOT_RADIUS and abs(z - sz) <= CHEST_SPOT_RADIUS
+                   for c, sx, sz in self.state.chest_spots)
+
+    def update(self, counter: int, code: Optional[str], pos) -> Optional[int]:
+        prev, self._prev = self._prev, counter
+        if prev != counter:
+            return None  # attendre une 2e lecture identique
+        if self._last is None or counter < self._last:
+            self._last = counter  # baseline ou rechargement
+            return None
+        if counter == self._last:
+            return None
+        self._last = counter
+        if code is None or self._known(code, pos):
+            return None
+        self.state.chest_spots.append((code, pos[0], pos[2]))
+        if self.state.chests_found >= self.max_count:
+            return None
+        self.state.chests_found += 1
+        return self.state.chests_found

@@ -176,3 +176,52 @@ def test_item_baseline_needs_two_identical_reads():
     t.scan({540, 601})
     assert s.item_baseline == {540, 601}
     assert s.items_found == set()
+
+
+from nier_automata.game.trackers import ChestTracker
+
+P1 = (-554.5, 37.2, 276.8)
+P2 = (-300.0, 10.0, 100.0)
+
+
+def ch(s, n, code="00_80", pos=P1, t=None):
+    t = t or ChestTracker(s, max_count=10)
+    return t, t.update(n, code, pos)
+
+
+def test_chest_first_read_is_baseline():
+    s = st()
+    t = ChestTracker(s, max_count=10)
+    assert t.update(3, "00_80", P1) is None
+    assert t.update(3, "00_80", P1) is None
+    assert s.chests_found == 0
+
+
+def test_chest_increment_needs_two_reads():
+    s = st()
+    t = ChestTracker(s, max_count=10)
+    t.update(3, "00_80", P1); t.update(3, "00_80", P1)
+    assert t.update(4, "00_80", P2) is None      # vu une fois
+    assert t.update(4, "00_80", P2) == 1         # confirme
+    assert s.chests_found == 1
+
+
+def test_same_chest_after_reload_not_recounted():
+    s = st()
+    t = ChestTracker(s, max_count=10)
+    t.update(3, "00_80", P1); t.update(3, "00_80", P1)
+    t.update(4, "00_80", P2); t.update(4, "00_80", P2)
+    t.update(3, "00_80", P1); t.update(3, "00_80", P1)    # rechargement : compteur redescend
+    t.update(4, "00_80", P2)
+    assert t.update(4, "00_80", (P2[0] + 1, P2[1], P2[2] + 1)) is None  # meme coffre (meme endroit)
+    assert s.chests_found == 1
+
+
+def test_chest_capped():
+    s = st()
+    t = ChestTracker(s, max_count=1)
+    t.update(0, "00_80", P1); t.update(0, "00_80", P1)
+    t.update(1, "00_80", P1); t.update(1, "00_80", P1)
+    t.update(2, "00_80", P2)
+    assert t.update(2, "00_80", P2) is None
+    assert s.chests_found == 1

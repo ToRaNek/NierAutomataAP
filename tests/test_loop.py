@@ -19,6 +19,12 @@ class FakeGame:
     def owned_items(self):
         return set(self.owned)
 
+    def chest_counter(self):
+        return getattr(self, "chests", 0)
+
+    def position(self):
+        return (0.0, 0.0, 0.0)
+
     def in_game(self):
         return self.ingame
 
@@ -208,3 +214,10 @@ def test_tick_story_goal():
     tr = make_trackers(s, story_checks=1, weapon_checks=3)
     r = tick(FakeGame(), s, [], tr, GOAL, goal=GOAL_STORY)
     assert r.goal is True
+
+
+def test_due_includes_chests():
+    s, _ = setup()
+    s.chests_found = 2
+    due = due_locations(s, story_checks=5, weapon_checks=3, chest_checks=10)
+    assert LOCS["Chest #1"] in due and LOCS["Chest #2"] in due and LOCS["Chest #3"] not in due

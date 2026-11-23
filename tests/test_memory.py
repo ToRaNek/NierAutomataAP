@@ -49,3 +49,12 @@ def test_offsets_found_in_game_v104():
     o = OFFSETS["v1.04"]
     assert o["funds"] == 0x148C830
     assert o["playerEntity"] == 0x1020C88
+
+
+def test_chest_counter_offset_v104():
+    assert OFFSETS["v1.04"]["chestCounter"] == 0xF50F60
+
+
+def test_playtime_offset_v104():
+    # compteur d'images (60/s), verifie en jeu : 1 h 09 affichee = ~250 000
+    assert OFFSETS["v1.04"]["playTimeFrames"] == 0x14990F4
