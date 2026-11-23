@@ -4,7 +4,7 @@ from nier_automata.game.loop import tick, make_trackers
 from nier_automata.game.state import ClientState
 
 LOCS = location_name_to_id()
-GOAL = "58_AB_BossArea_Fall"
+GOAL = "EndRoll_A"
 
 
 class FakeGame:
@@ -84,9 +84,10 @@ def test_no_action_in_menu():
 
 def test_first_phase_sends_story_check():
     s, tr = setup()
-    r = tick(FakeGame(), s, [], tr, GOAL)
+    boss = FakeGame(phase="05_00_A_RobotM_Pro_ArmBoss_2nd")
+    r = tick(boss, s, [], tr, GOAL)
     assert r.locations == [LOCS[story_location(1)]]
-    assert tick(FakeGame(), s, [], tr, GOAL).locations == []
+    assert tick(boss, s, [], tr, GOAL).locations == []
 
 
 def test_natural_weapon_removed_and_checked():
@@ -113,7 +114,7 @@ def test_ap_weapon_reinjected_after_reload():
 
 def test_goal_sent_on_ending_phase():
     s, tr = setup(story_codes={"00_60"})  # partie deja liee
-    r = tick(FakeGame(phase="58_AB_BossArea_Fall"), s, [], tr, GOAL)
+    r = tick(FakeGame(phase="EndRoll_A"), s, [], tr, GOAL)
     assert r.goal is True
 
 
@@ -133,7 +134,7 @@ from nier_automata.game.loop import due_locations
 def test_due_locations_from_state():
     s, _ = setup()
     s.weapons_found = 2
-    s.story_codes = {"00_60", "00_70", "00_80"}
+    s.story_codes = {"05_00_A_RobotM_Pro_ArmBoss", "10_A_bunker_Robot_Battle", "11_A_bunker_monitorHD", "00_60"}
     due = due_locations(s, story_checks=2, weapon_checks=1)
     assert due == {LOCS[story_location(1)], LOCS[story_location(2)], LOCS[weapon_location(1)]}
 
@@ -196,23 +197,23 @@ def test_tick_sends_item_location():
 from nier_automata.game.loop import goal_reached, GOAL_STORY, GOAL_ENDING_A
 
 
-def test_goal_story_progress_reached_at_count():
-    s, _ = setup(story_codes={"00_60", "00_70", "00_80", "10_AB", "11_AB"})
-    assert goal_reached(s, "11_AB_x", GOAL_STORY, 5, GOAL) is True
-    s.story_codes.discard("11_AB")
-    assert goal_reached(s, "10_AB_x", GOAL_STORY, 5, GOAL) is False
+def test_goal_story_progress_reached_at_nth_route_phase():
+    s, _ = setup(story_codes={"10_A_bunker_Robot_Battle", "16_AB_bunker_Order"})
+    assert goal_reached(s, "x", GOAL_STORY, 5, GOAL) is True      # 16_AB = 5e phase
+    s.story_codes.discard("16_AB_bunker_Order")
+    assert goal_reached(s, "x", GOAL_STORY, 5, GOAL) is False
 
 
 def test_goal_ending_a_needs_phase():
     s, _ = setup(story_codes={"00_60"})
-    assert goal_reached(s, "58_AB_BossArea_Fall", GOAL_ENDING_A, 5, GOAL) is True
+    assert goal_reached(s, "EndRoll_A", GOAL_ENDING_A, 5, GOAL) is True
     assert goal_reached(s, "10_AB_City", GOAL_ENDING_A, 5, GOAL) is False
 
 
 def test_tick_story_goal():
     s, tr = setup(story_codes={"00_60"})
     tr = make_trackers(s, story_checks=1, weapon_checks=3)
-    r = tick(FakeGame(), s, [], tr, GOAL, goal=GOAL_STORY)
+    r = tick(FakeGame(phase="05_00_A_RobotM_Pro_ArmBoss_2nd"), s, [], tr, GOAL, goal=GOAL_STORY)
     assert r.goal is True
 
 
@@ -238,3 +239,11 @@ def test_first_link_accepted_anywhere_in_prologue():
     tr = make_trackers(s, story_checks=5, weapon_checks=3)
     r = tick(FakeGame(phase="05_00_A_RobotM_Pro_ArmBoss_2nd"), s, [], tr, GOAL)
     assert not r.refused
+
+
+def test_linked_after_first_accepted_tick_even_without_story():
+    s, tr = setup()
+    tick(FakeGame(), s, [], tr, GOAL)              # prologue : accepte, pas de check d'histoire
+    assert s.linked
+    g = FakeGame(phase="30_AB_Ruined_City_ForcedLanding", weapons={0x42E, 0x4EC, 0x41A})
+    assert not tick(g, s, [], tr, GOAL).refused    # arme hors depart apres le prologue : toujours accepte

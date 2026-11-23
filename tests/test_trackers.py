@@ -79,12 +79,14 @@ def test_is_goal():
 from nier_automata.game.trackers import StoryTracker
 
 
-def test_story_new_code_counts():
+def test_story_one_check_per_named_route_phase():
     s = st()
-    t = StoryTracker(s, max_count=3)
-    assert t.check("00_60_A_RobotM_Pro_Tutorial") == 1
-    assert t.check("00_60_A_Other_Section") is None  # meme code
-    assert t.check("10_AB_City") == 2
+    t = StoryTracker(s, max_count=30)
+    assert t.check("00_60_A_RobotM_Pro_Tutorial") is None          # prologue : pas encore le boss
+    assert t.check("05_00_A_RobotM_Pro_ArmBoss_2nd") == 1          # boss du prologue
+    assert t.check("30_AB_Ruined_City_ForcedLanding") == 7
+    assert t.check("30_AB_Pascal_Village") == 23                    # meme code 30_AB, autre phase
+    assert t.check("30_AB_Pascal_Village") is None                  # deja compte
 
 
 def test_story_ignores_menu():
@@ -95,15 +97,21 @@ def test_story_ignores_menu():
 
 def test_story_capped():
     s = st()
-    t = StoryTracker(s, max_count=1)
-    t.check("00_60_A")
-    assert t.check("10_AB_City") is None
-    assert s.story_codes == {"00_60", "10_AB"}
+    t = StoryTracker(s, max_count=7)
+    assert t.check("40_AB_Resistance_Camp_Leader") is None          # 8e phase > 7
+    assert "40_AB_Resistance_Camp_Leader" in s.story_codes
 
 
 def test_story_survives_restart():
-    s = st(story_codes={"00_60"})
-    assert StoryTracker(s, max_count=3).check("00_60_A") is None
+    s = st(story_codes={"30_AB_Ruined_City_ForcedLanding"})
+    assert StoryTracker(s, max_count=30).check("30_AB_Ruined_City_ForcedLanding") is None
+
+
+def test_story_location_names_are_readable_and_short():
+    from nier_automata.data.tables import story_location
+    from nier_automata.data.phases import ROUTE_A
+    assert story_location(8) == "Story: Camp Resistance"
+    assert all(len(label) <= 17 for _, label in ROUTE_A)
 
 
 def test_unknown_weapon_id_ignored():

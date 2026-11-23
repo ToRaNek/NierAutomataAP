@@ -6,14 +6,17 @@ from .items_data import FILLER_ITEMS, FUNDS_ITEMS, MATERIALS, TRAP_ITEMS
 from .weapons import WEAPONS
 
 BASE_CODE = 0x4E41_0000
-MAX_STORY = 30
+from .phases import ROUTE_A
+
+MAX_STORY = len(ROUTE_A)
 MAX_WEAPON_CHECKS = 30
 MAX_CHEST_CHECKS = 60
 GOAL_LOCATION = "Story: Ending A"
 
 
 def story_location(n: int) -> str:
-    return f"Story Progress #{n}"
+    """n-ieme phase nommee de la route A, ex. "Story: Camp Resistance"."""
+    return f"Story: {ROUTE_A[n - 1][1]}"
 
 
 def weapon_location(n: int) -> str:

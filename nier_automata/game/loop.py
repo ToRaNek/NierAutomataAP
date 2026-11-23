@@ -4,7 +4,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 
 from ..data.items_data import MATERIALS
-from ..data.phases import is_prologue, phase_code
+from ..data.phases import is_prologue, phase_code, route_index
 from ..data.tables import ap_item_location, chest_location, item_location, level_location, location_name_to_id, story_location, weapon_location
 from ..data.weapons import STARTING_WEAPONS, WEAPONS
 from .state import ClientState
@@ -41,7 +41,8 @@ def new_state(seed: str, slot: int) -> ClientState:
 def due_locations(state: ClientState, story_checks: int, weapon_checks: int, chest_checks: int = 0,
                   max_level_check: int = 0) -> set[int]:
     """Locations meritees d'apres l'etat (renvoyees tant que le serveur ne les a pas confirmees)."""
-    due = {_LOCS[story_location(i)] for i in range(1, min(len(state.story_codes), story_checks) + 1)}
+    reached = {route_index(c) for c in state.story_codes} - {None}
+    due = {_LOCS[story_location(i + 1)] for i in reached if i + 1 <= story_checks}
     due |= {_LOCS[weapon_location(i)] for i in range(1, min(state.weapons_found, weapon_checks) + 1)}
     due |= {_MATERIAL_LOC_BY_ID[i] for i in state.items_found if i in _MATERIAL_LOC_BY_ID}
     due |= {_LOCS[chest_location(i)] for i in range(1, min(state.chests_found, chest_checks) + 1)}
@@ -51,7 +52,8 @@ def due_locations(state: ClientState, story_checks: int, weapon_checks: int, che
 
 
 def is_fresh(state: ClientState) -> bool:
-    return state.next_item_index == 0 and state.weapons_found == 0 and not state.story_codes
+    return (not state.linked and state.next_item_index == 0 and state.weapons_found == 0
+            and not state.story_codes)
 
 
 def looks_like_new_game(game) -> bool:
@@ -65,7 +67,7 @@ GOAL_ENDING_A = 1
 
 def goal_reached(state: ClientState, phase: str, goal: int, story_checks: int, goal_prefix: str) -> bool:
     if goal == GOAL_STORY:
-        return len(state.story_codes) >= story_checks
+        return any(i is not None and i + 1 >= story_checks for i in map(route_index, state.story_codes))
     return bool(phase) and phase.startswith(goal_prefix)
 
 
@@ -86,6 +88,7 @@ def tick(game, state: ClientState, received: list[str], trackers: Trackers, goal
     if is_fresh(state) and not looks_like_new_game(game):
         result.refused = True  # sauvegarde deja avancee : on ne touche a rien
         return result
+    state.linked = True  # partie acceptee : liee a cette seed
 
     # 1. objets recus pas encore appliques
     while state.next_item_index < len(received):

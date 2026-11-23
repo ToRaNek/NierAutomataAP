@@ -66,8 +66,8 @@ class NierAutomataWorld(World):
             if name.startswith(("Weapon Found", "Item: ")):
                 # Peut etre inatteignable (peu d'armes en route A) : jamais d'objet de progression ici.
                 loc.progress_type = LocationProgressType.EXCLUDED
-            if name.startswith(("AP Item #", "Shop ")) and self.multiworld.players > 1:
-                loc.item_rule = others_only(self.player)  # AP Items : toujours pour les autres joueurs
+            if self.multiworld.players > 1:
+                loc.item_rule = others_only(self.player)  # a plusieurs : chaque check donne aux AUTRES
             menu.locations.append(loc)
         goal_name = "Goal: Story Progress" if self.options.goal.value == 0 else GOAL_LOCATION
         goal = NierLocation(self.player, goal_name, None, menu)

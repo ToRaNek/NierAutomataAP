@@ -45,6 +45,8 @@ SHORT_PLACES = {"Resistance Camp": "Camp", "Pascal's Village": "Pascal", "Forest
 
 def short_location(location: str) -> str:
     """Nom de check court pour la notification (17 caracteres max)."""
+    if location.startswith("Story: "):
+        return location[7:]
     if location.startswith("Shop "):
         place, _, num = location[5:].rpartition(" #")
         return f"Magasin {SHORT_PLACES.get(place, place)} #{num}"

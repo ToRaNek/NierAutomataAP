@@ -56,3 +56,8 @@ def test_shop_location_shortened_in_notification():
     assert msgs[0] == ("Check : ", "Magasin Camp #1")
     msgs = messages_for_item_send(1, 1, 2, "X", "ToRaNek", "Niicotine", "Shop Forest Castle #2")
     assert msgs[0] == ("Check : ", "Magasin Foret #2")
+
+
+def test_story_location_shortened_in_notification():
+    msgs = messages_for_item_send(1, 1, 2, "X", "ToRaNek", "Niicotine", "Story: Camp Resistance")
+    assert msgs[0] == ("Check : ", "Camp Resistance")

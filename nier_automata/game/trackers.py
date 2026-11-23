@@ -3,7 +3,7 @@ from __future__ import annotations
 
 from typing import Iterable, Optional
 
-from ..data.phases import MENU_PHASES, phase_code
+from ..data.phases import MENU_PHASES, ROUTE_A, phase_code, route_index
 from ..data.weapons import WEAPONS
 from .state import ClientState
 
@@ -54,19 +54,22 @@ class PhaseTracker:
 
 
 class StoryTracker:
-    """Chaque nouveau code de phase ("NN_XX") donne "Story Progress #n", jusqu'a max_count."""
+    """Chaque phase nommee de la route A (ROUTE_A) donne son check "Story: <lieu>" (n = rang dans la route),
+    si n <= max_count. On memorise le nom de la phase atteinte."""
 
     def __init__(self, state: ClientState, max_count: int):
         self.state = state
         self.max_count = max_count
 
     def check(self, phase: str) -> Optional[int]:
-        code = phase_code(phase)
-        if code is None or code in self.state.story_codes:
+        i = route_index(phase)
+        if i is None:
             return None
-        self.state.story_codes.add(code)
-        n = len(self.state.story_codes)
-        return n if n <= self.max_count else None
+        key = ROUTE_A[i][0]
+        if key in self.state.story_codes:
+            return None
+        self.state.story_codes.add(key)
+        return i + 1 if i + 1 <= self.max_count else None
 
 
 class ItemTracker:

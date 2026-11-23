@@ -27,7 +27,8 @@ def test_item_codes_unique_and_based():
 def test_location_names_and_codes_unique():
     locs = location_name_to_id()
     assert len(set(locs.values())) == len(locs)
-    assert story_location(1) in locs and story_location(30) in locs
+    from nier_automata.data.tables import MAX_STORY
+    assert story_location(1) in locs and story_location(MAX_STORY) in locs
     assert weapon_location(1) in locs and weapon_location(30) in locs
 
 
@@ -48,7 +49,7 @@ def test_phase_code_first_two_tokens():
 
 
 def test_goal_prefix():
-    assert GOAL_PHASE_PREFIX == "58_AB_BossArea_Fall"
+    assert GOAL_PHASE_PREFIX == "EndRoll_A"  # generique de fin A
 
 
 def test_filler_never_material():

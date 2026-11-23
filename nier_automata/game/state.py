@@ -35,7 +35,8 @@ class ClientState:
     ap_spots_collected: set[int] = field(default_factory=set)
     ap_spawned_pid: int = 0
     ap_spawned_spots: set[int] = field(default_factory=set)
-    ap_dynamic_spots: list = field(default_factory=list)  # [(code, x, y, z)] trouves en jouant
+    ap_dynamic_spots: list = field(default_factory=list)
+    linked: bool = False  # partie deja acceptee pour cette seed  # [(code, x, y, z)] trouves en jouant
     chest_spots: list = field(default_factory=list)
 
     def to_dict(self) -> dict:
@@ -55,6 +56,7 @@ class ClientState:
             "ap_spawned_pid": self.ap_spawned_pid,
             "ap_spawned_spots": sorted(self.ap_spawned_spots),
             "ap_dynamic_spots": [list(x) for x in self.ap_dynamic_spots],
+            "linked": self.linked,
             "chest_spots": [list(x) for x in self.chest_spots],
         }
 
@@ -93,5 +95,6 @@ class ClientState:
                    ap_spots_collected=set(d.get("ap_spots_collected", [])),
                    ap_spawned_pid=d.get("ap_spawned_pid", 0),
                    ap_spawned_spots=set(d.get("ap_spawned_spots", [])),
+                   linked=bool(d.get("linked", False)),
                    ap_dynamic_spots=[(c, float(x), float(y), float(z)) for c, x, y, z in d.get("ap_dynamic_spots", [])],
                    chest_spots=[tuple(x) for x in d.get("chest_spots", [])])
