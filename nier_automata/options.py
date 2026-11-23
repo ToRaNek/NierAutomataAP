@@ -61,7 +61,7 @@ class ShopChecks(Range):
     Pascal, Chateau de la foret). Acheter un AP Item envoie un check."""
     display_name = "Shop Checks"
     range_start = 0
-    range_end = 4
+    range_end = 3   # 9 porteurs (skins de Pod) pour 3 magasins
     default = 2
 
 

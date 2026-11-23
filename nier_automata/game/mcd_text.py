@@ -114,7 +114,8 @@ class CoreText:
                 break
         if self.base is None:
             return
-        h = struct.unpack("<10I", mem.read(self.base, 40))
+        self._head = mem.read(self.base, 40)
+        h = struct.unpack("<10I", self._head)
         self.mo, self.mc, so, sc, _, _, _, _, self.eo, self.ec = h
         raw = mem.read(self.base + so, sc * 8)
         self.symbols = [struct.unpack_from("<HHI", raw, i * 8) for i in range(sc)]
@@ -204,8 +205,17 @@ class CoreText:
                 return self.symbols[first][0]
         return None
 
+    def alive(self) -> bool:
+        """Le fichier est-il toujours la (en-tete inchange) ? Sinon on n'ecrit rien."""
+        try:
+            return self.base is not None and self.mem.read(self.base, 40) == self._head
+        except OSError:
+            return False
+
     def set_text(self, key: str, text: str, width: int = 0, font_from: str = "") -> bool:
         """Remplace le texte d'une cle. width>0 : coupe en lignes (au plus le nombre de lignes d'origine)."""
+        if not self.alive():
+            return False
         lines = self._lines(key)
         if not lines:
             return False

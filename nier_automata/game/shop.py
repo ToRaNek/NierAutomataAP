@@ -291,6 +291,9 @@ class ShopSession:
         self.ok = True
 
     def apply(self, active: dict[str, list[int]]) -> None:
+        if self.mem.read(self.addr, 16) != self.orig[:16]:
+            self.ok = False   # table liberee ou rechargee ailleurs : on n'ecrit plus (session refaite au besoin)
+            return
         by_place: dict[str, list[str]] = {}
         for cid, (place, k) in sorted(self.carriers.items(), key=lambda kv: kv[1]):
             if k in active.get(place, []):
@@ -417,8 +420,12 @@ class PaymentWatch:
         return any(now - t <= self.window and d >= price for t, d in self.drops)
 
     def consume(self, price: int, now: float) -> bool:
+        """Consomme UN prix (deux achats dans la meme demi-seconde = une baisse de 2 x prix)."""
         for i, (t, d) in enumerate(self.drops):
             if now - t <= self.window and d >= price:
-                del self.drops[i]
+                if d - price >= price:
+                    self.drops[i] = (t, d - price)
+                else:
+                    del self.drops[i]
                 return True
         return False

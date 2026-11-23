@@ -35,8 +35,8 @@ def spot_location(spots, i: int) -> str:
     """Nom du check de l'emplacement i (spots : [(cle de phase ROUTE_A, x, y, z)])."""
     key = spots[i][0]
     k = sum(1 for s in spots[:i + 1] if s[0] == key)
-    idx = next(j for j, (prefix, _) in enumerate(ROUTE_A) if prefix == key)
-    return ap_item_location(idx, k)
+    idx = next((j for j, (prefix, _) in enumerate(ROUTE_A) if prefix == key), None)
+    return ap_item_location(idx, k) if idx is not None else None
 
 
 # Magasins sur la route A (ordre fixe : il determine les codes).
@@ -51,6 +51,11 @@ def shop_location(place: str, k: int) -> str:
 def others_only(player: int):
     """Regle d'emplacement : uniquement des objets destines aux AUTRES joueurs."""
     return lambda item: item.player != player
+
+
+def others_or_filler(player: int):
+    """Repli (pas assez d'objets chez les autres) : pour soi, seulement du remplissage."""
+    return lambda item: item.player != player or not (item.advancement or item.useful)
 
 
 def level_location(n: int) -> str:

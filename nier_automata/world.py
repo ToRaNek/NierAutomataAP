@@ -6,7 +6,7 @@ from .data.items_data import FILLER_ITEMS, FUNDS_ITEMS, MATERIALS, TRAP_ITEMS
 from .data.phases import GOAL_PHASE_PREFIX
 from .data.tables import (
     GOAL_LOCATION, ap_item_location, chest_location, item_location, level_location, item_name_to_id, pool_weapon_count, location_name_to_id, story_location, weapon_location,
-    SHOP_PLACES_ORDER, others_only, shop_location,
+    SHOP_PLACES_ORDER, others_only, others_or_filler, shop_location,
 )
 from .data.phases import ROUTE_A, ap_phase_indices
 from .data.weapons import STARTING_WEAPONS, WEAPONS
@@ -72,8 +72,6 @@ class NierAutomataWorld(World):
             if name.startswith(("Weapon Found", "Item: ")):
                 # Peut etre inatteignable (peu d'armes en route A) : jamais d'objet de progression ici.
                 loc.progress_type = LocationProgressType.EXCLUDED
-            if self.multiworld.players > 1:
-                loc.item_rule = others_only(self.player)  # a plusieurs : chaque check donne aux AUTRES
             menu.locations.append(loc)
         goal_name = "Goal: Story Progress" if self.options.goal.value == 0 else GOAL_LOCATION
         goal = NierLocation(self.player, goal_name, None, menu)
@@ -112,6 +110,18 @@ class NierAutomataWorld(World):
 
     def set_rules(self) -> None:
         self.multiworld.completion_condition[self.player] = lambda state: state.has("Victory", self.player)
+        if self.multiworld.players > 1:
+            # a plusieurs : chaque check donne aux AUTRES joueurs, s'ils ont assez d'objets pour tout remplir
+            mine = [loc for loc in self.multiworld.get_locations(self.player) if loc.address is not None]
+            others = sum(1 for it in self.multiworld.itempool if it.player != self.player)
+            strict = others >= len(mine)
+            if not strict:
+                import logging
+                logging.warning("NieR:Automata (%s) : pas assez d'objets chez les autres joueurs (%d < %d) ; "
+                                "seuls des objets de remplissage pourront etre pour soi.",
+                                self.player_name, others, len(mine))
+            for loc in mine:
+                loc.item_rule = others_only(self.player) if strict else others_or_filler(self.player)
 
     def fill_slot_data(self) -> dict:
         return {

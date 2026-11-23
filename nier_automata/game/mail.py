@@ -124,7 +124,9 @@ class Mailer:
         mem = self.mem
         arr, cnt, cap = struct.unpack("<QQQ", mem.read(self.obj + 0x18, 24))
         ents = [mem.read(arr + i * ENTRY, ENTRY) for i in range(cnt)]
-        template = next(e for e in ents if struct.unpack_from("<i", e, 0)[0] == TEMPLATE_MAIL)
+        template = next((e for e in ents if struct.unpack_from("<i", e, 0)[0] == TEMPLATE_MAIL), None)
+        if template is None:
+            return
         new = insert_entry(ents, template, no, sender)
         if len(new) != len(ents) and len(new) <= cap:
             mem.write(arr, b"".join(new))
@@ -149,7 +151,7 @@ class Mailer:
         mem = self.mem
         h = key_hash(sid)
         th = key_hash(TEMPLATE_SENDER)
-        text = display.encode("utf-8")[:60] + b"\0"
+        text = display[:30].encode("utf-8") + bytes(1)   # coupe sur des caracteres (UTF-8 valide)
         for s in range(NAME_SHARDS):
             hdr = mem.base + NAME_MAP_RVA + s * NAME_SHARD
             _vt, arr, cnt, cap = struct.unpack("<QQQQ", mem.read(hdr, 32))
@@ -218,6 +220,9 @@ class Mailer:
                 return False
             self._records[no] = (own[1], base, pool)
         rec, base, pool = self._records[no]
+        if struct.unpack("<Q", self.mem.read(rec + 8, 8))[0] == 0:
+            del self._records[no]          # enregistrement libere : on le recherchera
+            return False
         text = text[:0x3F00]
         mem.write(pool, text.encode("utf-16-le") + bytes(2))
         mem.write(rec + 0x20, struct.pack("<Q", pool + 0x8000))   # tampon de destination (32 Ko)

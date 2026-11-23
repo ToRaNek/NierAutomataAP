@@ -151,8 +151,7 @@ def scan_ground_objects(mem) -> dict:
     region = entity_region(mem)
     if region:
         scan(*region, out)
-        if out:
-            return out
+        return out          # zone des entites lue : pas d'objet = rien (pas de parcours complet de 17 s)
     addr = 0
     while addr < 0x7FFFFFFFFFFF:
         mbi = _MBI()
@@ -185,7 +184,7 @@ class GroundWatch:
         for o, p in list(self.items.items()):
             if math.dist(p, pos) <= radius and not object_alive(self.mem, o):
                 hit = True
-                del self.items[o]
+                self.items.pop(o, None)
         return hit
 
 

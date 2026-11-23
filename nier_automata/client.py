@@ -153,10 +153,10 @@ class NierContext(CommonContext):
                 asyncio.create_task(self.update_death_link(True))
             logger.info("Connecte. Etat local : %s", path)
             # Renvoyer les checks merites que le serveur n'a pas (coupure pendant un envoi).
-            missing = due_locations(self.state, self.trackers.story.max_count,
-                                    self.trackers.weapons.max_found,
-                                    self.trackers.chests.max_count,
-                                    self.trackers.max_level_check) - set(args.get("checked_locations", []))
+            missing = (due_locations(self.state, self.trackers.story.max_count,
+                                     self.trackers.weapons.max_found,
+                                     self.trackers.chests.max_count,
+                                     self.trackers.max_level_check) | self.state.sent_locations)                 - set(args.get("checked_locations", []))
             if missing:
                 asyncio.create_task(self.send_msgs([{"cmd": "LocationChecks", "locations": sorted(missing)}]))
 
@@ -291,7 +291,7 @@ async def mail_step(ctx: NierContext):
                 ctx.mail_hint_new = ctx.mail_hint_unread = False
                 logger.info("Messagerie : indice de %s ajoute", who)
         await asyncio.to_thread(mailer.locate_titles)
-    except (OSError, StopIteration) as e:
+    except Exception as e:
         logger.info("Messagerie indisponible : %r", e)
     finally:
         ctx.mail_busy = False
@@ -448,7 +448,7 @@ async def shop_step(ctx: NierContext) -> list[int]:
               for p in SHOP_PLACES_ORDER}
     key = repr(active)
     if key != ctx.shop_applied:
-        ctx.shop.apply(active)
+        await asyncio.to_thread(ctx.shop.apply, active)
         ctx.shop_applied = key
     texts = {}
     for place, k in slots:
@@ -493,17 +493,24 @@ async def game_iteration(ctx: NierContext):
         ctx._status("Sauvegarde deja avancee : commence une NOUVELLE partie pour cette seed.")
         return
     ctx._status(f"Jeu detecte ({ctx.nier.version}), phase {ctx.nier.phase()}")
-    await ground_step(ctx)
+    # checks de base envoyes AVANT les etapes optionnelles (une erreur la-bas ne doit pas les perdre)
+    if result.locations:
+        await ctx.send_msgs([{"cmd": "LocationChecks", "locations": result.locations}])
+    bought: list[int] = []
+    for step in (ground_step, ap_items_step, shop_step):
+        try:
+            out = await step(ctx)
+            if step is shop_step and out:
+                bought = out
+        except Exception as e:  # etape optionnelle : on continue
+            logger.info("Etape %s en echec (%r)", step.__name__, e)
     if not ctx.mail_busy:
         asyncio.create_task(mail_step(ctx))
-    await ap_items_step(ctx)
-    bought = await shop_step(ctx)
     extra = sorted((due_locations(ctx.state, 0, 0) | set(bought)) - ctx.state.sent_locations)
     if extra:
         ctx.state.sent_locations.update(extra)
-        result.locations = sorted(set(result.locations) | set(extra))
-    if result.locations:
-        await ctx.send_msgs([{"cmd": "LocationChecks", "locations": result.locations}])
+        ctx.state.save(ctx.state_file)          # achats : persistes avant l'envoi
+        await ctx.send_msgs([{"cmd": "LocationChecks", "locations": extra}])
     if result.goal and not ctx.goal_sent:
         await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
         ctx.goal_sent = True

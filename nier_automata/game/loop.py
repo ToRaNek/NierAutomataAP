@@ -47,8 +47,10 @@ def due_locations(state: ClientState, story_checks: int, weapon_checks: int, che
     due |= {_MATERIAL_LOC_BY_ID[i] for i in state.items_found if i in _MATERIAL_LOC_BY_ID}
     due |= {_LOCS[chest_location(i)] for i in range(1, min(state.chests_found, chest_checks) + 1)}
     due |= {_LOCS[level_location(n)] for n in range(2, min(state.max_level, max_level_check) + 1)}
-    due |= {_LOCS[spot_location(state.ap_dynamic_spots, i)] for i in state.ap_spots_collected
-            if i < len(state.ap_dynamic_spots)}
+    for i in state.ap_spots_collected:
+        name = spot_location(state.ap_dynamic_spots, i) if i < len(state.ap_dynamic_spots) else None
+        if name in _LOCS:
+            due.add(_LOCS[name])
     return due
 
 
