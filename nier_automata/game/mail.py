@@ -111,10 +111,13 @@ class Mailer:
     def __init__(self, mem):
         self.mem = mem
         self.obj = mem.base + MAIL_OBJ_RVA
+        remove_title_hooks(mem)
         self._records: dict[int, tuple] = {}     # no -> (enregistrement, base de table, zone)
         self._names: set[str] = set()
         self._titles: dict[int, str] = {}
-        self._hooks = False
+        self._title_file = None
+        self._title_retry = 0.0
+        self._title_lines: dict[int, bytes] = {}
 
     # table des mails
     def ensure_mail(self, no: int, sender: str) -> None:
@@ -222,20 +225,51 @@ class Mailer:
         mem.write(rec + 0x10, struct.pack("<I", pool - base))
         return True
 
-    # titre : deviation du menu vers une cle CORE (voir install_title_hooks)
-    def set_title(self, no: int, title: str) -> bool:
-        from .mcd_text import MenuTexts
-        if not self._hooks:
-            self._hooks = install_title_hooks(self.mem)
-        if self._titles.get(no) == title:
-            return True
-        if MenuTexts(self.mem).set_text(TITLE_KEYS[no], title):
+    # titre : le fichier des titres (MCD) est recharge SUR PLACE a chaque ouverture du terminal, ce qui efface
+    # nos lignes. Verifie : il reste a la meme adresse. On le localise une fois (lent, en arriere-plan :
+    # locate_titles), puis check_titles() (tres leger : 4 octets par titre) est appele toutes les 15 ms.
+    def set_title(self, no: int, title: str) -> None:
+        if self._titles.get(no) != title:
             self._titles[no] = title
-            return True
-        return False
+            self._title_lines.pop(no, None)
+
+    def locate_titles(self) -> bool:
+        from .mcd_text import MenuTexts
+        if self._title_file is not None or not self._titles:
+            return self._title_file is not None
+        if time.monotonic() < self._title_retry:
+            return False
+        self._title_retry = time.monotonic() + 10.0
+        texts = MenuTexts(self.mem, keys=tuple(f"PAUSE_MAIL_{no:03d}" for no in self._titles))
+        f = next((x for x in texts.files if f"PAUSE_MAIL_{min(self._titles):03d}" in x.keys), None)
+        if f is None:
+            return False
+        self._title_file = (f, self.mem.read(f.base, 40))
+        self._title_lines = {}
+        return True
+
+    def check_titles(self) -> None:
+        if self._title_file is None:
+            return
+        f, head = self._title_file
+        mem = self.mem
+        try:
+            if mem.read(f.base, 40) != head:
+                return          # fichier pas (encore) charge : on reessaie au prochain passage
+            for no, title in list(self._titles.items()):
+                key = f"PAUSE_MAIL_{no:03d}"
+                lines = f._lines(key)
+                if not lines:
+                    continue
+                if self._title_lines.get(no) != mem.read(lines[0], 4):
+                    f.set_text(key, title, font_from="PAUSE_MAIL_001")
+                    self._title_lines[no] = mem.read(lines[0], 4)
+        except OSError:
+            pass
 
     def poll_titles(self) -> None:
-        """(Plus rien a faire : les titres sont dans CORE, jamais recharge.)"""
+        self.locate_titles()
+        self.check_titles()
 
 
 # --- titres : deviation du code (le fichier des titres est recharge a chaque ouverture du terminal) ----
@@ -275,7 +309,16 @@ def title_cave_list(cave: int, base: int, mapping: dict[int, int]) -> bytes:
     return bytes(c)
 
 
+def remove_title_hooks(mem) -> None:
+    """Retire les deviations de titre si une ancienne version les a installees (elles vident les titres)."""
+    for rva, original in ((VIEW_SITE_RVA, VIEW_SITE_ORIGINAL), (LIST_SITE_RVA, LIST_SITE_ORIGINAL)):
+        site = mem.base + rva
+        if mem.read(site, 1)[0] == 0xE9:
+            mem.write_code(site, original)
+
+
 def install_title_hooks(mem) -> bool:
+    """ABANDONNE (verifie en jeu) : le menu ne cherche ses titres que dans son propre fichier."""
     import ctypes
     from ctypes import wintypes
     from .mcd_text import key_hash

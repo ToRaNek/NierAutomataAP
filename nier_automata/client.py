@@ -241,6 +241,12 @@ async def ability_loop(ctx: NierContext):
     while not ctx.exit_event.is_set():
         await asyncio.sleep(0.015)
         try:
+            mailer = getattr(ctx, "mailer", None)
+            if mailer is not None and mailer.mem is ctx.nier.mem:
+                mailer.check_titles()   # titres des mails : reecrits des que le terminal recharge son fichier
+        except Exception:
+            pass
+        try:
             if not ctx.randomized_abilities or ctx.state is None or ctx.nier.mem is None:
                 continue
             if ctx.ability_lock is None or ctx.ability_lock.mem is not ctx.nier.mem:
@@ -282,7 +288,7 @@ async def mail_step(ctx: NierContext):
                     mailer.mark_unread(mailm.HINTS_MAIL)
                 ctx.mail_hint_new = ctx.mail_hint_unread = False
                 logger.info("Messagerie : indice de %s ajoute", who)
-        await asyncio.to_thread(mailer.poll_titles)
+        await asyncio.to_thread(mailer.locate_titles)
     except (OSError, StopIteration) as e:
         logger.info("Messagerie indisponible : %r", e)
     finally:
