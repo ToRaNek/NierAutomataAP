@@ -14,9 +14,13 @@ class CodePatch:
     locked: bytes     # octets du blocage
 
 
-ABILITY_PATCHES: dict[str, CodePatch] = {
-    # cmp dword [rbx+0x14A8], 2 ; jge -> limite de sauts 2 -> 1 : plus de double saut
-    "Double Jump": CodePatch(0x47E357, b"\x02", b"\x01"),
-    # jne (esquive aerienne deja utilisee) -> jmp : l'esquive aerienne est toujours ignoree
-    "Air Dash": CodePatch(0x47E483, bytes.fromhex("0f8562020000"), bytes.fromhex("e96302000090")),
+ABILITY_PATCHES: dict[str, tuple[CodePatch, ...]] = {
+    "Double Jump": (
+        # cmp dword [rbx+0x14A8], 2 ; jge -> limite de sauts 2 -> 1 (teste en jeu)
+        CodePatch(0x47E357, b"\x02", b"\x01"),
+        # 2e chemin : mov eax,[rbx+0x14A8] ; cmp eax, 2 ; jge
+        CodePatch(0x47E74F, b"\x02", b"\x01"),
+    ),
+    # jne (esquive aerienne deja utilisee) -> jmp : l'esquive aerienne est toujours ignoree (teste en jeu)
+    "Air Dash": (CodePatch(0x47E483, bytes.fromhex("0f8562020000"), bytes.fromhex("e96302000090")),),
 }
