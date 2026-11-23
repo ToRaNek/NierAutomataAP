@@ -1,5 +1,6 @@
 from BaseClasses import Item, ItemClassification, Location, Region, Tutorial
 from worlds.AutoWorld import WebWorld, World
+from worlds.LauncherComponents import Component, Type, components, launch_subprocess
 
 from .data.items_data import FILLER_ITEMS
 from .data.phases import GOAL_PHASE_PREFIX
@@ -10,6 +11,15 @@ from .data.weapons import STARTING_WEAPONS, WEAPONS
 from .options import NierAutomataOptions
 
 GAME = "NieR:Automata"
+
+
+def launch_client(*args):
+    from .client import launch
+    launch_subprocess(launch, name="NieR:Automata Client", args=args)
+
+
+components.append(Component("NieR:Automata Client", func=launch_client, component_type=Type.CLIENT,
+                            game_name=GAME, supports_uri=True))
 
 
 class NierItem(Item):

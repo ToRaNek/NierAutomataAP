@@ -87,3 +87,14 @@ def test_weapon_add_existing_does_not_duplicate():
     w.add(0x41A, 1)
     assert w.add(0x41A, 1) is True
     assert len(w.read_all()) == 1
+
+
+def test_weapon_goes_to_its_dedicated_slot():
+    m = FakeMemory()
+    for i in range(WEAPON_SLOTS):
+        m.write(m.base + START + i * 0x14, struct.pack("<IIIII", EMPTY, 0, 0, 0, 0))
+    w = weapon_table(m, START)
+    w.add(0x41A, 1)  # Type-40 Sword = slot 5 (tableur nierhook, verifie en jeu : 0x42E slot 7)
+    assert w.find(0x41A).index == 5
+    w.add(0x42E, 1)
+    assert w.find(0x42E).index == 7

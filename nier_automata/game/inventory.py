@@ -35,7 +35,8 @@ class SlotTable:
     """status_off / qty_off : position des champs dans le slot (None = absent)."""
 
     def __init__(self, mem: Memory, start: int, count: int, slot_size: int,
-                 status_off: Optional[int], qty_off: int, stackable: bool):
+                 status_off: Optional[int], qty_off: int, stackable: bool,
+                 fixed_slots: Optional[dict[int, int]] = None):
         self.mem = mem
         self.start = start
         self.count = count
@@ -43,6 +44,7 @@ class SlotTable:
         self.status_off = status_off
         self.qty_off = qty_off
         self.stackable = stackable
+        self.fixed_slots = fixed_slots or {}
 
     def _addr(self, index: int) -> int:
         return self.mem.base + self.start + index * self.slot_size
@@ -75,7 +77,11 @@ class SlotTable:
                 if self.stackable:
                     self._put(s.index, self.qty_off, min(MAX_STACK, s.quantity + quantity))
                 return True
-        free = next((s for s in slots if s.item_id == EMPTY), None)
+        target = self.fixed_slots.get(item_id)
+        if target is not None and target < self.count and slots[target].item_id == EMPTY:
+            free = slots[target]
+        else:
+            free = next((s for s in slots if s.item_id == EMPTY), None)
         if free is None:
             return False
         if self.status_off is not None:
@@ -97,4 +103,8 @@ def item_table(mem: Memory, start: int, count: int = ITEM_SLOTS) -> SlotTable:
 
 
 def weapon_table(mem: Memory, start: int, count: int = WEAPON_SLOTS) -> SlotTable:
-    return SlotTable(mem, start, count, WEAPON_SLOT_SIZE, status_off=None, qty_off=4, stackable=False)
+    # Chaque arme a sa case reservee (ordre du tableur nierhook = ordre de WEAPONS).
+    from ..data.weapons import WEAPONS
+    fixed = {wid: i for i, wid in enumerate(WEAPONS.values())}
+    return SlotTable(mem, start, count, WEAPON_SLOT_SIZE, status_off=None, qty_off=4, stackable=False,
+                     fixed_slots=fixed)

@@ -9,6 +9,7 @@ def st(**kw):
 def test_natural_weapon_counted_and_removed():
     s = st()
     t = WeaponTracker(s, max_found=5)
+    assert t.scan({0x41A}) == ([], None)  # vue une 1re fois : on attend confirmation
     assert t.scan({0x41A}) == ([0x41A], 1)
     assert s.weapons_found == 1
 
@@ -16,7 +17,8 @@ def test_natural_weapon_counted_and_removed():
 def test_second_natural_weapon_gets_next_number():
     s = st()
     t = WeaponTracker(s, max_found=5)
-    t.scan({0x41A})
+    t.scan({0x41A}); t.scan({0x41A})
+    t.scan({0x4D8})
     assert t.scan({0x4D8}) == ([0x4D8], 2)
 
 
@@ -36,7 +38,9 @@ def test_reinjected_weapon_after_reload_not_counted():
 
 def test_counter_capped_at_max_found():
     s = st(weapons_found=2)
-    assert WeaponTracker(s, max_found=2).scan({0x41A}) == ([0x41A], None)
+    t = WeaponTracker(s, max_found=2)
+    t.scan({0x41A})
+    assert t.scan({0x41A}) == ([0x41A], None)
     assert s.weapons_found == 2
 
 
@@ -100,3 +104,18 @@ def test_story_capped():
 def test_story_survives_restart():
     s = st(story_codes={"00_60"})
     assert StoryTracker(s, max_count=3).check("00_60_A") is None
+
+
+def test_unknown_weapon_id_ignored():
+    s = st()
+    t = WeaponTracker(s, max_found=5)
+    t.scan({0x12345})
+    assert t.scan({0x12345}) == ([], None)
+
+
+def test_transient_weapon_not_counted():
+    s = st()
+    t = WeaponTracker(s, max_found=5)
+    t.scan({0x41A})          # valeur passagere pendant un chargement
+    assert t.scan(set()) == ([], None)
+    assert s.weapons_found == 0

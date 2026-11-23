@@ -4,23 +4,31 @@ from __future__ import annotations
 from typing import Iterable, Optional
 
 from ..data.phases import MENU_PHASES, phase_code
+from ..data.weapons import WEAPONS
 from .state import ClientState
+
+KNOWN_WEAPON_IDS = frozenset(WEAPONS.values())
 
 
 class WeaponTracker:
     def __init__(self, state: ClientState, max_found: int):
         self.state = state
         self.max_found = max_found
+        self._pending: set[int] = set()
 
     def scan(self, owned_weapon_ids: set[int]) -> tuple[list[int], Optional[int]]:
         """Renvoie (armes a retirer, numero de "Weapon Found #n" nouvellement obtenu ou None).
 
-        Une seule arme naturelle est traitee par appel : le client rappelle scan a chaque tour.
+        Seuls les IDs d'armes connus comptent, et une arme doit etre vue deux scans de suite
+        (evite les valeurs passageres pendant un chargement). Une arme traitee par appel.
         """
-        natural = sorted(owned_weapon_ids - self.state.ap_weapons)
-        if not natural:
+        natural = (owned_weapon_ids & KNOWN_WEAPON_IDS) - self.state.ap_weapons
+        confirmed = sorted(natural & self._pending)
+        self._pending = natural
+        if not confirmed:
             return [], None
-        weapon = natural[0]
+        weapon = confirmed[0]
+        self._pending.discard(weapon)
         if self.state.weapons_found >= self.max_found:
             return [weapon], None
         self.state.weapons_found += 1
