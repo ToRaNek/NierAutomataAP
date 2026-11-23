@@ -1,0 +1,3623 @@
+{
+ "_source": "tools/rf_endings.py ; hap YAX (*_hap.pak, *_grp.pak), NieRAutomata.exe (capstone), phf/pf30_sub.bxm. Traductions des noms japonais = NON OFFICIELLES.",
+ "endings": [
+  {
+   "letter": "A",
+   "title": "flowers for m[A]chines",
+   "pf30_subphase": null,
+   "pf30_comment_ja": null,
+   "pf30_comment_en_unofficial": null,
+   "trigger_sources": [
+    {
+     "file": "ph2/p200.dat",
+     "member": "p200_hap.pak",
+     "kind": "scene_state",
+     "target": "ending_A",
+     "hap": "イベント再生",
+     "action": "コマンド送信(3)",
+     "hap_actions": [
+      "イベントの再生",
+      "コマンド送信(3)",
+      "複数コマンド送信_フラグをOFF",
+      "フェーズジャンプ"
+     ],
+     "conditions": [],
+     "commands": [
+      {
+       "label": "SceneStateSystem.set",
+       "args": "ending_A"
+      },
+      {
+       "label": "MiscState.GAME_OFF",
+       "args": "8"
+      },
+      {
+       "label": "MiscState.GAME_OFF",
+       "args": "8"
+      },
+      {
+       "label": "MiscState.GAME_OFF",
+       "args": "9"
+      },
+      {
+       "label": "MiscState.GAME_OFF",
+       "args": "9"
+      },
+      {
+       "label": "MiscState.GAME_OFF",
+       "args": "11"
+      },
+      {
+       "label": "MiscState.GAME_OFF",
+       "args": "11"
+      },
+      {
+       "label": "MiscState.GAME_OFF",
+       "args": "12"
+      },
+      {
+       "label": "MiscState.GAME_OFF",
+       "args": "12"
+      },
+      {
+       "label": "MiscState.GAME_OFF",
+       "args": "13"
+      },
+      {
+       "label": "MiscState.GAME_OFF",
+       "args": "13"
+      }
+     ],
+     "referrers": [
+      {
+       "hap": "イベント再生",
+       "action": "条件ブロック",
+       "conditions": [],
+       "commands": []
+      },
+      {
+       "hap": "イベント再生",
+       "action": "コマンド送信",
+       "conditions": [],
+       "commands": [
+        {
+         "label": "PLAY",
+         "args": null
+        }
+       ]
+      },
+      {
+       "hap": "..M1090_S0320_GM_a",
+       "action": "コマンド送信",
+       "conditions": [],
+       "commands": [
+        {
+         "label": "PLAY",
+         "args": null
+        }
+       ]
+      },
+      {
+       "hap": "..M1090_S0320_GM_a",
+       "action": "条件ブロック",
+       "conditions": [],
+       "commands": []
+      }
+     ],
+     "groups": [
+      "A",
+      "80_HDイベント",
+      "200_大ハイキョ都市_イヴ戦",
+      "ハッキング中停止(7)",
+      "特殊ステージ中停止"
+     ],
+     "active_subphases": [
+      "200_00_AB_Ruined_City_Eve_EV",
+      "200_10_AB_Ruined_City_EveBattle",
+      "200_20_AB_Ruined_City_EveBattle",
+      "200_30_AB_Ruined_City_Eve_EV",
+      "200_40_AB_Ruined_City_EveBattle",
+      "200_50_AB_Ruined_City_EveBattle",
+      "200_60_AB_Ruined_City_Eve_EV",
+      "200_70_AB_Ruined_City_end",
+      "200_80_AB_Ruined_City_end"
+     ],
+     "chapters": [
+      {
+       "subphase": "200_00_AB_Ruined_City_Eve_EV",
+       "chapter": "10-04",
+       "route_group": "A+B",
+       "chapter_name": "Battling Eve"
+      },
+      {
+       "subphase": "200_80_AB_Ruined_City_end",
+       "chapter": "10-05",
+       "route_group": "A",
+       "chapter_name": "The End of Battle"
+      }
+     ],
+     "route_states": [
+      "Route/A"
+     ]
+    },
+    {
+     "file": "ph2/p200.dat",
+     "member": "p200_hap.pak",
+     "kind": "phase_jump",
+     "target": "EndRoll_A",
+     "hap": "イベント再生",
+     "action": "フェーズジャンプ",
+     "hap_actions": [
+      "イベントの再生",
+      "コマンド送信(3)",
+      "複数コマンド送信_フラグをOFF",
+      "フェーズジャンプ"
+     ],
+     "conditions": [],
+     "commands": [
+      {
+       "label": "SceneStateSystem.set",
+       "args": "ending_A"
+      },
+      {
+       "label": "MiscState.GAME_OFF",
+       "args": "8"
+      },
+      {
+       "label": "MiscState.GAME_OFF",
+       "args": "8"
+      },
+      {
+       "label": "MiscState.GAME_OFF",
+       "args": "9"
+      },
+      {
+       "label": "MiscState.GAME_OFF",
+       "args": "9"
+      },
+      {
+       "label": "MiscState.GAME_OFF",
+       "args": "11"
+      },
+      {
+       "label": "MiscState.GAME_OFF",
+       "args": "11"
+      },
+      {
+       "label": "MiscState.GAME_OFF",
+       "args": "12"
+      },
+      {
+       "label": "MiscState.GAME_OFF",
+       "args": "12"
+      },
+      {
+       "label": "MiscState.GAME_OFF",
+       "args": "13"
+      },
+      {
+       "label": "MiscState.GAME_OFF",
+       "args": "13"
+      }
+     ],
+     "referrers": [
+      {
+       "hap": "イベント再生",
+       "action": "条件ブロック",
+       "conditions": [],
+       "commands": []
+      },
+      {
+       "hap": "イベント再生",
+       "action": "コマンド送信",
+       "conditions": [],
+       "commands": [
+        {
+         "label": "PLAY",
+         "args": null
+        }
+       ]
+      },
+      {
+       "hap": "..M1090_S0320_GM_a",
+       "action": "コマンド送信",
+       "conditions": [],
+       "commands": [
+        {
+         "label": "PLAY",
+         "args": null
+        }
+       ]
+      },
+      {
+       "hap": "..M1090_S0320_GM_a",
+       "action": "条件ブロック",
+       "conditions": [],
+       "commands": []
+      }
+     ],
+     "groups": [
+      "A",
+      "80_HDイベント",
+      "200_大ハイキョ都市_イヴ戦",
+      "ハッキング中停止(7)",
+      "特殊ステージ中停止"
+     ],
+     "active_subphases": [
+      "200_00_AB_Ruined_City_Eve_EV",
+      "200_10_AB_Ruined_City_EveBattle",
+      "200_20_AB_Ruined_City_EveBattle",
+      "200_30_AB_Ruined_City_Eve_EV",
+      "200_40_AB_Ruined_City_EveBattle",
+      "200_50_AB_Ruined_City_EveBattle",
+      "200_60_AB_Ruined_City_Eve_EV",
+      "200_70_AB_Ruined_City_end",
+      "200_80_AB_Ruined_City_end"
+     ],
+     "chapters": [
+      {
+       "subphase": "200_00_AB_Ruined_City_Eve_EV",
+       "chapter": "10-04",
+       "route_group": "A+B",
+       "chapter_name": "Battling Eve"
+      },
+      {
+       "subphase": "200_80_AB_Ruined_City_end",
+       "chapter": "10-05",
+       "route_group": "A",
+       "chapter_name": "The End of Battle"
+      }
+     ],
+     "route_states": [
+      "Route/A"
+     ]
+    }
+   ],
+   "is_joke": false,
+   "kind": "main",
+   "confidence": "high",
+   "trigger_en_unofficial": "End of Route A: after the Eve fight, hap 'イベント再生' (event playback, played by '..M1090_S0320_GM_a') sets SceneState ending_A, clears GAME flags 8/9 and jumps to pf10 EndRoll_A. Group tokens: Route/A + subphases 200_xx (Eve fight).",
+   "where": "ph2/p200 10-04..10-05 (200_80_AB_Ruined_City_end), Route A",
+   "web_check": "agree (beat Route A, 10-05)"
+  },
+  {
+   "letter": "B",
+   "title": "or not to [B]e",
+   "pf30_subphase": null,
+   "pf30_comment_ja": null,
+   "pf30_comment_en_unofficial": null,
+   "trigger_sources": [
+    {
+     "file": "phf/pf10.dat",
+     "member": "pf10_hap.pak",
+     "kind": "scene_state",
+     "target": "ending_B",
+     "hap": "流れ(3)",
+     "action": "コマンド送信_クリアB",
+     "hap_actions": [
+      "コマンド送信_クリアB",
+      "コマンド送信_実績＿Bクリア"
+     ],
+     "conditions": [],
+     "commands": [
+      {
+       "label": "SceneStateSystem.set",
+       "args": "ending_B"
+      },
+      {
+       "label": "MiscState.unlockAchievement",
+       "args": "0x11"
+      }
+     ],
+     "referrers": [],
+     "groups": [],
+     "active_subphases": [],
+     "chapters": [],
+     "route_states": []
+    }
+   ],
+   "is_joke": false,
+   "kind": "main",
+   "confidence": "medium",
+   "trigger_en_unofficial": "phf/pf10 hap '流れ(3)' (flow 3) 'コマンド送信_クリアB' (send command: clear B) sets SceneState ending_B and unlocks achievement 0x11 (inside the credits phase pf10).",
+   "where": "pf10 credits, reached from p200 end of Route B (10-05 v2 'The Beginning of Battle')",
+   "web_check": "agree (beat Route B)",
+   "unresolved": "the p200 Route/B jump into pf10 was not isolated (no EndRoll_B subphase; the B credits flow is pf10)"
+  },
+  {
+   "letter": "C",
+   "title": "meaningless [C]ode",
+   "pf30_subphase": null,
+   "pf30_comment_ja": null,
+   "pf30_comment_en_unofficial": null,
+   "trigger_sources": [
+    {
+     "file": "ph3/p300.dat",
+     "member": "p300_hap.pak",
+     "kind": "phase_jump",
+     "target": "EndRoll_CD",
+     "hap": "流れ(26)",
+     "action": "フェーズジャンプ_CEnd",
+     "hap_actions": [
+      "..M3060_S0900_HD_9S勝利",
+      "イベントの再生_ev1230",
+      "コマンド送信_９S選択HAP消去",
+      "フェード",
+      "フェード_終了",
+      "サウンドノベル_9Sの最後",
+      "字幕",
+      "イベントの再生_ev1232_デバック用",
+      "フェーズジャンプ_CEnd",
+      "フェーズジャンプ_TrueEnd"
+     ],
+     "conditions": [],
+     "commands": [
+      {
+       "label": "DISABLE",
+       "args": null
+      }
+     ],
+     "referrers": [
+      {
+       "hap": "イベント(7)",
+       "action": "条件ブロック_ノベルスタート",
+       "conditions": [],
+       "commands": []
+      },
+      {
+       "hap": "イベント(3)",
+       "action": "条件ブロック_ノベルスタート",
+       "conditions": [],
+       "commands": []
+      },
+      {
+       "hap": "イベント(6)",
+       "action": "条件ブロック_ノベルスタート",
+       "conditions": [],
+       "commands": []
+      },
+      {
+       "hap": "イベント(2)",
+       "action": "条件ブロック_ノベルスタート",
+       "conditions": [],
+       "commands": []
+      }
+     ],
+     "groups": [
+      "340_9S勝利",
+      "ハッキング中停止(8)",
+      "特殊ステージ中停止"
+     ],
+     "active_subphases": [
+      "340_C_Tower_9Swin"
+     ],
+     "chapters": [
+      {
+       "subphase": "340_C_Tower_9Swin",
+       "chapter": "17-10",
+       "route_group": "C/D",
+       "chapter_name": "9S's Final Moments"
+      }
+     ],
+     "route_states": []
+    }
+   ],
+   "is_joke": false,
+   "kind": "main",
+   "confidence": "medium",
+   "trigger_en_unofficial": "p300 hap '流れ(26)' (group 340_9S勝利 = 9S wins) action 'フェーズジャンプ_CEnd' -> pf10 EndRoll_CD. Path: 332_CD_Tower_Talk '流れ' 'フェーズジャンプ_9Ssele' -> 335_CD_Tower_sele9S -> 'フェーズジャンプ_9Swin' -> 340_C_Tower_9Swin. exe fn 0x863730: SceneState 'select/9S' set -> sets 'ending_C' (select/A2 -> ending_D). Script p300_987be645 (in 流れ(26)) tests 'ending_D on?' (other ending already seen -> 'フェーズジャンプ_TrueEnd' to pf31).",
+   "where": "ph3/p300 17-09 -> 17-10 v1 (9S's Final Moments)",
+   "web_check": "DISAGREE: web says choosing A2 gives C and 9S gives D; internal data names the 9S-select/9S-win branch 'C' (subphase 340_C_, CEnd, select/9S -> ending_C)",
+   "unresolved": "which CREDIT_END_TITLE is displayed for each branch was not traced; release behaviour may follow the web (A2 -> C)"
+  },
+  {
+   "letter": "D",
+   "title": "chil[D]hood's end",
+   "pf30_subphase": null,
+   "pf30_comment_ja": null,
+   "pf30_comment_en_unofficial": null,
+   "trigger_sources": [
+    {
+     "file": "ph3/p300.dat",
+     "member": "p300_hap.pak",
+     "kind": "phase_jump",
+     "target": "EndRoll_CD",
+     "hap": "流れ(14)",
+     "action": "フェーズジャンプ_DEnd",
+     "hap_actions": [
+      "目的地ロケーション_9S休出",
+      "フェーズジャンプ_いらない？",
+      "イベントの再生_ev1240",
+      "イベントの再生_ev1241",
+      "サブフェーズ遷移_SCモデル消すフェーズへ",
+      "コマンド送信_ハッキングフィルター",
+      "いらない地形を消す",
+      "r500を消す",
+      "エレベーターを消す",
+      "コマンド送信_キャラをハッキング状態",
+      "地形の配置",
+      "オブジェ配置_9S",
+      "イベントの再生_ev1250",
+      "フェーズジャンプ_DEnd",
+      "フェーズジャンプ_TrueEnd",
+      "条件ブロック_繋ぎイベント再生後",
+      "カメラパラメータ指定エリア(2)",
+      "カメラパラメータ指定エリア",
+      "エリア1_会話用",
+      "エリア2_会話用",
+      "..M3060_S1100_GM_9Sの内面"
+     ],
+     "conditions": [],
+     "commands": [
+      {
+       "label": "Pl0000.setHackingFilterCore12",
+       "args": null
+      },
+      {
+       "label": "DISABLE",
+       "args": null
+      },
+      {
+       "label": "DISABLE",
+       "args": null
+      },
+      {
+       "label": "DISABLE",
+       "args": null
+      },
+      {
+       "label": "MiscState.GAME_ON",
+       "args": "26"
+      }
+     ],
+     "referrers": [],
+     "groups": [
+      "340_A2勝利",
+      "ハッキング中停止(8)",
+      "特殊ステージ中停止"
+     ],
+     "active_subphases": [
+      "340_D_Tower_A2win",
+      "345_D_Tower_A2win_9Shack"
+     ],
+     "chapters": [
+      {
+       "subphase": "345_D_Tower_A2win_9Shack",
+       "chapter": "17-10",
+       "route_group": "C/D",
+       "chapter_name": "A2's Final Moments"
+      }
+     ],
+     "route_states": []
+    },
+    {
+     "file": "quest/qaef.dat",
+     "member": "qaef_hap.pak",
+     "kind": "phase_jump",
+     "target": "EndRoll_CD",
+     "hap": "流れ(27)",
+     "action": "フェーズジャンプ_DEnd",
+     "hap_actions": [
+      "..M3060_S1100_GM_9Sの内面",
+      "オブジェ配置_ハッキング用モデル",
+      "オブジェ配置_9S",
+      "エリア1",
+      "エリア2",
+      "イベントの再生_ev1250",
+      "フェーズジャンプ_DEnd",
+      "フェーズジャンプ_TrueEnd"
+     ],
+     "conditions": [],
+     "commands": [],
+     "referrers": [],
+     "groups": [],
+     "active_subphases": [],
+     "chapters": [],
+     "route_states": []
+    }
+   ],
+   "is_joke": false,
+   "kind": "main",
+   "confidence": "medium",
+   "trigger_en_unofficial": "p300 hap '流れ(14)' (group 340_A2勝利 = A2 wins) 'フェーズジャンプ_DEnd' -> pf10 EndRoll_CD (copy in quest/qaef '流れ(27)'). Path: 'フェーズジャンプ_A2sele' -> 335_CD_Tower_seleA2 -> 'フェーズジャンプ_A2win' -> 340_D_Tower_A2win (-> 345_D_Tower_A2win_9Shack). exe: select/A2 -> ending_D. Script p300_10112854 (in 流れ(14)) tests 'ending_C on?' before 'フェーズジャンプ_TrueEnd'.",
+   "where": "ph3/p300 17-09 -> 17-10 v2 (A2's Final Moments)",
+   "web_check": "DISAGREE (see C): web says 9S -> D",
+   "unresolved": "see C"
+  },
+  {
+   "letter": "E",
+   "title": "the [E]nd of YoRHa",
+   "pf30_subphase": "Ending_E",
+   "pf30_comment_ja": "未使用",
+   "pf30_comment_en_unofficial": "unused",
+   "trigger_sources": [
+    {
+     "file": "ph3/p300.dat",
+     "member": "p300_hap.pak",
+     "kind": "phase_jump",
+     "target": "EndRoll_CD",
+     "hap": "流れ(14)",
+     "action": "フェーズジャンプ_DEnd",
+     "hap_actions": [
+      "目的地ロケーション_9S休出",
+      "フェーズジャンプ_いらない？",
+      "イベントの再生_ev1240",
+      "イベントの再生_ev1241",
+      "サブフェーズ遷移_SCモデル消すフェーズへ",
+      "コマンド送信_ハッキングフィルター",
+      "いらない地形を消す",
+      "r500を消す",
+      "エレベーターを消す",
+      "コマンド送信_キャラをハッキング状態",
+      "地形の配置",
+      "オブジェ配置_9S",
+      "イベントの再生_ev1250",
+      "フェーズジャンプ_DEnd",
+      "フェーズジャンプ_TrueEnd",
+      "条件ブロック_繋ぎイベント再生後",
+      "カメラパラメータ指定エリア(2)",
+      "カメラパラメータ指定エリア",
+      "エリア1_会話用",
+      "エリア2_会話用",
+      "..M3060_S1100_GM_9Sの内面"
+     ],
+     "conditions": [],
+     "commands": [
+      {
+       "label": "Pl0000.setHackingFilterCore12",
+       "args": null
+      },
+      {
+       "label": "DISABLE",
+       "args": null
+      },
+      {
+       "label": "DISABLE",
+       "args": null
+      },
+      {
+       "label": "DISABLE",
+       "args": null
+      },
+      {
+       "label": "MiscState.GAME_ON",
+       "args": "26"
+      }
+     ],
+     "referrers": [],
+     "groups": [
+      "340_A2勝利",
+      "ハッキング中停止(8)",
+      "特殊ステージ中停止"
+     ],
+     "active_subphases": [
+      "340_D_Tower_A2win",
+      "345_D_Tower_A2win_9Shack"
+     ],
+     "chapters": [
+      {
+       "subphase": "345_D_Tower_A2win_9Shack",
+       "chapter": "17-10",
+       "route_group": "C/D",
+       "chapter_name": "A2's Final Moments"
+      }
+     ],
+     "route_states": []
+    },
+    {
+     "file": "ph3/p300.dat",
+     "member": "p300_hap.pak",
+     "kind": "phase_jump",
+     "target": "BackTitle_CD",
+     "hap": "流れ(27)",
+     "action": "フェーズジャンプ_諦め",
+     "hap_actions": [
+      "..M3060_S7500_GM_スタッフロールSTG",
+      "コマンド送信_仮シグナル",
+      "フェーズジャンプ_諦め",
+      "フェーズジャンプ_STGクリア"
+     ],
+     "conditions": [],
+     "commands": [
+      {
+       "label": "Action.signal",
+       "args": "\"start_stg 0\""
+      }
+     ],
+     "referrers": [],
+     "groups": [
+      "350_スタッフロールSTG",
+      "ハッキング中停止(8)",
+      "特殊ステージ中停止"
+     ],
+     "active_subphases": [
+      "350_CD_TrueEnd_STG"
+     ],
+     "chapters": [
+      {
+       "subphase": "350_CD_TrueEnd_STG",
+       "chapter": "17-10",
+       "route_group": "C/D",
+       "chapter_name": "A2's Final Moments"
+      }
+     ],
+     "route_states": []
+    },
+    {
+     "file": "ph3/p300.dat",
+     "member": "p300_hap.pak",
+     "kind": "phase_jump",
+     "target": "EndRoll_CD",
+     "hap": "流れ(26)",
+     "action": "フェーズジャンプ_CEnd",
+     "hap_actions": [
+      "..M3060_S0900_HD_9S勝利",
+      "イベントの再生_ev1230",
+      "コマンド送信_９S選択HAP消去",
+      "フェード",
+      "フェード_終了",
+      "サウンドノベル_9Sの最後",
+      "字幕",
+      "イベントの再生_ev1232_デバック用",
+      "フェーズジャンプ_CEnd",
+      "フェーズジャンプ_TrueEnd"
+     ],
+     "conditions": [],
+     "commands": [
+      {
+       "label": "DISABLE",
+       "args": null
+      }
+     ],
+     "referrers": [
+      {
+       "hap": "イベント(7)",
+       "action": "条件ブロック_ノベルスタート",
+       "conditions": [],
+       "commands": []
+      },
+      {
+       "hap": "イベント(3)",
+       "action": "条件ブロック_ノベルスタート",
+       "conditions": [],
+       "commands": []
+      },
+      {
+       "hap": "イベント(6)",
+       "action": "条件ブロック_ノベルスタート",
+       "conditions": [],
+       "commands": []
+      },
+      {
+       "hap": "イベント(2)",
+       "action": "条件ブロック_ノベルスタート",
+       "conditions": [],
+       "commands": []
+      }
+     ],
+     "groups": [
+      "340_9S勝利",
+      "ハッキング中停止(8)",
+      "特殊ステージ中停止"
+     ],
+     "active_subphases": [
+      "340_C_Tower_9Swin"
+     ],
+     "chapters": [
+      {
+       "subphase": "340_C_Tower_9Swin",
+       "chapter": "17-10",
+       "route_group": "C/D",
+       "chapter_name": "9S's Final Moments"
+      }
+     ],
+     "route_states": []
+    },
+    {
+     "file": "phf/pf31.dat",
+     "member": "pf31_hap.pak",
+     "kind": "phase_jump",
+     "target": "BackTitle_CD",
+     "hap": "流れ(27)",
+     "action": "フェーズジャンプ_諦め",
+     "hap_actions": [
+      "オブジェ配置_天球",
+      "..M3060_S7500_GM_スタッフロールSTG",
+      "フェーズジャンプ_諦め",
+      "フェーズジャンプ_STGクリア"
+     ],
+     "conditions": [],
+     "commands": [],
+     "referrers": [
+      {
+       "hap": "流れ",
+       "action": "条件ブロック_スクリプト起動待ち",
+       "conditions": [],
+       "commands": []
+      },
+      {
+       "hap": "流れ",
+       "action": "コマンド送信_メッセージ再生シグナル",
+       "conditions": [],
+       "commands": [
+        {
+         "label": "Action.signal",
+         "args": "\"start_stg 0\""
+        }
+       ]
+      }
+     ],
+     "groups": [],
+     "active_subphases": [],
+     "chapters": [],
+     "route_states": []
+    },
+    {
+     "file": "quest/qaef.dat",
+     "member": "qaef_hap.pak",
+     "kind": "phase_jump",
+     "target": "EndRoll_CD",
+     "hap": "流れ(27)",
+     "action": "フェーズジャンプ_DEnd",
+     "hap_actions": [
+      "..M3060_S1100_GM_9Sの内面",
+      "オブジェ配置_ハッキング用モデル",
+      "オブジェ配置_9S",
+      "エリア1",
+      "エリア2",
+      "イベントの再生_ev1250",
+      "フェーズジャンプ_DEnd",
+      "フェーズジャンプ_TrueEnd"
+     ],
+     "conditions": [],
+     "commands": [],
+     "referrers": [],
+     "groups": [],
+     "active_subphases": [],
+     "chapters": [],
+     "route_states": []
+    }
+   ],
+   "is_joke": false,
+   "kind": "main",
+   "confidence": "medium",
+   "trigger_en_unofficial": "No Ending_E jump (pf30 Ending_E is commented '未使用' = unused). True ending: at the end of the C or D branch, 'フェーズジャンプ_TrueEnd' -> pf31 'start' (credits shoot-'em-up), the scripts testing the other ending (ending_C / ending_D 'on?'); pf31/p300 '流れ(27)' 'フェーズジャンプ_STGクリア' (STG cleared) -> p300 360_CD_TrueEnd_FIN, 'フェーズジャンプ_諦め' (give up) -> pf10 BackTitle_CD.",
+   "where": "ph3/p300 340_x -> phf/pf31 -> 350/360_CD_TrueEnd",
+   "web_check": "agree (after C and D, credits shmup)",
+   "unresolved": "the Pod 153 'Yes/No' prompt itself was not located; the 'other ending seen' reading of the 'on?' tests is inferred"
+  },
+  {
+   "letter": "F",
+   "title": "mission [F]ailed",
+   "pf30_subphase": "Ending_F",
+   "pf30_comment_ja": "B_プロローグ時、再構築ゲームで長時間放置",
+   "pf30_comment_en_unofficial": "route B prologue: leave the rebuild mini-game idle for a long time",
+   "trigger_sources": [
+    {
+     "file": "quest/qac8.dat",
+     "member": "qac8_hap.pak",
+     "kind": "phase_jump",
+     "target": "Ending_F",
+     "hap": "バッドエンド",
+     "action": "フェーズジャンプ_バッドエンド",
+     "hap_actions": [
+      "遅延ブロック",
+      "タイマー",
+      "条件ブロック",
+      "行動制限",
+      "コマンド送信_ノイズ",
+      "フェーズジャンプ_バッドエンド"
+     ],
+     "conditions": [],
+     "commands": [
+      {
+       "label": "Pl0000.setUINoiseFilterMax",
+       "args": null
+      }
+     ],
+     "referrers": [],
+     "groups": [],
+     "active_subphases": [],
+     "chapters": [],
+     "route_states": []
+    }
+   ],
+   "is_joke": true,
+   "kind": "joke",
+   "confidence": "high",
+   "trigger_en_unofficial": "quest/qac8 hap 'バッドエンド' (bad end): 'タイマー' (timer) + '条件ブロック' on the timer, '行動制限' (restrict actions), noise filter (Pl0000.setUINoiseFilterMax), then 'フェーズジャンプ_バッドエンド' -> Ending_F. pf30 comment: route B prologue, leave the rebuild game idle too long.",
+   "where": "quest/qac8 (internal quest; prologue Route B per pf30 comment)",
+   "web_check": "agree (let the 9S restore timer run out, 01-03 B)",
+   "unresolved": "qac8 activation subphase not resolved"
+  },
+  {
+   "letter": "G",
+   "title": "hun[G]ry for knowledge",
+   "pf30_subphase": "Ending_G",
+   "pf30_comment_ja": "B_プロローグで飛行ユニットに乗らず逃走",
+   "pf30_comment_en_unofficial": "route B prologue: run away without boarding the flight unit",
+   "trigger_sources": [
+    {
+     "file": "ph1/p100.dat",
+     "member": "p100_hap.pak",
+     "kind": "phase_jump",
+     "target": "Ending_G",
+     "hap": "バットエンド処理",
+     "action": "フェーズジャンプ",
+     "hap_actions": [
+      "フェーズジャンプ"
+     ],
+     "conditions": [],
+     "commands": [],
+     "referrers": [],
+     "groups": [
+      "飛行ユニット搭乗",
+      "00_02_B_ロボット山＿9S操作開始",
+      "00_プロローグ",
+      "ハッキング中停止(6)",
+      "特殊ステージ中停止"
+     ],
+     "active_subphases": [
+      "00_00_B_RobotM_Pro_RobotBrother",
+      "00_02_B_RobotM_Pro_9S_appearanc",
+      "00_05_B_RobotM_Pro_9S_STG1",
+      "00_10_B_RobotM_Pro_9S_STG2",
+      "00_15_B_RobotM_Pro_9S_STG3",
+      "00_30_A_RobotM_Prologue_STG1",
+      "00_40_A_RobotM_Prologue_STG2",
+      "00_50_A_RobotM_Prologue_STG3",
+      "00_55_A_RobotM_Prologue_EV",
+      "00_60_A_RobotM_Pro_Tutorial",
+      "00_70_A_RobotM_Pro_ArmBoss_1st",
+      "00_80_A_RobotM_Pro_1stArea",
+      "00_80_B_RobotM_Pro_BossArea",
+      "00_82_B_RobotM_Pro_9S_STG4",
+      "00_83_B_RobotM_Pro_9S_STG5",
+      "00_85_A_RobotM_Pro_2ndArea",
+      "00_90_A_RobotM_Pro_3rdArea",
+      "00_95_A_RobotM_Pro_lastArea",
+      "0x8174b393",
+      "0xca2f1083",
+      "0xf9f346a5"
+     ],
+     "chapters": [
+      {
+       "subphase": "00_10_B_RobotM_Pro_9S_STG2",
+       "chapter": "01-01",
+       "route_group": "B",
+       "chapter_name": "9S Disarms the Defense System"
+      },
+      {
+       "subphase": "00_50_A_RobotM_Prologue_STG3",
+       "chapter": "01-01",
+       "route_group": "A",
+       "chapter_name": "2B's Aerial Battle"
+      },
+      {
+       "subphase": "00_95_A_RobotM_Pro_lastArea",
+       "chapter": "01-02",
+       "route_group": "A",
+       "chapter_name": "2B's Defense Machine Battle 2"
+      },
+      {
+       "subphase": "00_83_B_RobotM_Pro_9S_STG5",
+       "chapter": "01-02",
+       "route_group": "B",
+       "chapter_name": "9S Outside the Factory"
+      }
+     ],
+     "route_states": []
+    }
+   ],
+   "is_joke": true,
+   "kind": "joke",
+   "confidence": "high",
+   "trigger_en_unofficial": "p100 hap 'バットエンド処理' (bad-end handling) in group '飛行ユニット搭乗' (boarding the flight unit) under '00_02_B_ロボット山＿9S操作開始': a single phase jump with an area at (-643.7, -10.6, 372.9). pf30: route B prologue, run away without boarding the flight unit.",
+   "where": "ph1/p100 prologue Route B (00_02/00_05_B_RobotM...), 01-01 v2",
+   "web_check": "partial: web says 'walk along a crane' at 01-01 B; data = leaving instead of boarding the flight unit"
+  },
+  {
+   "letter": "H",
+   "title": "a mountain too [H]igh",
+   "pf30_subphase": "Ending_H",
+   "pf30_comment_ja": "AB_巨大ロボ遭遇時に逃走",
+   "pf30_comment_en_unofficial": "routes A/B: run away when encountering the giant machine",
+   "trigger_sources": [
+    {
+     "file": "ph1/p100.dat",
+     "member": "p100_hap.pak",
+     "kind": "phase_jump",
+     "target": "Ending_H",
+     "hap": "バッドエンド",
+     "action": "フェーズジャンプ_バッドエンド",
+     "hap_actions": [
+      "エリア_バッドエンド警告",
+      "エリア_バッドエンド警告2",
+      "エリア_バッドエンド実行",
+      "フェーズジャンプ_バッドエンド",
+      "リセット"
+     ],
+     "conditions": [],
+     "commands": [],
+     "referrers": [],
+     "groups": [
+      "00/10共通",
+      "90_大ハイキョ都市_巨大ロボ襲来",
+      "ハッキング中停止(6)",
+      "特殊ステージ中停止"
+     ],
+     "active_subphases": [
+      "0xacbce0fc",
+      "0xfff1c46d",
+      "90_00_AB_Ruined_City",
+      "90_10_AB_Ruined_City_AerialBTL"
+     ],
+     "chapters": [
+      {
+       "subphase": "90_10_AB_Ruined_City_AerialBTL",
+       "chapter": "05-02",
+       "route_group": "A+B",
+       "chapter_name": "Goliath Attack"
+      }
+     ],
+     "route_states": [
+      "Route/A",
+      "Route/B"
+     ]
+    }
+   ],
+   "is_joke": true,
+   "kind": "joke",
+   "confidence": "high",
+   "trigger_en_unofficial": "p100 hap 'バッドエンド' in group '90_大ハイキョ都市_巨大ロボ襲来' (Goliath attack): areas 'エリア_バッドエンド警告'/'警告2' (warning) and 'エリア_バッドエンド実行' (execute) at (439.5, 10.9, 37.8), (-146.6, 11.3, 61.8), (-188.8, 21.7, 508.8) -> 'フェーズジャンプ_バッドエンド' Ending_H.",
+   "where": "ph1/p100 90_00_AB_Ruined_City / 90_10_AB_Ruined_City_AerialBTL, 05-02 Route A or B",
+   "web_check": "agree (ignore the Goliath intercept order, 05-02)"
+  },
+  {
+   "letter": "I",
+   "title": "no [I] in team",
+   "pf30_subphase": "Ending_I",
+   "pf30_comment_ja": "A_コピー都市で９S放置して逃走",
+   "pf30_comment_en_unofficial": "route A: abandon 9S in the Copied City and run away",
+   "trigger_sources": [
+    {
+     "file": "ph2/p200.dat",
+     "member": "p200_hap.pak",
+     "kind": "phase_jump",
+     "target": "Ending_I",
+     "hap": "バッドエンド対応",
+     "action": "フェーズジャンプ",
+     "hap_actions": [
+      "条件ブロック",
+      "コマンド送信",
+      "エリア",
+      "フェーズジャンプ"
+     ],
+     "conditions": [],
+     "commands": [
+      {
+       "label": "DISABLE",
+       "args": null
+      }
+     ],
+     "referrers": [],
+     "groups": [
+      "A",
+      "115_９S救出",
+      "ハッキング中停止(7)",
+      "特殊ステージ中停止"
+     ],
+     "active_subphases": [
+      "110_00_A_Copy_City",
+      "115_AB_Copy_City_AdamDie"
+     ],
+     "chapters": [
+      {
+       "subphase": "115_AB_Copy_City_AdamDie",
+       "chapter": "08-01",
+       "route_group": "B",
+       "chapter_name": "9S's Memory Area"
+      },
+      {
+       "subphase": "110_00_A_Copy_City",
+       "chapter": "08-01",
+       "route_group": "A",
+       "chapter_name": "2B's Battle with Adam"
+      }
+     ],
+     "route_states": [
+      "Route/A"
+     ]
+    }
+   ],
+   "is_joke": true,
+   "kind": "joke",
+   "confidence": "high",
+   "trigger_en_unofficial": "p200 hap 'バッドエンド対応' (bad-end response), group 'A' + '115_９S救出' (9S rescue): '条件ブロック' (DONE) + area at (258.9, -114.5, 568.6) -> Ending_I.",
+   "where": "ph2/p200 110_00_A_Copy_City / 115_AB_Copy_City_AdamDie, Route A 08-01",
+   "web_check": "agree (abandon 9S after Adam, Copied City)"
+  },
+  {
+   "letter": "J",
+   "title": "bad [J]udgment",
+   "pf30_subphase": "Ending_J",
+   "pf30_comment_ja": "A_和平を望むロボを殺害",
+   "pf30_comment_en_unofficial": "route A: kill the peace-seeking machines",
+   "trigger_sources": [
+    {
+     "file": "ph2/p200.dat",
+     "member": "p200_hap.pak",
+     "kind": "phase_jump",
+     "target": "Ending_J",
+     "hap": "司祭達を攻撃した際の対処",
+     "action": "フェーズジャンプ",
+     "hap_actions": [
+      "条件コマンド",
+      "条件ブロックリスト",
+      "フェーズジャンプ"
+     ],
+     "conditions": [
+      {
+       "target": "0xbd9211e7",
+       "state": "ON_SCARE_TALK",
+       "pred": "0"
+      },
+      {
+       "target": "0x53aa1d7f",
+       "state": "ON_SCARE_TALK",
+       "pred": "0"
+      },
+      {
+       "target": "0x290521d2",
+       "state": "ON_SCARE_TALK",
+       "pred": "0"
+      },
+      {
+       "target": "0xee68620f",
+       "state": "ON_SCARE_TALK",
+       "pred": "0"
+      },
+      {
+       "target": "0x1254f13e",
+       "state": "ON_SCARE_TALK",
+       "pred": "0"
+      },
+      {
+       "target": "0xdef802de",
+       "state": "ON_SCARE_TALK",
+       "pred": "0"
+      },
+      {
+       "target": "0x58883b18",
+       "state": "ON_SCARE_TALK",
+       "pred": "0"
+      },
+      {
+       "target": "0x84f0d1ad",
+       "state": "ON_SCARE_TALK",
+       "pred": "0"
+      },
+      {
+       "target": "0x93394cfe",
+       "state": "ON_SCARE_TALK",
+       "pred": "0"
+      },
+      {
+       "target": "0xbd9211e7",
+       "state": "BehaviorAppBase.getHpRate100",
+       "pred": "0"
+      },
+      {
+       "target": "0x53aa1d7f",
+       "state": "BehaviorAppBase.getHpRate100",
+       "pred": "0"
+      },
+      {
+       "target": "0x290521d2",
+       "state": "BehaviorAppBase.getHpRate100",
+       "pred": "0"
+      }
+     ],
+     "commands": [
+      {
+       "label": "Action.signal",
+       "args": "\"damage_talk 0\""
+      },
+      {
+       "label": "Action.signal",
+       "args": "\"damage_talk 0\""
+      }
+     ],
+     "referrers": [],
+     "groups": [
+      "140_00_A_狂った宗教_司祭達の案内",
+      "140_狂った宗教",
+      "ハッキング中停止(7)",
+      "特殊ステージ中停止"
+     ],
+     "active_subphases": [
+      "0x488d2486",
+      "140_00_A_RobotM_CrazyReligion",
+      "140_20_A_RobotM_CR_GuruRoom",
+      "140_20_B_RobotM_CR_HackingStart",
+      "140_30_A_RobotM_CR_GuruBattle",
+      "140_30_B_RobotM_CR_UF_Rescue",
+      "140_35_B_RobotM_CR_UF_Rescue2",
+      "140_40_A_RobotM_CR_UnderFactory",
+      "140_40_B_RobotM_CR_UF_Hacking",
+      "140_60_A_RobotM_CR_UF_Middle",
+      "140_80_A_RobotM_CR_UF_BossArea",
+      "140_80_B_RobotM_CR_CoreHacking",
+      "140_90_A_RobotM_CR_UF_Exit",
+      "140_90_B_Banker_9S",
+      "140_B_Banker_9S",
+      "145_AB_Ruined_City_diningtable"
+     ],
+     "chapters": [
+      {
+       "subphase": "140_00_A_RobotM_CrazyReligion",
+       "chapter": "09-01",
+       "route_group": "A",
+       "chapter_name": "2B Negotiates Peace"
+      },
+      {
+       "subphase": "140_90_A_RobotM_CR_UF_Exit",
+       "chapter": "09-03",
+       "route_group": "A",
+       "chapter_name": "Multi-leg Goliath Destroyed"
+      },
+      {
+       "subphase": "140_20_B_RobotM_CR_HackingStart",
+       "chapter": "09-02",
+       "route_group": "B",
+       "chapter_name": "9S Supports 2B"
+      },
+      {
+       "subphase": "140_80_A_RobotM_CR_UF_BossArea",
+       "chapter": "09-02",
+       "route_group": "A",
+       "chapter_name": "Multi-leg Goliath Battle"
+      },
+      {
+       "subphase": "145_AB_Ruined_City_diningtable",
+       "chapter": "09-03",
+       "route_group": "B",
+       "chapter_name": "9S Learns the Truth"
+      }
+     ],
+     "route_states": [
+      "Route/A"
+     ]
+    },
+    {
+     "file": "ph2/p200.dat",
+     "member": "p200_hap.pak",
+     "kind": "phase_jump",
+     "target": "Ending_J",
+     "hap": "司祭達を攻撃した際の対処2",
+     "action": "フェーズジャンプ",
+     "hap_actions": [
+      "条件コマンド",
+      "条件ブロックリスト",
+      "フェーズジャンプ"
+     ],
+     "conditions": [
+      {
+       "target": "0xa677c998",
+       "state": "ON_SCARE_TALK",
+       "pred": "0"
+      },
+      {
+       "target": "0xc94f2675",
+       "state": "ON_SCARE_TALK",
+       "pred": "0"
+      },
+      {
+       "target": "0x94cfcecf",
+       "state": "ON_SCARE_TALK",
+       "pred": "0"
+      },
+      {
+       "target": "0x104cdc04",
+       "state": "ON_SCARE_TALK",
+       "pred": "0"
+      },
+      {
+       "target": "0x9e06dff0",
+       "state": "ON_SCARE_TALK",
+       "pred": "0"
+      },
+      {
+       "target": "0x2a57ec5a",
+       "state": "ON_SCARE_TALK",
+       "pred": "0"
+      },
+      {
+       "target": "0xcc49f82a",
+       "state": "ON_SCARE_TALK",
+       "pred": "0"
+      },
+      {
+       "target": "0x0086dcf9",
+       "state": "ON_SCARE_TALK",
+       "pred": "0"
+      },
+      {
+       "target": "0xdfba70b8",
+       "state": "ON_SCARE_TALK",
+       "pred": "0"
+      },
+      {
+       "target": "0xd3d39a7f",
+       "state": "ON_SCARE_TALK",
+       "pred": "0"
+      },
+      {
+       "target": "0x5604fc5b",
+       "state": "ON_SCARE_TALK",
+       "pred": "0"
+      },
+      {
+       "target": "0xa677c998",
+       "state": "BehaviorAppBase.getHpRate100",
+       "pred": "0"
+      }
+     ],
+     "commands": [
+      {
+       "label": "Action.signal",
+       "args": "\"damage_talk 0\""
+      },
+      {
+       "label": "Action.signal",
+       "args": "\"damage_talk 0\""
+      }
+     ],
+     "referrers": [],
+     "groups": [
+      "140_20_A_ロボット山_教祖部屋",
+      "140_狂った宗教",
+      "ハッキング中停止(7)",
+      "特殊ステージ中停止"
+     ],
+     "active_subphases": [
+      "0x488d2486",
+      "140_00_A_RobotM_CrazyReligion",
+      "140_20_A_RobotM_CR_GuruRoom",
+      "140_20_B_RobotM_CR_HackingStart",
+      "140_30_A_RobotM_CR_GuruBattle",
+      "140_30_B_RobotM_CR_UF_Rescue",
+      "140_35_B_RobotM_CR_UF_Rescue2",
+      "140_40_A_RobotM_CR_UnderFactory",
+      "140_40_B_RobotM_CR_UF_Hacking",
+      "140_60_A_RobotM_CR_UF_Middle",
+      "140_80_A_RobotM_CR_UF_BossArea",
+      "140_80_B_RobotM_CR_CoreHacking",
+      "140_90_A_RobotM_CR_UF_Exit",
+      "140_90_B_Banker_9S",
+      "140_B_Banker_9S",
+      "145_AB_Ruined_City_diningtable"
+     ],
+     "chapters": [
+      {
+       "subphase": "140_00_A_RobotM_CrazyReligion",
+       "chapter": "09-01",
+       "route_group": "A",
+       "chapter_name": "2B Negotiates Peace"
+      },
+      {
+       "subphase": "140_90_A_RobotM_CR_UF_Exit",
+       "chapter": "09-03",
+       "route_group": "A",
+       "chapter_name": "Multi-leg Goliath Destroyed"
+      },
+      {
+       "subphase": "140_20_B_RobotM_CR_HackingStart",
+       "chapter": "09-02",
+       "route_group": "B",
+       "chapter_name": "9S Supports 2B"
+      },
+      {
+       "subphase": "140_80_A_RobotM_CR_UF_BossArea",
+       "chapter": "09-02",
+       "route_group": "A",
+       "chapter_name": "Multi-leg Goliath Battle"
+      },
+      {
+       "subphase": "145_AB_Ruined_City_diningtable",
+       "chapter": "09-03",
+       "route_group": "B",
+       "chapter_name": "9S Learns the Truth"
+      }
+     ],
+     "route_states": [
+      "Route/A"
+     ]
+    }
+   ],
+   "is_joke": true,
+   "kind": "joke",
+   "confidence": "high",
+   "trigger_en_unofficial": "p200 haps '司祭達を攻撃した際の対処' / '..対処2' (response when attacking the priests): '条件コマンド' on ON_SCARE_TALK of 5 priest NPCs + '条件ブロックリスト' on BehaviorAppBase.getHpRate100 of the same 5 -> Ending_J.",
+   "where": "ph2/p200 140_00_A_RobotM_CrazyReligion and 140_20_A_RobotM_CR_GuruRoom, Route A 09-01",
+   "web_check": "agree (kill the peaceful priests while escorting Pascal)"
+  },
+  {
+   "letter": "K",
+   "title": "aji wo [K]utta",
+   "pf30_subphase": "Ending_K",
+   "pf30_comment_ja": "いつでも_アジを食べる",
+   "pf30_comment_en_unofficial": "anytime: eat the mackerel",
+   "trigger_sources": [
+    {
+     "kind": "exe",
+     "rva": "0x991b77",
+     "function": [
+      "0x991958",
+      "0x991bd1"
+     ],
+     "string": "Ending_K",
+     "letter": "K",
+     "evidence": "menu objets (fn 0x991958, son 'core_main_disicion') : nom interne de l'objet utilise compare a 'fish_16' (Mackerel) -> saut 0xf30 Ending_K + BGM_Player_Die",
+     "verified": true
+    }
+   ],
+   "is_joke": true,
+   "kind": "joke",
+   "confidence": "high",
+   "trigger_en_unofficial": "exe fn 0x991958 (item-use menu, sound 'core_main_disicion'): if the used item's internal name == 'fish_16' (Mackerel, UniqueID 8016) -> phase jump 0xf30 Ending_K + BGM_Player_Die.",
+   "where": "anywhere (item menu)",
+   "web_check": "agree (eat the Mackerel)"
+  },
+  {
+   "letter": "L",
+   "title": "[L]one wolf",
+   "pf30_subphase": "Ending_L",
+   "pf30_comment_ja": "AB_レジキャン襲撃〜イヴ戦間でエリア外へ逃走",
+   "pf30_comment_en_unofficial": "routes A/B: leave the area between the Resistance Camp attack and the Eve fight",
+   "trigger_sources": [
+    {
+     "file": "ph2/p200.dat",
+     "member": "p200_hap.pak",
+     "kind": "phase_jump",
+     "target": "Ending_L",
+     "hap": "エリア外警告",
+     "action": "フェーズジャンプ",
+     "hap_actions": [
+      "エリア",
+      "エリア",
+      "エリア",
+      "エリア",
+      "エリア",
+      "エリア_badEnd",
+      "フェーズジャンプ"
+     ],
+     "conditions": [],
+     "commands": [],
+     "referrers": [
+      {
+       "hap": "エリア外通知",
+       "action": "条件コマンド(2)",
+       "conditions": [
+        {
+         "target": "エリア外通知/エリア(2)",
+         "state": "HITOUT",
+         "pred": "0"
+        }
+       ],
+       "commands": [
+        {
+         "label": "ENABLE",
+         "args": null
+        },
+        {
+         "label": "ENABLE",
+         "args": null
+        }
+       ]
+      },
+      {
+       "hap": "エリア外通知(4)",
+       "action": "条件コマンド(2)",
+       "conditions": [
+        {
+         "target": "エリア外通知(4)/エリア(2)",
+         "state": "HITOUT",
+         "pred": "0"
+        }
+       ],
+       "commands": [
+        {
+         "label": "ENABLE",
+         "args": null
+        },
+        {
+         "label": "ENABLE",
+         "args": null
+        }
+       ]
+      },
+      {
+       "hap": "エリア外通知",
+       "action": "条件コマンド(2)",
+       "conditions": [
+        {
+         "target": "エリア外通知/エリア",
+         "state": "INSIDE",
+         "pred": "0"
+        }
+       ],
+       "commands": [
+        {
+         "label": "ENABLE",
+         "args": null
+        },
+        {
+         "label": "ENABLE",
+         "args": null
+        }
+       ]
+      },
+      {
+       "hap": "エリア外通知(3)",
+       "action": "条件コマンド(2)",
+       "conditions": [
+        {
+         "target": "エリア外通知(3)/エリア(2)",
+         "state": "HITOUT",
+         "pred": "0"
+        }
+       ],
+       "commands": [
+        {
+         "label": "ENABLE",
+         "args": null
+        },
+        {
+         "label": "ENABLE",
+         "args": null
+        }
+       ]
+      }
+     ],
+     "groups": [
+      "ダンジョンで無効化",
+      "160~200_ステージ固有行動制御",
+      "ハッキング中停止(7)",
+      "特殊ステージ中停止"
+     ],
+     "active_subphases": [
+      "0x01b15951",
+      "0x84fd2ce3",
+      "0xe6acffc6",
+      "160_A_Ruined_City_2B",
+      "170_00_A_Resistance_Camp_2B",
+      "170_10_A_Resistance_Camp_2B",
+      "170_20_A_Resistance_Camp_2B",
+      "170_30_A_Resistance_Camp_2B",
+      "170_40_A_Resistance_Camp_2B",
+      "180_AB_Ruined_Front_Of_Camp",
+      "190_AB_Pascal_Village",
+      "195_AB_Pascal_Village_toEve",
+      "200_00_AB_Ruined_City_Eve_EV",
+      "200_10_AB_Ruined_City_EveBattle",
+      "200_20_AB_Ruined_City_EveBattle",
+      "200_30_AB_Ruined_City_Eve_EV",
+      "200_40_AB_Ruined_City_EveBattle",
+      "200_50_AB_Ruined_City_EveBattle",
+      "200_60_AB_Ruined_City_Eve_EV",
+      "200_70_AB_Ruined_City_end"
+     ],
+     "chapters": [
+      {
+       "subphase": "170_20_A_Resistance_Camp_2B",
+       "chapter": "10-01",
+       "route_group": "A",
+       "chapter_name": "2B Assists the Resistance"
+      },
+      {
+       "subphase": "200_00_AB_Ruined_City_Eve_EV",
+       "chapter": "10-04",
+       "route_group": "A+B",
+       "chapter_name": "Battling Eve"
+      },
+      {
+       "subphase": "190_AB_Pascal_Village",
+       "chapter": "10-03",
+       "route_group": "A+B",
+       "chapter_name": "Attack on Pascal's Village"
+      },
+      {
+       "subphase": "180_AB_Ruined_Front_Of_Camp",
+       "chapter": "10-02",
+       "route_group": "A+B",
+       "chapter_name": "Spherical Machine Battle"
+      }
+     ],
+     "route_states": []
+    }
+   ],
+   "is_joke": true,
+   "kind": "joke",
+   "confidence": "high",
+   "trigger_en_unofficial": "p200 hap 'エリア外警告' (out-of-area warning), group '160~200_ステージ固有行動制御': 5 areas + 'エリア_badEnd' (-451.0, 12.8, 461.7) -> Ending_L; enabled by 'エリア外通知(1..4)' (out-of-area notice) 条件コマンド on HITOUT/INSIDE.",
+   "where": "ph2/p200 160_A..200_70 (camp attack -> Eve fight), 10-01..10-04 A/B",
+   "web_check": "agree (flee during the camp attack / Eve section)"
+  },
+  {
+   "letter": "M",
+   "title": "break ti[M]e",
+   "pf30_subphase": "Ending_M",
+   "pf30_comment_ja": "CD_パスカル村襲撃ミッション中に村から逃走",
+   "pf30_comment_en_unofficial": "routes C/D: run from the village during the Pascal's Village attack mission",
+   "trigger_sources": [
+    {
+     "file": "ph3/p300.dat",
+     "member": "p300_hap.pak",
+     "kind": "phase_jump",
+     "target": "Ending_M",
+     "hap": "バッドエンド(2)",
+     "action": "フェーズジャンプ",
+     "hap_actions": [
+      "エリアコマンド",
+      "フェーズジャンプ"
+     ],
+     "conditions": [],
+     "commands": [
+      {
+       "label": "ENABLE",
+       "args": null
+      }
+     ],
+     "referrers": [],
+     "groups": [
+      "110_パスカルの村_パスカル護衛",
+      "ハッキング中停止(8)",
+      "特殊ステージ中停止"
+     ],
+     "active_subphases": [
+      "110_CD_2_Pascal_Village_A2"
+     ],
+     "chapters": [
+      {
+       "subphase": "110_CD_2_Pascal_Village_A2",
+       "chapter": "14-04",
+       "route_group": "C/D",
+       "chapter_name": "Cannibal Machines"
+      }
+     ],
+     "route_states": []
+    },
+    {
+     "file": "ph3/p300.dat",
+     "member": "p300_hap.pak",
+     "kind": "phase_jump",
+     "target": "Ending_M",
+     "hap": "バッドエンド",
+     "action": "フェーズジャンプ",
+     "hap_actions": [
+      "エリアコマンド",
+      "エリアコマンド",
+      "フェーズジャンプ",
+      "エリアコマンド"
+     ],
+     "conditions": [],
+     "commands": [
+      {
+       "label": "ENABLE",
+       "args": null
+      },
+      {
+       "label": "ENABLE",
+       "args": null
+      },
+      {
+       "label": "ENABLE",
+       "args": null
+      }
+     ],
+     "referrers": [],
+     "groups": [
+      "100_砂漠エリア_パスカルのムラへ",
+      "ハッキング中停止(8)",
+      "特殊ステージ中停止"
+     ],
+     "active_subphases": [
+      "100_CD_2_Desert_A2"
+     ],
+     "chapters": [
+      {
+       "subphase": "100_CD_2_Desert_A2",
+       "chapter": "14-03",
+       "route_group": "C/D",
+       "chapter_name": "Pascal Needs Help"
+      }
+     ],
+     "route_states": []
+    }
+   ],
+   "is_joke": true,
+   "kind": "joke",
+   "confidence": "high",
+   "trigger_en_unofficial": "p300 haps 'バッドエンド' (group '100_砂漠エリア_パスカルのムラへ' = desert, to Pascal's village; 2 'エリアコマンド' areas) and 'バッドエンド(2)' (group '110_パスカルの村_パスカル護衛' = escort Pascal) -> Ending_M.",
+   "where": "ph3/p300 100_CD_2_Desert_A2 (14-03) and 110_CD_2_Pascal_Village_A2 (14-04)",
+   "web_check": "agree (A2 doesn't go to help the village, 14-03)"
+  },
+  {
+   "letter": "N",
+   "title": "[N]o man's village",
+   "pf30_subphase": "Ending_N",
+   "pf30_comment_ja": "CD_パスカル村の村人を全滅させる",
+   "pf30_comment_en_unofficial": "routes C/D: wipe out the Pascal's Village residents",
+   "trigger_sources": [
+    {
+     "file": "st1/r140.dat",
+     "member": "r140_hap.pak",
+     "kind": "phase_jump",
+     "target": "Ending_N",
+     "hap": "初回訪問時/バッドエンド",
+     "action": "フェーズジャンプ",
+     "hap_actions": [
+      "条件コマンド",
+      "条件コマンド",
+      "フェーズジャンプ"
+     ],
+     "conditions": [
+      {
+       "target": "初回訪問時_村人配置/オブジェ配置エリア_パスカル",
+       "state": "DONE",
+       "pred": "0"
+      },
+      {
+       "target": "初回訪問時_村人配置/オブジェ配置エリア_鍛冶屋/道具屋",
+       "state": "DONE",
+       "pred": "0"
+      },
+      {
+       "target": "初回訪問時_村人配置/オブジェ配置エリア_遊び場",
+       "state": "DONE",
+       "pred": "0"
+      },
+      {
+       "target": "初回訪問時_村人配置/オブジェ配置エリア_2F表側",
+       "state": "DONE",
+       "pred": "0"
+      },
+      {
+       "target": "初回訪問時_村人配置/オブジェ配置エリア_1F",
+       "state": "DONE",
+       "pred": "0"
+      },
+      {
+       "target": "初回訪問時_村人配置/オブジェ配置エリア_2F裏側",
+       "state": "DONE",
+       "pred": "0"
+      },
+      {
+       "target": "初回訪問時_サブクエ村人/オブジェ配置エリア",
+       "state": "DONE",
+       "pred": "0"
+      },
+      {
+       "target": "初回訪問時_村人配置/オブジェ配置エリア_パスカル",
+       "state": "DONE",
+       "pred": "0"
+      },
+      {
+       "target": "初回訪問時_村人配置/オブジェ配置エリア_鍛冶屋/道具屋",
+       "state": "DONE",
+       "pred": "0"
+      },
+      {
+       "target": "初回訪問時_村人配置/オブジェ配置エリア_遊び場",
+       "state": "DONE",
+       "pred": "0"
+      },
+      {
+       "target": "初回訪問時_村人配置/オブジェ配置エリア_2F表側",
+       "state": "DONE",
+       "pred": "0"
+      },
+      {
+       "target": "初回訪問時_村人配置/オブジェ配置エリア_1F",
+       "state": "DONE",
+       "pred": "0"
+      }
+     ],
+     "commands": [
+      {
+       "label": "ENABLE",
+       "args": null
+      },
+      {
+       "label": "ENABLE",
+       "args": null
+      },
+      {
+       "label": "MiscState.callSe",
+       "args": "Set_State_r140_Buzz_Silent"
+      },
+      {
+       "label": "MiscState.callSe",
+       "args": "Set_State_r140_Buzz_Silent"
+      },
+      {
+       "label": "ENABLE",
+       "args": null
+      },
+      {
+       "label": "ENABLE",
+       "args": null
+      },
+      {
+       "label": "MiscState.callSe",
+       "args": "Set_State_r140_Buzz_Silent"
+      },
+      {
+       "label": "MiscState.callSe",
+       "args": "Set_State_r140_Buzz_Silent"
+      }
+     ],
+     "referrers": [
+      {
+       "hap": "陥没前",
+       "action": "条件コマンド(2)",
+       "conditions": [
+        {
+         "target": "通常時_村人配置(2)/オブジェ配置エリア_鍛冶屋/道具屋",
+         "state": "DONE",
+         "pred": "0"
+        },
+        {
+         "target": "通常時_村人配置(2)/オブジェ配置エリア_遊び場",
+         "state": "DONE",
+         "pred": "0"
+        },
+        {
+         "target": "通常時_村人配置(2)/オブジェ配置エリア_上階",
+         "state": "DONE",
+         "pred": "0"
+        },
+        {
+         "target": "通常時_村人配置(2)/オブジェ配置エリア_下階",
+         "state": "DONE",
+         "pred": "0"
+        },
+        {
+         "target": "通常時_村人配置(2)/オブジェ配置エリア_入口付近",
+         "state": "DONE",
+         "pred": "0"
+        },
+        {
+         "target": "陥没前_配置変更村人/オブジェ配置エリア_陥没前",
+         "state": "DONE",
+         "pred": "0"
+        }
+       ],
+       "commands": [
+        {
+         "label": "MiscState.callSe",
+         "args": null
+        },
+        {
+         "label": "MiscState.callSe",
+         "args": null
+        },
+        {
+         "label": "ENABLE",
+         "args": null
+        },
+        {
+         "label": "ENABLE",
+         "args": null
+        }
+       ]
+      },
+      {
+       "hap": "バンカー破壊後",
+       "action": "条件コマンド(2)",
+       "conditions": [
+        {
+         "target": "通常時_村人配置(2)/オブジェ配置エリア_鍛冶屋/道具屋",
+         "state": "DONE",
+         "pred": "0"
+        },
+        {
+         "target": "通常時_村人配置(2)/オブジェ配置エリア_遊び場",
+         "state": "DONE",
+         "pred": "0"
+        },
+        {
+         "target": "通常時_村人配置(2)/オブジェ配置エリア_上階",
+         "state": "DONE",
+         "pred": "0"
+        },
+        {
+         "target": "通常時_村人配置(2)/オブジェ配置エリア_下階",
+         "state": "DONE",
+         "pred": "0"
+        },
+        {
+         "target": "通常時_村人配置(2)/オブジェ配置エリア_入口付近",
+         "state": "DONE",
+         "pred": "0"
+        },
+        {
+         "target": "オブジェ配置(10)/オブジェ配置_パスカル",
+         "state": "DONE",
+         "pred": "0"
+        }
+       ],
+       "commands": [
+        {
+         "label": "MiscState.callSe",
+         "args": null
+        },
+        {
+         "label": "MiscState.callSe",
+         "args": null
+        },
+        {
+         "label": "ENABLE",
+         "args": null
+        },
+        {
+         "label": "ENABLE",
+         "args": null
+        }
+       ]
+      },
+      {
+       "hap": "陥没後",
+       "action": "条件コマンド(2)",
+       "conditions": [
+        {
+         "target": "通常時_村人配置(2)/オブジェ配置エリア_鍛冶屋/道具屋",
+         "state": "DONE",
+         "pred": "0"
+        },
+        {
+         "target": "通常時_村人配置(2)/オブジェ配置エリア_遊び場",
+         "state": "DONE",
+         "pred": "0"
+        },
+        {
+         "target": "通常時_村人配置(2)/オブジェ配置エリア_上階",
+         "state": "DONE",
+         "pred": "0"
+        },
+        {
+         "target": "通常時_村人配置(2)/オブジェ配置エリア_下階",
+         "state": "DONE",
+         "pred": "0"
+        },
+        {
+         "target": "通常時_村人配置(2)/オブジェ配置エリア_入口付近",
+         "state": "DONE",
+         "pred": "0"
+        },
+        {
+         "target": "オブジェ配置(10)/オブジェ配置_パスカル",
+         "state": "DONE",
+         "pred": "0"
+        }
+       ],
+       "commands": [
+        {
+         "label": "MiscState.callSe",
+         "args": null
+        },
+        {
+         "label": "MiscState.callSe",
+         "args": null
+        },
+        {
+         "label": "ENABLE",
+         "args": null
+        },
+        {
+         "label": "ENABLE",
+         "args": null
+        }
+       ]
+      },
+      {
+       "hap": "通常訪問時_パスカル不在中のバッドエンド",
+       "action": "条件コマンド(2)",
+       "conditions": [
+        {
+         "target": "通常時_村人配置(2)/オブジェ配置エリア_鍛冶屋/道具屋",
+         "state": "DONE",
+         "pred": "0"
+        },
+        {
+         "target": "通常時_村人配置(2)/オブジェ配置エリア_遊び場",
+         "state": "DONE",
+         "pred": "0"
+        },
+        {
+         "target": "通常時_村人配置(2)/オブジェ配置エリア_上階",
+         "state": "DONE",
+         "pred": "0"
+        },
+        {
+         "target": "通常時_村人配置(2)/オブジェ配置エリア_下階",
+         "state": "DONE",
+         "pred": "0"
+        },
+        {
+         "target": "通常時_村人配置(2)/オブジェ配置エリア_入口付近",
+         "state": "DONE",
+         "pred": "0"
+        },
+        {
+         "target": "通常時_村人配置(2)/オブジェ配置エリア_子供",
+         "state": "DONE",
+         "pred": "0"
+        }
+       ],
+       "commands": [
+        {
+         "label": "MiscState.callSe",
+         "args": null
+        },
+        {
+         "label": "MiscState.callSe",
+         "args": null
+        },
+        {
+         "label": "ENABLE",
+         "args": null
+        },
+        {
+         "label": "ENABLE",
+         "args": null
+        }
+       ]
+      }
+     ],
+     "groups": [
+      "パスカル村＿バッドエンド",
+      "ハッキング中停止(9)"
+     ],
+     "active_subphases": [],
+     "chapters": [],
+     "route_states": []
+    }
+   ],
+   "is_joke": true,
+   "kind": "joke",
+   "confidence": "high",
+   "trigger_en_unofficial": "st1/r140 (Pascal's Village room) hap '初回訪問時/バッドエンド' (first visit / bad end), group 'パスカル村＿バッドエンド': 条件コマンド requiring DONE on every villager layout area ('オブジェ配置エリア_パスカル', '鍛冶屋/道具屋', '遊び場', '2F', '1F'...) -> Ending_N; same check in '陥没前', '陥没後', 'バンカー破壊後', '通常訪問時_パスカル不在中のバッドエンド' (before/after the collapse, after Bunker destruction, Pascal absent).",
+   "where": "st1/r140 Pascal's Village (any route, several village states)",
+   "web_check": "partial: web says routes C/D or 05-01/07-01; data: several village states incl. first visit",
+   "unresolved": "exact meaning of 'DONE' on a layout area (all residents dead) inferred"
+  },
+  {
+   "letter": "O",
+   "title": "just y[O]u and me",
+   "pf30_subphase": "Ending_O",
+   "pf30_comment_ja": "CD_大乱戦中に逃走",
+   "pf30_comment_en_unofficial": "routes C/D: run away during the big melee",
+   "trigger_sources": [
+    {
+     "file": "ph3/p300.dat",
+     "member": "p300_hap.pak",
+     "kind": "phase_jump",
+     "target": "Ending_O",
+     "hap": "バッドエンド処理_9S防衛前まで",
+     "action": "フェーズジャンプ",
+     "hap_actions": [
+      "エリア_予兆",
+      "条件コマンド_エリア外警告",
+      "条件コマンド",
+      "エリア_進行禁止",
+      "条件ブロック",
+      "フェーズジャンプ"
+     ],
+     "conditions": [
+      {
+       "target": "バッドエンド処理_9S防衛前まで/エリア_予兆",
+       "state": "INSIDE",
+       "pred": "0"
+      },
+      {
+       "target": "流れ(9)/..M3000_S0330_GM_ジャミング敵撃破",
+       "state": "p300_27_caution_end",
+       "pred": "0"
+      }
+     ],
+     "commands": [
+      {
+       "label": "Action.signal",
+       "args": "\"p300_27_caution 0\""
+      },
+      {
+       "label": "Action.signal",
+       "args": "\"p300_27_caution 0\""
+      },
+      {
+       "label": "RESET",
+       "args": null
+      },
+      {
+       "label": "RESET",
+       "args": null
+      },
+      {
+       "label": "RESET",
+       "args": null
+      },
+      {
+       "label": "RESET",
+       "args": null
+      }
+     ],
+     "referrers": [
+      {
+       "hap": "バッドエンド処理",
+       "action": "複数コマンド送信",
+       "conditions": [],
+       "commands": [
+        {
+         "label": "DISABLE",
+         "args": null
+        },
+        {
+         "label": "DISABLE",
+         "args": null
+        }
+       ]
+      }
+     ],
+     "groups": [
+      "27_大ハイキョ都市_ジャミング敵撃破",
+      "ハッキング中停止(8)",
+      "特殊ステージ中停止"
+     ],
+     "active_subphases": [
+      "27_CD_Ruined_City_2B"
+     ],
+     "chapters": [
+      {
+       "subphase": "27_CD_Ruined_City_2B",
+       "chapter": "11-04",
+       "route_group": "C/D",
+       "chapter_name": "Contaminated YoRHa"
+      }
+     ],
+     "route_states": [
+      "PL/2B_Armed_NoMask"
+     ]
+    },
+    {
+     "file": "ph3/p300.dat",
+     "member": "p300_hap.pak",
+     "kind": "phase_jump",
+     "target": "Ending_O",
+     "hap": "バッドエンド処理",
+     "action": "フェーズジャンプ",
+     "hap_actions": [
+      "条件ブロック",
+      "複数コマンド送信",
+      "エリア_予兆",
+      "条件コマンド_エリア外警告",
+      "条件コマンド",
+      "エリア_進行不可",
+      "条件ブロック_バッドエンド",
+      "フェーズジャンプ"
+     ],
+     "conditions": [
+      {
+       "target": "バッドエンド処理/エリア_予兆",
+       "state": "OUTSIDE",
+       "pred": "0"
+      },
+      {
+       "target": "流れ(9)/..M3000_S0330_GM_ジャミング敵撃破",
+       "state": "p300_27_caution_end",
+       "pred": "0"
+      }
+     ],
+     "commands": [
+      {
+       "label": "DISABLE",
+       "args": null
+      },
+      {
+       "label": "DISABLE",
+       "args": null
+      },
+      {
+       "label": "Action.signal",
+       "args": "\"p300_27_caution 0\""
+      },
+      {
+       "label": "Action.signal",
+       "args": "\"p300_27_caution 0\""
+      },
+      {
+       "label": "RESET",
+       "args": null
+      },
+      {
+       "label": "RESET",
+       "args": null
+      },
+      {
+       "label": "RESET",
+       "args": null
+      },
+      {
+       "label": "RESET",
+       "args": null
+      }
+     ],
+     "referrers": [
+      {
+       "hap": "流れ(9)",
+       "action": "条件コマンド_9Sが死んだら",
+       "conditions": [
+        {
+         "target": "0x3b5a108d",
+         "state": "ON_DIE",
+         "pred": "0"
+        }
+       ],
+       "commands": [
+        {
+         "label": "DISABLE",
+         "args": null
+        },
+        {
+         "label": "DISABLE",
+         "args": null
+        }
+       ]
+      }
+     ],
+     "groups": [
+      "27_大ハイキョ都市_ジャミング敵撃破",
+      "ハッキング中停止(8)",
+      "特殊ステージ中停止"
+     ],
+     "active_subphases": [
+      "27_CD_Ruined_City_2B"
+     ],
+     "chapters": [
+      {
+       "subphase": "27_CD_Ruined_City_2B",
+       "chapter": "11-04",
+       "route_group": "C/D",
+       "chapter_name": "Contaminated YoRHa"
+      }
+     ],
+     "route_states": [
+      "PL/2B_Armed_NoMask"
+     ]
+    },
+    {
+     "file": "ph3/p300.dat",
+     "member": "p300_hap.pak",
+     "kind": "phase_jump",
+     "target": "Ending_O",
+     "hap": "バッドエンド処理(2)",
+     "action": "フェーズジャンプ",
+     "hap_actions": [
+      "エリア_予兆",
+      "エリア_進行禁止",
+      "条件コマンド_予兆エリアの警告",
+      "条件コマンド_予兆エリアのリセット",
+      "条件ブロック",
+      "フェーズジャンプ"
+     ],
+     "conditions": [
+      {
+       "target": "バッドエンド処理(2)/エリア_予兆",
+       "state": "INSIDE",
+       "pred": "0"
+      },
+      {
+       "target": "スクリプト/..M3000_S0200_GM_大乱戦",
+       "state": "p300_20_caution1_end",
+       "pred": "0"
+      },
+      {
+       "target": "流れ/..M3000_S0040_GM_防空システムハッキング",
+       "state": "p300_10_caution1_end",
+       "pred": "0"
+      }
+     ],
+     "commands": [
+      {
+       "label": "Action.signal",
+       "args": "\"p300_20_caution1 0\""
+      },
+      {
+       "label": "Action.signal",
+       "args": "\"p300_20_caution1 0\""
+      },
+      {
+       "label": "RESET",
+       "args": null
+      },
+      {
+       "label": "RESET",
+       "args": null
+      },
+      {
+       "label": "Action.signal",
+       "args": "\"p300_10_caution1 0\""
+      },
+      {
+       "label": "Action.signal",
+       "args": "\"p300_10_caution1 0\""
+      },
+      {
+       "label": "RESET",
+       "args": null
+      },
+      {
+       "label": "RESET",
+       "args": null
+      }
+     ],
+     "referrers": [],
+     "groups": [
+      "バッドエンド共通処理",
+      "ハッキング中停止(8)",
+      "特殊ステージ中停止"
+     ],
+     "active_subphases": [
+      "10_10_CD_Ruined_City_SPEnemy_9S",
+      "10_CD_Ruined_City_9S",
+      "15_CD_Ruined_City_9S",
+      "20_CD_Ruined_City_2B",
+      "21_CD_Ruined_City_2B",
+      "22_CD_Ruined_City_2B",
+      "23_CD_Ruined_City_2B"
+     ],
+     "chapters": [
+      {
+       "subphase": "23_CD_Ruined_City_2B",
+       "chapter": "11-03",
+       "route_group": "C/D",
+       "chapter_name": "2B's Battle for Control"
+      },
+      {
+       "subphase": "15_CD_Ruined_City_9S",
+       "chapter": "11-02",
+       "route_group": "C/D",
+       "chapter_name": "9S Hacks the Defense System"
+      }
+     ],
+     "route_states": []
+    },
+    {
+     "file": "ph3/p300.dat",
+     "member": "p300_hap.pak",
+     "kind": "phase_jump",
+     "target": "Ending_O",
+     "hap": "バッドエンド処理",
+     "action": "フェーズジャンプ",
+     "hap_actions": [
+      "エリア_予兆",
+      "エリア_進行禁止",
+      "条件コマンド_予兆エリアの警告",
+      "条件コマンド_予兆エリアのリセット",
+      "条件ブロック",
+      "フェーズジャンプ"
+     ],
+     "conditions": [
+      {
+       "target": "バッドエンド処理/エリア_予兆",
+       "state": "INSIDE",
+       "pred": "0"
+      },
+      {
+       "target": "スクリプト(16)/..M3000_S0200_GM_EMP攻撃",
+       "state": "p300_25_caution_end",
+       "pred": "0"
+      }
+     ],
+     "commands": [
+      {
+       "label": "Action.signal",
+       "args": "\"p300_25_caution 0\""
+      },
+      {
+       "label": "Action.signal",
+       "args": "\"p300_25_caution 0\""
+      },
+      {
+       "label": "RESET",
+       "args": null
+      },
+      {
+       "label": "RESET",
+       "args": null
+      },
+      {
+       "label": "RESET",
+       "args": null
+      },
+      {
+       "label": "RESET",
+       "args": null
+      }
+     ],
+     "referrers": [],
+     "groups": [
+      "25_大ハイキョ都市_ヨルハ感染",
+      "25~26_ヨルハ汚染",
+      "ハッキング中停止(8)",
+      "特殊ステージ中停止"
+     ],
+     "active_subphases": [
+      "25_CD_Ruined_City_2B",
+      "26_10_CD_Ruined_City_9S",
+      "26_CD_Ruined_City_9S"
+     ],
+     "chapters": [
+      {
+       "subphase": "26_CD_Ruined_City_9S",
+       "chapter": "11-03",
+       "route_group": "C/D",
+       "chapter_name": "2B's Battle for Control"
+      },
+      {
+       "subphase": "26_10_CD_Ruined_City_9S",
+       "chapter": "11-04",
+       "route_group": "C/D",
+       "chapter_name": "Contaminated YoRHa"
+      }
+     ],
+     "route_states": []
+    },
+    {
+     "file": "ph3/p300.dat",
+     "member": "p300_hap.pak",
+     "kind": "phase_jump",
+     "target": "Ending_O",
+     "hap": "バッドエンド処理(5)",
+     "action": "フェーズジャンプ",
+     "hap_actions": [
+      "エリア_予兆",
+      "条件コマンド_エリア外警告",
+      "条件コマンド",
+      "エリア_バッドエンド",
+      "条件ブロック",
+      "フェーズジャンプ"
+     ],
+     "conditions": [
+      {
+       "target": "バッドエンド処理(5)/エリア_予兆",
+       "state": "OUTSIDE",
+       "pred": "0"
+      },
+      {
+       "target": "スクリプト(16)/..M3000_S0200_GM_EMP攻撃",
+       "state": "p300_26_caution_end",
+       "pred": "0"
+      }
+     ],
+     "commands": [
+      {
+       "label": "Action.signal",
+       "args": "\"p300_26_caution 0\""
+      },
+      {
+       "label": "Action.signal",
+       "args": "\"p300_26_caution 0\""
+      },
+      {
+       "label": "RESET",
+       "args": null
+      },
+      {
+       "label": "RESET",
+       "args": null
+      },
+      {
+       "label": "RESET",
+       "args": null
+      },
+      {
+       "label": "RESET",
+       "args": null
+      }
+     ],
+     "referrers": [
+      {
+       "hap": "流れ(汚染解除前)",
+       "action": "条件コマンド_2Bが死んだら",
+       "conditions": [
+        {
+         "target": "0xb21ee9b4",
+         "state": "ON_DIE",
+         "pred": "0"
+        }
+       ],
+       "commands": [
+        {
+         "label": "DISABLE",
+         "args": null
+        },
+        {
+         "label": "DISABLE",
+         "args": null
+        }
+       ]
+      }
+     ],
+     "groups": [
+      "26_共通",
+      "25~26_ヨルハ汚染",
+      "ハッキング中停止(8)",
+      "特殊ステージ中停止"
+     ],
+     "active_subphases": [
+      "25_CD_Ruined_City_2B",
+      "26_10_CD_Ruined_City_9S",
+      "26_CD_Ruined_City_9S"
+     ],
+     "chapters": [
+      {
+       "subphase": "26_CD_Ruined_City_9S",
+       "chapter": "11-03",
+       "route_group": "C/D",
+       "chapter_name": "2B's Battle for Control"
+      },
+      {
+       "subphase": "26_10_CD_Ruined_City_9S",
+       "chapter": "11-04",
+       "route_group": "C/D",
+       "chapter_name": "Contaminated YoRHa"
+      }
+     ],
+     "route_states": []
+    }
+   ],
+   "is_joke": true,
+   "kind": "joke",
+   "confidence": "high",
+   "trigger_en_unofficial": "p300 haps 'バッドエンド処理' / '(2)' / '(5)' / '_9S防衛前まで': 'エリア_予兆' (warning area) -> signal p300_xx_caution, 'エリア_進行禁止/不可' (no-go area) -> Ending_O; also enabled by '流れ(9)/条件コマンド_9Sが死んだら' (if 9S dies) and '流れ(汚染解除前)/条件コマンド_2Bが死んだら'.",
+   "where": "ph3/p300 10..27_CD (11-02..11-04: 9S hack, big melee, YoRHa contamination, jamming)",
+   "web_check": "agree (leave the City Ruins fight / abandon 2B after the EMP)"
+  },
+  {
+   "letter": "P",
+   "title": "corru[P]tion",
+   "pf30_subphase": "Ending_P",
+   "pf30_comment_ja": "CD_２Bがショッピングモール移動時、逃走",
+   "pf30_comment_en_unofficial": "routes C/D: run away while 2B is moving to the shopping mall",
+   "trigger_sources": [
+    {
+     "file": "ph3/p300.dat",
+     "member": "p300_hap.pak",
+     "kind": "phase_jump",
+     "target": "Ending_P",
+     "hap": "時間制限",
+     "action": "フェーズジャンプ",
+     "hap_actions": [
+      "条件ブロック_転送端末演出中じゃない？",
+      "条件ブロック",
+      "遅延ブロック_汚染開始",
+      "コマンド送信_汚染開始",
+      "遅延ブロック_汚染発見までちょっと間",
+      "複数コマンド送信_汚染開始",
+      "条件コマンド_汚染開始",
+      "遅延ブロック_汚染Lv1",
+      "複数コマンド送信_汚染Lv1",
+      "コマンド送信_汚染Lv1",
+      "遅延ブロック_汚染Lv2",
+      "複数コマンド送信_汚染Lv2",
+      "コマンド送信_汚染Lv2",
+      "遅延ブロック_汚染Lv3",
+      "複数コマンド送信_汚染Lv3",
+      "コマンド送信_汚染Lv3",
+      "遅延ブロック_汚染Lv4",
+      "複数コマンド送信_汚染Lv4",
+      "コマンド送信_汚染Lv4",
+      "遅延ブロック_汚染Lv5",
+      "複数コマンド送信_汚染Lv5",
+      "コマンド送信_汚染Lv5",
+      "遅延ブロック_ショート",
+      "複数コマンド送信_ショート",
+      "コマンド送信_ショート",
+      "遅延ブロック",
+      "フェーズジャンプ"
+     ],
+     "conditions": [
+      {
+       "target": "時間制限/複数コマンド送信_汚染開始",
+       "state": "DONE",
+       "pred": "0"
+      }
+     ],
+     "commands": [
+      {
+       "label": "Action.signal",
+       "args": "\"p300_50_virus0 0\""
+      },
+      {
+       "label": "Pl0000.setUIPollutionGaugeLv1",
+       "args": "100"
+      },
+      {
+       "label": "Pl0000.setUIPollutionGaugeLv1",
+       "args": "100"
+      },
+      {
+       "label": "Pl0000.set2BDieFilterLv0",
+       "args": null
+      },
+      {
+       "label": "Pl0000.set2BDieFilterLv0",
+       "args": null
+      },
+      {
+       "label": "Pl0000.setVirusMode",
+       "args": null
+      },
+      {
+       "label": "Pl0000.setVirusMode",
+       "args": null
+      },
+      {
+       "label": "Pl0000.set2BDieSe10",
+       "args": null
+      },
+      {
+       "label": "Pl0000.set2BDieSe10",
+       "args": null
+      },
+      {
+       "label": "Pl0000.startVirusLv2",
+       "args": null
+      },
+      {
+       "label": "Pl0000.startVirusLv2",
+       "args": null
+      },
+      {
+       "label": "Pl0000.setUIPollutionGaugeLv2",
+       "args": "120"
+      }
+     ],
+     "referrers": [
+      {
+       "hap": "流れ",
+       "action": "条件コマンド_汚染開始",
+       "conditions": [
+        {
+         "target": "流れ/エリア_1_最初の会話",
+         "state": "INSIDE",
+         "pred": "0"
+        }
+       ],
+       "commands": [
+        {
+         "label": "DISABLE",
+         "args": null
+        },
+        {
+         "label": "DISABLE",
+         "args": null
+        }
+       ]
+      },
+      {
+       "hap": "流れ",
+       "action": "条件コマンド_汚染Lv1",
+       "conditions": [
+        {
+         "target": "流れ/エリア_2_汚染Lv1",
+         "state": "INSIDE",
+         "pred": "0"
+        }
+       ],
+       "commands": [
+        {
+         "label": "DISABLE",
+         "args": null
+        },
+        {
+         "label": "DISABLE",
+         "args": null
+        }
+       ]
+      },
+      {
+       "hap": "流れ",
+       "action": "条件コマンド_汚染Lv2",
+       "conditions": [
+        {
+         "target": "流れ/エリア_3_汚染Lv2",
+         "state": "INSIDE",
+         "pred": "0"
+        }
+       ],
+       "commands": [
+        {
+         "label": "DISABLE",
+         "args": null
+        },
+        {
+         "label": "DISABLE",
+         "args": null
+        }
+       ]
+      },
+      {
+       "hap": "流れ",
+       "action": "条件コマンド_汚染Lv3",
+       "conditions": [
+        {
+         "target": "流れ/エリア_4_汚染Lv3",
+         "state": "INSIDE",
+         "pred": "0"
+        }
+       ],
+       "commands": [
+        {
+         "label": "DISABLE",
+         "args": null
+        },
+        {
+         "label": "DISABLE",
+         "args": null
+        }
+       ]
+      },
+      {
+       "hap": "流れ",
+       "action": "条件コマンド_汚染Lv4",
+       "conditions": [
+        {
+         "target": "流れ/エリア_5_汚染Lv4",
+         "state": "INSIDE",
+         "pred": "0"
+        }
+       ],
+       "commands": [
+        {
+         "label": "DISABLE",
+         "args": null
+        },
+        {
+         "label": "DISABLE",
+         "args": null
+        }
+       ]
+      },
+      {
+       "hap": "流れ",
+       "action": "条件コマンド_汚染Lv5",
+       "conditions": [
+        {
+         "target": "流れ/エリア_6_汚染Lv5",
+         "state": "INSIDE",
+         "pred": "0"
+        }
+       ],
+       "commands": [
+        {
+         "label": "DISABLE",
+         "args": null
+        },
+        {
+         "label": "DISABLE",
+         "args": null
+        }
+       ]
+      },
+      {
+       "hap": "流れ",
+       "action": "条件コマンド_ショート",
+       "conditions": [
+        {
+         "target": "流れ/エリア_7_ショート",
+         "state": "INSIDE",
+         "pred": "0"
+        }
+       ],
+       "commands": [
+        {
+         "label": "DISABLE",
+         "args": null
+        },
+        {
+         "label": "DISABLE",
+         "args": null
+        }
+       ]
+      }
+     ],
+     "groups": [
+      "50_水没都市_９Sと合流",
+      "50_水没都市_2Bの死",
+      "ハッキング中停止(8)",
+      "特殊ステージ中停止"
+     ],
+     "active_subphases": [
+      "40_CD_Bunker_Shooting_2B",
+      "50_10_CD_Ruined_City_A2Come_2B",
+      "50_20_CD_Ruined_City_2BDead_9S",
+      "50_CD_Submerge_City_2B"
+     ],
+     "chapters": [
+      {
+       "subphase": "50_10_CD_Ruined_City_A2Come_2B",
+       "chapter": "11-06",
+       "route_group": "C/D",
+       "chapter_name": "2B's Final Moments"
+      },
+      {
+       "subphase": "40_CD_Bunker_Shooting_2B",
+       "chapter": "11-05",
+       "route_group": "C/D",
+       "chapter_name": "2B Escapes the Bunker"
+      },
+      {
+       "subphase": "50_20_CD_Ruined_City_2BDead_9S",
+       "chapter": "11-07",
+       "route_group": "C/D",
+       "chapter_name": "9S Gets Separated"
+      }
+     ],
+     "route_states": []
+    }
+   ],
+   "is_joke": true,
+   "kind": "joke",
+   "confidence": "high",
+   "trigger_en_unofficial": "p300 hap '時間制限' (time limit): infection timeline (Pl0000.setUIPollutionGaugeLv1..7, set2BDieFilterLv0..3, signals p300_50_virus0..6), each level started when 2B enters '流れ/エリア_N_汚染LvN' areas, then 'フェーズジャンプ' Ending_P.",
+   "where": "ph3/p300 50_CD_Submerge_City_2B (11-06)",
+   "web_check": "agree (infection reaches 100%)"
+  },
+  {
+   "letter": "Q",
+   "title": "[Q]uestionable actions",
+   "pf30_subphase": "Ending_Q",
+   "pf30_comment_ja": "CD_９Sがショッピングモール移動時、逃走",
+   "pf30_comment_en_unofficial": "routes C/D: run away while 9S is moving to the shopping mall",
+   "trigger_sources": [
+    {
+     "file": "ph3/p300.dat",
+     "member": "p300_hap.pak",
+     "kind": "phase_jump",
+     "target": "Ending_Q",
+     "hap": "バッドエンド処理(4)",
+     "action": "フェーズジャンプ",
+     "hap_actions": [
+      "エリア_予兆",
+      "エリア_進行禁止",
+      "条件コマンド_予兆エリアの警告",
+      "条件コマンド_予兆エリアのリセット",
+      "条件ブロック",
+      "フェーズジャンプ"
+     ],
+     "conditions": [
+      {
+       "target": "バッドエンド処理(4)/エリア_予兆",
+       "state": "INSIDE",
+       "pred": "0"
+      },
+      {
+       "target": "流れ/..M3000_S0730_GM_９Ｓ操作。地上に落ちる９Ｓ",
+       "state": "p300_50_caution1_end",
+       "pred": "0"
+      }
+     ],
+     "commands": [
+      {
+       "label": "Action.signal",
+       "args": "\"p300_50_caution1 0\""
+      },
+      {
+       "label": "Action.signal",
+       "args": "\"p300_50_caution1 0\""
+      },
+      {
+       "label": "RESET",
+       "args": null
+      },
+      {
+       "label": "RESET",
+       "args": null
+      },
+      {
+       "label": "RESET",
+       "args": null
+      },
+      {
+       "label": "RESET",
+       "args": null
+      }
+     ],
+     "referrers": [],
+     "groups": [
+      "50_20_ハイキョ都市_2B死亡目撃",
+      "50_水没都市_2Bの死",
+      "ハッキング中停止(8)",
+      "特殊ステージ中停止"
+     ],
+     "active_subphases": [
+      "40_CD_Bunker_Shooting_2B",
+      "50_10_CD_Ruined_City_A2Come_2B",
+      "50_20_CD_Ruined_City_2BDead_9S",
+      "50_CD_Submerge_City_2B"
+     ],
+     "chapters": [
+      {
+       "subphase": "50_20_CD_Ruined_City_2BDead_9S",
+       "chapter": "11-07",
+       "route_group": "C/D",
+       "chapter_name": "9S Gets Separated"
+      },
+      {
+       "subphase": "40_CD_Bunker_Shooting_2B",
+       "chapter": "11-05",
+       "route_group": "C/D",
+       "chapter_name": "2B Escapes the Bunker"
+      },
+      {
+       "subphase": "50_10_CD_Ruined_City_A2Come_2B",
+       "chapter": "11-06",
+       "route_group": "C/D",
+       "chapter_name": "2B's Final Moments"
+      }
+     ],
+     "route_states": [
+      "PL/9S"
+     ]
+    }
+   ],
+   "is_joke": true,
+   "kind": "joke",
+   "confidence": "high",
+   "trigger_en_unofficial": "p300 hap 'バッドエンド処理(4)', groups '50_20_ハイキョ都市_2B死亡目撃' + PL/9S: warning area (-33.3, -5.7, 239.5), no-go area (-76.3, -25.1, 243.0) -> Ending_Q.",
+   "where": "ph3/p300 50_20_CD_Ruined_City_2BDead_9S (11-07)",
+   "web_check": "agree (9S doesn't go to the Commercial Facility)"
+  },
+  {
+   "letter": "R",
+   "title": "mave[R]ick",
+   "pf30_subphase": "Ending_R",
+   "pf30_comment_ja": "CD_パスカル村の避難している住人を殺す",
+   "pf30_comment_en_unofficial": "routes C/D: kill the evacuated Pascal's Village residents",
+   "trigger_sources": [
+    {
+     "file": "ph3/p300.dat",
+     "member": "p300_hap.pak",
+     "kind": "phase_jump",
+     "target": "Ending_R",
+     "hap": "攻撃した際の処理",
+     "action": "フェーズジャンプ",
+     "hap_actions": [
+      "条件コマンド",
+      "条件ブロックリスト",
+      "フェーズジャンプ"
+     ],
+     "conditions": [
+      {
+       "target": "0xb0f1584f",
+       "state": "ON_SCARE_TALK",
+       "pred": "0"
+      },
+      {
+       "target": "0x1c0e0ed5",
+       "state": "ON_SCARE_TALK",
+       "pred": "0"
+      },
+      {
+       "target": "0x627cd9d4",
+       "state": "ON_SCARE_TALK",
+       "pred": "0"
+      },
+      {
+       "target": "0xee631d2c",
+       "state": "ON_SCARE_TALK",
+       "pred": "0"
+      },
+      {
+       "target": "0xd8963bc3",
+       "state": "ON_SCARE_TALK",
+       "pred": "0"
+      },
+      {
+       "target": "0xb2148d85",
+       "state": "ON_SCARE_TALK",
+       "pred": "0"
+      },
+      {
+       "target": "0x045e4cd9",
+       "state": "ON_SCARE_TALK",
+       "pred": "0"
+      },
+      {
+       "target": "0x0ca4c6b4",
+       "state": "ON_SCARE_TALK",
+       "pred": "0"
+      },
+      {
+       "target": "0x7228eb3a",
+       "state": "ON_SCARE_TALK",
+       "pred": "0"
+      },
+      {
+       "target": "0xd30e8e61",
+       "state": "ON_SCARE_TALK",
+       "pred": "0"
+      },
+      {
+       "target": "0xdd89dc9f",
+       "state": "ON_SCARE_TALK",
+       "pred": "0"
+      },
+      {
+       "target": "0x059d660b",
+       "state": "ON_SCARE_TALK",
+       "pred": "0"
+      }
+     ],
+     "commands": [
+      {
+       "label": "Action.signal",
+       "args": "\"damage_talk 0\""
+      },
+      {
+       "label": "Action.signal",
+       "args": "\"damage_talk 0\""
+      }
+     ],
+     "referrers": [],
+     "groups": [
+      "避難するパスカル村の住人",
+      "120_00_CD_2_ロボット山_パスカルと避難所で合流",
+      "120_パスカルの絶望",
+      "ハッキング中停止(8)",
+      "特殊ステージ中停止"
+     ],
+     "active_subphases": [
+      "0xb4a76d5c",
+      "120_00_CD_2_RobotM_Shelter_A2",
+      "120_30_CD_2_RobotM_TankBoss_A2",
+      "120_50_CD_2_RobotM_Operate1_A2",
+      "120_70_CD_2_RobotM_Operate2_A2",
+      "120_90_CD_2_RobotM_Pascal_A2",
+      "120_95_CD_2_Branch_A2_9S"
+     ],
+     "chapters": [
+      {
+       "subphase": "120_95_CD_2_Branch_A2_9S",
+       "chapter": "14-05",
+       "route_group": "C/D",
+       "chapter_name": "A2 and the Children"
+      }
+     ],
+     "route_states": [
+      "Route/C",
+      "Route/D"
+     ]
+    }
+   ],
+   "is_joke": true,
+   "kind": "joke",
+   "confidence": "high",
+   "trigger_en_unofficial": "p300 hap '攻撃した際の処理' (handling when attacked), group '避難するパスカル村の住人' (evacuating villagers): ON_SCARE_TALK + getHpRate100 on 5 villagers -> Ending_R; Route/C, Route/D.",
+   "where": "ph3/p300 120_xx_CD_2_RobotM (14-05, Abandoned Factory shelter)",
+   "web_check": "agree (attack sheltering machines, 14-05)"
+  },
+  {
+   "letter": "S",
+   "title": "city e[S]cape",
+   "pf30_subphase": "Ending_S",
+   "pf30_comment_ja": "CD_デボルポポルを残して廃墟都市から逃走。",
+   "pf30_comment_en_unofficial": "routes C/D: flee the City Ruins leaving Devola and Popola behind",
+   "trigger_sources": [
+    {
+     "file": "ph3/p300.dat",
+     "member": "p300_hap.pak",
+     "kind": "phase_jump",
+     "target": "Ending_S",
+     "hap": "バッドエンド_塔からの離脱",
+     "action": "フェーズジャンプ",
+     "hap_actions": [
+      "条件ブロック_デボルポポル繋ぎイベント終了",
+      "エリア_1",
+      "条件コマンド",
+      "エリア_2",
+      "条件コマンド(2)",
+      "エリア_3",
+      "エリア_3_2",
+      "条件コマンド(3)",
+      "フェーズジャンプ"
+     ],
+     "conditions": [
+      {
+       "target": "バッドエンド_塔からの離脱/エリア_1",
+       "state": "HITOUT",
+       "pred": "0"
+      },
+      {
+       "target": "バッドエンド_塔からの離脱/エリア_2",
+       "state": "HITOUT",
+       "pred": "0"
+      },
+      {
+       "target": "バッドエンド_塔からの離脱/エリア_3",
+       "state": "HITOUT",
+       "pred": "0"
+      },
+      {
+       "target": "バッドエンド_塔からの離脱/エリア_3_2",
+       "state": "HIT",
+       "pred": "0"
+      }
+     ],
+     "commands": [
+      {
+       "label": "Action.signal",
+       "args": "\"escape_fast 0\""
+      },
+      {
+       "label": "Action.signal",
+       "args": "\"escape_fast 0\""
+      },
+      {
+       "label": "Action.signal",
+       "args": "\"escape_second 0\""
+      },
+      {
+       "label": "Action.signal",
+       "args": "\"escape_second 0\""
+      },
+      {
+       "label": "Action.signal",
+       "args": "\"escape_third 0\""
+      },
+      {
+       "label": "Action.signal",
+       "args": "\"escape_third 0\""
+      }
+     ],
+     "referrers": [],
+     "groups": [
+      "260_大ハイキョ都市_塔をハッキング",
+      "ハッキング中停止(8)",
+      "特殊ステージ中停止"
+     ],
+     "active_subphases": [
+      "250_CD_Unknown_9S",
+      "260_00_CD_Ruined_City_9S"
+     ],
+     "chapters": [
+      {
+       "subphase": "260_00_CD_Ruined_City_9S",
+       "chapter": "17-01",
+       "route_group": "C/D",
+       "chapter_name": "9S Heads to the Tower"
+      }
+     ],
+     "route_states": []
+    }
+   ],
+   "is_joke": true,
+   "kind": "joke",
+   "confidence": "high",
+   "trigger_en_unofficial": "p300 hap 'バッドエンド_塔からの離脱' (leaving the tower): 3 nested areas (HITOUT -> signals escape_fast/second/third), last area 'エリア_3_2' (261.2, -10.2, 362.9) -> Ending_S; script group 'スクリプト(28)' param 'ending_S'.",
+   "where": "ph3/p300 250_CD_Unknown_9S / 260_00_CD_Ruined_City_9S (17-01)",
+   "web_check": "agree (abandon Devola & Popola)"
+  },
+  {
+   "letter": "T",
+   "title": "fa[T]al error",
+   "pf30_subphase": "Ending_T",
+   "pf30_comment_ja": "いつでも_OSチップを外す",
+   "pf30_comment_en_unofficial": "anytime: remove the OS chip",
+   "trigger_sources": [
+    {
+     "kind": "exe",
+     "rva": "0x899125",
+     "function": [
+      "0x898ee0",
+      "0x899978"
+     ],
+     "string": "Ending_T",
+     "letter": "T",
+     "evidence": "fn 0x898ee0 : objet 3000..3999 (puce) ; 0x7f54c0 teste emplacement == 0xd0a (3338 OS Chip) et equipe -> Ending_T",
+     "verified": true
+    },
+    {
+     "kind": "exe",
+     "rva": "0x9893e8",
+     "function": [
+      "0x9892df",
+      "0x989a8b"
+     ],
+     "string": "Ending_T",
+     "letter": "T",
+     "evidence": "menu puces (fn 0x9892df : core_pluginchip_remove / _dump / _settype_equip) -> Ending_T",
+     "verified": true
+    },
+    {
+     "kind": "exe",
+     "rva": "0x98ba08",
+     "function": [
+      "0x98b83f",
+      "0x98bd1b"
+     ],
+     "string": "Ending_T",
+     "letter": "T",
+     "evidence": "menu puces, 2e chemin (fn 0x98b83f, meme schema START/Ending_T)",
+     "verified": true
+    }
+   ],
+   "is_joke": true,
+   "kind": "joke",
+   "confidence": "high",
+   "trigger_en_unofficial": "exe: chip menu (fn 0x9892df, sounds core_pluginchip_remove/_dump) and fn 0x898ee0 (items 3000..3999): 0x7f54c0 tests chip id == 0xd0a (3338 OS Chip) -> Ending_T (0xf30).",
+   "where": "anywhere (plug-in chip menu)",
+   "web_check": "agree (remove the OS chip)"
+  },
+  {
+   "letter": "U",
+   "title": "deb[U]nked",
+   "pf30_subphase": "Ending_U",
+   "pf30_comment_ja": "いつでも_バンカーで自爆",
+   "pf30_comment_en_unofficial": "anytime: self-destruct in the Bunker",
+   "trigger_sources": [
+    {
+     "file": "quest/qb40.dat",
+     "member": "qb40_hap.pak",
+     "kind": "setBadEnd",
+     "target": "Ending_U",
+     "hap": "自爆バッドエンド",
+     "action": "コマンド送信",
+     "hap_actions": [
+      "条件ブロック",
+      "コマンド送信"
+     ],
+     "conditions": [],
+     "commands": [
+      {
+       "label": "ContinueState.setBadEnd",
+       "args": "1"
+      }
+     ],
+     "referrers": [],
+     "groups": [
+      "基本情報"
+     ],
+     "active_subphases": [],
+     "chapters": [],
+     "route_states": []
+    },
+    {
+     "kind": "exe",
+     "rva": "0x83dc66",
+     "function": [
+      "0x83dc4b",
+      "0x83dcb8"
+     ],
+     "string": "Ending_U",
+     "letter": "U",
+     "evidence": "ecran game over (fn 0x83dc4b) : si [0x11eac20]==1 -> Ending_U ; [0x11eac20] ecrit par ContinueState.setBadEnd(x) (natif 0x80e200 : etat 6, valeur x)",
+     "verified": true
+    }
+   ],
+   "is_joke": true,
+   "kind": "joke",
+   "confidence": "high",
+   "trigger_en_unofficial": "quest/qb40 (Bunker base quest) hap '自爆バッドエンド' (self-destruct bad end): ContinueState.setBadEnd 1 -> native 0x80e200 (game-over state 6, value 1) -> game-over handler 0x83dc4b: value 1 -> Ending_U.",
+   "where": "Bunker (qb40), while the Bunker exists (until Ch11)",
+   "web_check": "agree (self-destruct in the Bunker)"
+  },
+  {
+   "letter": "V",
+   "title": "reckless bra[V]ery",
+   "pf30_subphase": "Ending_V",
+   "pf30_comment_ja": "CD_塔メインユニットハッキングをセずに放置",
+   "pf30_comment_en_unofficial": "routes C/D: leave the Tower main unit without hacking it",
+   "trigger_sources": [
+    {
+     "file": "ph3/p300.dat",
+     "member": "p300_hap.pak",
+     "kind": "phase_jump",
+     "target": "Ending_V",
+     "hap": "バッドエンド_ハッキングを行わない",
+     "action": "フェーズジャンプ",
+     "hap_actions": [
+      "条件ブロック_デボルポポル繋ぎイベント終了",
+      "コマンド送信_カウント開始",
+      "条件コマンド_30秒経過",
+      "条件コマンド_６０秒経過",
+      "条件コマンド_12０秒経過",
+      "条件コマンド_18０秒経過",
+      "フェーズジャンプ"
+     ],
+     "conditions": [
+      {
+       "target": "0x11824836",
+       "state": "TOWER_NOTHACKING_30",
+       "pred": "0"
+      },
+      {
+       "target": "0x11824836",
+       "state": "TOWER_NOTHACKING_60",
+       "pred": "0"
+      },
+      {
+       "target": "0x11824836",
+       "state": "TOWER_NOTHACKING_120",
+       "pred": "0"
+      },
+      {
+       "target": "0x11824836",
+       "state": "TOWER_NOTHACKING_180",
+       "pred": "0"
+      }
+     ],
+     "commands": [
+      {
+       "label": "Bg6001.startCountDown",
+       "args": null
+      },
+      {
+       "label": "Action.signal",
+       "args": "\"TOWER_NOTHACKING_30 0\""
+      },
+      {
+       "label": "Action.signal",
+       "args": "\"TOWER_NOTHACKING_30 0\""
+      },
+      {
+       "label": "Action.signal",
+       "args": "\"TOWER_NOTHACKING_60 0\""
+      },
+      {
+       "label": "Action.signal",
+       "args": "\"TOWER_NOTHACKING_60 0\""
+      },
+      {
+       "label": "Action.signal",
+       "args": "\"TOWER_NOTHACKING_120 0\""
+      },
+      {
+       "label": "Action.signal",
+       "args": "\"TOWER_NOTHACKING_120 0\""
+      },
+      {
+       "label": "Action.signal",
+       "args": "\"TOWER_NOTHACKING_180 0\""
+      },
+      {
+       "label": "Action.signal",
+       "args": "\"TOWER_NOTHACKING_180 0\""
+      }
+     ],
+     "referrers": [],
+     "groups": [
+      "260_大ハイキョ都市_塔をハッキング",
+      "ハッキング中停止(8)",
+      "特殊ステージ中停止"
+     ],
+     "active_subphases": [
+      "250_CD_Unknown_9S",
+      "260_00_CD_Ruined_City_9S"
+     ],
+     "chapters": [
+      {
+       "subphase": "260_00_CD_Ruined_City_9S",
+       "chapter": "17-01",
+       "route_group": "C/D",
+       "chapter_name": "9S Heads to the Tower"
+      }
+     ],
+     "route_states": []
+    }
+   ],
+   "is_joke": true,
+   "kind": "joke",
+   "confidence": "high",
+   "trigger_en_unofficial": "p300 hap 'バッドエンド_ハッキングを行わない' (not hacking): Bg6001.startCountDown, conditions TOWER_NOTHACKING_30/60/120/180 (seconds) -> Ending_V.",
+   "where": "ph3/p300 250/260_CD (17-01, tower hack with Devola & Popola)",
+   "web_check": "agree (don't hack the tower)"
+  },
+  {
+   "letter": "W",
+   "title": "broken [W]ings",
+   "pf30_subphase": "Ending_W",
+   "pf30_comment_ja": "AB_プロローグロボット山で死亡",
+   "pf30_comment_en_unofficial": "routes A/B: die at the prologue factory (Robot Mountain)",
+   "trigger_sources": [
+    {
+     "kind": "exe",
+     "rva": "0x83dcb8",
+     "function": [
+      "0x83dcb8",
+      "0x83dcf6"
+     ],
+     "string": "Ending_W",
+     "letter": "W",
+     "evidence": "meme fonction : [0x11eac20]==0 (setBadEnd 0) -> Ending_W",
+     "verified": true
+    }
+   ],
+   "is_joke": true,
+   "kind": "joke",
+   "confidence": "medium",
+   "trigger_en_unofficial": "exe game-over handler 0x83dc4b: if [0x11eac20] == 0 -> Ending_W. pf30 comment: AB prologue, die at the Abandoned Factory.",
+   "where": "prologue p100 (per pf30 comment)",
+   "web_check": "agree (die in the prologue)",
+   "unresolved": "no ContinueState.setBadEnd 0 found in hap/scripts of ph*/phf/st*/quest/core: how state 6/value 0 is reached in the prologue was not traced"
+  },
+  {
+   "letter": "X",
+   "title": "time to rela[X]",
+   "pf30_subphase": "Ending_X",
+   "pf30_comment_ja": "CD_A2で２Bを助けずに逃走",
+   "pf30_comment_en_unofficial": "routes C/D: as A2, run away without saving 2B",
+   "trigger_sources": [
+    {
+     "file": "ph3/p300.dat",
+     "member": "p300_hap.pak",
+     "kind": "phase_jump",
+     "target": "Ending_X",
+     "hap": "バッドエンド",
+     "action": "フェーズジャンプ",
+     "hap_actions": [
+      "条件ブロック_ev0841再生待ち",
+      "エリア",
+      "条件ブロック",
+      "フェーズジャンプ"
+     ],
+     "conditions": [],
+     "commands": [],
+     "referrers": [],
+     "groups": [
+      "50_10_ハイキョ都市_A2バトル",
+      "50_水没都市_2Bの死",
+      "ハッキング中停止(8)",
+      "特殊ステージ中停止"
+     ],
+     "active_subphases": [
+      "40_CD_Bunker_Shooting_2B",
+      "50_10_CD_Ruined_City_A2Come_2B",
+      "50_20_CD_Ruined_City_2BDead_9S",
+      "50_CD_Submerge_City_2B"
+     ],
+     "chapters": [
+      {
+       "subphase": "50_10_CD_Ruined_City_A2Come_2B",
+       "chapter": "11-06",
+       "route_group": "C/D",
+       "chapter_name": "2B's Final Moments"
+      },
+      {
+       "subphase": "40_CD_Bunker_Shooting_2B",
+       "chapter": "11-05",
+       "route_group": "C/D",
+       "chapter_name": "2B Escapes the Bunker"
+      },
+      {
+       "subphase": "50_20_CD_Ruined_City_2BDead_9S",
+       "chapter": "11-07",
+       "route_group": "C/D",
+       "chapter_name": "9S Gets Separated"
+      }
+     ],
+     "route_states": []
+    }
+   ],
+   "is_joke": true,
+   "kind": "joke",
+   "confidence": "high",
+   "trigger_en_unofficial": "p300 hap 'バッドエンド', group '50_10_ハイキョ都市_A2バトル': waits for event ev0841, area (142.9, -20.8, -117.8) -> Ending_X.",
+   "where": "ph3/p300 50_10_CD_Ruined_City_A2Come_2B (11-06)",
+   "web_check": "agree (A2 runs away from infected 2B)"
+  },
+  {
+   "letter": "Y",
+   "title": "head[Y] battle",
+   "pf30_subphase": "Ending_Y",
+   "pf30_comment_ja": "CD_エミール最終戦で逃亡",
+   "pf30_comment_en_unofficial": "routes C/D: run away during the final Emil battle",
+   "trigger_sources": [
+    {
+     "file": "quest/q900.dat",
+     "member": "q900_9e77724b_grp.pak",
+     "kind": "phase_jump",
+     "target": "Ending_Y",
+     "hap": "ゲームオーバー",
+     "action": "フェーズジャンプ",
+     "hap_actions": [
+      "フェード",
+      "コマンド送信_BGMコール",
+      "コマンド送信_クエストをRUN_2に戻す",
+      "遅延ブロック",
+      "フェーズジャンプ"
+     ],
+     "conditions": [],
+     "commands": [
+      {
+       "label": "MiscState.callBgm",
+       "args": "BGM_Player_Die"
+      },
+      {
+       "label": "SceneStateSystem.set",
+       "args": "q900/RUN_2"
+      }
+     ],
+     "referrers": [
+      {
+       "hap": "進行制御(11)",
+       "action": "条件コマンド_失敗",
+       "conditions": [
+        {
+         "target": "0xdbb4a4f3",
+         "state": "FINAL_BOMB",
+         "pred": "0"
+        }
+       ],
+       "commands": [
+        {
+         "label": "ENABLE",
+         "args": null
+        },
+        {
+         "label": "ENABLE",
+         "args": null
+        }
+       ]
+      }
+     ],
+     "groups": [
+      "q900/RUN_1~3",
+      "進行不可になるまで有効(8)",
+      "ハッキング中停止(29)"
+     ],
+     "active_subphases": [],
+     "chapters": [],
+     "route_states": [
+      "0x011cb839",
+      "0x03f59572",
+      "0x0b3e33c5",
+      "0x1c2dca2c",
+      "0x2b6a84dd",
+      "0x4965dbc8",
+      "0x5b73d702",
+      "0x79efa52e",
+      "0x9237627f",
+      "0xa2bd0f5d",
+      "0xaa24e6c5",
+      "0xb57db62e",
+      "0xb94f1357",
+      "0xc27a86b8",
+      "0xc80a426b",
+      "0xdfd702bd",
+      "0xe53052e9",
+      "0xe6a4953e",
+      "0xeede0857",
+      "0xff7c6c21",
+      "0xffbfa47f"
+     ]
+    }
+   ],
+   "is_joke": true,
+   "kind": "hidden",
+   "confidence": "high",
+   "trigger_en_unofficial": "quest/q900 (Emil's Determination) hap '進行制御(11)': Emil Em8800 forms 2/3 then '条件コマンド_自爆モードへ' (to self-destruct mode); '条件コマンド_失敗' (fail) on Em8800 state FINAL_BOMB enables hap 'ゲームオーバー' (q900/RUN_2, BGM_Player_Die) -> Ending_Y; STOP_BOMB -> '_成功' -> q900/CLR.",
+   "where": "quest/q900, Desert boss area (~-792, -21, -1058)",
+   "web_check": "agree with web (let Emil self-destruct); pf30 comment says 'flee during the last Emil fight'"
+  },
+  {
+   "letter": "Z",
+   "title": "over[Z]ealous",
+   "pf30_subphase": "Ending_Z",
+   "pf30_comment_ja": "CD_レジキャン前のパスカルを殺す",
+   "pf30_comment_en_unofficial": "routes C/D: kill Pascal in front of the Resistance Camp",
+   "trigger_sources": [
+    {
+     "file": "quest/q910.dat",
+     "member": "q910_hap.pak",
+     "kind": "phase_jump",
+     "target": "Ending_Z",
+     "hap": "バッドエンド判定",
+     "action": "フェーズジャンプ_パスカル殺害後のバッドエンド",
+     "hap_actions": [
+      "条件ブロック_パスカル死んだ？",
+      "コマンド送信",
+      "エリア",
+      "条件コマンド",
+      "遅延ブロック",
+      "フェーズジャンプ_パスカル殺害後のバッドエンド"
+     ],
+     "conditions": [
+      {
+       "target": "バッドエンド判定/エリア",
+       "state": "OUTSIDE",
+       "pred": "0"
+      }
+     ],
+     "commands": [
+      {
+       "label": "SceneStateSystem.set",
+       "args": "PauseMask"
+      },
+      {
+       "label": "DISABLE",
+       "args": null
+      },
+      {
+       "label": "DISABLE",
+       "args": null
+      }
+     ],
+     "referrers": [],
+     "groups": [],
+     "active_subphases": [],
+     "chapters": [],
+     "route_states": []
+    }
+   ],
+   "is_joke": true,
+   "kind": "joke",
+   "confidence": "high",
+   "trigger_en_unofficial": "quest/q910 hap 'バッドエンド判定' (bad-end check): '条件ブロック_パスカル死んだ？' (is Pascal dead?), area (224.9, -2.4, 592.5) OUTSIDE -> 'フェーズジャンプ_パスカル殺害後のバッドエンド' (bad end after killing Pascal) -> Ending_Z.",
+   "where": "quest/q910, outside the Resistance Camp (14-01 A2)",
+   "web_check": "agree (kill Pascal outside the camp)"
+  }
+ ],
+ "dlc": {
+  "note": "Ending DLC (3C3C1D119440927): ph4/p400 hap '小型ゼンマイ操作' (small wind-up machine control), subphase 60_00_OrganizePapers -> phase jump EndRoll_DLC (p400 = Plato/DLC phase, entered from the Amusement Park TV, 10_00_firstChoice). Not a letter ending.",
+  "confidence": "medium"
+ },
+ "other_jumps": [
+  {
+   "file": "ph3/p300.dat",
+   "hap": "流れ(27)",
+   "action": "フェーズジャンプ_諦め",
+   "target": "BackTitle_CD",
+   "active_subphases": [
+    "350_CD_TrueEnd_STG"
+   ]
+  },
+  {
+   "file": "ph3/p300.dat",
+   "hap": "流れ(17)",
+   "action": "フェーズジャンプ_f10",
+   "target": "BackTitle_B",
+   "active_subphases": [
+    "00_CD_Bunker_2B",
+    "00_10_CD_Bunker_Hangar_2B",
+    "00_CD_Bunker_2B"
+   ]
+  },
+  {
+   "file": "phf/pf10.dat",
+   "hap": "流れ(28)",
+   "action": "フェーズジャンプ_タイトル",
+   "target": "BackTitle_CD",
+   "active_subphases": []
+  },
+  {
+   "file": "phf/pf31.dat",
+   "hap": "流れ(27)",
+   "action": "フェーズジャンプ_諦め",
+   "target": "BackTitle_CD",
+   "active_subphases": []
+  },
+  {
+   "file": "ph4/p400.dat",
+   "hap": "小型ゼンマイ操作",
+   "action": "フェーズジャンプ",
+   "target": "EndRoll_DLC",
+   "active_subphases": [
+    "60_00_OrganizePapers"
+   ]
+  }
+ ]
+}

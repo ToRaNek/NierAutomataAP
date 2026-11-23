@@ -159,7 +159,7 @@ a partir de 08-01 (GP indique "Route B" : coherent). Les fenetres = chapitres de
 quete existe (pas les prerequis). Detail par quete : `quest_availability.md` / `.json`.
 
 ## Limites
-- Rien n'est lu dans les fichiers monde `wd*/g*.dat` (geometrie uniquement). Les scripts mruby ne sont parcourus
+- (Corrige par "Positions monde" : les wd*/g*.dat ont 20 hap.pak et des Layout.lay.) Les scripts mruby ne sont parcourus
   que dans quest/, ph*, phf, core, novel, st1/2/5 (pas ba/em/bg...).
 - Les XML sont analyses avec `xml.etree` (fichiers locaux du jeu, non fiables par nature mais pas d'entites externes).
 
@@ -203,3 +203,152 @@ Hachage des chaines : 0x28EE00 = crc32 zlib (verifie : crc32('ft_PV') = 0x6B5E82
   2001 skill_act_spear = R010 Laser ... 2024 skill_act_sonar = A170 Scanner (17 programmes). Indices sans texte :
   13, 14, 16, 17, 18, 20, 23. Aide = `CORE_ACT_SKILL_HELP_%02d` (meme indice, coherente avec les noms internes :
   wire/Wire, repair/Repair, ride/'ride atop a Pod', sonar/Scanner).
+
+## Parcours des routes (tools/routes_full.py)
+
+`python tools/routes_full.py [routes|endings|enemies|md|all]` -> `routes_full.json`, `endings_triggers.json`
+(tools/rf_endings.py), `enemies_by_area.json` (tools/rf_enemies.py), `routes_full.md` (resume). Un fichier de phase
+a la fois via le cache de `extract_research`.
+- Etapes = `SubPhase` de `pXXX_sub.bxm` dans l'ordre du fichier. Route = jeton du nom `NN[_MM]_<route>_...` :
+  A = A + AB, B = B + AB (p100 puis p200), C/D = CD/C/D (p300). Commentaire `Aルート専用` / `Bルート専用` = exclu de
+  l'autre route. Exclus : noms hors format, `TEST`, `e3_`, `PlayGo`, commentaires `未使用` / `削除予定`
+  (sauf si l'entree est un point de ChapterData). p400 = DLC (Plato, salle g5ac00), hors route.
+- Chapitre = entree de `ChapterData.cha` qui commence a cette sous-phase, sinon la precedente dans l'ordre du fichier
+  (`chapter_assignment`). En C/D, les blocs A2 (12, 14) et 9S (13, 15-01/02) sont entrelaces dans le fichier : tri par
+  numero de chapitre puis ordre du fichier ; `220_CD_Submerge_City_9S` (point de jonction des deux pistes, prouve par
+  les sauts 120_95 -> 220_CD -> 220_10 et 180_30 -> 220_10) est place avant 15-03.
+- Zone : mot-cle japonais le plus tot dans le commentaire (format `lieu_detail` ; `XからYへ` -> `X -> Y`), sinon jeton
+  anglais du nom (RobotM = Abandoned Factory, Submerge_City = Flooded City, Danchi = Desert Housing...), sinon zone
+  majoritaire de la salle. RoomNo r001 = monde ouvert ; g50001 Tour, g50100 Copied City, g52001 usine souterraine,
+  g5a000/g5a100/g5a200 Meat/Soul/God Box ; r000 = generique E. Traduction non officielle.
+- Position de depart = `PlayerPos` (x y z [rotation Y]) ; 0 0 0 = cinematique / STG / menu (null).
+- **Jetons de groupe hap** : `<group><tokens><value><code>0xF3B97443</code><id>X</id>` avec X = **crc32(nom de
+  sous-phase)** (verifie sur p300) ; le groupe le plus proche (en remontant `parent`) portant des jetons donne les
+  sous-phases ou le hap est actif. Sert a `phase_transitions[].from_subphases` (187/189 resolus).
+- Quetes par etape = octets de QuestChapterData.qch de l'entree de chapitre, filtres par personnage (1 2B, 2 9S, 3 A2,
+  4 tous). Points de non-retour = derniere entree de la route ou la quete existe < derniere entree ayant des quetes.
+- Frontieres (hap) : fin A = p200 `..M1090_S0320_GM_a` -> pf10 EndRoll_A ; fin B = `..M1090_S0320_GM_b` -> p300
+  00_CD_Bunker_2B ; choix final 330_CD_Tower_Versus -> 335_CD_Tower_sele9S / seleA2 -> 340_C_Tower_9Swin
+  (`フェーズジャンプ_CEnd`) / 340_D_Tower_A2win (`_DEnd`) -> pf10 EndRoll_CD ou pf31 (`_TrueEnd`, STG du generique E)
+  -> 360_CD_TrueEnd_FIN (reussite) ou pf10 BackTitle_CD (abandon). Choix de personnage C/D : actions
+  `フェーズジャンプ_A2_1/_A2_2/_9S_1/_9S_2` (hap `UI画面会話`, `フェーズジャンプ(12)`/`(23)`).
+- Objets cles : Fuel Filter Ch05 = getReWard 107 (`pascal_ON_TALK_ev1`, p100) puis `addItem('item_uq_filter', -1)`
+  dans `ane_ON_TALK_ev0` (remis a Anemone) ; Ch14 = `this_q300_91_itemCheck_a1` (+1 Rigid Tree Bark), test
+  `item_uq_pascalReq_3?`, `pascal_ON_TALK_ev2` (-1 ecorce, getReWard 107). Cles d'acces : getReWard 101/102/103 (p300) ;
+  verification dans l'exe : vtable `Bg6001` (unite principale / secondaire de la Tour, placee par quest/qb20 en
+  (102.4, -68.4, 354.0)) : 0x5EA5B0 = possede une des 3 cles (0x7E3D30 = nombre d'un objet par nom), 0x574200 = retire
+  une cle (0x7CA680) et met un drapeau par cle ; 0x31DCF0 refuse de redonner une cle deja inseree. Elevator Key :
+  getReWard 224 (q330 `finish`) ; test `count(item_uq_mallKey) > 0` dans 0x8344B0 (objet non identifie).
+  A170 Scanner : aucune remise trouvee (scripts, DQR) ; seul test = condition hap `Pl0000.isActiveSkillSonar` (dialogue
+  tutoriel p200). Les conditions hap sont `<condition><state><label>` (INSIDE, SceneStateSystem.has,
+  Pl0000.hasBuddy...) : aucune condition d'objet dans les hap.
+
+## Ennemis et donnees d'unite (tools/rf_enemies.py)
+- `core/coregm.dat:EmList.bxm` : sections Category (CategoryID -> UIID -> `PAUSE_ENEMY_CTGR_%02x`), Type (TypeID -> UIID),
+  EmList (189 entrees : SortID, Category, Type, **SaveID** = numero de donnee d'unite (175 distincts), EmID, UmID,
+  setType, setFlag, bDie, bTalk, QueID, UIID (variante), RepUIID (autre description, 0x999a/b)).
+- Nom affiche (Intel > Unit Data) = `PAUSE_ENEMY_%04x` (format lu dans l'exe RVA 0xce6640 ; valeurs UIID lues en
+  hexadecimal : Type UIID '110' -> PAUSE_ENEMY_0110) dans `ui/ui_pause_us.dat:messpause.mcd` (cle `_US` prioritaire) ;
+  description = meme cle dans `txtmess/txt_pause_add_us.dat`. `CORE_RECORD_ENEMY_*` (messdlc1) = noms generiques seulement.
+- Lien placement -> donnee : (objId, setType) = (EmID, setType) de EmList (setType absent = 0). DEDUIT. Le setFlag de
+  EmList (0/1 = bouclier / bouclier EM) ne correspond pas au setFlag (masque de bits) des placements : non resolu.
+- Placements : valeurs avec `objId em*` dans hap.z (XML), `*_hap.pak` (si pas de hap.z) et `*_grp.pak` (YAX ; balise =
+  **crc32 du nom de balise**, ex. setType 0x192fea25). Deux formes : ennemi pose (`location/position`, `setType`, `setFlag`,
+  `setRtn`, `param` Lv/Lv_B/Lv_C) et generateur `敵発生機` (`points/nodes/value/point`, `items/value` objId+rate+setType,
+  `levelRange`, `spawnRange`).
+- Jetons de groupe : code 0xf3b97443 = crc32(nom de sous-phase), 0x35c92545 = crc32('qXXX/ETAT') ; remonter les parents.
+- Salles : r100 City Ruins, r110 Resistance Camp, r120 Abandoned Factory, r130 Amusement Park, r140 Pascal's Village,
+  r150 Desert, r160 Forest/Forest Castle, r170 Flooded City, r200 City Ruins crater/underground (+ Copied City lock,
+  Tower, ravine), r500 Tower, r501 Copied City, r502 hidden cave, r520 Factory underground, r530 Theater underground,
+  r5a2 God Box (deduit des noms de groupes).
+- Resultat `enemies_by_area.json` : 5640 placements, 164 types, 145/175 donnees placees ; 30 sans placement (EMP setType 10,
+  Gunman, Pascal, Ernst, Hegel, variantes Adam/Eve, 21O, Zombie Clown, variantes bouclier...).
+- Non lus : scripts mruby (EmBase.callEnemy), ennemis de hacking/STG, fichiers wd*.
+
+## Fins : declencheurs (tools/rf_endings.py)
+- Source fiable = arbres YAX des `*_hap.pak` et `*_grp.pak` (les `*_hap.z` XML sont incomplets : Ending_M/R/V absents de
+  p300_hap.z, Ending_Y seulement dans q900_9e77724b_grp.pak, Ending_N dans st1/r140).
+- Balises YAX = crc32 zlib du nom de balise (subPhase 0xacf1615, name 0x5e237e06, args 0x161b2ea2) ; noms recuperes dans les hap.z.
+- Table des groupes : `*_hap.pak` version 4, en-tete `<III>` (4, ?, h) ; a h+4 : u32 taille + zlib d'un YAX
+  `count/group(id,name,parent,tokens,comment)`.
+- Jetons : code 0xf3b97443 = sous-phase (id = crc32 du nom), 0x35c92545 = etat SceneState (crc32, ex. Route/A 0x583082bb,
+  Route/B 0xc139d301), 0x5cda8ece = salle (0x502 -> r502).
+- puid = reference par id a une action/hap du meme fichier ; 0xcecad9ce = objet systeme (id = crc32 du nom).
+- Saut : action 0x227440da (`<phase>0xf30</phase><subPhase>Ending_X</subPhase>`) ; 0xf10 = pf10 (EndRoll_A/CD, BackTitle_*),
+  0xf31 = pf31 (STG du generique, fin E).
+- exe : 0x7614a0(phase, nom de sous-phase) = saut de phase. Ending_K 0x991b77 (objet 'fish_16' = Mackerel) ; Ending_T
+  0x899125/0x9893e8/0x98ba08 (puce 0xd0a = OS Chip, test 0x7f54c0) ; Ending_U/W 0x83dc4b (fin du game over : [0x11eac20]
+  1 -> U, 0 -> W) ; ContinueState.setBadEnd = 0x80e200 (qb40 Bunker `自爆バッドエンド` -> setBadEnd 1). Table des 22 noms
+  Ending_E..Z en 0x85ff90 (initialisation, pas un declencheur).
+- C/D : exe 0x863730 : SceneState select/9S -> ending_C, select/A2 -> ending_D ; p300 340_C_Tower_9Swin (CEnd) /
+  340_D_Tower_A2win (DEnd) ; INVERSE du web (A2 -> C) ; titre affiche non trace.
+- Non resolu : W (aucun setBadEnd 0 trouve), invite Pod 153 (fin E), saut de fin de la route B vers pf10.
+
+## Positions monde (tools/world_positions.py -> world_positions.json)
+
+Relancer : `python tools/world_positions.py [--out docs/research] [--no-wd]` (un .dat a la fois ; 1er passage
+lent : les cellules wd* sont decompressees une fois, seuls leurs membres hap/pak/scp/lay sont gardes dans
+`%TEMP%/nier_research_cache/world_positions`). 588 fichiers : ph*, phf, quest, st1/2/5, core, wd1-5/wda.
+
+### Corrections importantes par rapport aux passes precedentes
+- **`*_hap.z` est un XML d'edition PERIME.** L'exe (RVA 0x3b8020) charge d'abord `%s_hap.pak` (0x3b4d00) et ne
+  lit `%s_hap.z` que si le .pak manque. Le .pak a plus de haps et des contenus differents (ex. r200 : points de
+  collecte ItemTable 0xa14/0xa15/0xa11 dans le .pak, 0xa00 dans le .z). Toutes les donnees viennent donc du .pak.
+- **`*_<groupe hexa>_grp.pak`** (format `%x_grp.pak` dans l'exe) = haps supplementaires d'un groupe (charges a la
+  demande) : ils n'etaient pas lus avant. `core/corehap.dat` contient aussi `qa*_hap.pak`.
+- Les entites SANS parametre ItemTable etaient ignorees (ItemTable absent = table 0) : 265 coffres au lieu de 124.
+- Les correspondances "uniques" vers les enregistrements BoxData de salle 0xb1 etaient fausses (voir ci-dessous).
+
+### Format .pak (hap)
+En-tete `u32 ?, u32 taille decompressee des groupes, u32 offset H` ; de 12 a H : entrees `u32 type, u32 taille,
+u32 offset` (une par hap, arbre YAX eventuellement zlib) ; a H : `u32 taille compressee` + zlib = arbre YAX des
+groupes (`count`, `group{id, name, parent, tokens{size, value{code, id}}, attribute, priority}`).
+Balises YAX = **crc32 zlib du nom de balise** (position 0x462CE4F5 = crc32('position'), etc.) : on les renomme avec
+le vocabulaire des hap.z. Un arbre de hap = `name, id, group, size, action*` ; une action peut avoir
+`layouts/{normal,hard,extream}/layouts/value{id, location{position, rotation}, scale, objId, setType, setRtn,
+alias, param{value{name, code, body}}, comment}`, `script{id}` et `variables{value{name, value{code 0xd8efbb45,
+value = id d'entite}}}`.
+- Script d'une action : membre `<prefixe>_<id en %x>_scp.bin` (ex. r160 action script 0x441c44e3 ->
+  `r160_441c44e3_scp.bin`). Les variables pointent vers des entites **de n'importe quel fichier** (les scripts de
+  quest/qXXX visent des PNJ places dans st1/rXXX). Les methodes mruby `<variable>_ON_TALK...` = dialogue du PNJ.
+- Jetons de groupe : id = **crc32 du nom**. code 0xf3b97443 = sous-phase (ex. crc32('50_00_A_City')), code
+  0x35c92545 = etat de scene ('Route/A' 0x583082bb, 'Route/B' 0xc139d301, 'Route/C' 0xb63ee397, 'Route/D'
+  0x285a7634, 'PL/2B', 'PL/9S', 'qXXX/RUN_n', 'Serious_RC', 'Tower_Appear'...). attribute & 0x10 = condition
+  inversee (ex. '森のキャンプが出てない時' 0x50 / '森の出張レジスタンスキャンプ' 0x40, memes jetons). 1003/1163
+  jetons resolus par dictionnaire (sous-phases, etats de quete generes, chaines exe/scripts/hap).
+
+### BoxData : algorithme de l'exe (RVA 0x7e37d0, appele par 0x4e5ba0 pour les objets a ItemTable)
+- cle = `[objet+0x5b8]` = objId numerique : prefixe 'ba' = 0xf, 'it' = 0x7, 'bg' = 0xc (bg0800..0805 = coffres
+  bg avec ItemTable : verifie par jointure). Le champ u32 a +0 de l'enregistrement A = cle (0xf2014...).
+- `ItemTable` lu **en hexa** meme sans '0x' (q440 : '100' -> 0x100 = enregistrement (0x160, 0xf2015, 0x100)).
+- salle = 0x7eefc0 : variable globale RVA 0x130c890 (0x550 force si le bit 0x400000 de RVA 0x1029b00 est mis ;
+  calcul depuis la position en phase 0xe01/0xe03). Recherche : 0 < box < 0xa00 : (salle, cle, box) puis
+  (salle, cle, 0) ; box = 0 : (salle, cle, 0) ; box > 0xa00 : (0xa00, cle, box) ; toujours repli final
+  (0xa00, cle, 0xa00). Les enregistrements de salle 0xb1 (box 0x0..0xa63) ne sont choisis que dans la salle 0xb1.
+- Salle par entite : nom du fichier st*/rXXX (sur) ; sinon salles candidates par proximite des entites des
+  salles connues (<= max(60, 1.5 x min)) ; si toutes donnent le meme enregistrement -> 'resolved' (confiance
+  medium), sinon 'ambiguous_room' avec le contenu par salle.
+
+### Resultats (v1.04)
+- Coffres : 265 entites (260 positions distinctes) ba2014 131, ba2015 71, ba2016 58, bg0800-0805 5 ; contenu
+  resolu pour 265/265 (234 high, 31 medium). Points de collecte : 1090 (it0000 1025, it0020 56, it0003 4,
+  it0040/41 5) ; 990 resolus high/medium, 95 ambigus (surtout core_hap, salle inconnue), 5 sans enregistrement
+  (it0003 : pas de BoxData pour la cle 0x70003).
+- PNJ de quete : donneur = PNJ dont la methode de dialogue contient `qXXX/RUN_1`, rendu = `qXXX/DONE`.
+  71 quetes nommees : 55 donneur trouve, 11 seulement entites du script (q070, q095, q150, q162, q170, q181,
+  q221, q360, q540, q561, q900), non resolus q085, q171, q401, q403, q920.
+- Marchands (methode de dialogue contenant le nom du magasin) : 20 PNJ trouves ; shop_chipEmile/rareEmile/
+  rareChipEmile = scripts trouves mais via une methode commune (`shop_branch`) -> candidats seulement ; non
+  trouves : shop_CS_Grocery, shop_CD_Grocery (arenes DLC ?) + 8 magasins de test.
+- Terminaux : 19/22 codes ft_ avec position (ba1000/ba1100 `codeName`) ; aucun placement pour ft_AP_C, ft_AP_T,
+  ft_AP_T2 (ni les re_tower_* / re_SC_2Bdie).
+- Peche : zones = objets `bga104` (BehaviorFishingArea), 18 haps de zones. Tables =
+  `core/core.dat:FishParam.csv` (`indice, etfXXX, poids`, indices 0-8 et 20 remplis). NON resolu : quel indice
+  s'applique a quelle zone (champs +0x3ec8/+0x3ecc de l'objet de peche, RVA 0x59bf30, aucun parametre dans le hap)
+  et la correspondance etfXXX -> fish_NN (8001-8041, noms `CORE_FISH_NN`). etf040/etf041 choisis selon le
+  personnage (cle 0x10200).
+- Objets uniques : 67 dans des coffres/points (MaxNum 1, armes, programmes de Pod : skill_act_ride, _hold,
+  _fixedBattery via it0040/it0041), 34 donnes par `addItem` de scripts (PNJ donneur via la methode).
+- `Layout.lay` (117 cellules wd) : decors bg/bh et quelques ba (ba0000, ba010x, ba55xx...) sans ItemTable ; aucun
+  coffre ni point de collecte. Archives ba/, em/, bg/, bh/, it/, et/, um/ : ni hap ni script (modeles, motions,
+  col, ObjectParam.bxm de rendu seulement).
