@@ -72,7 +72,7 @@ def test_pickup_text_for_other_player():
 
 
 def test_pickup_text_for_self():
-    assert pickup_text(me=1, receiver=1, item="Phoenix Sword", receiver_name="ToRaNek") == ("Trouvé : ", "Phoenix Sword")
+    assert pickup_text(me=1, receiver=1, item="Phoenix Sword", receiver_name="ToRaNek") == ("Check validé : ", "Phoenix Sword")
 
 
 def test_pickup_text_unknown_content():
@@ -97,3 +97,19 @@ def test_no_respawn_after_client_restart_in_same_game_process():
     t3 = SpotTracker(s, SPOTS, radius=150.0)      # jeu redemarre : on repose
     t3.set_game_process(5678)
     assert 0 in t3.to_spawn("30_AB_x", (0.0, 0.0, 0.0))
+
+
+from nier_automata.game.ap_items import nearest_object, match_objects_to_spots
+
+
+def test_nearest_object_uses_real_position():
+    objs = {0xA: 0, 0xB: 1}
+    pos_of = {0xA: (100.0, 0.0, 0.0), 0xB: (1.0, 0.0, 0.0)}.get
+    assert nearest_object(objs, pos_of, (0.0, 0.0, 0.0), radius=4.0) == 0xB
+    assert nearest_object(objs, pos_of, (50.0, 0.0, 0.0), radius=4.0) is None
+
+
+def test_existing_marked_objects_matched_to_nearest_spot():
+    spots = [("30_AB", 0.0, 0.0, 0.0), ("30_AB", 100.0, 0.0, 0.0)]
+    found = {0xA: (2.0, 0.0, 0.0), 0xB: (99.0, 0.0, 0.0), 0xC: (500.0, 0.0, 0.0)}
+    assert match_objects_to_spots(found, spots, collected=set(), max_dist=50.0) == {0xA: 0, 0xB: 1}

@@ -17,7 +17,7 @@ def test_sent_to_other_player():
 
 
 def test_own_item_found_by_self():
-    assert messages_for_item_send(1, 1, 1, "Soins legers", "ToRaNek", "ToRaNek") == [("Trouvé : ", "Soins legers")]
+    assert messages_for_item_send(1, 1, 1, "Soins legers", "ToRaNek", "ToRaNek") == [("Check validé : ", "Soins legers")]
 
 
 def test_unrelated_event_ignored():
@@ -25,7 +25,7 @@ def test_unrelated_event_ignored():
 
 
 def test_template_fits_and_keeps_placeholder():
-    for prefix in ("De Niicotine : ", "Pour Un_Nom_Tres_Long_De_Joueur : ", "Trouvé : "):
+    for prefix in ("De Niicotine : ", "Pour Un_Nom_Tres_Long_De_Joueur : ", "Check validé : "):
         t = template_for(prefix)
         assert len(t) <= TEMPLATE_LEN and t.endswith("<ITEM NAME>")
 

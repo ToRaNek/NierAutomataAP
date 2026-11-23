@@ -44,7 +44,7 @@ def messages_for_item_send(me: int, sender: int, receiver: int, item: str,
     """(prefixe, nom d'objet) a afficher pour "sender a envoye item a receiver"."""
     item = item[:MAX_LEN]
     if receiver == me and sender == me:
-        return [("Trouvé : ", item)]
+        return [("Check validé : ", item)]
     if receiver == me:
         return [(f"De {sender_name} : ", item)]
     if sender == me:

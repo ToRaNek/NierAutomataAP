@@ -210,20 +210,24 @@ async def ability_loop(ctx: NierContext):
 
 
 async def ap_items_step(ctx: NierContext):
-    """Pose les AP Items de la zone et detecte leur ramassage."""
+    """Pose les AP Items de la zone, prepare leur message quand le joueur approche, detecte le ramassage.
+    Les objets sont suivis eux-memes (vraie position, disparition au ramassage)."""
     if not getattr(ctx, "ap_items_on", False) or not AP_SPOTS:
         return
     mem = ctx.nier.mem
     if ctx.ap_pid != mem.pid:
         ok = await asyncio.to_thread(apit.install, mem)
         ctx.ap_pid = mem.pid
-        ctx.ap_tracked.clear()
-        ctx.spots.set_game_process(mem.pid)
-        ctx.pickup_note = await asyncio.to_thread(notify.Notifier, mem, apit.PICKUP_CARRIER_KEY, apit.PICKUP_CARRIER)
         logger.info("AP Items : %s", "deviation installee" if ok else "version non supportee")
         if not ok:
             ctx.ap_items_on = False
             return
+        ctx.spots.set_game_process(mem.pid)
+        ctx.pickup_note = await asyncio.to_thread(notify.Notifier, mem, apit.PICKUP_CARRIER_KEY, apit.PICKUP_CARRIER)
+        found = await asyncio.to_thread(apit.find_marked_objects, mem)
+        ctx.ap_tracked = apit.match_objects_to_spots(found, AP_SPOTS, ctx.state.ap_spots_collected, 50.0)
+        for i in ctx.ap_tracked.values():
+            ctx.spots.mark_spawned(i)
     phase = ctx.nier.phase()
     if phase != ctx.ap_phase:
         if ctx.ap_phase is not None:
@@ -235,12 +239,20 @@ async def ap_items_step(ctx: NierContext):
     pos = struct.unpack("<3f", mem.read(ent + 0x50, 12))
     for i in ctx.spots.to_spawn(phase, pos):
         _, x, y, z = AP_SPOTS[i]
-        work = await asyncio.to_thread(apit.spawn_ap_item, mem, (x, y, z))
+        obj = await asyncio.to_thread(apit.spawn_ap_item, mem, (x, y, z))
         ctx.spots.mark_spawned(i)
-        if work:
-            ctx.ap_tracked[work] = i
-    near = apit.nearest_spawned(AP_SPOTS, set(ctx.ap_tracked.values()), ctx.state.ap_spots_collected, pos, 4.0)
-    if near != ctx.ap_prepared and ctx.pickup_note.ok:
+        if obj:
+            ctx.ap_tracked[obj] = i
+
+    def pos_of(o):
+        if not apit.object_alive(mem, o):
+            return None
+        return struct.unpack("<3f", mem.read(o + 0x50, 12))
+
+    # message de ramassage prepare quand le joueur est a cote d'un AP Item
+    near_obj = apit.nearest_object(ctx.ap_tracked, pos_of, pos, 4.0)
+    near = ctx.ap_tracked.get(near_obj) if near_obj else None
+    if near != ctx.ap_prepared and ctx.pickup_note and ctx.pickup_note.ok:
         if near is None:
             ctx.pickup_note.restore()
         else:
@@ -248,19 +260,17 @@ async def ap_items_step(ctx: NierContext):
             prefix, item = apit.pickup_text(ctx.slot, rec, name, ctx.player_names.get(rec, "?") if rec else None)
             ctx.pickup_note.prepare(prefix, item)
         ctx.ap_prepared = near
+
+    # ramassage : objet detruit + porteur arrive dans l'inventaire
     marker = ctx.nier._items.find(apit.PICKUP_CARRIER) is not None
-    def obj_of(w):
-        return struct.unpack("<Q", mem.read(w + 0x60, 8))[0]
-    picked = apit.resolve_pickups(ctx.ap_tracked, obj_of, marker)
-    if marker and not picked:
-        # objet pose par une session precedente du client (non suivi) : le plus proche
-        i = apit.nearest_spawned(AP_SPOTS, ctx.state.ap_spawned_spots, ctx.state.ap_spots_collected, pos, 10.0)
-        if i is not None:
-            picked = [i]
-    for i in picked:
-        ctx.spots.collected(i)
-        logger.info("AP Item #%d ramasse !", i + 1)
-    ctx.ap_tracked = {w: i for w, i in ctx.ap_tracked.items() if i not in ctx.state.ap_spots_collected}
+    gone = [o for o in ctx.ap_tracked if not apit.object_alive(mem, o)]
+    for o in gone:
+        i = ctx.ap_tracked.pop(o)
+        if marker:
+            ctx.spots.collected(i)
+            logger.info("AP Item #%d ramasse !", i + 1)
+        else:
+            ctx.state.ap_spawned_spots.discard(i)  # decharge sans ramassage : a reposer plus tard
     if marker:
         ctx.nier._items.remove(apit.PICKUP_CARRIER)
 

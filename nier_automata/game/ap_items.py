@@ -86,7 +86,7 @@ def pickup_text(me: int, receiver, item, receiver_name) -> tuple[str, str]:
     if item is None or receiver is None:
         return "", "AP Item"
     if receiver == me:
-        return "Trouvé : ", item
+        return "Check validé : ", item
     return f"Pour {receiver_name} : ", item
 
 
@@ -98,6 +98,74 @@ def nearest_spawned(spots, spawned: set, collected: set, pos, radius: float):
         if d <= best_d:
             best, best_d = i, d
     return best
+
+
+SET_ITEM_VTABLE_RVA = 0xC79AE8  # BehaviorSetItem (it0000) ; la vtable change quand l'objet est detruit
+
+
+def nearest_object(objs: dict, pos_of, pos, radius: float):
+    """objs : {objet: indice de spot}. Renvoie l'objet le plus proche (vraie position) dans le rayon."""
+    best, best_d = None, radius
+    for o in objs:
+        p = pos_of(o)
+        if p is None:
+            continue
+        d = math.dist(p, pos)
+        if d <= best_d:
+            best, best_d = o, d
+    return best
+
+
+def match_objects_to_spots(found: dict, spots, collected: set, max_dist: float) -> dict:
+    """found : {objet: position}. Associe chaque AP Item deja au sol a l'emplacement le plus proche."""
+    out = {}
+    for o, p in found.items():
+        best, best_d = None, max_dist
+        for i, (_, x, y, z) in enumerate(spots):
+            if i in collected:
+                continue
+            d = math.dist((x, y, z), p)
+            if d <= best_d:
+                best, best_d = i, d
+        if best is not None:
+            out[o] = best
+    return out
+
+
+def find_marked_objects(mem) -> dict:
+    """AP Items deja au sol (objets it0000 portant le marqueur) -> {objet: position}."""
+    import ctypes
+    from ctypes import wintypes
+    from .spawner import _MBI
+    k = mem._k
+    k.VirtualQueryEx.argtypes = [wintypes.HANDLE, ctypes.c_void_p, ctypes.POINTER(_MBI), ctypes.c_size_t]
+    k.VirtualQueryEx.restype = ctypes.c_size_t
+    vt = mem.base + SET_ITEM_VTABLE_RVA
+    out, addr = {}, 0
+    while addr < 0x7FFFFFFFFFFF:
+        mbi = _MBI()
+        if not k.VirtualQueryEx(mem.handle, ctypes.c_void_p(addr), ctypes.byref(mbi), ctypes.sizeof(mbi)):
+            break
+        base, size = mbi.BaseAddress or 0, mbi.RegionSize
+        if mbi.State == 0x1000 and mbi.Protect in (0x04, 0x40) and size < 0x40000000 and size % 8 == 0:
+            try:
+                arr = memoryview(mem.read(base, size)).cast("Q")
+                for i, v in enumerate(arr):
+                    if v == vt:
+                        o = base + i * 8
+                        if struct.unpack("<I", mem.read(o + CONTENT_OFFSET, 4))[0] == MARKER_FLAG | PICKUP_CARRIER:
+                            out[o] = struct.unpack("<3f", mem.read(o + 0x50, 12))
+            except OSError:
+                pass
+        addr = base + size
+    return out
+
+
+def object_alive(mem, obj: int) -> bool:
+    try:
+        return struct.unpack("<Q", mem.read(obj, 8))[0] == mem.base + SET_ITEM_VTABLE_RVA
+    except OSError:
+        return False
 
 
 def resolve_pickups(tracked: dict, obj_of, marker_received: bool) -> list[int]:
@@ -193,6 +261,6 @@ def spawn_ap_item(mem, pos) -> int:
         obj = struct.unpack("<Q", mem.read(work + 0x60, 8))[0] if work else 0
         if obj:
             mem.write(obj + CONTENT_OFFSET, struct.pack("<I", MARKER_FLAG | PICKUP_CARRIER))
-            return work
+            return obj
         time.sleep(0.05)
-    return work
+    return 0
