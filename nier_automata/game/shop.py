@@ -396,3 +396,29 @@ def install_thumb(mem, lo: int = 950, hi: int = 958) -> bool:
     mem.write(cave, thumb_cave(cave, mem.base, lo, hi, THUMB_NONE))
     mem.write_code(site, bytes([0xE9]) + struct.pack("<i", cave - (site + 5)))
     return True
+
+
+class PaymentWatch:
+    """Suit les fonds : un achat d'AP Item n'est compte que si les G ont baisse d'au moins le prix
+    recemment (verifie : un porteur peut apparaitre dans l'inventaire sans achat, ex. au chargement)."""
+
+    def __init__(self, window: float = 10.0):
+        self.window = window
+        self.last: Optional[int] = None
+        self.drops: list[tuple[float, int]] = []
+
+    def update(self, funds: int, now: float) -> None:
+        if self.last is not None and funds < self.last:
+            self.drops.append((now, self.last - funds))
+        self.last = funds
+        self.drops = [(t, d) for t, d in self.drops if now - t <= self.window]
+
+    def paid(self, price: int, now: float) -> bool:
+        return any(now - t <= self.window and d >= price for t, d in self.drops)
+
+    def consume(self, price: int, now: float) -> bool:
+        for i, (t, d) in enumerate(self.drops):
+            if now - t <= self.window and d >= price:
+                del self.drops[i]
+                return True
+        return False

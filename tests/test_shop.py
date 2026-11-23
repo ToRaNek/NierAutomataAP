@@ -215,3 +215,21 @@ def test_assign_carriers_one_per_slot_skipping_owned():
     got = shop.assign_carriers(slots, pool, owned={951})
     assert got == {950: ("Resistance Camp", 1), 952: ("Resistance Camp", 2), 953: ("Pascal's Village", 1)}
     assert shop.assign_carriers(slots, [950], owned=set()) == {950: ("Resistance Camp", 1)}  # pas assez : le reste saute
+
+
+def test_purchase_needs_recent_payment():
+    w = shop.PaymentWatch(window=10.0)
+    w.update(1000, now=0.0)
+    w.update(1000, now=1.0)
+    assert not w.paid(300, now=1.0)            # pas de baisse : pas d'achat
+    w.update(700, now=2.0)
+    assert w.paid(300, now=3.0)                # -300 G il y a 1 s : achat
+    assert not w.paid(300, now=20.0)           # trop ancien
+    w.update(5000, now=21.0)                   # gain (objet recu) : rien
+    assert not w.paid(300, now=21.5)
+
+
+def test_payment_consumed_once():
+    w = shop.PaymentWatch(window=10.0)
+    w.update(1000, now=0.0); w.update(700, now=1.0)
+    assert w.consume(300, now=1.5) and not w.consume(300, now=2.0)

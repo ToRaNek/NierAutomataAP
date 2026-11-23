@@ -130,6 +130,7 @@ class NierContext(CommonContext):
             self.shop = None
             self.shop_pid = None
             self.shop_applied = None
+            self.shop_pay = shopm.PaymentWatch()
             self.ap_per_phase = int(sd.get("ap_items_per_phase", 0))
             self.ap_phase_count = int(sd.get("ap_phase_count", 0))
             ground = [LOC_IDS[apit_loc(i, k)] for i in ap_phase_indices(self.ap_phase_count)
@@ -456,14 +457,21 @@ async def shop_step(ctx: NierContext) -> list[int]:
         texts[(place, k)] = shopm.description(ctx.slot, rec, name, ctx.player_names.get(rec, "?") if rec else None,
                                               bool(ctx.ap_flags.get(lid, 0) & 1))
     await asyncio.to_thread(ctx.shop.describe, texts)
+    import time
+    now = time.monotonic()
+    ctx.shop_pay.update(struct.unpack("<I", mem.read(mem.base + 0x148C830, 4))[0], now)
     sent = []
     for cid, (place, k) in ctx.shop.carriers.items():
-        if ctx.nier._items.find(cid) is not None:
+        if ctx.nier._items.find(cid) is None:
+            continue
+        lid = LOC_IDS[shop_location(place, k)]
+        if lid in done:
+            ctx.nier._items.remove(cid)   # deja valide : on nettoie
+        elif ctx.shop_price <= 0 or ctx.shop_pay.consume(ctx.shop_price, now):
             ctx.nier._items.remove(cid)
-            lid = LOC_IDS[shop_location(place, k)]
-            if lid not in done:
-                sent.append(lid)
-                logger.info("AP Item achete : %s", shop_location(place, k))
+            sent.append(lid)
+            logger.info("AP Item achete : %s", shop_location(place, k))
+        # sinon : porteur apparu SANS paiement (chargement...) -> pas de check, on attend
     return sent
 
 
