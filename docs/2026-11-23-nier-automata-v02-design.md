@@ -37,6 +37,18 @@ Outil "diff memoire" : photo de la memoire du jeu, ToRaNek fait une action, nouv
 Esquive, double saut, sprint... : il faut patcher des instructions du jeu (nierhook le fait deja pour
 "double saut infini" : preuve que c'est possible). Risque de crash, a faire en dernier.
 
+## Conditions de victoire (demande ToRaNek : le jeu complet est trop long)
+
+Option YAML `goal` avec plusieurs choix :
+- **Story Progress** (disponible tout de suite) : atteindre N sequences d'histoire (N = `story_checks`).
+- **Boss** : battre un boss precis de la route A (ex. Colosse, Adam & Eve, Pascal, Simone, Hegel...,
+  liste a etablir) : necessite les noms de phases, collectes avec `tools/phases_seen.log` pendant une
+  partie.
+- **Fin A** : terminer la route A (jeu complet de la premiere route).
+- Plus tard : Fin B/C/D/E si les routes suivantes sont supportees.
+Le goal choisi ne doit pas exiger de locations au-dela du point d'arret (les checks d'histoire
+apres le boss choisi ne sont pas crees).
+
 ## Logique AP
 - Palier A : pas de verrou de logique (les puces changent la difficulte, pas l'acces).
 - Palier B : les locations d'une zone exigent "Zone: X" ; les coffres exigeant un Pod (ex. hauteur)
