@@ -15,9 +15,9 @@ def test_constants_verified_in_game_v104():
     assert (MARKER_FLAG, AP_MARKER_ITEM) == (0x10000, 688)
 
 
-def test_spots_to_spawn_only_in_current_area_and_near():
+def test_spots_to_spawn_only_near_any_phase():
     t = SpotTracker(st(), SPOTS, radius=150.0)
-    assert t.to_spawn("30_AB_Ruined_City", (10.0, 0.0, 0.0)) == [0, 1]
+    assert t.to_spawn("30_AB_Ruined_City", (10.0, 0.0, 0.0)) == [0, 1, 2]
     assert t.to_spawn("40_AB_Desert", (500.0, 0.0, 0.0)) == []  # trop loin
 
 
@@ -25,11 +25,11 @@ def test_spawned_once_per_session_and_never_after_collect():
     s = st()
     t = SpotTracker(s, SPOTS, radius=150.0)
     t.mark_spawned(0)
-    assert t.to_spawn("30_AB_x", (0.0, 0.0, 0.0)) == [1]
+    assert t.to_spawn("30_AB_x", (0.0, 0.0, 0.0)) == [1, 2]
     t.collected(1)
     assert s.ap_spots_collected == {1}
     t.reset_session()  # rechargement / changement de zone : on repose ce qui n'est pas ramasse
-    assert t.to_spawn("30_AB_x", (0.0, 0.0, 0.0)) == [0]
+    assert t.to_spawn("30_AB_x", (0.0, 0.0, 0.0)) == [0, 2]
 
 
 def test_pick_spots_spacing():
@@ -113,3 +113,17 @@ def test_existing_marked_objects_matched_to_nearest_spot():
     spots = [("30_AB", 0.0, 0.0, 0.0), ("30_AB", 100.0, 0.0, 0.0)]
     found = {0xA: (2.0, 0.0, 0.0), 0xB: (99.0, 0.0, 0.0), 0xC: (500.0, 0.0, 0.0)}
     assert match_objects_to_spots(found, spots, collected=set(), max_dist=50.0) == {0xA: 0, 0xB: 1}
+
+
+def test_spots_spawn_in_any_story_phase_but_not_prologue_or_menu():
+    t = SpotTracker(st(), [("30_AB", 0.0, 0.0, 0.0)], radius=150.0)
+    assert t.to_spawn("40_AB_Resistance_Camp_Leader", (10.0, 0.0, 0.0)) == [0]   # meme ville, autre phase
+    assert t.to_spawn("00_60_A_RobotM_Pro_Tutorial", (10.0, 0.0, 0.0)) == []     # prologue (autre carte)
+    assert t.to_spawn("SIGNIN", (10.0, 0.0, 0.0)) == []
+    assert t.to_spawn("12_STG_x", (10.0, 0.0, 0.0)) == []
+
+
+def test_pick_spots_dedupes_positions_across_phases():
+    path = [("30_AB_A", 0.0, 0.0, 0.0), ("40_AB_B", 1.0, 0.0, 0.0), ("40_AB_B", 100.0, 0.0, 0.0)]
+    spots = pick_spots(path, min_dist=25.0, per_area=6)
+    assert [s[1] for s in spots] == [0.0, 100.0]

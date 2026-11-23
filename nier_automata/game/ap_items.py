@@ -13,7 +13,11 @@ import math
 import struct
 from typing import Optional
 
-from ..data.phases import phase_code
+from ..data.phases import MENU_PHASES, is_prologue, phase_code
+
+
+def spawn_allowed(phase: str) -> bool:
+    return bool(phase) and phase not in MENU_PHASES and not is_prologue(phase) and "STG" not in phase
 from .state import ClientState
 
 CAVE_SITE_RVA = 0x5EB5B7       # mov edx,[rdi+0x838] ; mov rcx,rdi ; call 0x7CA790 (tirage au hasard)
@@ -41,7 +45,8 @@ def pick_spots(path, min_dist: float = 40.0, per_area: int = 5):
         chosen = per.setdefault(code, [])
         if len(chosen) >= per_area:
             continue
-        if all(math.dist((x, y, z), c) >= min_dist for c in chosen):
+        # le code est une ETAPE de l'histoire, pas un lieu : dedoublonner sur toutes les etapes
+        if all(math.dist((x, y, z), (a, b, c)) >= min_dist for _, a, b, c in out):
             chosen.append((x, y, z))
             out.append((code, x, y, z))
     return out
@@ -62,9 +67,12 @@ class SpotTracker:
             self.state.ap_spawned_spots.clear()
 
     def to_spawn(self, phase: str, player_pos) -> list[int]:
-        code = phase_code(phase)
+        """Emplacements proches a poser. Le code de phase est une etape de l'histoire (la ville reste la meme
+        d'une etape a l'autre) : pas de filtre par code, sauf prologue (autre carte), menus et vaisseau."""
+        if not spawn_allowed(phase):
+            return []
         return [i for i, (c, x, y, z) in enumerate(self.spots)
-                if c == code and i not in self.state.ap_spots_collected and i not in self._spawned
+                if i not in self.state.ap_spots_collected and i not in self._spawned
                 and i not in self.state.ap_spawned_spots
                 and math.dist((x, y, z), player_pos) <= self.radius]
 
