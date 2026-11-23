@@ -79,12 +79,14 @@ def test_is_goal():
 from nier_automata.game.trackers import StoryTracker
 
 
-def test_story_new_code_counts():
+def test_story_one_check_per_named_route_phase():
     s = st()
-    t = StoryTracker(s, max_count=3)
-    assert t.check("00_60_A_RobotM_Pro_Tutorial") == 1
-    assert t.check("00_60_A_Other_Section") is None  # meme code
-    assert t.check("10_AB_City") == 2
+    t = StoryTracker(s, max_count=30)
+    assert t.check("00_60_A_RobotM_Pro_Tutorial") is None          # prologue : pas encore le boss
+    assert t.check("05_00_A_RobotM_Pro_ArmBoss_2nd") == 1          # boss du prologue
+    assert t.check("30_AB_Ruined_City_ForcedLanding") == 7
+    assert t.check("30_AB_Pascal_Village") == 23                    # meme code 30_AB, autre phase
+    assert t.check("30_AB_Pascal_Village") is None                  # deja compte
 
 
 def test_story_ignores_menu():
@@ -95,15 +97,21 @@ def test_story_ignores_menu():
 
 def test_story_capped():
     s = st()
-    t = StoryTracker(s, max_count=1)
-    t.check("00_60_A")
-    assert t.check("10_AB_City") is None
-    assert s.story_codes == {"00_60", "10_AB"}
+    t = StoryTracker(s, max_count=7)
+    assert t.check("40_AB_Resistance_Camp_Leader") is None          # 8e phase > 7
+    assert "40_AB_Resistance_Camp_Leader" in s.story_codes
 
 
 def test_story_survives_restart():
-    s = st(story_codes={"00_60"})
-    assert StoryTracker(s, max_count=3).check("00_60_A") is None
+    s = st(story_codes={"30_AB_Ruined_City_ForcedLanding"})
+    assert StoryTracker(s, max_count=30).check("30_AB_Ruined_City_ForcedLanding") is None
+
+
+def test_story_location_names_are_readable_and_short():
+    from nier_automata.data.tables import story_location
+    from nier_automata.data.phases import ROUTE_A
+    assert story_location(8) == "Story: Camp Resistance"
+    assert all(len(label) <= 17 for _, label in ROUTE_A)
 
 
 def test_unknown_weapon_id_ignored():
@@ -128,3 +136,134 @@ def test_refound_weapon_after_reload_not_recounted():
     t.scan({0x3F5})                           # rechargement : retrouvee
     assert t.scan({0x3F5}) == ([0x3F5], None)  # retiree mais pas recomptee
     assert s.weapons_found == 1
+
+
+from nier_automata.game.trackers import ItemTracker
+
+
+def test_item_baseline_not_checked():
+    s = st()
+    t = ItemTracker(s, enabled_ids={540, 601})
+    assert t.scan({540}) == []
+    assert t.scan({540}) == []
+    assert s.item_baseline == {540}
+
+
+def test_new_material_checked_once():
+    s = st()
+    t = ItemTracker(s, enabled_ids={540, 601})
+    t.scan({540}); t.scan({540})
+    assert t.scan({540, 601}) == []
+    assert t.scan({540, 601}) == [601]
+    assert t.scan({540, 601}) == []
+    assert s.items_found == {601}
+
+
+def test_disabled_item_ignored():
+    s = st()
+    t = ItemTracker(s, enabled_ids={601})
+    t.scan(set())
+    assert t.scan({0}) == []
+
+
+def test_item_transient_value_not_checked():
+    s = st()
+    t = ItemTracker(s, enabled_ids={540, 601})
+    t.scan({540}); t.scan({540})          # baseline confirmee
+    assert t.scan({540, 601}) == []       # vu une fois
+    assert t.scan({540}) == []            # disparu : passager
+    assert s.items_found == set()
+
+
+def test_item_baseline_needs_two_identical_reads():
+    s = st()
+    t = ItemTracker(s, enabled_ids={540, 601})
+    t.scan(set())                         # table vide pendant un chargement
+    t.scan({540, 601})
+    assert s.item_baseline is None or s.item_baseline == {540, 601}
+    t.scan({540, 601})
+    assert s.item_baseline == {540, 601}
+    assert s.items_found == set()
+
+
+from nier_automata.game.trackers import ChestTracker
+
+P1 = (-554.5, 37.2, 276.8)
+P2 = (-300.0, 10.0, 100.0)
+
+
+def ch(s, n, code="00_80", pos=P1, t=None):
+    t = t or ChestTracker(s, max_count=10)
+    return t, t.update(n, code, pos)
+
+
+def test_chest_first_read_is_baseline():
+    s = st()
+    t = ChestTracker(s, max_count=10)
+    assert t.update(3, "00_80", P1) is None
+    assert t.update(3, "00_80", P1) is None
+    assert s.chests_found == 0
+
+
+def test_chest_increment_needs_two_reads():
+    s = st()
+    t = ChestTracker(s, max_count=10)
+    t.update(3, "00_80", P1); t.update(3, "00_80", P1)
+    assert t.update(4, "00_80", P2) is None      # vu une fois
+    assert t.update(4, "00_80", P2) == 1         # confirme
+    assert s.chests_found == 1
+
+
+def test_same_chest_after_reload_not_recounted():
+    s = st()
+    t = ChestTracker(s, max_count=10)
+    t.update(3, "00_80", P1); t.update(3, "00_80", P1)
+    t.update(4, "00_80", P2); t.update(4, "00_80", P2)
+    t.update(3, "00_80", P1); t.update(3, "00_80", P1)    # rechargement : compteur redescend
+    t.update(4, "00_80", P2)
+    assert t.update(4, "00_80", (P2[0] + 1, P2[1], P2[2] + 1)) is None  # meme coffre (meme endroit)
+    assert s.chests_found == 1
+
+
+def test_chest_capped():
+    s = st()
+    t = ChestTracker(s, max_count=1)
+    t.update(0, "00_80", P1); t.update(0, "00_80", P1)
+    t.update(1, "00_80", P1); t.update(1, "00_80", P1)
+    t.update(2, "00_80", P2)
+    assert t.update(2, "00_80", P2) is None
+    assert s.chests_found == 1
+
+
+from nier_automata.game.trackers import LevelTracker
+
+
+def test_level_needs_two_reads():
+    s = st()
+    t = LevelTracker(s)
+    t.update(4)
+    assert s.max_level == 1
+    t.update(4)
+    assert s.max_level == 4
+
+
+def test_level_never_decreases_and_ignores_garbage():
+    s = st(max_level=4)
+    t = LevelTracker(s)
+    t.update(2); t.update(2)          # rechargement d'une ancienne save
+    t.update(5000); t.update(5000)    # valeur absurde (chargement)
+    t.update(0); t.update(0)
+    assert s.max_level == 4
+
+
+def test_ground_pickup_does_not_count_as_chest():
+    s = st()
+    t = ChestTracker(s, max_count=5)
+    pos = (0.0, 0.0, 0.0)
+    for c in (3, 3):
+        t.update(c, "30_AB", pos)
+    t.update(4, "30_AB", pos, ground_pickup=True)
+    assert t.update(4, "30_AB", pos, ground_pickup=True) is None   # ramassage au sol : pas de check
+    assert s.chests_found == 0
+    t.update(5, "30_AB", (50.0, 0.0, 0.0))
+    assert t.update(5, "30_AB", (50.0, 0.0, 0.0)) == 1            # vrai coffre

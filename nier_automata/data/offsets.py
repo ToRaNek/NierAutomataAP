@@ -26,6 +26,13 @@ OFFSETS: dict[str, dict[str, int]] = {
         # Hypothese : nierhook v1.02 weapons_first=0x148DCC4, bloc inventaire decale de +0x370
         # en v1.03 (items 0x148C4C4 -> 0x148C834). A confirmer avec tools/probe.py.
         "weaponTableStart": 0x148E034,
+        # Trouves en jeu le 2026-11-23 (1720 G et 512/1058 PV confirmes par ToRaNek).
+        "funds": 0x148C830,
+        "playerEntity": 0x1020C88,
+        # Compteur de coffres ouverts (0->1->2->3 sur 3 coffres, inchange au ramassage au sol).
+        "chestCounter": 0xF50F60,
+        # Temps de jeu en images (60/s), verifie : 1 h 09 = ~250 000.
+        "playTimeFrames": 0x14990F4,
     },
 }
 

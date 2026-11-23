@@ -1,0 +1,17 @@
+snaps/
+tools/bisect_state.json
+tools/bisect_targets.json
+tools/bisect_mode.txt
+path_log.tsv
+e2e_apitems/
+e2e_duo/
+e2e_plando/
+e2e_plando2/
+e2e_plando2_serve.py
+e2e_plando3/
+e2e_plando3_serve.py
+spots_chests.tsv
+spots_items.tsv
+e2e_shop/
+e2e_shop_serve.py
+e2e_gen/

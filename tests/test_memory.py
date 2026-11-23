@@ -43,3 +43,23 @@ def test_offsets_v104_values():
 def test_v104_hash_registered():
     from nier_automata.data.offsets import VERSIONS
     assert VERSIONS["09854c2d45d9a72e66357e72f50cee379bb2eafe35b3d64e5e88f4eddc8613fa"] == "v1.04"
+
+
+def test_offsets_found_in_game_v104():
+    o = OFFSETS["v1.04"]
+    assert o["funds"] == 0x148C830
+    assert o["playerEntity"] == 0x1020C88
+
+
+def test_chest_counter_offset_v104():
+    assert OFFSETS["v1.04"]["chestCounter"] == 0xF50F60
+
+
+def test_playtime_offset_v104():
+    # compteur d'images (60/s), verifie en jeu : 1 h 09 affichee = ~250 000
+    assert OFFSETS["v1.04"]["playTimeFrames"] == 0x14990F4
+
+
+def test_level_offset_v104():
+    from nier_automata.game.game import LEVEL_OFFSET
+    assert LEVEL_OFFSET == 0x14BC  # verifie en jeu : niveau 4

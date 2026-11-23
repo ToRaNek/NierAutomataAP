@@ -1,0 +1,42 @@
+"""Classes d'ennemis (RTTI de NieRAutomata.exe v1.04) : RVA de vtable -> nom de classe."""
+
+ENEMY_VTABLES: dict[int, str] = {
+    0xC50E50: "Em0061",
+    0xC51C90: "Em0080",
+    0xC52F90: "Em5000",
+    0xC53890: "Em0090",
+    0xC55410: "Em0101",
+    0xC57708: "Em0110",
+    0xC5A500: "Em011e",
+    0xC5B7E8: "Em0120",
+    0xC5C5B8: "Em1000",
+    0xC5DF50: "Em1010",
+    0xC61DB0: "Em1050",
+    0xC62D00: "Em1090",
+    0xC64108: "Em1080",
+    0xC65478: "Em1100",
+    0xC67720: "Em2000",
+    0xC68BA0: "Em2001",
+    0xC69C18: "Em2100",
+    0xC6CED8: "Em3000",
+    0xC6E2C0: "Em3004",
+    0xC70328: "Em4100",
+    0xC71000: "Em0050",
+    0xC76360: "Em7000",
+    0xC77488: "Em8001",
+    0xC791C0: "Em8000",
+    0xC7A8D0: "Em8002",
+    0xC7BFE0: "Em8800",
+    0xC7F678: "Em9000",
+    0xC818E0: "Em0000",
+    0xC825D0: "Em9010",
+    0xC82F18: "Em0010",
+    0xC83F38: "Em0020",
+    0xC84B48: "Em4000",
+    0xC85688: "Em0030",
+    0xC87698: "Em0040",
+    0xC88798: "Em0060",
+}
+
+# Objets "carcasse" (pas des ennemis actifs, invisibles une fois crees).
+NOT_SPAWNABLE_NAMES = {"Corpse"}

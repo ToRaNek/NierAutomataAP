@@ -28,6 +28,17 @@ class ClientState:
     ap_weapons: set[int] = field(default_factory=set)
     story_codes: set[str] = field(default_factory=set)
     found_weapon_ids: set[int] = field(default_factory=set)
+    item_baseline: Optional[set[int]] = None
+    items_found: set[int] = field(default_factory=set)
+    chests_found: int = 0
+    max_level: int = 1
+    ap_spots_collected: set[int] = field(default_factory=set)
+    ap_spawned_pid: int = 0
+    ap_spawned_spots: set[int] = field(default_factory=set)
+    ap_dynamic_spots: list = field(default_factory=list)
+    linked: bool = False  # partie deja acceptee pour cette seed
+    hints: list = field(default_factory=list)  # [(objet, pour qui, emplacement)] dans notre partie  # [(code, x, y, z)] trouves en jouant
+    chest_spots: list = field(default_factory=list)
 
     def to_dict(self) -> dict:
         return {
@@ -38,6 +49,17 @@ class ClientState:
             "ap_weapons": sorted(self.ap_weapons),
             "story_codes": sorted(self.story_codes),
             "found_weapon_ids": sorted(self.found_weapon_ids),
+            "item_baseline": None if self.item_baseline is None else sorted(self.item_baseline),
+            "items_found": sorted(self.items_found),
+            "chests_found": self.chests_found,
+            "max_level": self.max_level,
+            "ap_spots_collected": sorted(self.ap_spots_collected),
+            "ap_spawned_pid": self.ap_spawned_pid,
+            "ap_spawned_spots": sorted(self.ap_spawned_spots),
+            "ap_dynamic_spots": [list(x) for x in self.ap_dynamic_spots],
+            "linked": self.linked,
+            "hints": [list(h) for h in self.hints],
+            "chest_spots": [list(x) for x in self.chest_spots],
         }
 
     def to_json(self) -> str:
@@ -67,4 +89,15 @@ class ClientState:
                    sent_locations=set(d["sent_locations"]),
                    weapons_found=d["weapons_found"], ap_weapons=set(d["ap_weapons"]),
                    story_codes=set(d.get("story_codes", [])),
-                   found_weapon_ids=set(d.get("found_weapon_ids", [])))
+                   found_weapon_ids=set(d.get("found_weapon_ids", [])),
+                   item_baseline=None if d.get("item_baseline") is None else set(d["item_baseline"]),
+                   items_found=set(d.get("items_found", [])),
+                   chests_found=d.get("chests_found", 0),
+                   max_level=d.get("max_level", 1),
+                   ap_spots_collected=set(d.get("ap_spots_collected", [])),
+                   ap_spawned_pid=d.get("ap_spawned_pid", 0),
+                   ap_spawned_spots=set(d.get("ap_spawned_spots", [])),
+                   linked=bool(d.get("linked", False)),
+                   hints=[tuple(h) for h in d.get("hints", [])],
+                   ap_dynamic_spots=[(c, float(x), float(y), float(z)) for c, x, y, z in d.get("ap_dynamic_spots", [])],
+                   chest_spots=[tuple(x) for x in d.get("chest_spots", [])])

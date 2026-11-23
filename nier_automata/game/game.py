@@ -7,12 +7,20 @@ from datetime import datetime
 from pathlib import Path
 from typing import Optional
 
-from ..data.items_data import FILLER_ITEMS, FILLER_QUANTITY
+from ..data.items_data import FILLER_ITEMS, FILLER_QUANTITY, FUNDS_ITEMS, TRAP_ITEMS
 from ..data.offsets import OFFSETS, detect_version
 from ..data.phases import MENU_PHASES
 from ..data.weapons import WEAPONS
+import struct
+
+from .deathlink import HP_OFFSET, MAX_HP_COPY_OFFSET, add_funds
+from .traps import damage_after_trap, funds_after_trap
 from .inventory import item_table, weapon_table
 from .memory import ProcessMemory, read_cstr, read_u32
+
+
+# Niveau du joueur dans l'entite (verifie en jeu v1.04 : niveau 4).
+LEVEL_OFFSET = 0x14BC
 
 
 def save_dir() -> Path:
@@ -75,15 +83,119 @@ class NierGame:
     def phase(self) -> str:
         return read_cstr(self.mem, self._off["currentPhase"])
 
+    ground = None  # GroundWatch (objets au sol), fourni par le client
+
+    def ground_pickup(self, pos) -> bool:
+        """Un objet au sol vient-il d'etre ramasse a cote de `pos` ?"""
+        try:
+            return bool(self.ground and self.ground.picked_near(pos))
+        except OSError:
+            return False
+
+    def chest_counter(self) -> int:
+        return read_u32(self.mem, self._off["chestCounter"])
+
+    def position(self) -> tuple[float, float, float]:
+        return struct.unpack("<3f", self.mem.read(self.mem.base + self._off["playerLocation"], 12))
+
+    def owned_items(self) -> set[int]:
+        return {s.item_id for s in self._items.read_all()}
+
     def owned_weapons(self) -> set[int]:
         return {s.item_id for s in self._weapons.read_all()}
 
     def give(self, name: str) -> bool:
         if name in WEAPONS:
             return self._weapons.add(WEAPONS[name], 1)
+        if name in TRAP_ITEMS:
+            return self.apply_trap(*TRAP_ITEMS[name])
+        if name in FUNDS_ITEMS:
+            add_funds(self.mem, self._off["funds"], FUNDS_ITEMS[name])
+            return True
         if name in FILLER_ITEMS:
+            # ajout discret : la notification "De X : <objet>" du client remplace le message du jeu
             return self._items.add(FILLER_ITEMS[name], FILLER_QUANTITY.get(name, 1))
         return True  # objet inconnu : ignore plutot que bloquer la file
 
     def remove_weapon(self, weapon_id: int) -> bool:
         return self._weapons.remove(weapon_id)
+
+    def entity(self) -> Optional[int]:
+        try:
+            p = struct.unpack("<Q", self.mem.read(self.mem.base + self._off["playerEntity"], 8))[0]
+        except (OSError, AttributeError):
+            return None
+        return p if 0x10000 < p < 0x7FFFFFFFFFFF else None
+
+    def hp(self) -> Optional[int]:
+        p = self.entity()
+        if p is None:
+            return None
+        try:
+            return struct.unpack("<I", self.mem.read(p + HP_OFFSET, 4))[0]
+        except OSError:
+            return None
+
+    def kill(self) -> bool:
+        p = self.entity()
+        if p is None:
+            return False
+        try:
+            self.mem.write(p + HP_OFFSET, struct.pack("<I", 0))
+        except OSError:
+            return False
+        return True
+
+    GIVE_ITEM_RVA = 0x8006F0  # donne 1 objet ET affiche "Objet obtenu" (verifie en jeu)
+
+    def give_with_popup(self, item_id: int) -> bool:
+        """Donne 1 exemplaire via la fonction du jeu, avec son message. False si l'appel echoue."""
+        from .spawner import remote_call
+        try:
+            return remote_call(self.mem, self.mem.base + self.GIVE_ITEM_RVA, item_id, 1, 1, 1, e=1) & 0xFF == 1
+        except OSError:
+            return False
+
+    def apply_trap(self, kind: str, percent: int) -> bool:
+        """False = pas applicable maintenant (pas d'entite) : le client reessaie au tour suivant."""
+        if kind == "spawn":
+            from .spawner import spawn_enemies
+            pos = struct.unpack("<3f", self.mem.read(self.mem.base + self._off["playerLocation"], 12))
+            if spawn_enemies(self.mem, pos, count=percent):
+                return True
+            kind, percent = "damage", 10  # aucun ennemi charge dans la zone : degats a la place
+        if kind == "money":
+            funds = read_u32(self.mem, self._off["funds"])
+            self.mem.write(self.mem.base + self._off["funds"], struct.pack("<I", funds_after_trap(funds, percent)))
+            return True
+        p = self.entity()
+        if p is None:
+            return False
+        try:
+            hp, = struct.unpack("<I", self.mem.read(p + HP_OFFSET, 4))
+            max_hp, = struct.unpack("<I", self.mem.read(p + MAX_HP_COPY_OFFSET, 4))
+            if hp == 0 or max_hp == 0:
+                return False
+            self.mem.write(p + HP_OFFSET, struct.pack("<I", damage_after_trap(hp, max_hp, percent)))
+        except OSError:
+            return False
+        return True
+
+    def grounded(self) -> Optional[bool]:
+        """2B au sol = compteur de sauts (+0x14A8) a 0. None si illisible."""
+        p = self.entity()
+        if p is None:
+            return None
+        try:
+            return struct.unpack("<I", self.mem.read(p + 0x14A8, 4))[0] == 0
+        except OSError:
+            return None
+
+    def level(self) -> Optional[int]:
+        p = self.entity()
+        if p is None:
+            return None
+        try:
+            return struct.unpack("<I", self.mem.read(p + LEVEL_OFFSET, 4))[0]
+        except OSError:
+            return None

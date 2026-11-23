@@ -27,7 +27,8 @@ def test_item_codes_unique_and_based():
 def test_location_names_and_codes_unique():
     locs = location_name_to_id()
     assert len(set(locs.values())) == len(locs)
-    assert story_location(1) in locs and story_location(30) in locs
+    from nier_automata.data.tables import MAX_STORY
+    assert story_location(1) in locs and story_location(MAX_STORY) in locs
     assert weapon_location(1) in locs and weapon_location(30) in locs
 
 
@@ -48,4 +49,76 @@ def test_phase_code_first_two_tokens():
 
 
 def test_goal_prefix():
-    assert GOAL_PHASE_PREFIX == "58_AB_BossArea_Fall"
+    assert GOAL_PHASE_PREFIX == "EndRoll_A"  # generique de fin A
+
+
+def test_filler_never_material():
+    from nier_automata.data.items_data import MATERIALS
+    assert len(MATERIALS) == 71
+    assert not set(FILLER_ITEMS.values()) & set(MATERIALS.values())
+
+
+def test_item_location_codes_unique():
+    from nier_automata.data.tables import item_location
+    locs = location_name_to_id()
+    assert item_location("Iron Ore") == "Item: Iron Ore"
+    assert item_location("Iron Ore") in locs
+    assert len(set(locs.values())) == len(locs)
+
+
+def test_pool_weapon_count_never_exceeds_open_locations():
+    from nier_automata.data.tables import pool_weapon_count
+    # 12 histoire (non exclues) + 79 exclues : 12 armes max, le reste en filler
+    assert pool_weapon_count(story_locations=12, total_locations=91, candidates=37) == 12
+    assert pool_weapon_count(story_locations=40, total_locations=60, candidates=37) == 30
+    assert pool_weapon_count(story_locations=3, total_locations=3, candidates=37) == 1
+
+
+def test_abilities_never_locked_in_prologue_or_flight():
+    from nier_automata.data.phases import abilities_allowed
+    assert abilities_allowed("00_60_A_RobotM_Pro_Tutorial") is False   # tutoriel des controles
+    assert abilities_allowed("00_40_A_RobotM_Prologue_STG2") is False  # vaisseau du prologue
+    assert abilities_allowed("10_AB_City_STG_Test") is False           # phase vaisseau hors prologue
+    assert abilities_allowed("SIGNIN") is False
+    assert abilities_allowed("") is False
+    assert abilities_allowed("10_AB_City") is True
+
+
+def test_prologue_includes_factory_phases_beyond_00():
+    from nier_automata.data.phases import abilities_allowed, is_prologue
+    assert is_prologue("05_00_A_RobotM_Pro_ArmBoss_2nd")  # vu en jeu, toujours le prologue
+    assert is_prologue("00_90_A_RobotM_Pro_3rdArea")
+    assert not is_prologue("10_AB_City")
+    assert abilities_allowed("05_00_A_RobotM_Pro_ArmBoss_2nd") is False
+
+
+def test_item_checks_off_by_default():
+    import ast, pathlib
+    src = (pathlib.Path(__file__).parent.parent / "nier_automata" / "options.py").read_text(encoding="utf-8")
+    cls = next(n for n in ast.parse(src).body if isinstance(n, ast.ClassDef) and n.name == "ItemChecks")
+    assert [b.id for b in cls.bases] == ["Toggle"]  # Toggle = desactive par defaut
+
+
+def test_shop_locations_have_codes():
+    from nier_automata.data.tables import location_name_to_id, shop_location, SHOP_PLACES_ORDER, MAX_SHOP_SLOTS
+    ids = location_name_to_id()
+    names = [shop_location(p, k) for p in SHOP_PLACES_ORDER for k in range(1, MAX_SHOP_SLOTS + 1)]
+    assert all(n in ids for n in names)
+    assert len({ids[n] for n in names}) == len(names)
+    assert shop_location("Resistance Camp", 1) == "Shop Resistance Camp #1"
+
+
+def test_others_only_rule():
+    from nier_automata.data.tables import others_only
+    class It:  # objet minimal
+        def __init__(self, p): self.player = p
+    rule = others_only(1)
+    assert rule(It(2)) and not rule(It(1))
+
+
+def test_others_or_filler_rule():
+    from nier_automata.data.tables import others_or_filler
+    class It:
+        def __init__(self, p, adv=False, useful=False): self.player, self.advancement, self.useful = p, adv, useful
+    rule = others_or_filler(1)
+    assert rule(It(2, adv=True)) and rule(It(1)) and not rule(It(1, adv=True)) and not rule(It(1, useful=True))
