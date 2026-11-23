@@ -54,34 +54,79 @@ class _MBI(ctypes.Structure):
                 ("Protect", wintypes.DWORD), ("Type", wintypes.DWORD)]
 
 
-def loaded_enemies(mem) -> list[tuple[int, str]]:
-    """Parcourt la memoire du jeu (quelques secondes) et renvoie (objId, nom) des ennemis vivants."""
+def vtable_hits(data: bytes, vts) -> list[int]:
+    """Offsets (alignes sur 8) des pointeurs de vtable dans `data`. Les vtables d'ennemis sont regroupees
+    dans le module : on cherche (bytes.find, en C) leurs 6 octets de poids fort communs puis on verifie."""
+    groups = {struct.pack("<Q", v)[2:] for v in vts}
+    hits = []
+    for g in groups:
+        i = data.find(g, 2)
+        while i != -1:
+            start = i - 2
+            if start % 8 == 0 and struct.unpack_from("<Q", data, start)[0] in vts:
+                hits.append(start)
+            i = data.find(g, i + 1)
+    return sorted(hits)
+
+
+def enough_types(found: Sequence[tuple[int, str]], want: int) -> bool:
+    """Assez de types d'ennemis utilisables pour arreter le parcours de la memoire."""
+    return len({oid for oid, name in found if oid >> 16 == 2 and name not in NOT_SPAWNABLE_NAMES}) >= want
+
+
+PLAYER_PTR_RVA = 0x1020C88
+
+
+def loaded_enemies(mem, want: int = 3) -> list[tuple[int, str]]:
+    """(objId, nom) des ennemis vivants. Verifie en jeu : les entites (joueur et ennemis) sont dans la meme
+    zone memoire (~370 Mo) ; on ne lit qu'elle (1-2 s au lieu de ~17 s), puis tout si rien n'y est trouve."""
+    try:
+        player = struct.unpack("<Q", mem.read(mem.base + PLAYER_PTR_RVA, 8))[0]
+    except OSError:
+        player = 0
+    if player:
+        found = _scan_enemies(mem, want, only=player)
+        if found:
+            return found
+    return _scan_enemies(mem, want)
+
+
+def _scan_enemies(mem, want: int, only: int = 0) -> list[tuple[int, str]]:
     k = mem._k
     k.VirtualQueryEx.argtypes = [wintypes.HANDLE, ctypes.c_void_p, ctypes.POINTER(_MBI), ctypes.c_size_t]
     k.VirtualQueryEx.restype = ctypes.c_size_t
     vts = {mem.base + rva for rva in ENEMY_VTABLES}
-    objs, addr = [], 0
+    out: list[tuple[int, str]] = []
+    addr = 0
+    if only:
+        mbi = _MBI()
+        if not k.VirtualQueryEx(mem.handle, ctypes.c_void_p(only), ctypes.byref(mbi), ctypes.sizeof(mbi)):
+            return []
+        addr = mbi.BaseAddress or 0
     while addr < 0x7FFFFFFFFFFF:
         mbi = _MBI()
         if not k.VirtualQueryEx(mem.handle, ctypes.c_void_p(addr), ctypes.byref(mbi), ctypes.sizeof(mbi)):
             break
         base, size = mbi.BaseAddress or 0, mbi.RegionSize
-        if mbi.State == 0x1000 and mbi.Protect in (0x04, 0x40) and size < 0x40000000 and size % 8 == 0:
+        if mbi.State == 0x1000 and mbi.Protect in (0x04, 0x40) and size < 0x40000000:
             try:
-                arr = memoryview(mem.read(base, size)).cast("Q")
-                objs.extend(base + i * 8 for i, v in enumerate(arr) if v in vts)
+                data = mem.read(base, size)
             except OSError:
-                pass
+                data = b""
+            for off in vtable_hits(data, vts):
+                o = base + off
+                try:
+                    oid = struct.unpack("<I", mem.read(o + OBJID_OFFSET, 4))[0]
+                    info = struct.unpack("<Q", mem.read(o + INFO_OFFSET, 8))[0]
+                    name = mem.read(info + 0x8, 0x20).split(bytes(1))[0].decode("ascii", "replace") if info else ""
+                    out.append((oid, name))
+                except OSError:
+                    continue
+            if want and enough_types(out, want):
+                break
+        if only:
+            break
         addr = base + size
-    out = []
-    for o in objs:
-        try:
-            oid = struct.unpack("<I", mem.read(o + OBJID_OFFSET, 4))[0]
-            info = struct.unpack("<Q", mem.read(o + INFO_OFFSET, 8))[0]
-            name = mem.read(info + 0x8, 0x20).split(b"\0")[0].decode("ascii", "replace") if info else ""
-            out.append((oid, name))
-        except OSError:
-            continue
     return out
 
 

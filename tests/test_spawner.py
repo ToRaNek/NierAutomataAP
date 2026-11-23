@@ -38,3 +38,20 @@ def test_set_info_layout_copied_from_game_code():
     assert struct.unpack_from("<4f", b, 0x40) == (1.0, 2.0, 3.0, 1.0)
     assert struct.unpack_from("<4f", b, 0x60) == (1.0, 1.0, 1.0, 1.0)
     assert struct.unpack_from("<iIiI", b, 0x80) == (-1, 0, 1, 0xFFFFFFFF)
+
+
+def test_vtable_hits_finds_aligned_pointers_fast():
+    import struct
+    from nier_automata.game.spawner import vtable_hits
+    vts = {0x7FF600001000, 0x7FF600002000}
+    data = bytearray(64)
+    struct.pack_into("<Q", data, 8, 0x7FF600001000)
+    struct.pack_into("<Q", data, 33, 0x7FF600002000)   # non aligne : ignore
+    struct.pack_into("<Q", data, 48, 0x7FF600002000)
+    assert vtable_hits(bytes(data), vts) == [8, 48]
+
+
+def test_enough_types_stops_scan():
+    from nier_automata.game.spawner import enough_types
+    assert not enough_types([(0x20000, "Corpse"), (0x20000, "")], 2)
+    assert enough_types([(0x20000, ""), (0x20030, "")], 2)
