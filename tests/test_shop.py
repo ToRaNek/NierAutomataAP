@@ -197,3 +197,13 @@ def test_no_image_cave_skips_carriers_only():
     assert ("cmp", "esi, 0x3b6") in ins and ("cmp", "esi, 0x3b9") in ins
     targets = {int(op, 16) for m, op in ins if m == "jmp"}
     assert targets == {base + shop.SHOW_IMAGE_RVA, base + shop.SKIP_IMAGE_RVA}
+
+
+def test_thumb_cave_swaps_carrier_thumbnail_only():
+    from capstone import Cs, CS_ARCH_X86, CS_MODE_64
+    base, cave = 0x140000000, 0x13F000000
+    code = shop.thumb_cave(cave, base, 950, 953, 4)
+    ins = [(i.mnemonic, i.op_str) for i in Cs(CS_ARCH_X86, CS_MODE_64).disasm(code, cave)]
+    assert ("cmp", "ebx, 0x3b6") in ins and ("cmp", "ebx, 0x3b9") in ins
+    assert ("mov", "r9d, 4") in ins and ("mov", "edx, 0xf") in ins
+    assert ins[-1] == ("jmp", hex(base + shop.THUMB_RETURN_RVA))

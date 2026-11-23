@@ -20,6 +20,10 @@ SHOP_LIST_OFFSET = 0x748
 # lettres ; les teintures 880.. ont leurs textes dans un fichier aux lettres incompletes). 959 = notifications.
 CARRIER_NAMES = [f"item_uq_podSkin{i}" for i in range(1, 5)]
 CARRIER_IDS = [950, 951, 952, 953]
+THUMB_SITE_RVA = 0x808FFF        # mov edx,0xf ; juste avant sprintf("item_thumb_%03d", id % 1000) (r9 = numero)
+THUMB_SITE_ORIGINAL = bytes.fromhex("ba0f000000")
+THUMB_RETURN_RVA = 0x809004
+THUMB_NONE = 4                    # item_thumb_004 n'existe pas : pas d'image
 NO_IMAGE_SITE_RVA = 0x8FFE1B     # test eax,eax ; je <pas d'image> (apres recherche de l'image de l'objet)
 NO_IMAGE_SITE_ORIGINAL = bytes.fromhex("85c00f84b5feffff")
 SHOW_IMAGE_RVA = 0x8FFE23
@@ -273,7 +277,7 @@ class ShopSession:
             self.texts.set_text(f"CORE_ITEM_NAME_{cid}", "AP Item")
         for name in CARRIER_NAMES:
             set_price(mem, ids, name, price)
-        install_no_image(mem)
+        install_thumb(mem)
         self.place: Optional[str] = None
         self.last_shown: list[int] = []
         self.ok = True
@@ -342,4 +346,48 @@ def install_no_image(mem) -> bool:
         return False
     mem.write(cave, no_image_cave(cave, mem.base, min(CARRIER_IDS), max(CARRIER_IDS)))
     mem.write_code(site, b"\xE9" + struct.pack("<i", cave - (site + 5)) + b"\x90" * 3)
+    return True
+
+
+def thumb_cave(cave: int, base: int, lo: int, hi: int, thumb: int) -> bytes:
+    """cmp ebx,lo ; jb L ; cmp ebx,hi ; ja L ; mov r9d,thumb ; L: mov edx,0xf ; jmp retour."""
+    c = bytearray()
+    c += bytes([0x81, 0xFB]) + struct.pack("<I", lo)
+    jb = len(c); c += bytes([0x72, 0x00])
+    c += bytes([0x81, 0xFB]) + struct.pack("<I", hi)
+    ja = len(c); c += bytes([0x77, 0x00])
+    c += bytes([0x41, 0xB9]) + struct.pack("<I", thumb)
+    lab = len(c)
+    c += THUMB_SITE_ORIGINAL
+    c += bytes([0xE9]) + struct.pack("<i", base + THUMB_RETURN_RVA - (cave + len(c) + 5))
+    c[jb + 1] = lab - (jb + 2)
+    c[ja + 1] = lab - (ja + 2)
+    return bytes(c)
+
+
+def install_thumb(mem) -> bool:
+    """Les porteurs n'ont pas de vignette (une fois par processus)."""
+    import ctypes
+    from ctypes import wintypes
+    site = mem.base + THUMB_SITE_RVA
+    cur = mem.read(site, 5)
+    if cur[0] == 0xE9:
+        return True
+    if cur != THUMB_SITE_ORIGINAL:
+        return False
+    k = mem._k
+    k.OpenProcess.restype = wintypes.HANDLE
+    h = k.OpenProcess(0x1F0FFF, False, mem.pid)
+    k.VirtualAllocEx.argtypes = [wintypes.HANDLE, ctypes.c_void_p, ctypes.c_size_t, wintypes.DWORD, wintypes.DWORD]
+    k.VirtualAllocEx.restype = ctypes.c_void_p
+    cave = None
+    for delta in range(0x10000000, 0x7F000000, 0x1000000):
+        cave = k.VirtualAllocEx(h, ctypes.c_void_p((mem.base - delta) & ~0xFFFF), 0x1000, 0x3000, 0x40)
+        if cave:
+            break
+    k.CloseHandle(h)
+    if not cave:
+        return False
+    mem.write(cave, thumb_cave(cave, mem.base, min(CARRIER_IDS), max(CARRIER_IDS), THUMB_NONE))
+    mem.write_code(site, bytes([0xE9]) + struct.pack("<i", cave - (site + 5)))
     return True
