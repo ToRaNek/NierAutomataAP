@@ -38,8 +38,8 @@ def item_name_to_id() -> dict[str, int]:
         ids[name] = BASE_CODE + 0x280 + i
     for i, name in enumerate(TRAP_ITEMS):
         ids[name] = BASE_CODE + 0x300 + i
-    for i, name in enumerate(ABILITY_PATCHES):
-        ids[name] = BASE_CODE + 0x400 + i
+    for name, code in (("Double Jump", 0x400), ("Air Dash", 0x401), ("Evade", 0x402), ("Pod Fire", 0x403)):
+        ids[name] = BASE_CODE + code
     ids["Ground Evade"] = BASE_CODE + 0x480
     return ids
 

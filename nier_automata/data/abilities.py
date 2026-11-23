@@ -26,4 +26,7 @@ ABILITY_PATCHES: dict[str, tuple[CodePatch, ...]] = {
     # Debut du bloc setState(0x12 = esquive) -> jmp vers "aucune action" (xor eax,eax).
     # Teste en jeu : bloque l'esquive au sol, en l'air et le sprint.
     "Evade": (CodePatch(0x47E6BB, bytes.fromhex("488b"), bytes.fromhex("eb2e")),),
+    # call 0x49EA20 (lecture du bouton de tir) -> xor eax,eax : le Pod ne tire plus (teste en jeu,
+    # trouve par dichotomie sur les 27 appels de 0x49EA20).
+    "Pod Fire": (CodePatch(0x4306CF, bytes.fromhex("e84ce30600"), bytes.fromhex("31c00f1f00")),),
 }

@@ -93,3 +93,9 @@ def test_ground_evade_unknown_grounding_leaves_unlocked():
     ev, = ABILITY_PATCHES["Evade"]
     AbilityLock(m, randomized={"Ground Evade"}).sync(received=set(), grounded=None)
     assert m.read(m.base + ev.rva, 2) == ev.original
+
+
+def test_pod_fire_patch_verified_in_game_v104():
+    pf, = ABILITY_PATCHES["Pod Fire"]
+    # call 0x49EA20 (bouton de tir) -> xor eax,eax ; nop3 : le bouton de tir du Pod lit "non presse"
+    assert (pf.rva, pf.original, pf.locked) == (0x4306CF, bytes.fromhex("e84ce30600"), bytes.fromhex("31c00f1f00"))
