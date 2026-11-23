@@ -32,6 +32,7 @@ class ClientState:
     items_found: set[int] = field(default_factory=set)
     chests_found: int = 0
     max_level: int = 1
+    ap_spots_collected: set[int] = field(default_factory=set)
     chest_spots: list = field(default_factory=list)
 
     def to_dict(self) -> dict:
@@ -47,6 +48,7 @@ class ClientState:
             "items_found": sorted(self.items_found),
             "chests_found": self.chests_found,
             "max_level": self.max_level,
+            "ap_spots_collected": sorted(self.ap_spots_collected),
             "chest_spots": [list(x) for x in self.chest_spots],
         }
 
@@ -82,4 +84,5 @@ class ClientState:
                    items_found=set(d.get("items_found", [])),
                    chests_found=d.get("chests_found", 0),
                    max_level=d.get("max_level", 1),
+                   ap_spots_collected=set(d.get("ap_spots_collected", [])),
                    chest_spots=[tuple(x) for x in d.get("chest_spots", [])])

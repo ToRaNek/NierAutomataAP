@@ -20,6 +20,13 @@ def weapon_location(n: int) -> str:
     return f"Weapon Found #{n}"
 
 
+MAX_AP_SPOTS = 300
+
+
+def ap_item_location(n: int) -> str:
+    return f"AP Item #{n}"
+
+
 def level_location(n: int) -> str:
     return f"Level {n}"
 
@@ -61,6 +68,8 @@ def location_name_to_id() -> dict[str, int]:
         locs[chest_location(n)] = BASE_CODE + 0x4000 + n
     for n in range(2, 100):
         locs[level_location(n)] = BASE_CODE + 0x5000 + n
+    for n in range(1, MAX_AP_SPOTS + 1):
+        locs[ap_item_location(n)] = BASE_CODE + 0x6000 + n
     return locs
 
 

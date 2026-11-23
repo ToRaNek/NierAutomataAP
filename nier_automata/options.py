@@ -56,6 +56,12 @@ class MaxLevelCheck(Range):
     default = 20
 
 
+class ApItems(DefaultOnToggle):
+    """Des objets "AP Item" apparaissent au sol a des emplacements predefinis sur le chemin.
+    Les ramasser envoie un check (rien n'est ajoute a l'inventaire)."""
+    display_name = "AP Items"
+
+
 class ItemChecks(DefaultOnToggle):
     """Le premier ramassage de chaque materiau (coffre, ennemi, sol) envoie un check "Item: <nom>"."""
     display_name = "Item Checks"
@@ -76,6 +82,7 @@ class NierAutomataOptions(PerGameCommonOptions):
     story_checks: StoryChecks
     weapon_checks: WeaponChecks
     item_checks: ItemChecks
+    ap_items: ApItems
     chest_checks: ChestChecks
     max_level_check: MaxLevelCheck
     trap_percentage: TrapPercentage

@@ -1,0 +1,59 @@
+from nier_automata.game.ap_items import (
+    AP_MARKER_ITEM, CAVE_SITE_RVA, DIRECT_GIVE_RVA, DROP_CALL_RVA, MARKER_FLAG, SpotTracker, pick_spots,
+)
+from nier_automata.game.state import ClientState
+
+SPOTS = [("30_AB", 0.0, 0.0, 0.0), ("30_AB", 100.0, 0.0, 0.0), ("40_AB", 5.0, 0.0, 5.0)]
+
+
+def st(**kw):
+    return ClientState(seed="S", slot=1, save_slot=None, **kw)
+
+
+def test_constants_verified_in_game_v104():
+    assert (CAVE_SITE_RVA, DIRECT_GIVE_RVA, DROP_CALL_RVA) == (0x5EB5B7, 0x5EB597, 0x7CA790)
+    assert (MARKER_FLAG, AP_MARKER_ITEM) == (0x10000, 688)
+
+
+def test_spots_to_spawn_only_in_current_area_and_near():
+    t = SpotTracker(st(), SPOTS, radius=150.0)
+    assert t.to_spawn("30_AB_Ruined_City", (10.0, 0.0, 0.0)) == [0, 1]
+    assert t.to_spawn("40_AB_Desert", (500.0, 0.0, 0.0)) == []  # trop loin
+
+
+def test_spawned_once_per_session_and_never_after_collect():
+    s = st()
+    t = SpotTracker(s, SPOTS, radius=150.0)
+    t.mark_spawned(0)
+    assert t.to_spawn("30_AB_x", (0.0, 0.0, 0.0)) == [1]
+    t.collected(1)
+    assert s.ap_spots_collected == {1}
+    t.reset_session()  # rechargement / changement de zone : on repose ce qui n'est pas ramasse
+    assert t.to_spawn("30_AB_x", (0.0, 0.0, 0.0)) == [0]
+
+
+def test_pick_spots_spacing():
+    path = [("30_AB_A", float(x), 0.0, 0.0) for x in range(0, 200, 5)]
+    spots = pick_spots(path, min_dist=40.0, per_area=3)
+    xs = [s[1] for s in spots]
+    assert len(spots) == 3 and all(b - a >= 40.0 for a, b in zip(xs, xs[1:]))
+    assert all(s[0] == "30_AB" for s in spots)
+
+
+from nier_automata.game.ap_items import resolve_pickups
+
+
+def test_pickup_resolved_when_object_gone_and_marker_received():
+    tracked = {0xA: 0, 0xB: 1}
+    objs = {0xA: 0, 0xB: 0x1234}           # l'objet du spot 0 a disparu
+    assert resolve_pickups(tracked, objs.get, marker_received=True) == [0]
+    assert resolve_pickups(tracked, objs.get, marker_received=False) == []  # disparu sans ramassage (zone quittee)
+
+
+def test_due_includes_ap_items():
+    from nier_automata.data.tables import location_name_to_id
+    from nier_automata.game.loop import due_locations
+    s = st(ap_spots_collected={0, 2})
+    locs = location_name_to_id()
+    due = due_locations(s, 0, 0)
+    assert {locs["AP Item #1"], locs["AP Item #3"]} <= due and locs["AP Item #2"] not in due

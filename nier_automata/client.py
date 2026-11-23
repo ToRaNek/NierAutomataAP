@@ -2,12 +2,15 @@
 from __future__ import annotations
 
 import asyncio
+import struct
 import urllib.parse
 
 from CommonClient import CommonContext, get_base_parser, gui_enabled, logger, server_loop
 from NetUtils import ClientStatus
 
 from .data.phases import GOAL_PHASE_PREFIX, abilities_allowed
+from .data.ap_spots import AP_SPOTS
+from .game import ap_items as apit
 from .game.abilities import AbilityLock
 from .game.deathlink import DeathTracker
 from .game.game import NierGame, backup_saves
@@ -61,6 +64,11 @@ class NierContext(CommonContext):
             self.goal = sd.get("goal", 1)
             self.death_link_on = bool(sd.get("death_link", False))
             self.randomized_abilities = set(sd.get("randomized_abilities", []))
+            self.ap_items_on = bool(sd.get("ap_items", False))
+            self.spots = apit.SpotTracker(self.state, AP_SPOTS)
+            self.ap_tracked = {}
+            self.ap_pid = None
+            self.ap_phase = None
             self.ability_lock = None
             if self.death_link_on:
                 asyncio.create_task(self.update_death_link(True))
@@ -139,6 +147,43 @@ async def ability_loop(ctx: NierContext):
             pass
 
 
+async def ap_items_step(ctx: NierContext):
+    """Pose les AP Items de la zone et detecte leur ramassage."""
+    if not getattr(ctx, "ap_items_on", False) or not AP_SPOTS:
+        return
+    mem = ctx.nier.mem
+    if ctx.ap_pid != mem.pid:
+        ok = await asyncio.to_thread(apit.install, mem)
+        ctx.ap_pid = mem.pid
+        ctx.spots.reset_session(); ctx.ap_tracked.clear()
+        logger.info("AP Items : %s", "deviation installee" if ok else "version non supportee")
+        if not ok:
+            ctx.ap_items_on = False
+            return
+    phase = ctx.nier.phase()
+    if phase != ctx.ap_phase:
+        ctx.spots.reset_session(); ctx.ap_tracked.clear(); ctx.ap_phase = phase
+    ent = ctx.nier.entity()
+    if ent is None:
+        return
+    pos = struct.unpack("<3f", mem.read(ent + 0x50, 12))
+    for i in ctx.spots.to_spawn(phase, pos):
+        _, x, y, z = AP_SPOTS[i]
+        work = await asyncio.to_thread(apit.spawn_ap_item, mem, (x, y, z))
+        ctx.spots.mark_spawned(i)
+        if work:
+            ctx.ap_tracked[work] = i
+    marker = ctx.nier._items.find(apit.AP_MARKER_ITEM) is not None
+    def obj_of(w):
+        return struct.unpack("<Q", mem.read(w + 0x60, 8))[0]
+    for i in apit.resolve_pickups(ctx.ap_tracked, obj_of, marker):
+        ctx.spots.collected(i)
+        logger.info("AP Item #%d ramasse !", i + 1)
+    ctx.ap_tracked = {w: i for w, i in ctx.ap_tracked.items() if i not in ctx.state.ap_spots_collected}
+    if marker:
+        ctx.nier._items.remove(apit.AP_MARKER_ITEM)
+
+
 async def game_iteration(ctx: NierContext):
     if ctx.state is None or ctx.trackers is None:
         return
@@ -157,6 +202,11 @@ async def game_iteration(ctx: NierContext):
         ctx._status("Sauvegarde deja avancee : commence une NOUVELLE partie pour cette seed.")
         return
     ctx._status(f"Jeu detecte ({ctx.nier.version}), phase {ctx.nier.phase()}")
+    await ap_items_step(ctx)
+    extra = sorted(due_locations(ctx.state, 0, 0) - ctx.state.sent_locations)
+    if extra:
+        ctx.state.sent_locations.update(extra)
+        result.locations = sorted(set(result.locations) | set(extra))
     if result.locations:
         await ctx.send_msgs([{"cmd": "LocationChecks", "locations": result.locations}])
     if result.goal and not ctx.goal_sent:

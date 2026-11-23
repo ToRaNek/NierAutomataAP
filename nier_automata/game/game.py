@@ -104,7 +104,10 @@ class NierGame:
             add_funds(self.mem, self._off["funds"], FUNDS_ITEMS[name])
             return True
         if name in FILLER_ITEMS:
-            return self._items.add(FILLER_ITEMS[name], FILLER_QUANTITY.get(name, 1))
+            qty = FILLER_QUANTITY.get(name, 1)
+            if self.give_with_popup(FILLER_ITEMS[name]):
+                return qty == 1 or self._items.add(FILLER_ITEMS[name], qty - 1)
+            return self._items.add(FILLER_ITEMS[name], qty)
         return True  # objet inconnu : ignore plutot que bloquer la file
 
     def remove_weapon(self, weapon_id: int) -> bool:
@@ -135,6 +138,16 @@ class NierGame:
         except OSError:
             return False
         return True
+
+    GIVE_ITEM_RVA = 0x8006F0  # donne 1 objet ET affiche "Objet obtenu" (verifie en jeu)
+
+    def give_with_popup(self, item_id: int) -> bool:
+        """Donne 1 exemplaire via la fonction du jeu, avec son message. False si l'appel echoue."""
+        from .spawner import remote_call
+        try:
+            return remote_call(self.mem, self.mem.base + self.GIVE_ITEM_RVA, item_id, 1, 1, 1, e=1) & 0xFF == 1
+        except OSError:
+            return False
 
     def apply_trap(self, kind: str, percent: int) -> bool:
         """False = pas applicable maintenant (pas d'entite) : le client reessaie au tour suivant."""

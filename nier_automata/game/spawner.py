@@ -85,8 +85,9 @@ def loaded_enemies(mem) -> list[tuple[int, str]]:
     return out
 
 
-def remote_call(mem, func: int, a: int = 0, b: int = 0, c: int = 0, d: int = 0, timeout_ms: int = 5000) -> int:
-    """Appelle func(a, b, c, d) dans le jeu (nouveau fil) et renvoie rax."""
+def remote_call(mem, func: int, a: int = 0, b: int = 0, c: int = 0, d: int = 0, timeout_ms: int = 5000,
+                e: int = 0) -> int:
+    """Appelle func(a, b, c, d, e) dans le jeu (nouveau fil) et renvoie rax. La page de code est liberee."""
     k = mem._k
     k.OpenProcess.restype = wintypes.HANDLE
     h = k.OpenProcess(0x1F0FFF, False, mem.pid)
@@ -101,19 +102,24 @@ def remote_call(mem, func: int, a: int = 0, b: int = 0, c: int = 0, d: int = 0, 
     if not page:
         raise OSError("VirtualAllocEx")
     result = page + 0x800
-    code = (b"\x48\x83\xEC\x28" + b"\x48\xB9" + struct.pack("<Q", a) + b"\x48\xBA" + struct.pack("<Q", b)
+    code = (b"\x48\x83\xEC\x38"                                            # sub rsp,0x38
+            + b"\x48\xB8" + struct.pack("<Q", e) + b"\x48\x89\x44\x24\x20"   # 5e parametre [rsp+0x20]
+            + b"\x48\xB9" + struct.pack("<Q", a) + b"\x48\xBA" + struct.pack("<Q", b)
             + b"\x49\xB8" + struct.pack("<Q", c) + b"\x49\xB9" + struct.pack("<Q", d)
             + b"\x48\xB8" + struct.pack("<Q", func) + b"\xFF\xD0" + b"\x48\xA3" + struct.pack("<Q", result)
-            + b"\x48\x83\xC4\x28\xC3")
+            + b"\x48\x83\xC4\x38\xC3")                                      # add rsp,0x38 ; ret
     mem.write(page, code)
     t = k.CreateRemoteThread(h, None, 0, ctypes.c_void_p(page), None, 0, None)
     if not t:
         raise OSError("CreateRemoteThread")
-    k.WaitForSingleObject(t, timeout_ms)
+    finished = k.WaitForSingleObject(t, timeout_ms) == 0
     k.CloseHandle(t)
+    ret = struct.unpack("<Q", mem.read(result, 8))[0]
+    if finished:  # ne jamais liberer une page encore en cours d'execution
+        k.VirtualFreeEx.argtypes = [wintypes.HANDLE, ctypes.c_void_p, ctypes.c_size_t, wintypes.DWORD]
+        k.VirtualFreeEx(h, ctypes.c_void_p(page), 0, 0x8000)
     k.CloseHandle(h)
-    # la page n'est pas liberee : la fiche de placement et le nom y restent valides pour le moteur
-    return struct.unpack("<Q", mem.read(result, 8))[0]
+    return ret
 
 
 def alloc(mem, data: bytes) -> int:
