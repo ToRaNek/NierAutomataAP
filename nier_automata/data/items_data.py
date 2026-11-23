@@ -14,6 +14,13 @@ FILLER_ITEMS: dict[str, int] = {
 # Argent recu (ajoute aux fonds, adresse "funds").
 FUNDS_ITEMS: dict[str, int] = {"500 G": 500, "1000 G": 1000, "2000 G": 2000}
 
+# Pieges : (type, pourcentage).
+TRAP_ITEMS: dict[str, tuple[str, int]] = {
+    "Damage Trap (5%)": ("damage", 5),
+    "Damage Trap (10%)": ("damage", 10),
+    "Money Trap": ("money", 10),
+}
+
 # Quantite donnee par objet recu.
 FILLER_QUANTITY: dict[str, int] = {"Small Recovery": 3, "Medium Recovery": 2}
 

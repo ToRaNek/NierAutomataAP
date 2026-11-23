@@ -2,7 +2,7 @@ from BaseClasses import Item, ItemClassification, Location, LocationProgressType
 from worlds.AutoWorld import WebWorld, World
 from worlds.LauncherComponents import Component, Type, components, launch_subprocess
 
-from .data.items_data import FILLER_ITEMS, FUNDS_ITEMS, MATERIALS
+from .data.items_data import FILLER_ITEMS, FUNDS_ITEMS, MATERIALS, TRAP_ITEMS
 from .data.phases import GOAL_PHASE_PREFIX
 from .data.tables import (
     GOAL_LOCATION, chest_location, item_location, item_name_to_id, pool_weapon_count, location_name_to_id, story_location, weapon_location,
@@ -69,7 +69,12 @@ class NierAutomataWorld(World):
         self.multiworld.regions.append(menu)
 
     def create_item(self, name: str) -> NierItem:
-        cls = ItemClassification.useful if name in WEAPONS else ItemClassification.filler
+        if name in WEAPONS:
+            cls = ItemClassification.useful
+        elif name in TRAP_ITEMS:
+            cls = ItemClassification.trap
+        else:
+            cls = ItemClassification.filler
         return NierItem(name, cls, self.item_name_to_id[name], self.player)
 
     def get_filler_item_name(self) -> str:
@@ -82,7 +87,12 @@ class NierAutomataWorld(World):
         n = pool_weapon_count(open_locs, count, len(candidates))
         weapons = self.random.sample(candidates, n)
         pool = [self.create_item(w) for w in weapons]
-        pool += [self.create_item(self.get_filler_item_name()) for _ in range(count - len(pool))]
+        traps = list(TRAP_ITEMS)
+        for _ in range(count - len(pool)):
+            if self.random.randint(1, 100) <= self.options.trap_percentage.value:
+                pool.append(self.create_item(self.random.choice(traps)))
+            else:
+                pool.append(self.create_item(self.get_filler_item_name()))
         self.multiworld.itempool += pool
 
     def set_rules(self) -> None:

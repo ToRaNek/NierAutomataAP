@@ -7,13 +7,14 @@ from datetime import datetime
 from pathlib import Path
 from typing import Optional
 
-from ..data.items_data import FILLER_ITEMS, FILLER_QUANTITY, FUNDS_ITEMS
+from ..data.items_data import FILLER_ITEMS, FILLER_QUANTITY, FUNDS_ITEMS, TRAP_ITEMS
 from ..data.offsets import OFFSETS, detect_version
 from ..data.phases import MENU_PHASES
 from ..data.weapons import WEAPONS
 import struct
 
-from .deathlink import HP_OFFSET, add_funds
+from .deathlink import HP_OFFSET, MAX_HP_COPY_OFFSET, add_funds
+from .traps import damage_after_trap, funds_after_trap
 from .inventory import item_table, weapon_table
 from .memory import ProcessMemory, read_cstr, read_u32
 
@@ -93,6 +94,8 @@ class NierGame:
     def give(self, name: str) -> bool:
         if name in WEAPONS:
             return self._weapons.add(WEAPONS[name], 1)
+        if name in TRAP_ITEMS:
+            return self.apply_trap(*TRAP_ITEMS[name])
         if name in FUNDS_ITEMS:
             add_funds(self.mem, self._off["funds"], FUNDS_ITEMS[name])
             return True
@@ -125,6 +128,25 @@ class NierGame:
             return False
         try:
             self.mem.write(p + HP_OFFSET, struct.pack("<I", 0))
+        except OSError:
+            return False
+        return True
+
+    def apply_trap(self, kind: str, percent: int) -> bool:
+        """False = pas applicable maintenant (pas d'entite) : le client reessaie au tour suivant."""
+        if kind == "money":
+            funds = read_u32(self.mem, self._off["funds"])
+            self.mem.write(self.mem.base + self._off["funds"], struct.pack("<I", funds_after_trap(funds, percent)))
+            return True
+        p = self.entity()
+        if p is None:
+            return False
+        try:
+            hp, = struct.unpack("<I", self.mem.read(p + HP_OFFSET, 4))
+            max_hp, = struct.unpack("<I", self.mem.read(p + MAX_HP_COPY_OFFSET, 4))
+            if hp == 0 or max_hp == 0:
+                return False
+            self.mem.write(p + HP_OFFSET, struct.pack("<I", damage_after_trap(hp, max_hp, percent)))
         except OSError:
             return False
         return True

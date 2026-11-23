@@ -31,6 +31,15 @@ class ChestChecks(Range):
     default = 15
 
 
+class TrapPercentage(Range):
+    """Pourcentage des objets de remplissage remplaces par des pieges
+    (degats 5 %/10 % des PV max, perte de 10 % des G)."""
+    display_name = "Trap Percentage"
+    range_start = 0
+    range_end = 100
+    default = 20
+
+
 class ItemChecks(DefaultOnToggle):
     """Le premier ramassage de chaque materiau (coffre, ennemi, sol) envoie un check "Item: <nom>"."""
     display_name = "Item Checks"
@@ -52,5 +61,6 @@ class NierAutomataOptions(PerGameCommonOptions):
     weapon_checks: WeaponChecks
     item_checks: ItemChecks
     chest_checks: ChestChecks
+    trap_percentage: TrapPercentage
     goal: Goal
     death_link: DeathLink
