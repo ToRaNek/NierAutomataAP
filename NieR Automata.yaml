@@ -1,0 +1,29 @@
+﻿# NieR:Automata (Archipelago) - modele de YAML
+name: TonPseudo
+game: NieR:Automata
+description: NieR:Automata - route A
+
+NieR:Automata:
+  # Objectif : story_progress (atteindre story_checks etapes de l'histoire) ou ending_a (fin A).
+  goal: story_progress
+  # Etapes de l'histoire qui donnent un check "Story: <lieu>" (1-27). Avec story_progress, c'est aussi l'objectif.
+  story_checks: 12
+  # Armes trouvees (retirees de l'inventaire, envoient un check).
+  weapon_checks: 8
+  # Coffres ouverts.
+  chest_checks: 15
+  # Un check par niveau, de 2 jusqu'a ce niveau (0 = desactive).
+  max_level_check: 20
+  # AP Items au sol sur ton trajet ("AP Item: <lieu> #k").
+  ap_items: true
+  ap_items_per_phase: 2
+  # AP Items vendus en tete des magasins (Camp, Village de Pascal, Chateau) et leur prix.
+  shop_checks: 2
+  shop_price: 300
+  # Capacites bloquees jusqu'a ce qu'on les recoive.
+  randomized_abilities: ["Double Jump", "Air Dash", "Ground Evade"]
+  # Pourcentage de pieges parmi les objets de remplissage.
+  trap_percentage: 20
+  # Premier ramassage de chaque materiau = un check (beaucoup de checks).
+  item_checks: false
+  death_link: false

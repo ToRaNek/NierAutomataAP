@@ -1,38 +1,49 @@
 # NieR:Automata pour Archipelago
 
-Apworld + client qui relient NieR:Automata (PC Steam) a un multiworld Archipelago.
-
-## Prerequis
-- NieR:Automata **Steam v1.04** (le client refuse toute autre version).
-- Archipelago **0.6.8** ou plus recent.
+Monde Archipelago (`.apworld`) et client pour **NieR:Automata (PC Steam, v1.04)**, route A.
+Le client lit et modifie la memoire du jeu en cours (aucun fichier du jeu n'est modifie).
 
 ## Installation
-1. Copier `dist/nier_automata.apworld` dans le dossier `custom_worlds` d'Archipelago
-   (`C:\ProgramData\Archipelago\custom_worlds`), ou bouton "Install APWorld" du launcher.
-2. La personne qui genere la partie doit aussi installer cet apworld.
-3. Remplir `dist/NieR Automata.yaml` (pseudo) et l'envoyer a l'hote.
+**Avec le lanceur** : telecharge `NierAutomataAP.exe` dans les Releases et lance-le. Il trouve Archipelago,
+installe/met a jour le `.apworld` dans `custom_worlds`, puis ouvre le client NieR:Automata.
+Un lien `archipelago://pseudo@serveur:port` peut lui etre passe (ou associe aux liens archipelago://).
+
+**A la main** : copie `nier_automata.apworld` dans `<Archipelago>/custom_worlds`, puis
+Launcher Archipelago -> *NieR:Automata Client*.
+
+Prerequis : NieR:Automata **Steam v1.04**, Archipelago **0.6.8+**. Celui qui genere la partie doit aussi
+avoir le `.apworld`. Modele de reglages : `NieR Automata.yaml`.
 
 ## Jouer
-1. Lancer NieR:Automata et commencer une **nouvelle partie** (une par seed).
-2. Launcher Archipelago -> **NieR:Automata Client** -> se connecter au serveur.
-3. Le client copie les sauvegardes dans `%LOCALAPPDATA%\NierAutomataAP\backups` au debut de chaque session.
+1. Lance le jeu et commence une **nouvelle partie** (une par seed).
+2. Lance le client et connecte-toi. Les sauvegardes sont copiees dans `%LOCALAPPDATA%\NierAutomataAP\backups`.
+3. Garde la fenetre du client ouverte : on y tape les commandes Archipelago (`!hint`, `!remaining`, chat...).
 
 ## Checks
-- **Story Progress #1..#N** : chaque nouvelle sequence de l'histoire (option `story_checks`, 12 par defaut).
-- **Weapon Found #1..#N** : chaque arme trouvee (coffre, quete, boutique) est retiree de l'inventaire
-  et envoie un check (option `weapon_checks`, 8 par defaut).
-- **Objectif** : terminer la route A.
+- **Story: <lieu>** : chaque etape nommee de la route A (Camp Resistance, Village de Pascal, Boss Simone...).
+- **Weapon Found #n** : chaque arme trouvee (retiree de l'inventaire).
+- **Chest #n**, **Level n** : coffres ouverts, niveaux atteints.
+- **AP Item: <lieu> #k** : objets "AP Item" poses au sol sur ton trajet, 1 a 3 par etape.
+- **Shop <lieu> #k** : "AP Item" vendus en tete des magasins (Camp de la Resistance, Village de Pascal,
+  Chateau de la foret) ; la description dit ce qu'il contient et pour qui.
+- A plusieurs, tes checks contiennent uniquement des objets pour les autres joueurs.
 
 ## Objets recus
-Armes (ajoutees dans l'inventaire), soins et materiaux.
+Armes, capacites (double saut, dash aerien, esquive au sol, tir du Pod, attaques...), soins, argent, pieges
+(degats 5/10 %, perte de 10 % des G, ennemis qui apparaissent).
 
-## Limites connues (v0.1)
-- La detection de la fin A est provisoire (phase `58_AB_BossArea_Fall`) : a confirmer sur une vraie fin A.
-- Pas de checks de coffres/quetes individuels pour l'instant.
-- Si une ancienne sauvegarde est rechargee : les armes recues reviennent, pas les soins/materiaux.
+## En jeu
+- Notifications : "De Niicotine : X", "Check : Camp Resistance" puis "Pour Niicotine : X".
+- Messagerie (Courrier des points d'acces) : mail "Checks Archipelago" (checks restants) et mail
+  "Indice de <joueur>" (indices demandes par les autres sur ta partie).
+- DeathLink en option.
+
+## Limites connues
+- Uniquement Steam v1.04, route A.
+- Titres des mails : ouvrir un point d'acces ~10 s la premiere fois apres chaque lancement du jeu.
 - Ne pas charger une autre sauvegarde que celle de la seed.
 
 ## Developpement
 - Tests : `python -m pytest`
-- Sonde memoire : `python tools/probe.py` (log des phases dans `tools/phases_seen.log`)
-- Build : `python build.py`
+- Build : `python build.py` (apworld) ; lanceur : `python launcher/build_exe.py`
+- Outils de retro-ingenierie dans `tools/` (sondes memoire, points d'arret materiels, lecture CPK/BXM/MCD).
