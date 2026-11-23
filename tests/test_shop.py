@@ -1,0 +1,157 @@
+import struct
+
+from nier_automata.game import mcd_text, shop
+
+
+# --- textes MCD ------------------------------------------------------------------------------
+
+SYM = [(36, ord(c), i) for i, c in enumerate("APItemaudio2'?")] + [(1, ord("Z"), 99)]
+
+
+def test_encode_pairs_letters_space_end():
+    out = mcd_text.encode_pairs("AP Item", SYM, 36)
+    idx = {chr(c): i for i, (f, c, g) in enumerate(SYM)}
+    assert out == [idx["A"], 0, idx["P"], 0, 0x8001, mcd_text.SPACE_KERNING,
+                   idx["I"], 0, idx["t"], 0, idx["e"], 0, idx["m"], 0, 0x8000]
+
+
+def test_encode_pairs_accent_fallback_and_unknown():
+    # 'é' absent -> 'e' ; 'Z' n'existe que dans une autre police -> '?'
+    out = mcd_text.encode_pairs("éZ", SYM, 36)
+    idx = {chr(c): i for i, (f, c, g) in enumerate(SYM)}
+    assert out == [idx["e"], 0, idx["?"], 0, 0x8000]
+
+
+def test_wrap_respects_width_and_lines():
+    assert mcd_text.wrap("Pour Niicotine : Grappin (progression)", 20, 3) == [
+        "Pour Niicotine :", "Grappin", "(progression)"]
+    assert len(mcd_text.wrap("a " * 100, 10, 2)) == 2
+
+
+# --- table des magasins (BXM) ------------------------------------------------------------------
+
+def make_bxm(shops):
+    """BXM minimal : ShopInfo > shop > Item > item > State_0..1 (valeurs '0'/'1')."""
+    strings = bytearray()
+    so = {}
+
+    def s(t):
+        if t is None:
+            return 0xFFFF
+        if t not in so:
+            so[t] = len(strings); strings.extend(t.encode() + b"\0")
+        return so[t]
+
+    data, pairs = [], {}
+
+    def d(name, value=None):
+        key = (name, value)
+        if key not in pairs:
+            pairs[key] = len(data); data.append((s(name), s(value)))
+        return pairs[key]
+
+    # arbre en largeur : noeuds = (childCount, firstChild, attrCount, dataIndex)
+    tree = ("ShopInfo", None, [(sh, None, [("Item", None, [(it, None, [(f"State_{k}", v, []) for k, v in enumerate(st)])
+                                                          for it, st in items])])
+                               for sh, items in shops])
+    nodes, queue = [], [tree]
+    nodes.append(None)
+    order = [(tree, 0)]
+    i = 0
+    while i < len(order):
+        (name, value, kids), idx = order[i]
+        first = len(nodes)
+        for kid in kids:
+            nodes.append(None); order.append((kid, first + kids.index(kid)))
+        nodes[idx] = (len(kids), first, 0, d(name, value))
+        i += 1
+    head = b"BXM\0" + b"\0" * 4 + struct.pack(">HHI", len(nodes), len(data), len(strings))
+    body = b"".join(struct.pack(">HHHH", *n) for n in nodes) + b"".join(struct.pack(">HH", *x) for x in data)
+    return head + body + bytes(strings)
+
+
+def items_of(raw, shop_name):
+    import sys, pathlib
+    sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent.parent / "tools"))
+    import bxm
+    root, _ = bxm.parse(raw)
+    sh = [c for c in root["children"] if c["name"] == shop_name][0]
+    return [(i["name"], "".join(x["value"] for x in i["children"])) for i in sh["children"][0]["children"]]
+
+
+SHOPS = [("shop_RC_Grocery", [("item_rec_S", "11"), ("item_stUp_pAtk_S", "11"), ("item_stUp_pAtk_M", "01"),
+                              ("item_feed_S", "11"), ("item_uq_music_2", "01")]),
+         ("shop_PV_Grocery", [("item_rec_S", "11"), ("item_rec_M", "11")])]
+CARRIERS = ["item_uq_music_2", "item_uq_music_3"]
+
+
+def apply(raw, writes):
+    b = bytearray(raw)
+    for off, val in writes:
+        struct.pack_into(">H", b, off, val)
+    return bytes(b)
+
+
+def test_plan_puts_carriers_first_and_always_on():
+    raw = make_bxm(SHOPS + [("shop_X", [("item_uq_music_3", "00")])])
+    writes = shop.plan(raw, {"shop_RC_Grocery": 2}, CARRIERS)
+    got = items_of(apply(raw, writes), "shop_RC_Grocery")
+    assert got[:2] == [("item_uq_music_2", "11"), ("item_uq_music_3", "11")]
+    # victimes : d'abord l'objet porteur deja present, puis un bonus de stats ; le reste garde son ordre
+    assert got[2:] == [("item_rec_S", "11"), ("item_stUp_pAtk_S", "11"), ("item_feed_S", "11")]
+    assert items_of(apply(raw, writes), "shop_PV_Grocery") == SHOPS[1][1]  # autres magasins intacts
+
+
+def test_plan_zero_slots_is_identity():
+    raw = make_bxm(SHOPS + [("shop_X", [("item_uq_music_3", "11")])])
+    assert apply(raw, shop.plan(raw, {"shop_RC_Grocery": 0}, CARRIERS)) == raw
+
+
+def test_plan_does_not_touch_shared_data_entries():
+    raw = make_bxm(SHOPS + [("shop_X", [("item_uq_music_3", "11")])])
+    patched = apply(raw, shop.plan(raw, {"shop_RC_Grocery": 2, "shop_PV_Grocery": 1}, CARRIERS))
+    nn, dn, _ = struct.unpack(">HHI", raw[8:16])
+    data_area = slice(16 + nn * 8, 16 + nn * 8 + dn * 4)
+    assert patched[data_area] == raw[data_area]
+
+
+def test_identify_shop_by_displayed_items():
+    sets = {"RC": {0, 1, 100, 101, 921}, "RC_small": {0, 1, 921}, "PV": {0, 1, 2, 50}}
+    assert shop.identify([931, 0, 1, 100], sets, carriers={931, 932}) == "RC"
+    assert shop.identify([931, 0, 1, 921], sets, carriers={931, 932}) == "RC_small"
+    assert shop.identify([931, 2, 50], sets, carriers={931}) == "PV"
+    assert shop.identify([931, 777], sets, carriers={931}) is None
+
+
+def test_shop_text_for_content():
+    assert shop.description(1, 2, "Grappin", "Niicotine", progression=True) == "Pour Niicotine : Grappin (progression)"
+    assert shop.description(1, 1, "Phoenix Sword", "ToRaNek", progression=False) == "Pour toi : Phoenix Sword"
+    assert shop.description(1, None, None, None, False) == "Objet Archipelago"
+
+
+def test_reserve_names_reuses_test_shop_strings_only():
+    shops = SHOPS + [("shop_TEST_Grocery", [("item_test_only_long_name", "1"), ("item_rec_S", "1")])]
+    raw = make_bxm(shops)
+    carriers = ["item_uq_hairSpray_A"]
+    patched = apply_bytes(raw, shop.reserve_names(raw, carriers))
+    assert ("item_uq_hairSpray_A", "1") in items_of(patched, "shop_TEST_Grocery")
+    assert items_of(patched, "shop_RC_Grocery") == SHOPS[0][1]       # vrais magasins intacts
+    writes = shop.plan(patched, {"shop_PV_Grocery": 1}, carriers)
+    assert items_of(apply(patched, writes), "shop_PV_Grocery")[0] == ("item_uq_hairSpray_A", "11")
+
+
+def test_reserve_names_never_touches_real_shop_names():
+    raw = make_bxm(SHOPS + [("shop_TEST_Grocery", [("item_rec_S", "1")])])
+    assert shop.reserve_names(raw, ["item_uq_hairSpray_A"]) == []   # aucun nom reutilisable : rien
+
+
+def apply_bytes(raw, patches):
+    b = bytearray(raw)
+    for off, data in patches:
+        b[off:off + len(data)] = data
+    return bytes(b)
+
+
+def test_key_hash_matches_game():
+    assert mcd_text.key_hash("CORE_ITEM_NAME_931") == 0x11F3487D
+    assert mcd_text.key_hash("CORE_ITEM_NAME_922") == 0x11E12886

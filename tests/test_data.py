@@ -96,3 +96,20 @@ def test_item_checks_off_by_default():
     src = (pathlib.Path(__file__).parent.parent / "nier_automata" / "options.py").read_text(encoding="utf-8")
     cls = next(n for n in ast.parse(src).body if isinstance(n, ast.ClassDef) and n.name == "ItemChecks")
     assert [b.id for b in cls.bases] == ["Toggle"]  # Toggle = desactive par defaut
+
+
+def test_shop_locations_have_codes():
+    from nier_automata.data.tables import location_name_to_id, shop_location, SHOP_PLACES_ORDER, MAX_SHOP_SLOTS
+    ids = location_name_to_id()
+    names = [shop_location(p, k) for p in SHOP_PLACES_ORDER for k in range(1, MAX_SHOP_SLOTS + 1)]
+    assert all(n in ids for n in names)
+    assert len({ids[n] for n in names}) == len(names)
+    assert shop_location("Resistance Camp", 1) == "Shop Resistance Camp #1"
+
+
+def test_others_only_rule():
+    from nier_automata.data.tables import others_only
+    class It:  # objet minimal
+        def __init__(self, p): self.player = p
+    rule = others_only(1)
+    assert rule(It(2)) and not rule(It(1))

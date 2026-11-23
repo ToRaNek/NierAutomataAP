@@ -57,3 +57,38 @@ def value_slots(d: bytes, path_test):
 
     walk(0, ())
     return out, soff
+
+
+def node_patches(d: bytes, path_test, want_value: str):
+    """Pour chaque noeud dont le chemin satisfait path_test : (offset du champ dataIndex du noeud, nouvel index)
+    pointant vers une entree de donnees existante (meme nom, valeur want_value). N'altere aucune entree partagee."""
+    nn, dn, ds = struct.unpack(">HHI", d[8:16])
+    nodes = [struct.unpack_from(">HHHH", d, 16 + i * 8) for i in range(nn)]
+    doff = 16 + nn * 8
+    soff = doff + dn * 4
+    data = [struct.unpack_from(">HH", d, doff + i * 4) for i in range(dn)]
+
+    def s(o):
+        if o == 0xFFFF:
+            return None
+        e = d.index(b"\0", soff + o)
+        return d[soff + o:e].decode("shift_jis", "replace")
+
+    by_pair = {}
+    for i, (n, v) in enumerate(data):
+        by_pair.setdefault((s(n), s(v)), i)
+    out = []
+
+    def walk(i, path):
+        cc, fc, ac, di = nodes[i]
+        name = s(data[di][0])
+        p = path + (name,)
+        if path_test(p) and ac == 0:
+            j = by_pair.get((name, want_value))
+            if j is not None and j != di:
+                out.append((16 + i * 8 + 6, j))
+        for c in range(cc):
+            walk(fc + c, p)
+
+    walk(0, ())
+    return out

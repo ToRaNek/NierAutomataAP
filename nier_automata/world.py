@@ -6,6 +6,7 @@ from .data.items_data import FILLER_ITEMS, FUNDS_ITEMS, MATERIALS, TRAP_ITEMS
 from .data.phases import GOAL_PHASE_PREFIX
 from .data.tables import (
     GOAL_LOCATION, ap_item_location, chest_location, item_location, level_location, item_name_to_id, pool_weapon_count, location_name_to_id, story_location, weapon_location,
+    SHOP_PLACES_ORDER, others_only, shop_location,
 )
 from .data.weapons import STARTING_WEAPONS, WEAPONS
 from .data.ap_spots import AP_SPOTS
@@ -56,15 +57,18 @@ class NierAutomataWorld(World):
             names += [item_location(m) for m in MATERIALS]
         if self.options.ap_items:
             names += [ap_item_location(i + 1) for i in range(len(AP_SPOTS))]
+        names += [shop_location(p, k) for p in SHOP_PLACES_ORDER for k in range(1, self.options.shop_checks.value + 1)]
         return names
 
     def create_regions(self) -> None:
         menu = Region("Menu", self.player, self.multiworld)
         for name in self._location_names():
             loc = NierLocation(self.player, name, self.location_name_to_id[name], menu)
-            if name.startswith(("Weapon Found", "Item: ", "AP Item #")):
+            if name.startswith(("Weapon Found", "Item: ")):
                 # Peut etre inatteignable (peu d'armes en route A) : jamais d'objet de progression ici.
                 loc.progress_type = LocationProgressType.EXCLUDED
+            if name.startswith(("AP Item #", "Shop ")) and self.multiworld.players > 1:
+                loc.item_rule = others_only(self.player)  # AP Items : toujours pour les autres joueurs
             menu.locations.append(loc)
         goal_name = "Goal: Story Progress" if self.options.goal.value == 0 else GOAL_LOCATION
         goal = NierLocation(self.player, goal_name, None, menu)
@@ -111,6 +115,8 @@ class NierAutomataWorld(World):
             "item_checks": bool(self.options.item_checks),
             "chest_checks": self.options.chest_checks.value,
             "ap_items": bool(self.options.ap_items),
+            "shop_checks": self.options.shop_checks.value,
+            "shop_price": self.options.shop_price.value,
             "max_level_check": self.options.max_level_check.value,
             "randomized_abilities": sorted(self.options.randomized_abilities.value),
             "goal": self.options.goal.value,

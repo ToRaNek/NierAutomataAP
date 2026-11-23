@@ -27,6 +27,20 @@ def ap_item_location(n: int) -> str:
     return f"AP Item #{n}"
 
 
+# Magasins sur la route A (ordre fixe : il determine les codes).
+SHOP_PLACES_ORDER = ["Resistance Camp", "Pascal's Village", "Forest Castle"]
+MAX_SHOP_SLOTS = 4
+
+
+def shop_location(place: str, k: int) -> str:
+    return f"Shop {place} #{k}"
+
+
+def others_only(player: int):
+    """Regle d'emplacement : uniquement des objets destines aux AUTRES joueurs."""
+    return lambda item: item.player != player
+
+
 def level_location(n: int) -> str:
     return f"Level {n}"
 
@@ -70,6 +84,9 @@ def location_name_to_id() -> dict[str, int]:
         locs[level_location(n)] = BASE_CODE + 0x5000 + n
     for n in range(1, MAX_AP_SPOTS + 1):
         locs[ap_item_location(n)] = BASE_CODE + 0x6000 + n
+    for i, place in enumerate(SHOP_PLACES_ORDER):
+        for k in range(1, MAX_SHOP_SLOTS + 1):
+            locs[shop_location(place, k)] = BASE_CODE + 0x7000 + i * 0x10 + k
     return locs
 
 

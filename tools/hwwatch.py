@@ -5,6 +5,7 @@ Attache un debogueur, arme les DR sur tous les threads, attend une ecriture, aff
 adresses de retour trouvees sur la pile (pile d'appels approximative), puis se detache.
 """
 import ctypes
+import os
 import struct
 import sys
 import time
@@ -63,7 +64,11 @@ def set_drs(tid, addrs, enable=True):
             v = addrs[i] if enable and i < len(addrs) else 0
             struct.pack_into("<Q", raw, o + 0x48 + 8 * i, v)
             if v:
-                dr7 |= (1 << (2 * i)) | (0b01 << (16 + 4 * i)) | (0b11 << (18 + 4 * i))  # ecriture, 4 octets
+                if os.environ.get("HW_X"):
+                    rw, ln = 0b00, 0b00  # execution
+                else:
+                    rw, ln = (0b11 if os.environ.get("HW_RW") else 0b01), 0b01
+                dr7 |= (1 << (2 * i)) | (rw << (16 + 4 * i)) | (ln << (18 + 4 * i))  # 00=exec 01=ecriture 11=lecture/ecriture
         struct.pack_into("<Q", raw, o + 0x70, dr7)
         struct.pack_into("<Q", raw, o + 0x68, 0)
         k.SetThreadContext(h, ctypes.c_void_p(a))
@@ -100,7 +105,7 @@ def main():
                     dr6 = struct.unpack_from("<Q", raw, o + 0x68)[0]
                     regs = {n: struct.unpack_from("<Q", raw, o + off)[0] for n, off in
                             (("rax", 0x78), ("rcx", 0x80), ("rdx", 0x88), ("rbx", 0x90), ("rsi", 0xA8), ("rdi", 0xB0),
-                             ("r8", 0xB8), ("r9", 0xC0))}
+                             ("r8", 0xB8), ("r9", 0xC0), ("r12", 0xD8), ("r13", 0xE0), ("r14", 0xE8), ("r15", 0xF0))}
                     k.CloseHandle(h)
                     stack = m.read(rsp, 0x400)
                     rets = [struct.unpack_from("<Q", stack, i)[0] - base for i in range(0, 0x400, 8)]
@@ -110,6 +115,15 @@ def main():
                     print(" regs", {n: hex(v) for n, v in regs.items()}, flush=True)
                     print(" pile (RVA):", [hex(r) for r in rets[:24]], flush=True)
                     for tid in thread_ids(pid): set_drs(tid, addrs, enable=False)
+                    if os.environ.get("HW_X"):  # reprendre apres le point d'arret d'execution (RF)
+                        k.OpenThread.restype = wintypes.HANDLE
+                        h = k.OpenThread(0x001F03FF, False, ev.tid)
+                        raw, a = ctx_buf(); o = a - ctypes.addressof(raw)
+                        struct.pack_into("<I", raw, o + 0x30, CONTEXT_FULL)
+                        k.GetThreadContext(h, ctypes.c_void_p(a))
+                        ef = struct.unpack_from("<I", raw, o + 0x44)[0]
+                        struct.pack_into("<I", raw, o + 0x44, ef | 0x10000)
+                        k.SetThreadContext(h, ctypes.c_void_p(a)); k.CloseHandle(h)
                     break
                 elif code not in (EXC_BREAKPOINT, EXC_SINGLE_STEP):
                     status = DBG_EXCEPTION_NOT_HANDLED

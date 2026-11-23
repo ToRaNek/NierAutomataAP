@@ -56,6 +56,23 @@ class MaxLevelCheck(Range):
     default = 20
 
 
+class ShopChecks(Range):
+    """Nombre d'AP Items vendus en tete de chaque magasin sur la route (Camp de la Resistance, Village de
+    Pascal, Chateau de la foret). Acheter un AP Item envoie un check."""
+    display_name = "Shop Checks"
+    range_start = 0
+    range_end = 4
+    default = 2
+
+
+class ShopPrice(Range):
+    """Prix d'un AP Item en magasin (G)."""
+    display_name = "Shop Price"
+    range_start = 0
+    range_end = 20000
+    default = 300
+
+
 class ApItems(DefaultOnToggle):
     """Des objets "AP Item" apparaissent au sol a des emplacements predefinis sur le chemin.
     Les ramasser envoie un check (rien n'est ajoute a l'inventaire)."""
@@ -83,6 +100,8 @@ class NierAutomataOptions(PerGameCommonOptions):
     weapon_checks: WeaponChecks
     item_checks: ItemChecks
     ap_items: ApItems
+    shop_checks: ShopChecks
+    shop_price: ShopPrice
     chest_checks: ChestChecks
     max_level_check: MaxLevelCheck
     trap_percentage: TrapPercentage
