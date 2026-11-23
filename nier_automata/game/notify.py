@@ -40,6 +40,17 @@ def template_for(prefix: str) -> str:
     return prefix + PLACEHOLDER
 
 
+SHORT_PLACES = {"Resistance Camp": "Camp", "Pascal's Village": "Pascal", "Forest Castle": "Foret"}
+
+
+def short_location(location: str) -> str:
+    """Nom de check court pour la notification (17 caracteres max)."""
+    if location.startswith("Shop "):
+        place, _, num = location[5:].rpartition(" #")
+        return f"Magasin {SHORT_PLACES.get(place, place)} #{num}"
+    return location
+
+
 def messages_for_item_send(me: int, sender: int, receiver: int, item: str,
                            sender_name: str, receiver_name: str, location: str) -> list[tuple[str, str]]:
     """(prefixe, texte) a afficher pour "sender a envoye item a receiver depuis location".
@@ -47,7 +58,7 @@ def messages_for_item_send(me: int, sender: int, receiver: int, item: str,
     item = item[:MAX_LEN]
     if sender == me:
         to = "toi" if receiver == me else receiver_name
-        return [("Check : ", location[:MAX_LEN]), (f"Pour {to} : ", item)]
+        return [("Check : ", short_location(location)[:MAX_LEN]), (f"Pour {to} : ", item)]
     if receiver == me:
         return [(f"De {sender_name} : ", item)]
     return []

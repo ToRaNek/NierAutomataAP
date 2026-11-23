@@ -43,10 +43,34 @@ def encode_pairs(text: str, symbols, font: int) -> list[int]:
             continue
         if c not in idx:
             base = unicodedata.normalize("NFKD", c)[0]
-            c = base if base in idx else "?"
+            for alt in (base, base.lower(), base.upper(), "?"):
+                if alt in idx:
+                    c = alt
+                    break
         if c in idx:
             out += [idx[c], 0]
     return out + [END]
+
+
+SPARE_SYMBOLS = "[]+ÀÉêâàè"
+WANTED = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
+
+
+def glyph_plan(symbols, donor_symbols, font: int, wanted: str = WANTED, spare: str = SPARE_SYMBOLS):
+    """Lettres absentes de `font` : (indice de symbole sacrifie, lettre, glyphe du donneur).
+    Verifie en jeu : un glyphe designe sa texture par hachage, on peut donc copier celui d'un autre fichier."""
+    have = {chr(c) for f, c, _ in symbols if f == font}
+    donor = {}
+    for f, c, g in donor_symbols:
+        if f == font:
+            donor.setdefault(chr(c), g)
+    spares = [i for i, (f, c, _) in enumerate(symbols) if f == font and chr(c) in spare]
+    out = []
+    for ch in wanted:
+        if ch in have or ch not in donor or not spares:
+            continue
+        out.append((spares.pop(0), ch, donor[ch]))
+    return out
 
 
 def wrap(text: str, width: int, max_lines: int) -> list[str]:
@@ -80,6 +104,7 @@ class CoreText:
         self._pool_used = 0
         self._bufs: dict[int, int] = {}
         self._relocated = False
+        self._hidden: dict[int, int] = {}
         self._added = 0
         self._hdr_orig: Optional[bytes] = None
         for k in _find(mem, probe_key.encode() + b"\0"):
@@ -150,10 +175,19 @@ class CoreText:
             k.VirtualAllocEx.argtypes = [wintypes.HANDLE, ctypes.c_void_p, ctypes.c_size_t, wintypes.DWORD,
                                          wintypes.DWORD]
             k.VirtualAllocEx.restype = ctypes.c_void_p
-            for delta in range(0x1000000, 0xF0000000, 0x1000000):
-                self._pool = k.VirtualAllocEx(h, ctypes.c_void_p((self.base + delta) & ~0xFFFF), POOL_SIZE, 0x3000, 0x04)
-                if self._pool:
+            from .spawner import _MBI
+            k.VirtualQueryEx.argtypes = [wintypes.HANDLE, ctypes.c_void_p, ctypes.POINTER(_MBI), ctypes.c_size_t]
+            k.VirtualQueryEx.restype = ctypes.c_size_t
+            addr = self.base
+            while addr < self.base + 0xF0000000 and not self._pool:
+                mbi = _MBI()
+                if not k.VirtualQueryEx(h, ctypes.c_void_p(addr), ctypes.byref(mbi), ctypes.sizeof(mbi)):
                     break
+                start = ((mbi.BaseAddress or 0) + 0xFFFF) & ~0xFFFF
+                end = (mbi.BaseAddress or 0) + mbi.RegionSize
+                if mbi.State == 0x10000 and end - start >= POOL_SIZE:  # MEM_FREE
+                    self._pool = k.VirtualAllocEx(h, ctypes.c_void_p(start), POOL_SIZE, 0x3000, 0x04)
+                addr = end
             k.CloseHandle(h)
         if not self._pool or self._pool_used + size > POOL_SIZE:
             return None
@@ -237,8 +271,78 @@ class CoreText:
         self.keys[key] = idx
         return True
 
+    def borrow_glyphs(self, donor: "CoreText", font: int = 36) -> int:
+        """Toutes les lettres de `font` utilisent les glyphes du fichier donneur (meme caractere) : le jeu
+        dessine une ligne avec une seule texture, on ne doit donc pas melanger les deux fichiers.
+        Les lettres absentes prennent la place de symboles rares (glyph_plan)."""
+        h = struct.unpack("<10I", self.mem.read(self.base, 40))
+        hd = struct.unpack("<10I", self.mem.read(donor.base, 40))
+        size = (h[6] - h[4]) // h[5] if h[5] else 40
+        dsize = (hd[6] - hd[4]) // hd[5] if hd[5] else 40
+        donor_g = {}
+        for f, c, g in donor.symbols:
+            if f == font:
+                donor_g.setdefault(c, g)
+        n = 0
+        for i, ch, dg in glyph_plan(self.symbols, donor.symbols, font):
+            g = self.symbols[i][2]
+            self.mem.write(self.base + h[2] + i * 8, struct.pack("<HHI", font, ord(ch), g))
+            self.symbols[i] = (font, ord(ch), g)
+        for i, (f, c, g) in enumerate(self.symbols):
+            if f == font and c in donor_g:
+                self.mem.write(self.base + h[4] + g * size,
+                               self.mem.read(donor.base + hd[4] + donor_g[c] * dsize, size))
+                n += 1
+        return n
+
+    def hide_key(self, key: str) -> bool:
+        """Rend une cle introuvable dans ce fichier (le jeu passe alors au fichier suivant)."""
+        for i in range(self.ec):
+            a = self.base + self.eo + i * 0x28
+            if self.mem.read(a + 8, 0x20).split(bytes(1))[0] == key.encode():
+                h = struct.unpack("<I", self.mem.read(a, 4))[0]
+                if h == key_hash(key):
+                    self._hidden[a] = h
+                    self.mem.write(a, struct.pack("<I", h ^ 0x40000000))
+                return True
+        return False
+
     def restore(self) -> None:
+        for a, h in self._hidden.items():
+            self.mem.write(a, struct.pack("<I", h))
         for la, raw in self._orig.items():
             self.mem.write(la, raw)
         if self._hdr_orig is not None:
             self.mem.write(self.base, self._hdr_orig)
+
+
+class MenuTexts:
+    """Le jeu consulte plusieurs fichiers MCD (CORE + additionnel : ex. noms des teintures 880..).
+    set_text() modifie la cle dans chaque fichier qui la contient."""
+
+    def __init__(self, mem, probes=("CORE_ITEM_NAME_931", "CORE_ITEM_NAME_880")):
+        self.files: list[CoreText] = []
+        for p in probes:
+            f = CoreText(mem, p)
+            if f.ok and all(f.base != g.base for g in self.files):
+                self.files.append(f)
+        for f in self.files[1:]:
+            f.borrow_glyphs(self.files[0])
+
+    @property
+    def ok(self) -> bool:
+        return bool(self.files)
+
+    def set_text(self, key: str, text: str, width: int = 0) -> bool:
+        """Ecrit la cle dans chaque fichier qui la contient. Un fichier ne contient que les lettres de ses
+        propres textes : lettre absente -> autre casse, sans accent, sinon '?'.
+        (Verifie : le jeu garde en cache ses tables de cles, add_key/hide_key ne sont pas pris en compte.)"""
+        done = False
+        for f in self.files:
+            if key in f.keys:
+                done = f.set_text(key, text, width) or done
+        return done
+
+    def restore(self) -> None:
+        for f in self.files:
+            f.restore()

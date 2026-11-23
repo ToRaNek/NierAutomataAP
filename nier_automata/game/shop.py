@@ -153,7 +153,8 @@ def shop_item_names(raw: bytes) -> dict[str, set[str]]:
 
 def identify(displayed: Iterable[int], shop_ids: dict[str, set[int]], carriers: set[int]) -> Optional[str]:
     """Magasin ouvert : le plus petit dont le contenu couvre tous les objets affiches (hors porteurs)."""
-    shown = {i for i in displayed if i >= 0 and i not in carriers}
+    known = set().union(*shop_ids.values()) if shop_ids else set()
+    shown = {i for i in displayed if i >= 0 and i not in carriers and i in known}  # puces/armes : ignorees
     fits = [s for s, ids in shop_ids.items() if shown <= ids]
     return min(fits, key=lambda s: len(shop_ids[s])) if fits and shown else None
 
@@ -218,3 +219,76 @@ def set_price(mem, names_to_ids: dict[str, int], carrier: str, price: int) -> No
         if raw[k * ITEM_ENTRY + 0x10:k * ITEM_ENTRY + 0x40].split(b"\0")[0] == carrier.encode():
             mem.write(mem.base + ITEM_TABLE_RVA + k * ITEM_ENTRY + PRICE_OFFSET, struct.pack("<I", price))
             return
+
+
+def active_slots(place: str, count: int, checked: set, loc_id) -> list[int]:
+    """Emplacements 1..count du magasin pas encore achetes (check non envoye)."""
+    return [k for k in range(1, count + 1) if loc_id(place, k) not in checked]
+
+
+def carrier_map(active: list[int], carrier_ids: list[int]) -> dict[int, int]:
+    """Porteur (id d'objet) -> numero d'emplacement : les porteurs suivent les emplacements restants."""
+    return dict(zip(carrier_ids, active))
+
+
+class ShopSession:
+    """Etat des AP Items en magasin pour un processus du jeu."""
+
+    def __init__(self, mem, orig_path, price: int):
+        from .mcd_text import MenuTexts
+        self.mem = mem
+        self.ok = False
+        self.addr = find_table(mem)
+        if self.addr is None:
+            return
+        size = table_size(mem, self.addr)
+        cached = None
+        try:
+            data = orig_path.read_bytes()
+            if len(data) == size:
+                cached = data   # table d'origine gardee par une session precedente (meme processus)
+        except OSError:
+            pass
+        self.orig = cached or mem.read(self.addr, size)
+        if cached is None:
+            try:
+                orig_path.write_bytes(self.orig)
+            except OSError:
+                pass
+        self.base = bytearray(self.orig)
+        for off, data in reserve_names(self.orig, CARRIER_NAMES):
+            self.base[off:off + len(data)] = data
+        self.base = bytes(self.base)
+        ids = item_ids_by_name(mem)
+        self.shop_ids = {s: {ids[n] for n in names if n in ids} for s, names in shop_item_names(self.orig).items()
+                         if "TEST" not in s}
+        self.texts = MenuTexts(mem)
+        for cid in CARRIER_IDS:
+            self.texts.set_text(f"CORE_ITEM_NAME_{cid}", "AP Item")
+        for name in CARRIER_NAMES:
+            set_price(mem, ids, name, price)
+        self.place: Optional[str] = None
+        self.last_shown: list[int] = []
+        self.ok = True
+
+    def apply(self, active: dict[str, list[int]]) -> None:
+        slots = {shop: len(active.get(place, [])) for place, shops in SHOP_PLACES.items() for shop in shops}
+        b = bytearray(self.base)
+        for off, val in plan(self.base, slots, CARRIER_NAMES):
+            struct.pack_into(">H", b, off, val)
+        self.mem.write(self.addr, bytes(b))
+
+    def current_place(self) -> Optional[str]:
+        shown = displayed_ids(self.mem)
+        if shown != self.last_shown:
+            self.last_shown = shown
+            shop_name = identify(shown, self.shop_ids, set(CARRIER_IDS))
+            place = next((p for p, shops in SHOP_PLACES.items() if shop_name in shops), None)
+            if place is not None:
+                self.place = place
+            return place if place is not None else self.place
+        return self.place
+
+    def describe(self, mapping: dict[int, int], texts: dict[int, str]) -> None:
+        for cid, k in mapping.items():
+            self.texts.set_text(f"CORE_ITEM_HELP_{cid}", texts.get(k, "Objet Archipelago"), width=34)

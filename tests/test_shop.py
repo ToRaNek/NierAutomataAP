@@ -155,3 +155,34 @@ def apply_bytes(raw, patches):
 def test_key_hash_matches_game():
     assert mcd_text.key_hash("CORE_ITEM_NAME_931") == 0x11F3487D
     assert mcd_text.key_hash("CORE_ITEM_NAME_922") == 0x11E12886
+
+
+def test_encode_pairs_case_fallback():
+    sym = [(36, ord(c), i) for i, c in enumerate("niIcot?")]
+    idx = {chr(c): i for i, (f, c, g) in enumerate(sym)}
+    out = mcd_text.encode_pairs("Ni", sym, 36)          # 'N' absent -> 'n' ; 'i' present
+    assert out == [idx["n"], 0, idx["i"], 0, 0x8000]
+    out = mcd_text.encode_pairs("W", sym, 36)           # W absent, w absent -> ?
+    assert out == [idx["?"], 0, 0x8000]
+
+
+def test_active_slots_skip_checked():
+    loc = {("RC", 1): 11, ("RC", 2): 12, ("RC", 3): 13}
+    assert shop.active_slots("RC", 3, {12}, lambda p, k: loc[(p, k)]) == [1, 3]
+    assert shop.active_slots("RC", 0, set(), lambda p, k: loc[(p, k)]) == []
+
+
+def test_carrier_map_follows_active_slots():
+    assert shop.carrier_map([1, 3], [880, 881, 882]) == {880: 1, 881: 3}
+
+
+def test_glyph_plan_borrows_missing_into_spare_symbols():
+    sym = [(36, ord(c), i) for i, c in enumerate("ab[]?")] + [(5, ord("N"), 9)]
+    donor = [(36, ord(c), 100 + i) for i, c in enumerate("abNO")]
+    plan = mcd_text.glyph_plan(sym, donor, 36, "NOx", spare="[]")
+    assert plan == [(2, "N", 102), (3, "O", 103)]   # x absent du donneur : ignore
+
+
+def test_identify_ignores_unknown_ids_like_chips():
+    sets = {"RC": {0, 1, 100, 101, 921}, "RC_small": {0, 1, 921}, "PV": {0, 1, 2, 50}}
+    assert shop.identify([880, 3335, 3336, 100, 0], sets, carriers={880}) == "RC"

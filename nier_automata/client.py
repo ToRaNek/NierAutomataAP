@@ -12,7 +12,8 @@ from .data.phases import GOAL_PHASE_PREFIX, abilities_allowed
 from .data.ap_spots import AP_SPOTS
 from .game import ap_items as apit
 from .game import notify
-from .data.tables import ap_item_location as apit_loc, location_name_to_id
+from .data.tables import SHOP_PLACES_ORDER, ap_item_location as apit_loc, location_name_to_id, shop_location
+from .game import shop as shopm
 
 LOC_IDS = location_name_to_id()
 from .data.items_data import FILLER_ITEMS
@@ -61,12 +62,13 @@ class NierContext(CommonContext):
                 get = (lambda k, it=it: it[k]) if isinstance(it, dict) else (lambda k, it=it: getattr(it, k))
                 rec = get("player")
                 self.ap_contents[get("location")] = (rec, self.item_names.lookup_in_slot(get("item"), rec))
+                self.ap_flags[get("location")] = get("flags")
         if cmd == "PrintJSON" and args.get("type") in ("ItemSend", "ItemCheat") and self.slot is not None:
             try:
                 it = args["item"]
                 get = (lambda k: it[k]) if isinstance(it, dict) else (lambda k: getattr(it, k))
                 sender, receiver = get("player"), args["receiving"]
-                if sender == self.slot and get("location") in getattr(self, "ap_contents", {}):
+                if sender == self.slot and get("location") in getattr(self, "ap_ground_ids", set()):
                     raise StopIteration  # deja affiche par le message de ramassage de l'AP Item
                 name = self.item_names.lookup_in_slot(get("item"), receiver)
                 loc_name = self.location_names.lookup_in_slot(get("location"), sender)
@@ -97,13 +99,21 @@ class NierContext(CommonContext):
             self.randomized_abilities = set(sd.get("randomized_abilities", []))
             self.ap_items_on = bool(sd.get("ap_items", False))
             self.ap_contents = {}
+            self.ap_flags = {}
             self.ap_prepared = None
             self.pickup_note = None
-            if self.ap_items_on:
-                ids = [LOC_IDS[apit_loc(i + 1)] for i in range(len(AP_SPOTS))]
-                ids = [i for i in ids if i in self.server_locations]
-                if ids:
-                    asyncio.create_task(self.send_msgs([{"cmd": "LocationScouts", "locations": ids, "create_as_hint": 0}]))
+            self.shop_checks = int(sd.get("shop_checks", 0))
+            self.shop_price = int(sd.get("shop_price", 300))
+            self.shop = None
+            self.shop_pid = None
+            self.shop_applied = None
+            self.shop_described = None
+            ground = [LOC_IDS[apit_loc(i + 1)] for i in range(len(AP_SPOTS))] if self.ap_items_on else []
+            self.ap_ground_ids = set(ground)
+            shops = [LOC_IDS[shop_location(p, k)] for p in SHOP_PLACES_ORDER for k in range(1, self.shop_checks + 1)]
+            ids = [i for i in ground + shops if i in self.server_locations]
+            if ids:
+                asyncio.create_task(self.send_msgs([{"cmd": "LocationScouts", "locations": ids, "create_as_hint": 0}]))
             self.spots = apit.SpotTracker(self.state, AP_SPOTS)
             self.ap_tracked = {}
             self.ap_pid = None
@@ -279,6 +289,49 @@ async def ap_items_step(ctx: NierContext):
         ctx.nier._items.remove(apit.PICKUP_CARRIER)
 
 
+async def shop_step(ctx: NierContext) -> list[int]:
+    """AP Items en tete des magasins ; description = contenu ; achat -> check (porteur retire)."""
+    if not getattr(ctx, "shop_checks", 0):
+        return []
+    from pathlib import Path
+    mem = ctx.nier.mem
+    if ctx.shop_pid != mem.pid:
+        orig = Path(ctx.state_file).parent / f"shop_table_{mem.pid}.bin"
+        ctx.shop = await asyncio.to_thread(shopm.ShopSession, mem, orig, ctx.shop_price)
+        ctx.shop_pid, ctx.shop_applied, ctx.shop_described = mem.pid, None, None
+        logger.info("Magasins : %s", "AP Items installes" if ctx.shop.ok else "table introuvable")
+    if not ctx.shop.ok:
+        return []
+    done = set(ctx.checked_locations) | ctx.state.sent_locations
+    active = {p: shopm.active_slots(p, ctx.shop_checks, done, lambda p, k: LOC_IDS[shop_location(p, k)])
+              for p in SHOP_PLACES_ORDER}
+    key = repr(active)
+    if key != ctx.shop_applied:
+        ctx.shop.apply(active)
+        ctx.shop_applied = key
+    place = ctx.shop.current_place()
+    if place is None:
+        return []
+    mapping = shopm.carrier_map(active[place], shopm.CARRIER_IDS)
+    texts = {}
+    for k in active[place]:
+        lid = LOC_IDS[shop_location(place, k)]
+        rec, name = ctx.ap_contents.get(lid, (None, None))
+        texts[k] = shopm.description(ctx.slot, rec, name, ctx.player_names.get(rec, "?") if rec else None,
+                                     bool(ctx.ap_flags.get(lid, 0) & 1))
+    sig = repr((place, sorted(texts.items())))
+    if sig != ctx.shop_described:
+        ctx.shop.describe(mapping, texts)
+        ctx.shop_described = sig
+    sent = []
+    for cid, k in mapping.items():
+        if ctx.nier._items.find(cid) is not None:
+            ctx.nier._items.remove(cid)
+            sent.append(LOC_IDS[shop_location(place, k)])
+            logger.info("AP Item achete : %s", shop_location(place, k))
+    return sent
+
+
 async def game_iteration(ctx: NierContext):
     if ctx.state is None or ctx.trackers is None:
         return
@@ -298,7 +351,8 @@ async def game_iteration(ctx: NierContext):
         return
     ctx._status(f"Jeu detecte ({ctx.nier.version}), phase {ctx.nier.phase()}")
     await ap_items_step(ctx)
-    extra = sorted(due_locations(ctx.state, 0, 0) - ctx.state.sent_locations)
+    bought = await shop_step(ctx)
+    extra = sorted((due_locations(ctx.state, 0, 0) | set(bought)) - ctx.state.sent_locations)
     if extra:
         ctx.state.sent_locations.update(extra)
         result.locations = sorted(set(result.locations) | set(extra))

@@ -49,3 +49,10 @@ def test_encode_fixed_never_exceeds_capacity_with_emoji():
 def test_encode_fixed_strips_control_and_pads():
     b = encode_fixed("A\nB\x00C", 5)
     assert b == "ABC".encode("utf-16-le") + b"\0\0" * 2
+
+
+def test_shop_location_shortened_in_notification():
+    msgs = messages_for_item_send(1, 1, 2, "Full Recovery", "ToRaNek", "Niicotine", "Shop Resistance Camp #1")
+    assert msgs[0] == ("Check : ", "Magasin Camp #1")
+    msgs = messages_for_item_send(1, 1, 2, "X", "ToRaNek", "Niicotine", "Shop Forest Castle #2")
+    assert msgs[0] == ("Check : ", "Magasin Foret #2")
