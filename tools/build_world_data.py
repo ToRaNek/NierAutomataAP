@@ -257,6 +257,10 @@ def main():
     quests = []
     avail = load("quest_availability.json")["quests"]
     runtime = load("runtime_state.json")["quests"]
+    # etat de chaque quete releve EN JEU a chaque chapitre de la route A (sans l'accepter) :
+    # BREAK = le jeu ne la propose plus -> ratable
+    seen = load("quest_states_by_chapter.json")
+    closed = {q for ch in seen.values() for q, st in ch.items() if st == "BREAK"}
     for qid in sorted(avail):
         q = avail[qid]
         status_index = (runtime.get(qid) or {}).get("status_index")
@@ -278,7 +282,7 @@ def main():
         missable = (region[0] != "C" and not cd and last < "10-01") or (region[0] == "C" and max(cd) < "17-01")
         quests.append({"id": qid, "name": f"Quest: {q['english_name']}", "region": region,
                        "status_index": status_index,
-                       "excluded": bool(missable or qid in HARD_QUESTS or qid in MISSABLE_QUESTS)})
+                       "excluded": bool(missable or qid in HARD_QUESTS or qid in MISSABLE_QUESTS or qid in closed)})
     data["quests"] = quests
 
     OUT.write_text(json.dumps(data, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")

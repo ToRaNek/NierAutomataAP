@@ -128,3 +128,13 @@ def test_pascal_shop_missable_only_when_route_c_is_played():
     assert not shop_missable("Pascal's Village", ("A01", "A05", "B05"))
     assert shop_missable("Pascal's Village", ("A05", "C14"))      # choix de fin du chapitre 14
     assert not shop_missable("Resistance Camp", ("A02", "C11"))
+
+
+def test_quests_closed_in_game_before_the_end_of_route_a_are_missable():
+    # releve en jeu (docs/research/quest_states_by_chapter.json) : etat BREAK au chapitre 8
+    from nier_automata.data import worlddb as db
+    q = {x["id"]: x for x in db.QUESTS}
+    for qid in ("q110", "q500", "q140", "q121", "q340", "q650"):       # Lost Girl, Wandering Couple...
+        assert q[qid]["excluded"], qid
+    for qid in ("q150", "q660", "q680", "q410"):                       # encore proposees au chapitre 10
+        assert not q[qid]["excluded"], qid
