@@ -9,7 +9,14 @@ FILLER_ITEMS: dict[str, int] = {
     "Visual Cure": 60,
     "Aural Cure": 70,
     "Cure All Status": 80,
+    "Melee Attack Up (L)": 102,       # degats des armes doubles pendant 30 s
+    "Melee Defense Up (L)": 122,      # degats de melee recus -50 % pendant 30 s
 }
+
+# Kit de depart (objets donnes des la connexion) : le debut du jeu est le plus dur et le premier mur est le
+# boss du parc d'attractions (avis d'un joueur experimente) ; un joueur ne doit pas y arriver sans rien.
+STARTER_KIT: list[str] = ["Medium Recovery", "Medium Recovery", "Large Recovery",
+                          "Melee Attack Up (L)", "Melee Defense Up (L)"]
 
 # Argent recu (ajoute aux fonds, adresse "funds").
 FUNDS_ITEMS: dict[str, int] = {"500 G": 500, "1000 G": 1000, "2000 G": 2000}

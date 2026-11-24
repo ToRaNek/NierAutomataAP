@@ -3,7 +3,7 @@ from worlds.AutoWorld import WebWorld, World
 from worlds.LauncherComponents import Component, Type, components, launch_subprocess
 
 from .data import worlddb as db
-from .data.items_data import FILLER_ITEMS, FUNDS_ITEMS, MATERIALS, TRAP_ITEMS
+from .data.items_data import FILLER_ITEMS, FUNDS_ITEMS, MATERIALS, STARTER_KIT, TRAP_ITEMS
 from .data.tables import (
     SHOP_PLACES_ORDER, SHOP_REGION, item_location, item_name_to_id, level_location, location_name_to_id,
     pool_weapon_count, quest_excluded, shop_location, shop_missable, weapon_location,
@@ -137,6 +137,9 @@ class NierAutomataWorld(World):
             else:
                 pool.append(self.create_item(self.get_filler_item_name()))
         self.multiworld.itempool += pool
+        if self.options.starter_kit:
+            for name in STARTER_KIT:
+                self.multiworld.push_precollected(self.create_item(name))
 
     def set_rules(self) -> None:
         self.multiworld.completion_condition[self.player] = lambda state: state.has("Victory", self.player)

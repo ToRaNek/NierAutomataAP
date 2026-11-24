@@ -108,6 +108,12 @@ class ApItemsPerArea(Range):
     default = 3
 
 
+class StarterKit(DefaultOnToggle):
+    """Start with a few healing items, one Melee Attack Up (L) and one Melee Defense Up (L). The start of the
+    game is the hardest part and the first wall is the Amusement Park boss."""
+    display_name = "Starter Kit"
+
+
 class ItemChecks(Toggle):
     """Off by default. If on: the first pickup of each material sends an "Item: <name>" check."""
     display_name = "Item Checks"
@@ -142,6 +148,7 @@ class NierAutomataOptions(PerGameCommonOptions):
     chest_checks: ChestChecks
     max_level_check: MaxLevelCheck
     trap_percentage: TrapPercentage
+    starter_kit: StarterKit
     randomized_abilities: RandomizedAbilities
     goal: Goal
     death_link: DeathLink

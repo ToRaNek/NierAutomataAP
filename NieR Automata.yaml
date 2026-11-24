@@ -31,6 +31,8 @@ NieR:Automata:
   weapon_checks: 8
   # Abilities locked until received (add "Pod Fire", "Pod Program" for a pod-less start).
   randomized_abilities: ["Double Jump", "Air Dash", "Ground Evade"]
+  # Start with a few healing items and one attack and one defense boost (the early game is the hardest part).
+  starter_kit: true
   # Percentage of traps among filler items.
   trap_percentage: 20
   # First pickup of each material = one check (many checks).

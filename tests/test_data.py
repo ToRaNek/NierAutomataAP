@@ -147,3 +147,14 @@ def test_no_important_item_in_quests_when_route_c_is_played():
     assert quest_excluded(q, ("A01", "A05", "C11"))
     assert not quest_excluded(q, ("A01", "A05", "B05"))
     assert quest_excluded({"excluded": True}, ("A01",))
+
+
+def test_starter_kit_helps_the_early_game():
+    # avis du testeur : le debut est le plus dur, premier mur = boss du parc d'attractions
+    from nier_automata.data.items_data import FILLER_ITEMS, STARTER_KIT
+    from nier_automata.data.tables import item_name_to_id
+    ids = item_name_to_id()
+    assert FILLER_ITEMS["Melee Attack Up (L)"] == 102 and FILLER_ITEMS["Melee Defense Up (L)"] == 122
+    assert all(n in ids for n in STARTER_KIT)
+    assert any("Recovery" in n for n in STARTER_KIT) and "Melee Attack Up (L)" in STARTER_KIT
+    assert ids["Cure All Status"] - ids["Small Recovery"] == 6      # les codes existants ne bougent pas
