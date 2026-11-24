@@ -156,6 +156,10 @@ def main():
         if c["context"].get("kind") in ("quest", "phase"):
             skipped["coffre de quete/phase"] += 1
             continue
+        if c["objId"].startswith("bg08"):
+            # socle d'arme (pas un coffre) : l'arme ramassee passe par les checks "Weapon Found" (vu en jeu)
+            skipped["socle d'arme"] += 1
+            continue
         if not c["box"].get("contents"):
             # sans contenu : doublon d'un coffre voisin ou caisse de quete (verifie en jeu : absents)
             skipped["sans contenu (doublon / caisse de quete)"] += 1
