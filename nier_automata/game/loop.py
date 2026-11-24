@@ -126,7 +126,8 @@ def tick(game, state: ClientState, received: list[str], trackers: Trackers) -> T
     if trackers.chests.enabled:
         pos = game.position()
         picked = getattr(game, "ground_pickup", lambda p: False)(pos)
-        trackers.chests.update(game.chest_counter(), pos, ground_pickup=picked)
+        trackers.chests.update(game.chest_counter(), pos, ground_pickup=picked,
+                               opened=getattr(game, "opened_chests", None))
 
     # 7. niveaux
     if scope.max_level and hasattr(game, "level"):

@@ -75,6 +75,21 @@ def region_of(area_label, locked=False, routes=()):
     return f"{route}{major:02d}", missable
 
 
+def refine(region, label, c):
+    """Corrections verifiees en jeu (tools/sweep.py) : la zone "City Ruins" couvre aussi la ville d'apres
+    l'effondrement (st2/r200, chapitre 05), les egouts et les grottes, pas accessibles au chapitre 02."""
+    if label != "City Ruins" or region[0] == "C":
+        return region
+    hap, major = c.get("hap", ""), int(region[1:])
+    if "下水道_水没都市" in hap:              # egouts vers la cite engloutie
+        major = max(major, 7)
+    elif "下水道_遊園地" in hap:              # egouts vers le parc d'attractions
+        major = max(major, 4)
+    elif c["file"].startswith("st2/r200") or c["position"][1] < -20:
+        major = max(major, 5)
+    return f"{region[0]}{major:02d}"
+
+
 def reach_index():
     out = {}
     for key, v in load("reachability.json")["locations"].items():
@@ -140,8 +155,19 @@ def main():
         if c["context"].get("kind") in ("quest", "phase"):
             skipped["coffre de quete/phase"] += 1
             continue
+        if not c["box"].get("contents"):
+            # sans contenu : doublon d'un coffre voisin ou caisse de quete (verifie en jeu : absents)
+            skipped["sans contenu (doublon / caisse de quete)"] += 1
+            continue
+        if any(st.startswith(("q65", "NOT q65")) and "NOT" not in st for st in c["conditions"].get("scene_states", [])):
+            skipped["caisse de la quete Sorting Trouble"] += 1
+            continue
+        if any(math.dist(c["position"], o["pos"]) < 1.5 for o in chests):
+            skipped["doublon au meme endroit"] += 1
+            continue
         locked = c["objId"] == "ba2016"
         region, missable = region_of(label, locked, c["conditions"].get("routes") or ())
+        region = refine(region, label, c)
         rc = reach.get((c["file"], c["entity_id"]), {})
         needs = rc.get("needs")
         unknown = not isinstance(needs, list)
@@ -185,6 +211,8 @@ def main():
         rc = reach.get((p["file"], p["entity_id"]), {})
         if rc.get("needs") != [] or rc.get("confidence") == "low":
             continue
+        if refine(region_of(label)[0], label, p) != region_of(label)[0]:
+            continue                               # sous-zone tardive (egouts, grottes) : pas d'AP Item
         per_area[label].append({"pos": [round(v, 2) for v in p["position"]]})
     pickups = []
     for label in sorted(per_area):

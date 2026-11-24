@@ -1,6 +1,7 @@
 """Detection des checks : armes trouvees (compteur) et phases d'histoire."""
 from __future__ import annotations
 
+import math
 from typing import Iterable, Optional
 
 from ..data import worlddb as db
@@ -110,8 +111,10 @@ class ChestTracker:
         self._last: Optional[int] = None
         self._prev: Optional[int] = None
 
-    def update(self, counter: int, pos, ground_pickup: bool = False) -> Optional[int]:
-        """Renvoie l'indice du coffre ouvert (worlddb.CHESTS) s'il est dans le perimetre, sinon None."""
+    def update(self, counter: int, pos, ground_pickup: bool = False, opened=None) -> Optional[int]:
+        """Renvoie l'indice du coffre ouvert (worlddb.CHESTS) s'il est dans le perimetre, sinon None.
+        opened : fonction donnant les positions des objets coffre ouverts en memoire (plus sur que la
+        position du joueur quand deux coffres sont proches)."""
         prev, self._prev = self._prev, counter
         if prev != counter:
             return None  # attendre une 2e lecture identique
@@ -123,7 +126,13 @@ class ChestTracker:
         self._last = counter
         if ground_pickup or pos is None:
             return None
-        i = db.nearest(db.CHESTS, pos, self.state.chests_opened)
+        i = None
+        for q in sorted(opened() if opened else [], key=lambda q: math.dist(q, pos)):
+            i = db.nearest(db.CHESTS, q, self.state.chests_opened, radius=2.0, dy=3.0)
+            if i is not None:
+                break
+        if i is None:
+            i = db.nearest(db.CHESTS, pos, self.state.chests_opened)
         if i is None:
             return None
         self.state.chests_opened.add(i)

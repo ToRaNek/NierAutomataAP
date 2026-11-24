@@ -265,3 +265,23 @@ def test_ground_pickup_does_not_count_as_chest():
     assert s.chests_opened == set()
     t.update(5, chest_at(1))
     assert t.update(5, chest_at(1)) == 1                          # vrai coffre
+
+
+def test_chest_identified_by_the_opened_chest_object_not_the_player():
+    from nier_automata.data import worlddb as db
+    s = st()
+    t = ChestTracker(s, {0, 1})
+    far_player = chest_at(0, dx=6.0)                 # joueur a 6 m du coffre 0 ...
+    x, y, z = db.CHESTS[1]["pos"]
+    opened = lambda: [(x + 0.1, y, z)]               # ... mais l'objet coffre ouvert est le coffre 1
+    t.update(5, far_player); t.update(5, far_player)
+    t.update(6, far_player, opened=opened)
+    assert t.update(6, far_player, opened=opened) == 1
+
+
+def test_chest_falls_back_to_player_position_without_opened_objects():
+    s = st()
+    t = ChestTracker(s, {0, 1})
+    t.update(5, chest_at(0)); t.update(5, chest_at(0))
+    t.update(6, chest_at(0), opened=lambda: [])
+    assert t.update(6, chest_at(0), opened=lambda: []) == 0

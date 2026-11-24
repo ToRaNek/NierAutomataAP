@@ -41,6 +41,8 @@ def backup_saves(src: Optional[Path] = None, dst_root: Optional[Path] = None) ->
 
 
 ACCESS_POINT_BITS_RVA = 0x14957E0
+CHEST_VTABLE_RVA = 0xC7D708      # objet coffre (ba2014/15/16)
+CHEST_OPEN_OFFSET = 0xA8C         # != 0 une fois ouvert
 
 
 def decode_bits(raw: bytes) -> set[int]:
@@ -120,6 +122,26 @@ class NierGame:
         except OSError:
             return set()
         return db.quests_done(list(struct.unpack(f"<{db.QUEST_STATUS_COUNT}i", raw)))
+
+    def opened_chests(self) -> list:
+        """Positions des objets coffre ouverts actuellement charges (vtable et drapeau verifies en jeu)."""
+        import struct
+        from .spawner import entity_region
+        try:
+            region = entity_region(self.mem)
+            if not region:
+                return []
+            base, size = region
+            data = self.mem.read(base, size)
+        except OSError:
+            return []
+        vt = struct.pack("<Q", self.mem.base + CHEST_VTABLE_RVA)
+        out, i = [], data.find(vt)
+        while i != -1:
+            if i % 8 == 0 and i + CHEST_OPEN_OFFSET + 4 <= len(data)                     and struct.unpack_from("<I", data, i + CHEST_OPEN_OFFSET)[0]:
+                out.append(struct.unpack_from("<3f", data, i + 0x50))
+            i = data.find(vt, i + 8)
+        return out
 
     def chest_counter(self) -> int:
         return read_u32(self.mem, self._off["chestCounter"])
