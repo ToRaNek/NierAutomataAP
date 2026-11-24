@@ -33,7 +33,7 @@ Everything is named after where it is, so a hint tells you where to go.
 - **Quest: <name>**: side quests (experimental, off by default).
 
 ## Goals and logic
-- `goal`: `story_progress` (reach N chapters, short game), `ending_a`, `ending_b`, `ending_cd`, `ending_e`.
+- `goal`: `story_progress` (finish chapter N of a route, short game), `ending_a`, `ending_b`, `ending_cd`, `ending_e`.
   The goal sets how much of the game has checks.
 - Chapters are logic regions in story order. Weapons are progression items: later chapters expect more of
   them, so the weapons you need arrive before the harder areas. Level checks follow the level the game

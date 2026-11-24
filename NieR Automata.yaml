@@ -5,12 +5,14 @@ description: NieR:Automata
 
 NieR:Automata:
   # Goal, which also sets how much of the game has checks:
-  #   story_progress (reach story_checks chapters), ending_a, ending_b (routes A+B),
+  #   story_progress (finish chapter story_chapter of route story_route), ending_a, ending_b (routes A+B),
   #   ending_cd (route C/D), ending_e.
   goal: story_progress
-  # Chapters covered by story_progress, counted in order (route A = 37, then B, then C/D; 109 in total).
-  # Each one is a "Story A 02-01: Landing at the City Ruins" check; only the areas they open have checks.
-  story_checks: 12
+  # For story_progress: the route (a, b or cd) and the chapter to finish (1-10 in routes a and b, 11-17 in cd).
+  # Every part of every chapter up to it is a "Story A 02-01: Landing at the City Ruins" check, and only the
+  # areas opened by then have checks. a + 4 = a short game ending at the Amusement Park.
+  story_route: a
+  story_chapter: 4
   # Every chest is a check named after its area ("Chest: City Ruins #12").
   chest_checks: true
   # "AP Item" objects on the ground at the game's collection points ("AP Item: Desert Zone #2"), 1-8 per area.

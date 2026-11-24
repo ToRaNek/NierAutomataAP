@@ -2,18 +2,29 @@ from dataclasses import dataclass
 
 from Options import Choice, DeathLink, DefaultOnToggle, OptionSet, PerGameCommonOptions, Range, Toggle
 
-from .data.tables import MAX_STORY, MAX_WEAPON_CHECKS
+from .data.tables import MAX_WEAPON_CHECKS
 
 
-class StoryChecks(Range):
-    """Number of story chapters covered when the goal is story_progress. Chapters are counted in order across
-    the routes (A: 37 chapters, then B, then C/D); reaching the last one wins. Every chapter in range is a
-    "Story <route> <chapter>: <title>" check, and only the areas opened by these chapters have checks.
+class StoryRoute(Choice):
+    """Route of the chapter to reach when the goal is story_progress. Routes A and B go through the same
+    chapters 1-10 (B is the second playthrough, as 9S); route C/D has chapters 11-17."""
+    display_name = "Story Route"
+    option_a = 0
+    option_b = 1
+    option_cd = 2
+    default = 0
+
+
+class StoryChapter(Range):
+    """Chapter to finish when the goal is story_progress (the 17 big chapters of the game: 1-10 in routes A
+    and B, 11-17 in route C/D). You win when you reach the last part of that chapter. Every part of every
+    chapter up to it is a "Story <route> <chapter>: <title>" check, and only the areas opened by then have
+    checks. Example: route a, chapter 4 = a short game that ends at the Amusement Park.
     Ignored by the ending goals (they cover whole routes)."""
-    display_name = "Story Checks"
+    display_name = "Story Chapter"
     range_start = 1
-    range_end = MAX_STORY
-    default = 12
+    range_end = 17
+    default = 4
 
 
 class WeaponChecks(Range):
@@ -104,7 +115,7 @@ class ItemChecks(Toggle):
 
 class Goal(Choice):
     """Victory condition, which also sets how much of the game has checks.
-    story_progress: reach `story_checks` chapters (short game, adjustable).
+    story_progress: finish chapter `story_chapter` of route `story_route` (short game, adjustable).
     ending_a: finish route A. ending_b: finish routes A and B. ending_cd: finish route C/D (ending C or D).
     ending_e: get ending E."""
     display_name = "Goal"
@@ -118,7 +129,8 @@ class Goal(Choice):
 
 @dataclass
 class NierAutomataOptions(PerGameCommonOptions):
-    story_checks: StoryChecks
+    story_route: StoryRoute
+    story_chapter: StoryChapter
     weapon_checks: WeaponChecks
     item_checks: ItemChecks
     ap_items: ApItems

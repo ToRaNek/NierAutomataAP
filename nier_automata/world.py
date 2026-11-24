@@ -54,7 +54,7 @@ class NierAutomataWorld(World):
     def generate_early(self) -> None:
         o = self.options
         self.scope = db.make_scope(
-            goal=o.goal.value, story_checks=o.story_checks.value, chest_checks=bool(o.chest_checks),
+            goal=o.goal.value, story_checks=self._story_checks(), chest_checks=bool(o.chest_checks),
             ap_items_per_area=o.ap_items_per_area.value if o.ap_items else 0,
             access_point_checks=bool(o.access_point_checks), quest_checks=bool(o.quest_checks),
             weapon_checks=o.weapon_checks.value, max_level_check=o.max_level_check.value,
@@ -65,6 +65,10 @@ class NierAutomataWorld(World):
         candidates = sorted(set(WEAPONS) - STARTING_WEAPONS)
         n = pool_weapon_count(max(0, open_locs - abilities), len(self.spots), len(candidates))
         self.pool_weapons = self.random.sample(candidates, n)
+
+    def _story_checks(self) -> int:
+        o = self.options
+        return db.chapters_until("ABC"[o.story_route.value], o.story_chapter.value)
 
     def _spots(self) -> list[tuple[str, str, bool, list]]:
         """(nom, region, exclu, capacites requises) de chaque check de cette partie."""
@@ -141,7 +145,7 @@ class NierAutomataWorld(World):
         o = self.options
         return {
             "goal": o.goal.value,
-            "story_checks": o.story_checks.value,
+            "story_checks": self._story_checks(),
             "chest_checks": bool(o.chest_checks),
             "ap_items_per_area": o.ap_items_per_area.value if o.ap_items else 0,
             "access_point_checks": bool(o.access_point_checks),

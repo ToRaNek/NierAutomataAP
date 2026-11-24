@@ -203,3 +203,11 @@ GOAL_STATES = {
     GOAL_ENDING_CD: {"ending_C", "ending_D", "ending_CD"},
 }
 ENDING_STATES = ("ending_A", "ending_B", "ending_C", "ending_D", "ending_CD")
+
+
+def chapters_until(route: str, big_chapter: int) -> int:
+    """Nombre de sous-chapitres (ordre A, B, C/D) jusqu'a la FIN du grand chapitre `big_chapter` de `route`.
+    Le numero est borne aux chapitres de la route (A et B : 1 a 10 ; C/D : 11 a 17)."""
+    majors = sorted({int(c["chapter"][:2]) for c in CHAPTERS if c["route"] == route})
+    big = min(max(big_chapter, majors[0]), majors[-1])
+    return max(i for i, c in enumerate(CHAPTERS) if c["route"] == route and int(c["chapter"][:2]) == big) + 1

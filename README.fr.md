@@ -34,7 +34,7 @@ Chaque check porte le nom de son lieu : un indice dit donc ou aller.
 - **Quest: <nom>** : quetes annexes (experimental, desactive par defaut).
 
 ## Objectifs et logique
-- `goal` : `story_progress` (atteindre N chapitres, partie courte), `ending_a`, `ending_b`, `ending_cd`,
+- `goal` : `story_progress` (finir le chapitre N d'une route, partie courte), `ending_a`, `ending_b`, `ending_cd`,
   `ending_e`. L'objectif fixe la part du jeu qui a des checks.
 - Les chapitres sont des regions logiques dans l'ordre de l'histoire. Les armes sont des objets de
   progression : les chapitres avances en demandent plus, donc elles arrivent avant les zones difficiles.

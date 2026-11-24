@@ -103,3 +103,15 @@ def test_same_subphase_name_in_two_chapters_is_told_apart_by_phase_number():
     b = db.match_chapter("80_00_AB_Pascal_Village", "A", phase_id=0x200)
     assert db.CHAPTERS[a]["chapter"] == "05-01" and db.CHAPTERS[b]["chapter"] == "07-01"
     assert db.match_chapter("80_00_AB_Pascal_Village", "A") == a          # sans numero : le premier
+
+
+def test_goal_by_big_chapter_and_route():
+    # avis du testeur : objectif par grand chapitre (1 a 17), pas par nombre de sous-chapitres
+    n = db.chapters_until("A", 4)
+    assert db.CHAPTERS[n - 1]["route"] == "A" and db.CHAPTERS[n - 1]["chapter"].startswith("04-")
+    assert n == max(i for i, c in enumerate(db.CHAPTERS) if c["route"] == "A" and c["chapter"][:2] == "04") + 1
+    nb = db.chapters_until("B", 4)                       # meme chapitre, autre route : plus loin dans la partie
+    assert nb > db.chapters_until("A", 10) and db.CHAPTERS[nb - 1]["route"] == "B"
+    assert db.chapters_until("C", 17) == len(db.CHAPTERS)
+    assert db.chapters_until("A", 15) == db.chapters_until("A", 10)      # borne a la route
+    assert db.chapters_until("C", 3) == db.chapters_until("C", 11)
