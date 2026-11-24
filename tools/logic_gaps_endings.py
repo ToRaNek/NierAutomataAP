@@ -506,17 +506,39 @@ def run():
                                    "'X' / '*X' = nouvelle plage commencant a la sous-phase (0x341ac0), '!X' = ferme la "
                                    "plage ouverte de X a cette sous-phase (fin = indice, 0x354ec1..0x354f1f), "
                                    "'[cond] X' = conditionnel. Ordre = ordre du fichier pXXX_sub.bxm (A et B entrelaces). "
-                                   "Difference exacte '*X' / 'X' non tracee (hypothese : 'X' = cette sous-phase seule).",
+                                   "Application (RESOLU) : hap::scene_state::SubPhaseBind, fonction membre 0x31e0b0 "
+                                   "(pointeur pose en 0xb80c1, foncteur vtable 0xc26888) appelee a chaque changement "
+                                   "de sous-phase (phase, indice via 0x85deb0) : liste 'X' ([this+8]) = entrees dont "
+                                   "debut == indice EXACT (cette sous-phase seule) ; liste '*X' ([this+0x38]) = "
+                                   "debut <= indice ET (fin <= 0 ou indice <= fin) : la sous-phase du '!' est "
+                                   "INCLUSE. 0x31dcf0 applique l'element (0 StateOn, 1 StateOff = reset 0x34f8e0, "
+                                   "2/3 QuestOn/Off...). Les plages portent sur l'indice du fichier (A et B "
+                                   "entrelaces) : une plage A qui se ferme sur une entree B inclut les entrees B "
+                                   "intermediaires (ex. RobotMt_Boss/A 05_00_A..05_40_B couvre 05_10_B, 05_30_B, "
+                                   "05_40_B).",
             "tutorial_STG": tut,
             "where_unofficial": "Prologue route A (2B) : vol STG 00_30..00_50_A (tutorial_STG, mis par les scripts de "
                                 "dialogue STG1/2/3, efface en 00_50) ; usine a partir de 00_60_A_RobotM_Pro_Tutorial "
-                                "(premier controle de 2B) jusqu'a 00_80_A (borne non verifiee), 00_85_A..05_10_A, "
+                                "(premier controle de 2B) jusqu'a 00_80_A INCLUS (0x31e0b0 : indice <= fin), 00_85_A..05_10_A, "
                                 "05_20/05_30/05_40_A ; boss 05_00_A..05_40_A (RobotMt_Boss/A, ferme par '!' en 05_40_B). "
                                 "Route B (9S) : RobotMt_Prologue/A force a faux (StateOff) -> pas de fin W. Efface "
                                 "(StateOff) au debut de p200 00_AB_Ruined_City et p300 00_CD_Bunker_2B ; RobotMt_Boss/A "
                                 "aussi en 10_A_bunker_Robot_Battle.",
-            "open": "Inclusion exacte des bornes (sous-phase du '!'), cas 00_80_A_RobotM_Pro_1stArea, sens de "
-                    "[0x1029c30].",
+            "resolved_2026_11_24": {
+                "range_end": "borne de fin INCLUSE (SubPhaseBind 0x31e0b0 : debut <= i et (fin <= 0 ou i <= fin)) ; "
+                             "00_80_A_RobotM_Pro_1stArea est dans RobotMt_Prologue/A. confidence: high.",
+                "flag_0x1029c30": "un seul ecrivain dans tout l'exe : 0x75f592 (initialisation 0x75f250, a cote du "
+                                  "chemin de donnees de developpement '%s:/project/PRJ_028/p2/win32/data') qui y "
+                                  "ecrit ebx = 0 (xor ebx,ebx en 0x75f29b, chemins 0x75f2d4/0x75f309). ~60 lecteurs "
+                                  "(UI 0x9c..., fins, succes) testent < 0. En version commerciale il vaut toujours 0 : "
+                                  "drapeau de build/debug, l'etat 7 (saut START) est inatteignable. confidence: high.",
+                "side_effect": "RobotMt_Boss/A (05_00_A..!05_40_B) s'applique aussi en entrant dans 05_10_B, 05_30_B, "
+                               "05_40_B (route B) : une mort a ces sous-phases donnerait statiquement le type 6 "
+                               "(fin W). Non verifie en jeu ; persistance des StateOn hors plage non tracee "
+                               "(pas d'effacement explicite avant p200/p300 hors StateOff).",
+            },
+            "open": "persistance d'un StateOn apres la fin de sa plage (le reset n'est fait que par StateOff/"
+                    "SceneStateSystem.reset) ; effet reel de RobotMt_Boss/A sur la route B.",
         },
         "E": {
             "status": "resolved",
@@ -586,7 +608,22 @@ def run():
                 "la distinction vient de ending_C / ending_D poses en fin de generique (0x863730).",
                 "Titre affiche : 0x89ae00 (UIEndRollRoute, [ui+0x90] -> CREDIT_END_TITLE_%02d) n'est appele qu'avec "
                 "1 (B, 0x83de77), 4 (E, 0x85eac6) et l'indice des fins pf30 (0x862e2f) : les titres A/C/D ne passent "
-                "pas par ce chemin (probablement integres au generique/video) : NON trace.",
+                "pas par ce chemin. Verifie le 2026-11-24 : l'UI d'affichage (table CREDIT_END_TITLE_01..26 en "
+                "0x91890a, indice [ui+0x90]) n'est alimentee que par 0x89ae00, dont les 4 appelants sont B "
+                "(0x83de77), le game over (0x842973, indice [obj+0xc]), E (0x85eac6) et pf30 (0x862e2f). "
+                "data/movie : 150 fichiers evNNNN.usm (aucun nom par fin, aucun flux de sous-titres @SBT) ; "
+                "credit/credit_ver1.dat (creditSq.bxm = indices de sequence) et ui/ui_ending_us.dat (ending00NN.uid "
+                "+ messending.mcd) ne lient pas un titre a un drapeau. Titre A/C/D = probablement integre au "
+                "generique (EndRoll / EndRollShooting) : NON trace statiquement.",
+                "Indices narratifs (evenements par branche, p300) : branche 9S gagnante 340_C_Tower_9Swin = "
+                "ev1230 puis une des variantes ev1232..ev1235 'パス◯/×いく◯/×' (choix 'partir / ne pas partir' "
+                "qui correspond a la fin ou 9S part avec l'arche) ; branche A2 gagnante 340_D_Tower_A2win = ev1240, "
+                "ev1241, ev1250 + 345_D_Tower_A2win_9Shack (piratage de 9S par A2/les Pods). Ces contenus "
+                "correspondent aux fins nommees D (9S) et C (A2) par web_reference.md : les noms internes "
+                "(sous-phases 340_C/340_D, etats ending_C/ending_D, succes 17/18) sont donc probablement "
+                "inverses par rapport au titre affiche, ou le web se trompe. CONFLIT non tranche statiquement ; "
+                "pour l'AP : utiliser les drapeaux internes (select/9S -> ending_C, select/A2 -> ending_D) comme "
+                "conditions, et l'intitule du web pour l'affichage. confidence (titre) : low.",
                 "Succes : MiscState.unlockAchievement 'N' = numero decimal ecrit en hexa (0x10 -> 10 'One Battle "
                 "Ends' A, 0x11 -> 11 B, 0x19 -> 19 E) ; l'exe appelle 0x9c7250(indice = numero-1) : 0x10 -> n 17, "
                 "0x11 -> n 18. Noms = CORE_ACHIEVEMENT_HELP_NN.",

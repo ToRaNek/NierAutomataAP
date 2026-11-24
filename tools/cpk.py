@@ -197,6 +197,32 @@ def pak_yax(b: bytes):
     return out
 
 
+def pak_group_block(b: bytes):
+    """Bloc YAX des groupes d'un .pak (en-tete `u32 version, u32 taille, u32 offset`) ou None.
+    version 4 : a l'offset `u32 taille compressee` + zlib ; version 1 (753 paks sur 841 en v1.04 : grp.pak, qa*,
+    quest/qb*...) : YAX brut de `taille` octets a l'offset (pas de prefixe). On essaie zlib puis le brut."""
+    import zlib
+    try:
+        ver, usz, off = struct.unpack_from("<III", b, 0)
+    except struct.error:
+        return None
+    if not usz or off + 4 > len(b):
+        return None
+    try:
+        csz = struct.unpack_from("<I", b, off)[0]
+        return zlib.decompress(b[off + 4:off + 4 + csz])
+    except zlib.error:
+        pass
+    raw = b[off:off + usz]
+    try:
+        n = struct.unpack_from("<I", raw, 0)[0]
+        if 4 + 9 * n > len(raw):
+            return None
+    except struct.error:
+        return None
+    return raw
+
+
 def yax(b: bytes):
     n = struct.unpack("<I", b[:4])[0]
     nodes = []

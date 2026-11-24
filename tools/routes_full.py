@@ -687,7 +687,7 @@ def main():
         rf_endings.build(out)
     if a.what in ("enemies", "all"):
         import rf_enemies
-        rf_enemies.build(out)
+        rf_enemies.write(out)  # (build seul n'ecrivait pas enemies_by_area.json)
     if a.what in ("md", "all"):
         build_md(out)
 

@@ -298,7 +298,7 @@ def statebind(needles=("Shop_upgrade", "ShoppingMall_ElevatorUnlock", "ElevatorU
 
 def raw_groups(b: bytes, vocab) -> dict:
     """Bloc de groupes d'un .pak, y compris NON compresse (taille stockee = taille decompressee, ex. qb95) :
-    world_positions.pak_groups ne lit que la forme zlib."""
+    (world_positions.pak_groups lit maintenant aussi ce format via cpk.pak_group_block.)"""
     import cpk
     _a, usz, off = struct.unpack_from("<III", b, 0)
     csz = struct.unpack_from("<I", b, off)[0]

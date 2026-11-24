@@ -89,10 +89,10 @@ def walk(n):
 
 def group_table(pak: bytes, T):
     try:
-        ver, _x, h = struct.unpack_from("<III", pak, 0)
-        if ver != 4:
+        # version 4 = zlib, version 1 = YAX brut (avant : seuls les version 4 etaient lus)
+        raw = cpk.pak_group_block(pak)
+        if raw is None:
             return []
-        raw = zlib.decompressobj().decompress(pak[h + 4:])
         root = tree(cpk.yax(raw), T)
     except Exception:
         return []

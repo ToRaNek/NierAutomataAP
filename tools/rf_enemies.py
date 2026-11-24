@@ -6,8 +6,11 @@ Usage : python tools/rf_enemies.py [--out docs/research]   -> enemies_by_area.js
   donnee d'unite). Noms : PAUSE_ENEMY_%04x (format lu dans l'exe, RVA 0xce6640) avec la valeur UIID lue en
   hexadecimal ; nom du type = Type[TypeID].UIID, variante = UIID de l'entree ; categorie = PAUSE_ENEMY_CTGR_%02x.
   Noms dans ui/ui_pause_us.dat:messpause.mcd, descriptions dans txtmess/txt_pause_add_us.dat (meme cle).
-- Placements : toutes les valeurs ayant un objId em* dans les hap (hap.z XML ; sinon *_hap.pak YAX) et les
-  *_grp.pak (YAX, balises = crc32 du nom de balise) de ph1-4, phf, st1/st2/st5, quest/, core/corehap.dat.
+- Placements : toutes les valeurs ayant un objId em* dans les *_hap.pak (YAX ; FONT FOI : l'exe 0x3b8020 charge
+  %s_hap.pak et ne lit %s_hap.z que si le .pak manque ; le hap.z n'est lu que dans ce cas) et les *_grp.pak
+  (YAX, balises = crc32 du nom de balise) de ph1-4, phf, st1/st2/st5, quest/, core/corehap.dat et des cellules
+  wd*. Groupes lus dans le bloc de groupes de chaque .pak (zlib v4 ou YAX brut v1, cpk.pak_group_block).
+- Donnees debloquees par la mort d'un placement : regle de l'exe 0x8257C0 (death_match, toutes les lignes).
   Deux sortes : 'layout' (enemi pose, position fixe) et 'generator' (敵発生機 : liste d'objId tires au hasard
   autour de points).
 - Proprietaire : jetons des groupes (code 0xf3b97443 = crc32(nom de sous-phase), 0x35c92545 = crc32('qXXX/ETAT')),
@@ -29,6 +32,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import cpk  # noqa: E402
 import bxm  # noqa: E402
 import extract_research as er  # noqa: E402
+import world_positions as wp  # noqa: E402  (members : cache des cellules wd)
 
 TOK_SUBPHASE, TOK_QUEST = 0xF3B97443, 0x35C92545
 
@@ -179,6 +183,79 @@ def build_catalogue(gm, names, desc, core):
     return entries, acdb_rows, hr_rows
 
 
+# --- regle de deblocage de l'exe v1.04 (0x8257C0, mode 'mort') -------------------------------------------------
+# (deplacee ici depuis logic_gaps_enemies.py, qui la reutilise) : toutes les lignes EmList qui correspondent sont
+# debloquees : EmID egal, setType egal, (setFlag du placement & masque) == masque (EmList setFlag 0 -> 0x10,
+# 1 -> 0x10000010) ; lignes de mode 0 (bDie=1, bTalk=0) seulement ; exclusions codees en dur.
+OBJ_PREFIX_NUM = {"pl": 0x1, "em": 0x2, "bg": 0xC}
+
+
+def objid_num(s):
+    m = re.match(r"(pl|em|bg)([0-9a-f]{4})$", s or "")
+    return (OBJ_PREFIX_NUM[m.group(1)] << 16) | int(m.group(2), 16) if m else None
+
+
+def mask_of(emlist_setflag: int) -> int:
+    return {0: 0x10, 1: 0x10000010}.get(emlist_setflag, 0)
+
+
+def mode_of(rec) -> int:
+    if rec["bTalk"]:
+        return 1 if not rec["bDie"] else -1
+    return 0 if rec["bDie"] else -1
+
+
+def death_match(rec, objId, setType, setFlag, emp=False):
+    """Regle de 0x8257C0 en mode 'mort' pour une ligne d'EmList."""
+    if mode_of(rec) != 0 or rec["EmID"] != objId:
+        return False
+    st = 10 if emp else (setType or 0)
+    sf = setFlag or 0
+    if objId == "em0000" and st == 2:
+        sf |= 0x10
+    num = objid_num(objId)
+    excluded = {(0x21030, 6), (0x25000, 1), (0x25000, 5), (0x26000, 1), (0x26000, 2)}
+    if (num, st) in excluded or num in (0x2B010, 0x2B041, 0x2B051, 0x2B061):
+        return False
+    ignore_st = num in (0x20060, 0x20061, 0x20090) or (num == 0x20040 and st != 10)
+    if num == 0x20040 and rec["setType"] == 10:
+        ignore_st = False
+    if not ignore_st and rec["setType"] != st:
+        return False
+    m = mask_of(rec["setFlag"])
+    return not m or (sf & m) == m
+
+
+def talk_match(rec, objId, setType, setFlag):
+    """Regle de 0x825CB0 (dialogue, appele par 0x35776F) : lignes de mode 1 (bDie=0, bTalk=1), EmID egal.
+    Categorie 5 (Village Machines, [ligne+4]) : PAS de test de setType ; exige la variable 'UI_namePV' (nom du
+    village de Pascal connu, sinon rien) ; em005b avec setType 1 -> seulement SortID 0x4d (aucune ligne em005b :
+    rien), em001b avec setType 1 -> SortID != 0x4e. Autres categories : setType egal et (masque == 0 ou
+    setFlag & masque != 0). setType = celui du PNJ a qui l'on parle (DEDUIT de l'argent r8d)."""
+    if mode_of(rec) != 1 or rec["EmID"] != objId:
+        return False
+    st, sf = setType or 0, setFlag or 0
+    if rec["category"] == 5:
+        if objId == "em005b" and st == 1:
+            return rec["SortID"] == 0x4D
+        if objId == "em001b" and st == 1:
+            return rec["SortID"] != 0x4E
+        return True
+    if rec["setType"] != st:
+        return False
+    m = mask_of(rec["setFlag"])
+    return not m or bool(sf & m)
+
+
+def match_records_talk(by_em, em, st, sf):
+    return sorted({e["SaveID"] for e in by_em.get(em, []) if talk_match(e, em, st, sf)})
+
+
+def match_records_exe(by_em, em, st, sf):
+    """SaveIDs debloques par la mort de ce placement (regle exe, toutes les lignes)."""
+    return sorted({e["SaveID"] for e in by_em.get(em, []) if death_match(e, em, st, sf)})
+
+
 def match_record(by_em, em, st, sf):
     """Entree EmList pour un placement (EmID, setType, setFlag). Renvoie (entree, qualite)."""
     c = by_em.get(em)
@@ -295,8 +372,15 @@ def describe(act, val):
 # --- fichiers ------------------------------------------------------------------------------------
 
 def source_files():
-    return sorted(n for n in er.all_names()
-                  if re.match(r"(ph\w|phf|quest|st\d)/[^/]+\.dat$", n) or n == "core/corehap.dat")
+    names = er.all_names()
+    return sorted(n for n in names
+                  if re.match(r"(ph\w|phf|quest|st\d)/[^/]+\.dat$", n) or n == "core/corehap.dat") + \
+        sorted(n for n in names if wp.WD_RE.match(n))
+
+
+def _members(n):
+    """Membres d'un .dat (cellules wd : seulement hap/pak/scp/lay, cache world_positions)."""
+    return wp.members(n)
 
 
 def owner_of_file(n, member=None):
@@ -345,26 +429,28 @@ def build(out_dir: Path) -> dict:
     seen = set()
     files = source_files()
     # 1re passe legere : vocabulaire des balises (pour les arbres YAX)
-    xml_cache_flags = {}
+    diag = Counter()
     for n in files:
-        d = cpk.dat_files(er.game_file(n))
+        d = _members(n)
         for k, v in d.items():
             if k.endswith("_hap.z") and len(v) > 100:
                 t = zlib.decompress(v).decode("shift_jis", "replace")
                 tag_names |= set(re.findall(r"<([A-Za-z_][A-Za-z0-9_]*)>", t))
-                xml_cache_flags[n] = True
         del d
     H = {zlib.crc32(t.encode()): t for t in tag_names}
 
     for n in files:
-        d = cpk.dat_files(er.game_file(n))
+        d = _members(n)
         groups = {}
         haps = []  # (hap element, member)
-        has_xml = False
+        # Le *_hap.pak fait foi (exe RVA 0x3b8020 charge %s_hap.pak, %s_hap.z seulement si le .pak manque) :
+        # le hap.z n'est lu que pour un prefixe sans .pak. Groupes : bloc de groupes de chaque .pak (hap.pak et
+        # grp.pak, zlib version 4 ou YAX brut version 1 : cpk.pak_group_block).
+        pak_stems = {k[:-len("_hap.pak")] for k in d if k.endswith("_hap.pak")}
         for k, v in d.items():
-            if k.endswith("_hap.z") and len(v) > 100:
+            if k.endswith("_hap.z") and len(v) > 100 and k[:-len("_hap.z")] not in pak_stems:
                 root = er.hap_xml(v)
-                has_xml = True
+                diag["hap_z_used_no_pak"] += 1
                 for g in root.iter("group"):
                     gid = _t(g, "id")
                     if gid is None or g.find("name") is None:
@@ -373,15 +459,26 @@ def build(out_dir: Path) -> dict:
                     groups[_int(gid)] = {"name": _t(g, "name"), "parent": _int(_t(g, "parent")), "tokens": toks}
                 for h in root.iter("hap"):
                     haps.append((h, k))
+            elif k.endswith("_hap.z"):
+                diag["hap_z_skipped_pak_exists"] += 1
         for k, v in d.items():
             if not k.endswith(".pak"):
                 continue
-            if k.endswith("_hap.pak") and has_xml:
-                continue  # meme contenu que hap.z
+            raw = cpk.pak_group_block(v)
+            if raw is not None:
+                for g in yax_to_et(cpk.yax(raw), H).findall("group"):
+                    gid = _int(_t(g, "id"))
+                    if gid is None:
+                        continue
+                    toks = [(_int(_t(tv, "code")), _int(_t(tv, "id"))) for tv in g.findall("tokens/value")]
+                    groups[gid] = {"name": _t(g, "name"), "parent": _int(_t(g, "parent")), "tokens": toks}
+                diag["pak_group_blocks"] += 1
             try:
                 trees = cpk.pak_yax(v)
             except Exception:
+                diag["pak_unreadable"] += 1
                 continue
+            diag["pak_read"] += 1
             for t in trees:
                 if t and any(tag == cpk.TAG_OBJ and val.startswith("em") for _, tag, val in t):
                     haps.append((yax_to_et(t, H), k))
@@ -410,6 +507,8 @@ def build(out_dir: Path) -> dict:
                     continue
                 seen.add(key)
                 rec, q = match_record(by_em, e["objId"], e["setType"], e["setFlag"])
+                exe_ids = match_records_exe(by_em, e["objId"], e["setType"], e["setFlag"])
+                talk_ids = match_records_talk(by_em, e["objId"], e["setType"], e["setFlag"])
                 e.update({
                     "file": n, "member": member, "owner_kind": kind, "owner": owner, "hap": hname,
                     "group_chain": chain, "subphases": [f"{p}:{s}" for p, s in subs],
@@ -418,6 +517,8 @@ def build(out_dir: Path) -> dict:
                     "route_hint": route_hint(chain + [hname, e["action"]]),
                     "unit_data_saveid": rec["SaveID"] if rec else None,
                     "unit_data_name": rec["unit_data_name"] if rec else None, "unit_data_match": q,
+                    "unit_data_saveids_exe": exe_ids,
+                    "unit_data_saveids_talk": talk_ids,
                 })
                 if other_toks:
                     e["other_tokens"] = other_toks
@@ -441,7 +542,7 @@ def build(out_dir: Path) -> dict:
                 p["area"], p["area_source"], p["area_confidence"] = best[1], "nearest_labelled", "low"
                 p["area_nearest_dist_m"] = round(best[0])
 
-    return summarise(catalogue, acdb, hrand, placements, files)
+    return summarise(catalogue, acdb, hrand, placements, files, diag)
 
 
 def subphase_chapters(phases):
@@ -492,11 +593,14 @@ def assign_area(e, kind, owner, subs, sub_meta):
     return {"area": None, "area_source": None, "area_confidence": None}
 
 
-def summarise(catalogue, acdb, hrand, placements, files):
+def summarise(catalogue, acdb, hrand, placements, files, diag=None):
     by_area = defaultdict(lambda: {"placements": 0, "em": Counter(), "unit_data": {}})
     by_phase = defaultdict(lambda: {"placements": 0, "em": Counter(), "unit_data": {}})
     by_quest = defaultdict(lambda: {"placements": 0, "em": Counter(), "unit_data": {}})
     rec_where = defaultdict(lambda: {"areas": Counter(), "subphases": Counter(), "quests": Counter(), "n": 0})
+    sid_name = {}
+    for e in catalogue:
+        sid_name.setdefault(e["SaveID"], e["unit_data_name"])
     for p in placements:
         a = p["area"] or "(unknown)"
         targets = [by_area[a]]
@@ -504,13 +608,14 @@ def summarise(catalogue, acdb, hrand, placements, files):
             targets.append(by_phase[s])
         if p["owner_kind"] == "quest":
             targets.append(by_quest[p["owner"]])
+        sids = (p.get("unit_data_saveids_exe") or []) + (p.get("unit_data_saveids_talk") or [])
         for t in targets:
             t["placements"] += 1
             t["em"][p["objId"]] += 1
-            if p["unit_data_saveid"] is not None:
-                t["unit_data"][p["unit_data_saveid"]] = p["unit_data_name"]
-        if p["unit_data_saveid"] is not None:
-            r = rec_where[p["unit_data_saveid"]]
+            for sid in sids:
+                t["unit_data"][sid] = sid_name.get(sid)
+        for sid in sids:
+            r = rec_where[sid]
             r["n"] += 1
             r["areas"][a] += 1
             for s in p["subphases"]:
@@ -539,19 +644,26 @@ def summarise(catalogue, acdb, hrand, placements, files):
     unplaced = [r for r in records if not r["placements"]]
     return {
         "_source": "tools/rf_enemies.py ; core/coregm.dat EmList.bxm, AcdbEnemySet.bxm, HackingRandom_EmId.bxm ; "
-                   "hap.z / *_hap.pak / *_grp.pak de ph*, phf, st1, st2, st5, quest, core/corehap.dat",
+                   "*_hap.pak / *_grp.pak (hap.z si pas de .pak) de ph*, phf, st1, st2, st5, quest, core/corehap.dat, wd*",
         "notes": [
             "unit data record = EmList SaveID (bit de sauvegarde). Nom = PAUSE_ENEMY_%04x(Type.UIID) + "
             "' (' + PAUSE_ENEMY_%04x(UIID) + ')' ; format %04x lu dans l'exe (RVA 0xce6640), UIID lus en hexa "
             "(Type UIID '110' -> PAUSE_ENEMY_0110 'Multi-tier Type').",
-            "lien placement -> record : (objId, setType, setFlag) == (EmID, setType, setFlag) de EmList ; setType absent "
-            "= 0, setFlag absent = -1. Regle deduite de la structure (non tracee dans le code de deblocage).",
+            "lien placement -> donnees (unit_data_saveids_exe, utilise pour unit_data_records / by_*) = regle de "
+            "l'exe 0x8257C0 en mode mort : toutes les lignes EmList avec EmID et setType egaux et (setFlag & masque) "
+            "== masque (EmList setFlag 0 -> 0x10, 1 -> 0x10000010), mode 0 seulement, exclusions codees en dur. "
+            "unit_data_saveids_talk : regle de 0x825CB0 (dialogue, lignes bTalk=1 ; Village Machines sans test de "
+            "setType, apres la variable UI_namePV). Les lignes bDie=0/bTalk=0 (evenement seulement : boss, PNJ, "
+            "quetes) ne se debloquent ni par mort ni par dialogue : voir records_resolved_logic_gaps "
+            "(tools/logic_gaps_enemies.py --update-enemies).",
+            "unit_data_saveid / unit_data_match = ancien appariement 1 ligne (garde pour comparaison).",
+            "sources : *_hap.pak (fait foi, exe 0x3b8020) + *_grp.pak + groupes de chaque .pak (zlib v4 ou YAX brut "
+            "v1) ; *_hap.z seulement pour un prefixe sans .pak. Cellules wd* incluses.",
             "kind=generator : objId tire au hasard (rate = poids) autour de points ; position = 1er point.",
             "area : name_keyword (noms japonais de l'action/hap/groupes) > room_file (salle st*) > owner_subphase "
             "(commentaire de la sous-phase) > nearest_labelled (plus proche placement etiquete, < 120 m, faible).",
             "chapters : deduits de l'ordre des fichiers _sub et des entrees de ChapterData.cha (meme route).",
-            "Non lus : fichiers monde wd*/ (aucun placement d'ennemi trouve en dehors des hap), apparitions "
-            "par scripts mruby (EmBase.callEnemy...), ennemis de hacking (HackingEnemy) et STG.",
+            "Non lus : apparitions par scripts mruby (EmBase.callEnemy...), ennemis de hacking (HackingEnemy) et STG.",
         ],
         "room_files": {k: {"area": v, "evidence": ROOM_EVIDENCE.get(k)} for k, v in ROOMS.items()},
         "coverage": {
@@ -562,6 +674,9 @@ def summarise(catalogue, acdb, hrand, placements, files):
             "placements_with_area": sum(1 for p in placements if p["area"]),
             "records_with_placement": len(saveids) - len(unplaced), "records_without_placement": len(unplaced),
             "match_quality": dict(match_q),
+            "placements_with_record_exe_rule": sum(1 for p in placements if p.get("unit_data_saveids_exe")),
+            "placements_with_record_talk_rule": sum(1 for p in placements if p.get("unit_data_saveids_talk")),
+            "load_diag": dict(diag or {}),
         },
         "catalogue": catalogue,
         "unit_data_records": records,
@@ -577,14 +692,21 @@ def summarise(catalogue, acdb, hrand, placements, files):
     }
 
 
+def write(out: Path) -> dict:
+    """build + ecriture de enemies_by_area.json (utilise par main et par routes_full.py enemies).
+    Les resolutions de tools/logic_gaps_enemies.py (records_resolved_logic_gaps) sont a re-appliquer ensuite :
+    python tools/logic_gaps_enemies.py --update-enemies."""
+    res = build(out)
+    (out / "enemies_by_area.json").write_text(json.dumps(res, ensure_ascii=False, indent=1), encoding="utf8")
+    print(json.dumps(res["coverage"], indent=1))
+    return res
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--out", default=str(Path(__file__).resolve().parent.parent / "docs" / "research"))
     a = ap.parse_args()
-    out = Path(a.out)
-    res = build(out)
-    (out / "enemies_by_area.json").write_text(json.dumps(res, ensure_ascii=False, indent=1), encoding="utf8")
-    print(json.dumps(res["coverage"], indent=1))
+    write(Path(a.out))
 
 
 if __name__ == "__main__":

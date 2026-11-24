@@ -118,13 +118,9 @@ def yax_to_elem(nodes, vocab: Vocab) -> ET.Element:
 def pak_groups(b: bytes, vocab: Vocab):
     """Bloc des groupes d'un .pak : en-tete `u32 ?, u32 taille decompressee, u32 offset` ; a l'offset :
     `u32 taille compressee` + zlib -> arbre YAX (count, group{id, name, parent, tokens, attribute, priority})."""
-    try:
-        _a, usz, off = struct.unpack_from("<III", b, 0)
-        if not usz or off + 4 > len(b):
-            return None
-        csz = struct.unpack_from("<I", b, off)[0]
-        raw = zlib.decompress(b[off + 4:off + 4 + csz])
-    except (struct.error, zlib.error):
+    # bloc zlib (version 4) ou YAX brut (version 1 : grp.pak, qa*, qb95...) : cpk.pak_group_block
+    raw = cpk.pak_group_block(b)
+    if raw is None:
         return None
     root = ET.Element("root")
     g = ET.SubElement(root, "group")

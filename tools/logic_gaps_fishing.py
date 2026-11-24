@@ -260,18 +260,30 @@ def run() -> dict:
             "csv_rules": "0x7fa460 : ligne commencant par ',' ou '/' ignoree -> la ligne ',etf032,10,' (apres la "
                          "table 5) n'est PAS chargee ; tables 10-19 et 21-29 vides.",
             "character": "etf040 -> objId 0x4f041 si l'objId du joueur == 0x10200 (0x59c1dc) ; 0x4f041 donne "
-                         "aussi l'indice 41 (Pod B). Identite du personnage 0x10200 non verifiee ici.",
+                         "aussi l'indice 41 (Pod B). 0x10200 = pl0200 = 9S (prefixe pl = 0x1 ; hap p300/p200 : "
+                         "objId pl0200 alias '9S' / 'npc_9s', pl0100 alias 'A2', pl0000 alias '2B' ; exe : "
+                         "'mesh_pl0200' a cote de 'PL/9S_NoPatch'). Donc etf041 = variante 9S (meme Pod B). "
+                         "confidence: high.",
+            "setType_slot": "[obj+0x590] = setType du placement : copie setInfo+0x70 -> +0x590 (0x853b60, appele "
+                            "par la creation d'entite 0x7453c0 en 0x74567d) ; trois consommateurs independants "
+                            "confirment que c'est le setType : mort d'un ennemi 0x5f485a passe [+0x590] comme "
+                            "setType a 0x825780 (compare au setType d'EmList), EmBase 0x5a74cc teste [+0x590]==10 "
+                            "(lignes EMP), ascenseur Ba0200 [+0x590] = id (setType des 12 cabines coherent). "
+                            "L'analyseur de layout 0x3e94d0/0x3e96c0 range setType/setRtn/setFlag en +0x4c/+0x50/"
+                            "+0x54 ; la copie layout -> setInfo (decalage +0x24) n'est pas lue instruction par "
+                            "instruction. Note : la mort passe [+0x598] (setInfo+0x7c) comme setFlag. "
+                            "confidence: high (par les consommateurs).",
         },
         "csv_ignored_lines": ignored,
         "csv_code_to_objId": {hex(k): v for k, v in code_to_obj.items()},
         "etf_to_item": etf_map,
         "tables": {str(t): table_view(t) for t in sorted(tables)},
         "zones": zones,
-        "open": ["+0x590 = setType : deduit de la copie setInfo+0x70 -> +0x590 (0x853b60) et de l'ordre setType/"
-                 "setRtn/setFlag de l'analyseur 0x3e96c0 ; la copie layout -> setInfo n'a pas ete lue",
-                 "role de [+0x3ec0] (= [zone+0x59c], setFlag ?) et de setRtn des volumes : non utilise pour le choix "
-                 "de table",
-                 "identite du personnage objId 0x10200 (variante etf041)"],
+        "open": ["copie instruction par instruction layout (+0x4c) -> setInfo (+0x70) non lue (setType confirme "
+                 "par 3 consommateurs, voir rules.setType_slot)",
+                 "role de [+0x3ec0] (= [zone+0x59c]) et de setRtn des volumes : non utilise pour le choix de table"],
+        "resolved_2026_11_24": ["0x10200 = pl0200 = 9S (etf041 = variante 9S de Pod B)",
+                                "[obj+0x590] = setType (consommateurs : 0x5f485a, 0x5a74cc, Ba0200)"],
     }
 
 

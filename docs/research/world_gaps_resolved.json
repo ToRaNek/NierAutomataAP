@@ -191,7 +191,12 @@
      "method": "this_q150_talk2_a0",
      "script_group_conditions": {
       "group_chain": [
-       "DONEになるまで有効(3)"
+       "DONEになるまで有効(3)",
+       "Aルート専用",
+       "ハッキング中停止(15)"
+      ],
+      "routes": [
+       "A"
       ],
       "unresolved_tokens": 3
      },
@@ -303,7 +308,12 @@
          "group_conditions": {
           "group_chain": [
            "q150/REQ",
-           "進行不可になるまで有効"
+           "進行不可になるまで有効",
+           "Aルート専用",
+           "ハッキング中停止(15)"
+          ],
+          "routes": [
+           "A"
           ],
           "scene_states": [
            "q150/REQ",
@@ -329,7 +339,17 @@
      "file": "quest/q162.dat",
      "script": "q162_fc7da4a2_scp.bin",
      "method": "area_talk_start_HIT_a0",
-     "script_group_conditions": {},
+     "script_group_conditions": {
+      "group_chain": [
+       "DONEになるまで有効_q162",
+       "ハッキング中停止(3)"
+      ],
+      "scene_states": [
+       "NOT hap/blocked",
+       "NOT q162/DONE"
+      ],
+      "unresolved_tokens": 1
+     },
      "triggers": [
       {
        "script": "q162_fc7da4a2_scp.bin",
@@ -1509,7 +1529,6 @@
        "call_path": [
         "devol_ON_TALK_ev0",
         "q561_talk1_9s",
-        "q561_talk1_no1",
         "q561_talk1_ok"
        ],
        "resolved": [
@@ -1545,7 +1564,6 @@
        "call_path": [
         "popol_ON_TALK_ev0",
         "q561_talk1_9s",
-        "q561_talk1_no1",
         "q561_talk1_ok"
        ],
        "resolved": [
@@ -1815,7 +1833,16 @@
      "referenced_areas": [],
      "referenced_entities": [],
      "positioned_actions_in_hap": [],
-     "group_conditions": {}
+     "group_conditions": {
+      "group_chain": [
+       "q080/CLR",
+       "ハッキング中停止"
+      ],
+      "scene_states": [
+       "q080/CLR"
+      ],
+      "unresolved_tokens": 1
+     }
     }
    ],
    "req_setters": [
@@ -1824,7 +1851,12 @@
      "file": "quest/q080.dat",
      "script": "q080_64afc72a_scp.bin",
      "method": "this_q080_mailSend_a0",
-     "script_group_conditions": {},
+     "script_group_conditions": {
+      "group_chain": [
+       "ハッキング中停止"
+      ],
+      "unresolved_tokens": 1
+     },
      "triggers": [
       {
        "script": "q080_64afc72a_scp.bin",
@@ -1861,7 +1893,16 @@
          "referenced_areas": [],
          "referenced_entities": [],
          "positioned_actions_in_hap": [],
-         "group_conditions": {}
+         "group_conditions": {
+          "group_chain": [
+           "q080/REQ",
+           "ハッキング中停止"
+          ],
+          "scene_states": [
+           "q080/REQ"
+          ],
+          "unresolved_tokens": 1
+         }
         }
        ]
       }
@@ -2057,7 +2098,19 @@
      "file": "quest/q401.dat",
      "script": "q401_643e5418_scp.bin",
      "method": "this_q401_talk2_a0",
-     "script_group_conditions": {},
+     "script_group_conditions": {
+      "group_chain": [
+       "DONEになるまで有効(4)",
+       "破棄されるまで有効(3)",
+       "ハッキング中停止(4)"
+      ],
+      "scene_states": [
+       "NOT q401/DONE",
+       "NOT q401_DONE",
+       "NOT q401/BREAK"
+      ],
+      "unresolved_tokens": 1
+     },
      "triggers": [
       {
        "script": "q401_643e5418_scp.bin",
@@ -2152,7 +2205,18 @@
          ],
          "referenced_entities": [],
          "positioned_actions_in_hap": [],
-         "group_conditions": {}
+         "group_conditions": {
+          "group_chain": [
+           "q401/REQ",
+           "破棄されるまで有効(3)",
+           "ハッキング中停止(4)"
+          ],
+          "scene_states": [
+           "q401/REQ",
+           "NOT q401/BREAK"
+          ],
+          "unresolved_tokens": 1
+         }
         }
        ]
       }
@@ -2172,7 +2236,19 @@
      "file": "quest/q403.dat",
      "script": "q403_5d43ba8b_scp.bin",
      "method": "this_q403_talk2_a0",
-     "script_group_conditions": {},
+     "script_group_conditions": {
+      "group_chain": [
+       "FINになるまで有効(5)",
+       "破棄されるまで有効(4)",
+       "ハッキング中停止(8)"
+      ],
+      "scene_states": [
+       "NOT q403/FIN",
+       "NOT q403_FIN",
+       "NOT q403/BREAK"
+      ],
+      "unresolved_tokens": 1
+     },
      "triggers": [
       {
        "script": "q403_5d43ba8b_scp.bin",
@@ -2267,7 +2343,18 @@
          ],
          "referenced_entities": [],
          "positioned_actions_in_hap": [],
-         "group_conditions": {}
+         "group_conditions": {
+          "group_chain": [
+           "q403/REQ",
+           "破棄されるまで有効(4)",
+           "ハッキング中停止(8)"
+          ],
+          "scene_states": [
+           "q403/REQ",
+           "NOT q403/BREAK"
+          ],
+          "unresolved_tokens": 1
+         }
         }
        ]
       }
@@ -2320,7 +2407,7 @@
         "trigger_condition": "PL/2B,PL/9S",
         "call_path": [
          "emile_fast_ON_TALK_4_ev0",
-         "emile_fast_ON_TALK_4_ev2",
+         "emile_fast_ON_TALK_4_ev1",
          "first_end"
         ],
         "resolved": [
@@ -2480,7 +2567,14 @@
       "file": "quest/q920.dat",
       "script": "q920_e5072c9_scp.bin",
       "method": "this_theft_talk_ev2",
-      "script_group_conditions": {},
+      "script_group_conditions": {
+       "group_chain": [
+        "パスカル村で無効",
+        "ハッキング中停止(4)",
+        "エミール決戦クリアでOFF"
+       ],
+       "unresolved_tokens": 2
+      },
       "triggers": [
        {
         "script": "q920_e5072c9_scp.bin",
@@ -2566,7 +2660,17 @@
             "scale": null
            }
           ],
-          "group_conditions": {}
+          "group_conditions": {
+           "group_chain": [
+            "住居侵入_エミール初戦",
+            "ハッキング中停止(4)",
+            "エミール決戦クリアでOFF"
+           ],
+           "scene_states": [
+            "NOT emil_battlelose"
+           ],
+           "unresolved_tokens": 1
+          }
          }
         ]
        }
@@ -2632,7 +2736,17 @@
        "scale": null
       }
      ],
-     "group_conditions": {}
+     "group_conditions": {
+      "group_chain": [
+       "住居侵入_エミール初戦",
+       "ハッキング中停止(4)",
+       "エミール決戦クリアでOFF"
+      ],
+      "scene_states": [
+       "NOT emil_battlelose"
+      ],
+      "unresolved_tokens": 1
+     }
     }
    ]
   }
@@ -4417,5 +4531,6 @@
    "files_scanned": 588,
    "exe": "chaine referencee uniquement par les initialiseurs de tables crc32 RVA 0x105a90 et 0x109ee0 (bit de terminal / texte CORE_MAP_TRANS) ; aucun objet ba1100 ni 'ファストトラベル出現位置' (code 0xfbac492d) ne porte ce codeName. Seul terminal du parc : ft_AP (r130, 647.59, 13.37, 387.15). Terminal coupe."
   }
- }
+ },
+ "changes_2026_11_24": "Relance apres correction de world_positions.pak_groups (cpk.pak_group_block : les blocs de groupes version 1 = YAX brut, 753/841 .pak, n'etaient pas lus ; ex. quest/qb95, tous les *_grp.pak, core qa*). Resultats des lacunes inchanges (16 quetes, 3 magasins Emil, CS/CD Grocery et ft_AP_C/T/T2 toujours non resolus). world_positions.json : jetons de groupe 1163 -> 1265 (resolus 1003 -> 1103) ; coffres avec chaine de groupes 217 -> 243 / 265, points de collecte 935 -> 1071 / 1090 ; nombres de coffres (265) et de points (1090) et contenus BoxData inchanges."
 }

@@ -585,3 +585,95 @@ Resultat : 30/30 donnees resolues (26 high, 4 medium = EMP). `enemies_by_area.js
 ### Limite trouvee
 rf_enemies.py saute les `*_hap.pak` quand un `*_hap.z` existe (297 fichiers ont les deux) : des placements manquent
 dans enemies_by_area.json (ex. emb033 q300, Gunman r150). Seules les 30 donnees ont ete recalculees depuis les .pak.
+(CORRIGE : voir la section suivante.)
+
+## Corrections d'outils et dernieres lacunes (2026-11-24)
+
+Relance complete : `python tools/routes_full.py enemies` (ecrit maintenant enemies_by_area.json via
+`rf_enemies.write`), `python tools/logic_gaps_enemies.py --update-enemies`, `python tools/world_positions.py`,
+`python tools/world_gaps.py --refresh` (le cache pickle doit etre refait apres un changement de world_positions),
+`python tools/logic_gaps.py`, `python tools/routes_full.py endings md`.
+
+### Blocs de groupes des .pak (cpk.pak_group_block)
+En-tete `u32 version, u32 taille, u32 offset`. **Version 4** (88 .pak sur 841 : les gros `*_hap.pak`) : a l'offset
+`u32 taille compressee` + zlib. **Version 1** (753 .pak : tous les `*_grp.pak`, `core/corehap.dat:qa*`, `quest/qb*`...) :
+YAX brut de `taille` octets directement a l'offset. `world_positions.pak_groups` et `rf_endings.group_table` ne lisaient
+que la forme zlib (rf_endings exigeait meme la version 4) ; les sous-groupes des grp.pak (parent = groupe du hap.pak
+principal) manquaient. Effet sur `world_positions.json` : jetons de groupe 1163 -> 1265 (resolus 1003 -> 1103) ;
+coffres avec chaine de conditions 217 -> 243 / 265, points de collecte 935 -> 1071 / 1090 ; nombres de coffres (265),
+de points (1090) et contenus BoxData inchanges (les placements viennent des arbres de hap, pas des groupes).
+Lacunes de world_gaps inchangees.
+
+### rf_enemies.py
+- `*_hap.pak` lu meme si un `*_hap.z` existe (301 hap.z ignores ; 1 seul prefixe sans .pak) ; groupes lus dans chaque
+  .pak ; cellules wd* incluses (582 fichiers au lieu de 327).
+- Donnees debloquees par un placement = regle de l'exe (deplacee de logic_gaps_enemies vers `rf_enemies.death_match`) :
+  mort 0x8257C0 (toutes les lignes, masque setFlag) -> `unit_data_saveids_exe` ; dialogue **0x825CB0** (nouveau) ->
+  `unit_data_saveids_talk` : lignes bTalk=1 ; categorie 5 (Village Machines, `[ligne+4]`) sans test de setType mais
+  seulement si la variable `UI_namePV` est vraie (cas em005b/em001b setType 1 filtres par SortID 0x4d/0x4e) ; autres
+  categories : setType egal et `setFlag & masque != 0`. L'ancien appariement 1 ligne reste dans `unit_data_saveid`.
+- Avant -> apres : placements 5640 -> 6833, types em 164 -> 171, avec sous-phase 2327 -> 3427 ; donnees avec
+  placement 145 (appariement lache) -> 121 (114 par mort + 7 Village Machines par dialogue). Les 54 autres sont des
+  lignes bDie=0/bTalk=0 (evenement, boss, PNJ, quetes) ou sans placement compatible : 53 resolues high dans
+  `records_resolved_logic_gaps`, reste 190.
+
+### Donnees d'unite : nouvelles resolutions (logic_gaps_enemies.py)
+- **107-110 'EMP Attack Machines'** (em0000, em0050, em0010, em0040 setType 10) - confiance haute. L'attaque EMP =
+  actions EmBase **0x84** (132 : 0x696337 -> 0x53F860, pose [ennemi+0x2C32C]=1 en 0x53FCCD) et **0x85** (133 :
+  0x69646F) de la table de sauts 0x6979e4 (EmBase vtable slot 174 = 0x692760, switch sur [ennemi+0x670]) ; motions
+  05a0/05a1/05a2 dont les seq.bxm jouent `em_common_EMP_open/_Buzzer/_atk_loop_s|m|l/_end` : presentes seulement dans
+  em000f, em001f, em004f, em005f (= em0000, em0010, em0040, em0050, exactement les 4 lignes). (em3000/em5000 ont un
+  autre tir 'EMP_around_shot' sans donnee d'unite.) La capacite est donnee par le **parametre de placement `EMP`**
+  (probabilite 1 / 0.5 / 0.3 ; chaine 'EMP' lue par EmBase 0x65f730 en 0x66016c et Em0040 0x5a73ca) : 29 placements
+  (em0010 17, em0000 8, em0040 3, em0050 1), tous routes C/D : p300 25/26_CD City Ruins (乱戦＿モザイク敵増援,
+  ~(-70, 0, 630)), 27_CD 'ジャミング敵' (125.6, -65.4, 352.5), r200 groupe '塔出現後' / 'C' (generateurs : crater
+  (221, -28, 406), autoroute, devant le camp (242, 2, 454), quartier des bureaux pres du desert, bassin souleve) et
+  r200 'ハッキング中' em0050. Tuer l'un d'eux apres son attaque EMP debloque la donnee.
+- **147 9S / 149 A2** : fin C/D (0x85C160 : em1030 st6 si select/9S -> 149, em1040 st6 si select/A2 -> 147).
+- **177 Masamune** : `getReWard('123')` (Cruel Lament, st1/r160 `densetu_ON_TALK_ev4`, (998.5, 3.6, -377.1)) ;
+  l'attribution 0x7ca970 teste id 0x7b (0x7caa7f) et debloque les lignes emb054 (0x817980).
+- **190 em0096 setType 2** : NON resolu (low). Aucun em0096 de setType 2 dans les donnees (arenes DLC q090/q091/q092,
+  r520 : setType 0). em0096 est aussi cree a l'execution par em0046 (0x64da0b : em0042 -> em0090, em0044 -> em0094,
+  em0046 -> em0096) ; le setType de l'enfant n'a pas ete lu.
+- **Positions 73 / 114 / 145** : les actions `敵図鑑解放` n'ont pas de position ; elles s'executent dans le flux du hap
+  apres les evenements qui les precedent. Estimation (`position_estimate`, medium) = PlayerPos de la sous-phase + zones
+  du meme hap : 73 Pascal = apres ev0490/ev0491 (apres Grun), 100_A_Submerge_City_2B, depart (429, -80, 907), zone
+  'エリア_会話開始用' (420.3, -84.0, 882.7) ; 114 Adam = hap `Bルート`/`Aルート` (apres ev0351/ev0352), 10_20/10_30
+  Alien Ship (494.3, -98.7, 350.3) / (497, -98.7, 348), zone (435.8, -92.5, 348.8) ; 145 21O = hap `9S再起動`
+  (sound novel du redemarrage de 9S), 250_CD_Unknown_9S, depart (414.75, -0.18, 294.55) parc d'attractions.
+
+### Peche
+- objId **0x10200 = pl0200 = 9S** (haute) : prefixe pl = 0x1 ; dans les hap, pl0200 porte les alias '9S' / 'npc_9s',
+  pl0100 'A2', pl0000 '2B' ; exe : 'mesh_pl0200' a cote de 'PL/9S_NoPatch'. etf041 = variante 9S de Pod B.
+- `[obj+0x590]` = setType du placement : copie setInfo+0x70 -> +0x590 en 0x853b60 (appelee par la creation
+  d'entite 0x7453c0 en 0x74567d) ; confirme par trois consommateurs independants : mort d'un ennemi (0x5f485a passe
+  [+0x590] comme setType et [+0x598] comme setFlag a 0x825780), EmBase 0x5a74cc (`[+0x590] == 10` = EMP), Ba0200
+  (id d'ascenseur). L'analyseur de layout 0x3e94d0/0x3e96c0 range setType/setRtn/setFlag en +0x4c/+0x50/+0x54 ; la
+  copie exacte layout -> setInfo n'est pas lue (reste ouvert, sans impact).
+
+### Fin W
+- Application de StateBind = `hap::scene_state::SubPhaseBind`, fonction membre **0x31e0b0** (pointeur pose en 0xb80c1,
+  foncteur vtable 0xc26888 ; l'autre foncteur 0xc26810 -> 0x35b780 = lecture du document), appelee a chaque changement
+  de sous-phase avec (phase, indice de sous-phase via 0x85deb0) : liste `X` ([this+8]) = entrees dont debut == indice
+  (cette sous-phase seule) ; liste `*X` ([this+0x38]) = `debut <= i et (fin <= 0 ou i <= fin)` : **la sous-phase du
+  `!` est incluse**. Donc 00_80_A_RobotM_Pro_1stArea est dans RobotMt_Prologue/A (fin W possible). 0x31dcf0 applique
+  l'element (0 StateOn, 1 StateOff = reset 0x34f8e0, 2/3 quetes...).
+- Consequence statique : les plages sont en indice de fichier (A et B entrelaces) ; RobotMt_Boss/A (05_00_A..!05_40_B)
+  s'applique aussi en 05_10_B, 05_30_B, 05_40_B (route B). Non verifie en jeu ; la persistance d'un StateOn apres sa
+  plage (seuls StateOff / SceneStateSystem.reset effacent) n'est pas tracee.
+- **[0x1029c30]** : un seul ecrivain dans l'exe, 0x75f592 (init 0x75f250, a cote du chemin de dev
+  `%s:/project/PRJ_028/p2/win32/data`), qui ecrit ebx = 0 ; ~60 lecteurs (UI 0x9c..., fins, succes) testent < 0. En
+  version commerciale toujours 0 : drapeau de build/debug, l'etat 7 (saut START) est inatteignable.
+
+### Titre affiche des fins A/C/D
+- Non trouve dans les donnees : `data/movie` = 150 `evNNNN.usm` (aucun nom par fin, pas de flux de sous-titres) ;
+  `credit/credit_ver1.dat` (creditSq.bxm = indices de sequence, creditMsg.mcd) et `ui/ui_ending_us.dat`
+  (ending00NN.uid, messending.mcd avec CREDIT_END_TITLE_*) ne lient pas un titre a un drapeau. L'UI de titre (table
+  CREDIT_END_TITLE_01..26 en 0x91890a, indice [ui+0x90]) n'est alimentee que par 0x89ae00, appele pour B (0x83de77),
+  le game over (0x842973), E (0x85eac6) et pf30 (0x862e2f).
+- Indices narratifs (p300) : branche 9S gagnante `340_C_Tower_9Swin` = ev1230 puis une variante ev1232..1235
+  'パス◯/×いく◯/×' (choix partir / rester : fin ou 9S part avec l'arche) ; branche A2 gagnante `340_D_Tower_A2win` =
+  ev1240, ev1241, ev1250 et `345_D_Tower_A2win_9Shack` (9S pirate). Ces contenus correspondent aux fins D (9S) et C
+  (A2) du web. **Conflit** avec les noms internes (340_C/340_D, ending_C/ending_D, succes 17/18) : non tranche
+  statiquement (confiance du titre : faible). Pour l'AP : conditions sur les drapeaux internes (select/9S ->
+  ending_C, select/A2 -> ending_D), libelle d'affichage selon le web.

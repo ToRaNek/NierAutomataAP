@@ -49,6 +49,9 @@ ROOT = Path(__file__).resolve().parent.parent
 RESEARCH = ROOT / "docs" / "research"
 
 UNLOCK_CODE = "0xc168700d"
+# donnees sans placement dans enemies_by_area.json avant la correction hap.pak de rf_enemies (passe 1)
+ORIGINAL_UNPLACED = (3, 9, 10, 35, 36, 46, 47, 48, 52, 53, 72, 73, 77, 81, 107, 108, 109, 110, 114, 117, 118, 124,
+                     129, 145, 151, 152, 156, 157, 158, 161)
 OBJ_PREFIX = {"pl": 0x1, "em": 0x2, "bg": 0xC}
 TOK_SUBPHASE, TOK_STATE = 0xF3B97443, 0x35C92545
 EXTRA_TAGS = ("ObjId objId setType setFlag setRtn items points nodes point rate levelRange spawnRange location "
@@ -65,19 +68,8 @@ EXE_CHECKS = {
 }
 
 
-def objid_num(s: str):
-    m = re.match(r"(pl|em|bg)([0-9a-f]{4})$", s or "")
-    return (OBJ_PREFIX[m.group(1)] << 16) | int(m.group(2), 16) if m else None
-
-
-def mask_of(emlist_setflag: int) -> int:
-    return {0: 0x10, 1: 0x10000010}.get(emlist_setflag, 0)
-
-
-def mode_of(rec) -> int:
-    if rec["bTalk"]:
-        return 1 if not rec["bDie"] else -1
-    return 0 if rec["bDie"] else -1
+# regle de mort de l'exe : definie dans rf_enemies.py (partagee avec l'extraction des placements)
+objid_num, mask_of, mode_of, death_match = rfm.objid_num, rfm.mask_of, rfm.mode_of, rfm.death_match
 
 
 def _i(v):
@@ -85,27 +77,6 @@ def _i(v):
         return int(v, 0)
     except (TypeError, ValueError):
         return None
-
-
-def death_match(rec, objId, setType, setFlag, emp=False):
-    """Regle de 0x8257C0 en mode 'mort' pour une ligne d'EmList."""
-    if mode_of(rec) != 0 or rec["EmID"] != objId:
-        return False
-    st = 10 if emp else (setType or 0)
-    sf = setFlag or 0
-    if objId == "em0000" and st == 2:
-        sf |= 0x10
-    num = objid_num(objId)
-    excluded = {(0x21030, 6), (0x25000, 1), (0x25000, 5), (0x26000, 1), (0x26000, 2)}
-    if (num, st) in excluded or num in (0x2B010, 0x2B041, 0x2B051, 0x2B061):
-        return False
-    ignore_st = num in (0x20060, 0x20061, 0x20090) or (num == 0x20040 and st != 10)
-    if num == 0x20040 and rec["setType"] == 10:
-        ignore_st = False
-    if not ignore_st and rec["setType"] != st:
-        return False
-    m = mask_of(rec["setFlag"])
-    return not m or (sf & m) == m
 
 
 def event_match(rec, objId, setType, setFlag):
@@ -196,6 +167,36 @@ def _context(hap, groups, SP, QS):
     return {"group_chain": chain, "subphases": sorted(subs), "scene_states": sorted(states)}
 
 
+AREA_CODE = "0x8cf2e32"  # action hap 'エリア' (zone : area/value/position)
+
+
+def _hap_areas(hap):
+    """Positions des zones (actions 0x8cf2e32) du meme hap : indice de lieu pour une action sans position."""
+    out = []
+    for a in hap["k"]:
+        if a["t"] == "action" and rfe.kv(a, "code") == AREA_CODE:
+            for nd in rfe.walk(a):
+                if nd["t"] == "position":
+                    p = rfm._pos(nd["v"])
+                    if p:
+                        out.append({"area_action": rfe.kv(a, "name"), "position": p})
+                    break
+    return out[:12]
+
+
+def _subphase_starts(subphases, sub_pos):
+    out = []
+    for s in subphases:
+        ph, name = s.split(":", 1)
+        r = sub_pos.get((ph, name))
+        if r and r.get("PlayerPos"):
+            v = [float(x) for x in r["PlayerPos"].split()[:3]]
+            if any(v):
+                out.append({"subphase": s, "player_start": [round(x, 2) for x in v], "room": r.get("RoomNo"),
+                            "comment_ja": r.get("Comment")})
+    return out
+
+
 def _scan_hap(n, m, hap, groups, target_ems, unlocks, places, SP, QS):
     hname = rfe.kv(hap, "name")
     ctx = None
@@ -207,7 +208,8 @@ def _scan_hap(n, m, hap, groups, target_ems, unlocks, places, SP, QS):
             if c["t"] == "action" and rfe.kv(c, "code") == UNLOCK_CODE:
                 ctx = ctx or _context(hap, groups, SP, QS)
                 params = {k["t"]: k["v"] for k in c["k"] if k["t"] not in ("code", "name", "id", "attribute")}
-                unlocks.append({"file": n, "member": m, "hap": hname, "action": rfe.kv(c, "name"),
+                unlocks.append({"file": n, "member": m, "hap": hname, "hap_area_positions": _hap_areas(hap),
+                                "action": rfe.kv(c, "name"),
                                 "action_id": rfe.kv(c, "id"), "objId": rfe.kv(c, "ObjId"),
                                 "setType": _i(rfe.kv(c, "setType")), "setFlag": _i(rfe.kv(c, "setFlag")),
                                 "other_fields": {k: v for k, v in params.items()
@@ -287,11 +289,16 @@ def run(update_enemies: bool = False) -> dict:
     eba = json.load(open(eba_path, encoding="utf8"))
     cat = eba["catalogue"]
     # re-executable : les entrees deja resolues par une passe precedente sont reprises
+    # + les 30 donnees sans placement de la premiere passe (ORIGINAL_UNPLACED) pour garder la meme couverture
+    # apres une regeneration de enemies_by_area.json
     missing = sorted({r["SaveID"] for r in eba["records_without_placement"]}
-                     | {r["SaveID"] for r in eba.get("records_resolved_logic_gaps", [])})
+                     | {r["SaveID"] for r in eba.get("records_resolved_logic_gaps", [])} | set(ORIGINAL_UNPLACED))
+    fresh_unplaced = {r["SaveID"] for r in eba["records_without_placement"]} |         {r["SaveID"] for r in eba.get("records_resolved_logic_gaps", [])}
     recs = {sid: [c for c in cat if c["SaveID"] == sid] for sid in missing}
     target_ems = {c["EmID"] for rows in recs.values() for c in rows}
     qnpc = json.load(open(RESEARCH / "world_positions.json", encoding="utf8"))["quest_npcs"]
+    phases = json.load(open(RESEARCH / "phases.json", encoding="utf8"))
+    sub_pos = {(ph, r["Name"]): r for ph, rows in phases["sub_phase_files"].items() for r in rows}
 
     T = rfe.tag_names()
     for t in EXTRA_TAGS:
@@ -329,10 +336,19 @@ def run(update_enemies: bool = False) -> dict:
                         sp = slim(p)
                         sp["note"] = "entite %s posee dans le meme fichier et les memes sous-phases" % c["EmID"]
                         entry["positions"].append(sp)
+                    starts = _subphase_starts(u["subphases"], sub_pos)
                     entry["unlock"].append({"area": a,"how": "hap EmListUnlockAction (敵図鑑解放)", "rule": "exe 0x3A04C0 -> 0x8257C0",
                                             "file": u["file"], "member": u["member"], "hap": u["hap"],
                                             "action": u["action"], "group_chain": u["group_chain"],
                                             "subphases": u["subphases"], "scene_states": u["scene_states"],
+                                            "position_estimate": {
+                                                "note": "l'action n'a pas de position : elle s'execute dans le flux "
+                                                        "du hap (apres les evenements qui la precedent) pendant la "
+                                                        "sous-phase ; position = depart joueur de la sous-phase "
+                                                        "(PlayerPos de pXXX_sub.bxm) + zones du meme hap",
+                                                "subphase_start": starts,
+                                                "hap_areas": u.get("hap_area_positions", []),
+                                                "confidence": "medium" if starts else "low"},
                                             "confidence": "high"})
         # 3) QueID : fin de la quete (numero decimal = chiffres hexa de QueID)
         for c in rows:
@@ -371,13 +387,49 @@ def run(update_enemies: bool = False) -> dict:
             entry["positions"] += [dict(slim(p), note="combat final d'Eve (setType du placement != 5/6)")
                                    for p in places if p["objId"] == "em5000"]
         if r0["setType"] == 10:
+            emp = [p for p in places if p["objId"] == r0["EmID"] and "EMP" in (p.get("params") or {})]
             entry["unlock"].append({"how": "kill after EMP attack",
-                                    "rule": "exe 0x825780 : setType remplace par 10 si [ennemi+0x2C32C] != 0 ; "
-                                            "drapeau mis par 0x53FCCD (fn 0x53F890) et 0x69646F (fn 0x692819), "
-                                            "etats d'attaque (motions 05a0..05a2 / EM0051_*)",
-                                    "data_source": "aucune : pas de setType 10 dans les hap ; tout "
-                                                   + r0["EmID"] + " tue apres avoir declenche cette attaque",
-                                    "confidence": "medium"})
+                                    "rule": "exe 0x825780 : setType remplace par 10 si [ennemi+0x2C32C] != 0. Le "
+                                            "drapeau est pose par l'attaque EMP = actions EmBase 0x84 (132, "
+                                            "0x696337 -> 0x53F860, 0x53FCCD) et 0x85 (133, 0x69646F) de la table "
+                                            "de sauts 0x6979e4 (EmBase vtable slot 174 = 0x692760), motions "
+                                            "05a0/05a1/05a2 (sons em_common_EMP_open/Buzzer/atk_loop/end dans "
+                                            "em000f/em001f/em004f/em005f = em0000, em0010, em0040, em0050 "
+                                            "seulement). Capacite activee par le parametre de placement 'EMP' "
+                                            "(probabilite 1 / 0.5 / 0.3 ; chaine 'EMP' lue par EmBase 0x65f730 "
+                                            "(0x66016c) et Em0040 0x5a73ca).",
+                                    "emp_placements": len(emp),
+                                    "data_source": "placements %s avec param EMP (routes C/D : p300 25/26/27_CD "
+                                                   "City Ruins, r200 groupe '塔出現後' C)" % r0["EmID"],
+                                    "confidence": "high" if emp else "medium"})
+            entry["positions"] += [dict(slim(p), note="placement avec param EMP=%s" % p["params"]["EMP"])
+                                   for p in emp]
+        if r0["EmID"] in ("em1030", "em1040") and r0["setType"] == 6:
+            sel = ("select/9S (le joueur est 9S, A2 vaincue)" if r0["EmID"] == "em1030"
+                   else "select/A2 (le joueur est A2, 9S vaincu)")
+            entry["unlock"].append({"how": "ending", "trigger": "saut de phase vers pf10 (EndRoll_CD / BackTitle) "
+                                    "apres le choix final, " + sel,
+                                    "rule": "exe 0x85C160 (codes 2..4) : em1030 st6 si select/9S, em1040 st6 si "
+                                            "select/A2 (puis em8002, em8020 st2, em8010 st6)",
+                                    "subphases": ["p300:340_C_Tower_9Swin" if r0["EmID"] == "em1030"
+                                                  else "p300:340_D_Tower_A2win"],
+                                    "confidence": "high"})
+        if r0["EmID"] == "emb054":
+            entry["unlock"].append({"how": "quest reward", "reward_id": 123,
+                                    "trigger": "getReWard('123') = Cruel Lament, st1/r160 densetu_ON_TALK_ev4 "
+                                               "(forgeron legendaire Masamune, Chateau de la Foret)",
+                                    "rule": "exe 0x7ca970 (attribution getReWard) : id 0x7b (0x7caa7f) -> "
+                                            "0x825e20(emb054) x2 puis lignes EmList emb054 -> 0x817980 (SaveID)",
+                                    "position": [998.5, 3.62, -377.06], "confidence": "high"})
+        if r0["EmID"] == "em0096" and r0["setType"] == 2:
+            entry["unlock"].append({"how": "kill (setType 2 non trouve dans les donnees)",
+                                    "rule": "mort, regle 0x8257C0 : il faut un em0096 de setType 2 ; les em0096 "
+                                            "places (arenes DLC q090/q091/q092, r520) sont setType 0 -> ligne 190 "
+                                            "non atteinte par ces placements. em0096 est aussi cree a l'execution "
+                                            "par em0046 (0x64da0b : em0042 -> em0090, em0044 -> em0094, em0046 -> "
+                                            "em0096) : setType de l'enfant non lu.",
+                                    "candidates": "em0046 places (q091/q092/q102 setType 1, p300, r150, r501, r502)",
+                                    "confidence": "low"})
         hegel_dup = r0["EmID"] == "em8800" and sid == 129
         if hegel_dup:
             entry["unlock"].append({"how": "same as 128", "rule": "2 lignes identiques (em8800 st0, mode 0) : "
@@ -409,13 +461,12 @@ def run(update_enemies: bool = False) -> dict:
                     "diag": dict(diag)},
         "records": results,
         "emlist_unlock_actions": unlocks,
-        "rf_enemies_note": "rf_enemies.py ignore les *_hap.pak quand un *_hap.z existe : or le .pak fait foi "
-                           "(exe 0x3B8020). Des placements manquent donc dans enemies_by_area.json (ex. emb033 "
-                           "q300_hap.pak, Gunman emb004/012/031 r150_hap.pak). Son appariement (1 ligne par "
-                           "placement) ne suit pas l'exe (plusieurs lignes, masque setFlag).",
+        "rf_enemies_note": "CORRIGE : rf_enemies.py lit maintenant les *_hap.pak (le .z seulement sans .pak), les "
+                           "blocs de groupes v1 (YAX brut) et applique la regle de mort de l'exe (death_match, "
+                           "partagee) et la regle de dialogue 0x825CB0.",
     }
     if update_enemies:
-        _update_eba(eba_path, eba, results)
+        _update_eba(eba_path, eba, [r for r in results if r["SaveID"] in fresh_unplaced])
     return out
 
 
@@ -431,8 +482,9 @@ def _update_eba(path, eba, results):
         "tools/logic_gaps_enemies.py : %d/%d donnees sans placement resolues (deblocage par mort selon la regle de "
         "l'exe 0x8257C0 avec masque setFlag, action hap EmListUnlockAction 0xC168700D, fin de quete QueID, etats "
         "q400, fin A, attaque EMP). Les entrees resolues sont dans records_resolved_logic_gaps (source "
-        "'logic_gaps') ; records_without_placement ne garde que les non resolues. Les placements de cette passe "
-        "viennent des *_hap.pak (source de verite) ; le reste du fichier (placements, by_area) n'est pas regenere."
+        "'logic_gaps') ; records_without_placement ne garde que les non resolues. A relancer apres chaque "
+        "regeneration de enemies_by_area.json (tools/rf_enemies.py ou routes_full.py enemies), qui lit deja les "
+        "*_hap.pak (source de verite) et applique les regles de mort / dialogue de l'exe."
         % (len(done), len(results)))
     json.dump(eba, open(path, "w", encoding="utf8"), ensure_ascii=False, indent=1)
 
