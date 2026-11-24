@@ -227,6 +227,13 @@ async def notify_loop(ctx: NierContext):
     while not ctx.exit_event.is_set():
         await asyncio.sleep(2.5)
         try:
+            import time
+            pending_restore = getattr(ctx, "note_restore_at", None)
+            if not ctx.notes and pending_restore and time.monotonic() >= pending_restore                     and getattr(ctx, "note_slot", None) is not None:
+                # textes d'origine remis seulement quand plus rien n'attend : le jeu cree parfois la ligne en
+                # retard (file du journal), et afficherait le nom d'origine du porteur (vu en jeu)
+                ctx.note_slot.restore()
+                ctx.note_restore_at = None
             if not ctx.notes or ctx.state is None or not ctx.nier.in_game():
                 continue
             if getattr(ctx, "ap_prepared", None) is not None:
@@ -243,8 +250,9 @@ async def notify_loop(ctx: NierContext):
             shown = await asyncio.to_thread(ctx.note_slot.show, prefix, item)
             logger.info("notification shown (%s): %s%s", shown, prefix, item)
             await asyncio.sleep(1.5)
-            ctx.note_slot.restore()
             ctx.nier._items.remove(notify.CARRIER_ITEM)
+            ctx.note_restore_at = time.monotonic() + 12.0
+            await asyncio.sleep(1.0)          # une ligne toutes les 5 s : laisse le journal du jeu suivre
         except Exception as e:
             logger.info("notification failed: %r", e)
 
