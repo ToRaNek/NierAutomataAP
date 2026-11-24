@@ -52,8 +52,11 @@ money, traps (5/10% damage, 10% money loss, enemy spawn).
 - Optional DeathLink.
 
 ## Known limits
-- Steam v1.04 only. Route A is tested in game; routes B and C/D are generated from game data and not
-  tested in game yet.
+- Steam v1.04 only.
+- Tested in game on all three routes with automated chapter jumps (`tools/campaign.py`): story checks for
+  every chapter, 129 of 187 chests found at their expected position, ground AP Items placed on their spots.
+  Chests that could not be confirmed (mostly inside separately loaded interiors) never hold an important
+  item. Not tested in game yet: the shops of Pascal's Village and the Forest Castle, quest checks, endings.
 - Mail titles: open an access point for ~10 s the first time after each game launch.
 - Don't load another save than the one of the seed.
 

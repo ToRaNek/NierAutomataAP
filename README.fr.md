@@ -53,8 +53,11 @@ Armes, capacites (double saut, dash aerien, esquive au sol, tir du Pod, attaques
 - DeathLink en option.
 
 ## Limites connues
-- Uniquement Steam v1.04. La route A est testee en jeu ; les routes B et C/D sont generees a partir des
-  donnees du jeu et pas encore testees en jeu.
+- Uniquement Steam v1.04.
+- Teste en jeu sur les trois routes par sauts de chapitre automatiques (`tools/campaign.py`) : checks
+  d'histoire de chaque chapitre, 129 coffres sur 187 retrouves a la position prevue, AP Items poses a leur
+  emplacement. Les coffres non confirmes (surtout dans les interieurs charges a part) ne contiennent jamais
+  d'objet important. Pas encore teste en jeu : magasins du Village de Pascal et du Chateau, quetes, fins.
 - Titres des mails : ouvrir un point d'acces ~10 s la premiere fois apres chaque lancement du jeu.
 - Ne pas charger une autre sauvegarde que celle de la seed.
 
