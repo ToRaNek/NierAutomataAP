@@ -21,7 +21,7 @@ def _map_file() -> str:
 
 def build_map_tab(ctx):
     from kivy.clock import Clock
-    from kivy.graphics import Color, Ellipse, Line
+    from kivy.graphics import Color, Ellipse, Point
     from kivy.graphics.transformation import Matrix
     from kivy.uix.boxlayout import BoxLayout
     from kivy.uix.image import Image
@@ -92,28 +92,36 @@ def build_map_tab(ctx):
         except Exception:
             player = None
         marks = wm.markers(hints, remaining, player)
-        image.canvas.after.clear()
         zoom = max(scatter.scale, 0.3)
+        # On ne redessine que si quelque chose a change (270 cercles recrees chaque seconde faisaient ramer la
+        # molette) ; les checks sont UN seul lot de points au lieu d'un cercle de 180 segments chacun.
+        sig = (round(zoom, 1), len(remaining), len(hints),
+               None if player is None else (round(player[0]), round(player[2])))
+        if sig == state.get("sig"):
+            return
+        state["sig"] = sig
+        image.canvas.after.clear()
         with image.canvas.after:
+            pts = []
             for m in marks:
-                x, y = to_canvas(m)
                 if m.kind == "check":
-                    Color(0.75, 0.8, 0.85, 0.75)
-                    r = 3.0 / zoom
-                elif m.kind == "hint":
-                    Color(1.0, 0.85, 0.1, 1.0)
-                    r = 7.0 / zoom
-                else:
-                    Color(1.0, 0.2, 0.2, 1.0)
-                    r = 6.0 / zoom
-                Ellipse(pos=(x - r, y - r), size=(2 * r, 2 * r))
-                if m.kind != "check":
-                    Color(0, 0, 0, 1)
-                    Line(circle=(x, y, r), width=1.2 / zoom)
+                    pts.extend(to_canvas(m))
+            Color(0.75, 0.8, 0.85, 0.8)
+            for i in range(0, len(pts), 2000):          # un lot = 1000 points au plus
+                Point(points=pts[i:i + 2000], pointsize=2.5 / zoom)
+            for m in marks:
+                if m.kind == "check":
+                    continue
+                x, y = to_canvas(m)
+                r = (7.0 if m.kind == "hint" else 6.0) / zoom
+                Color(0, 0, 0, 1)
+                Ellipse(pos=(x - r * 1.25, y - r * 1.25), size=(2.5 * r, 2.5 * r), segments=16)
+                Color(*((1.0, 0.85, 0.1, 1.0) if m.kind == "hint" else (1.0, 0.2, 0.2, 1.0)))
+                Ellipse(pos=(x - r, y - r), size=(2 * r, 2 * r), segments=16)
         n_h = sum(1 for m in marks if m.kind == "hint")
         n_c = sum(1 for m in marks if m.kind == "check")
         last = next((m.label for m in reversed(marks) if m.kind == "hint"), "")
         legend.text = f"  Hints: {n_h} (yellow)   Remaining checks with a location: {n_c} (grey)   You: red   {last}"
 
-    Clock.schedule_interval(refresh, 1.0)
+    Clock.schedule_interval(refresh, 0.5)
     return root
