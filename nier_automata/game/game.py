@@ -41,6 +41,7 @@ def backup_saves(src: Optional[Path] = None, dst_root: Optional[Path] = None) ->
 
 
 ACCESS_POINT_BITS_RVA = 0x14957E0
+PHASE_ID_RVA = 0xF64B18           # descripteur {u32 phase, u32 hachage, nom} ; le nom est en +8
 CHEST_VTABLE_RVA = 0xC7D708      # objet coffre (ba2014/15/16)
 CHEST_OPEN_OFFSET = 0xA8C         # != 0 une fois ouvert
 
@@ -142,6 +143,13 @@ class NierGame:
                 out.append(struct.unpack_from("<3f", data, i + 0x50))
             i = data.find(vt, i + 8)
         return out
+
+    def phase_id(self):
+        """Numero de la phase (0x100 = p100, 0x200 = p200...), a cote de son nom."""
+        try:
+            return int.from_bytes(self.mem.read(self.mem.base + PHASE_ID_RVA, 4), "little")
+        except OSError:
+            return None
 
     def chest_counter(self) -> int:
         return read_u32(self.mem, self._off["chestCounter"])

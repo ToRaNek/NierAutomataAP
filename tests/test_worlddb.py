@@ -95,3 +95,11 @@ def test_quests_done_from_status_array():
     status[db.QUESTS[3]["status_index"]] = 4
     assert db.quests_done(status) == {0, 3}
     assert db.quests_done([]) == set()          # lecture ratee : rien
+
+
+def test_same_subphase_name_in_two_chapters_is_told_apart_by_phase_number():
+    # verifie en jeu : "80_00_AB_Pascal_Village" existe au chapitre 05-01 (p100) et 07-01 (p200)
+    a = db.match_chapter("80_00_AB_Pascal_Village", "A", phase_id=0x100)
+    b = db.match_chapter("80_00_AB_Pascal_Village", "A", phase_id=0x200)
+    assert db.CHAPTERS[a]["chapter"] == "05-01" and db.CHAPTERS[b]["chapter"] == "07-01"
+    assert db.match_chapter("80_00_AB_Pascal_Village", "A") == a          # sans numero : le premier

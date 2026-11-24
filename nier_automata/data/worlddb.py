@@ -63,11 +63,20 @@ def _candidates(subphase: str) -> list[int]:
     return best
 
 
-def match_chapter(subphase: str, route: str) -> Optional[int]:
-    """Indice du chapitre de `subphase` pour la route en cours (les sous-phases "_AB_" sont partagees)."""
+def _phase_of(i: int, subphase: str):
+    c = CHAPTERS[i]
+    return c["phase_ids"][c["subphases"].index(subphase)] if subphase in c["subphases"] else None
+
+
+def match_chapter(subphase: str, route: str, phase_id: Optional[int] = None) -> Optional[int]:
+    """Indice du chapitre de `subphase` pour la route en cours (les sous-phases "_AB_" sont partagees).
+    phase_id (0x100 = p100...) departage un meme nom de sous-phase present dans deux chapitres."""
     cands = _candidates(subphase) if subphase else []
     if not cands:
         return None
+    if phase_id is not None:
+        exact = [i for i in cands if _phase_of(i, subphase) == phase_id]
+        cands = exact or cands
     same = [i for i in cands if CHAPTERS[i]["route"] == route]
     if same:
         return same[0]

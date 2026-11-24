@@ -120,7 +120,7 @@ def tick(game, state: ClientState, received: list[str], trackers: Trackers) -> T
 
     # 5. progression de l'histoire
     phase = game.phase()
-    trackers.story.check(phase)
+    trackers.story.check(phase, game.phase_id() if hasattr(game, "phase_id") else None)
 
     # 6. coffres
     if trackers.chests.enabled:

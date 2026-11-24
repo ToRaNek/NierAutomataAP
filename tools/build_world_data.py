@@ -115,6 +115,7 @@ def build_chapters(routes):
                 e["title"] = s["chapter_name"]
             if s["subphase"] not in e["subphases"]:
                 e["subphases"].append(s["subphase"])
+                e.setdefault("phase_ids", []).append(int(s["phase"][1:], 16))
         for ch, e in by.items():
             e["region"] = f"{route}{int(ch[:2]):02d}"
             e["name"] = f"Story {route if route != 'C' else 'C/D'} {ch}: {e['title']}"

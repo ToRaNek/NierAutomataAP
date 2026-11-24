@@ -58,7 +58,9 @@ def main():
     chapters = [c for c in db.CHAPTERS if c["route"] == route]
     for n, ch in enumerate(chapters):
         cid = f"{route} {ch['chapter']}"
-        if ch["chapter"] < start or rep.get(cid, {}).get("jump") == "ok":
+        last_of_region = n + 1 == len(chapters) or chapters[n + 1]["region"] != ch["region"]
+        swept = rep.get("regions_done", {}).get(ch["region"])
+        if ch["chapter"] < start or (rep.get(cid, {}).get("jump") == "ok" and (swept or not last_of_region)):
             continue
         s = first.get(ch["chapter"])
         r = rep.setdefault(cid, {})
@@ -128,6 +130,8 @@ def main():
             except OSError as ex:
                 res[p["name"]] = f"error {ex}"
             save(rep)
+        rep.setdefault("regions_done", {})[region] = True
+        save(rep)
         vals = list(res.values())
         print("  region", region, {v: vals.count(v) for v in sorted(set(vals))}, flush=True)
     return 0

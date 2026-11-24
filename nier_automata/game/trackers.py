@@ -64,10 +64,10 @@ class StoryTracker:
         self.state = state
         self.max_count = max_count
 
-    def check(self, phase: str) -> Optional[int]:
+    def check(self, phase: str, phase_id: Optional[int] = None) -> Optional[int]:
         """Renvoie l'indice (0..) du chapitre nouvellement atteint s'il est dans le perimetre, sinon None."""
         self.state.route = db.next_route(self.state.route, phase)
-        i = db.match_chapter(phase, self.state.route)
+        i = db.match_chapter(phase, self.state.route, phase_id)
         if i is None or i in self.state.chapters:
             return None
         if db.CHAPTERS[i]["route"] == self.state.route:
