@@ -51,6 +51,13 @@ money, traps (5/10% damage, 10% money loss, enemy spawn).
   (hints other players requested on your world).
 - Optional DeathLink.
 
+## Map
+The client has a **Map** tab: a top-down map of the world built from the game's own collision data. Hinted
+locations are yellow, your remaining checks that have a precise location are grey, and you are the red dot.
+Scroll to zoom, drag to move.
+
+![Map tab](docs/map_tab.png)
+
 ## Known limits
 - Steam v1.04 only.
 - Tested in game on all three routes with automated chapter jumps (`tools/campaign.py`): story checks for
