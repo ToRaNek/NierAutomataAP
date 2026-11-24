@@ -677,3 +677,182 @@ Lacunes de world_gaps inchangees.
   (A2) du web. **Conflit** avec les noms internes (340_C/340_D, ending_C/ending_D, succes 17/18) : non tranche
   statiquement (confiance du titre : faible). Pour l'AP : conditions sur les drapeaux internes (select/9S ->
   ending_C, select/A2 -> ending_D), libelle d'affichage selon le web.
+
+## Zones (areas) : noms officiels par position (tools/areas.py -> areas.json)
+
+Relancer : `python tools/areas.py [--refresh] [--verify-exe] [--no-label] [--out docs/research] [--wp F.json]` APRES
+`world_positions.py` / `world_gaps.py` (qui reecrivent world_positions.json). Un .dat a la fois ; volumes en cache
+`%TEMP%/nier_research_cache/areas_volumes.json` (`--refresh` pour relire les .pak). `--verify-exe` recalcule les tables
+depuis l'exe (unicorn + tables de sauts) et echoue si elles different. API : `areas.area_of(pos, file=, room=,
+names=, conditions=)`.
+
+### Source de verite (exe v1.04 + *.pak)
+- Zone courante = un entier global RVA **0x1494a04** (lecture 0x7c4870, ecriture 0x7c71d0 ; sauvegarde 0x11e1f8c).
+- Ecrit par **`hap::ChangeAreaAction`** (vtable 0xc43cf0 ; code d'action hap **0x1571c131** = crc32('ChangeAreaAction') ;
+  les codes d'action sont des crc32 du nom de classe, avec ou sans 'Action'). Slot 9 = 0x39e690 : sur l'evenement
+  0xcc7564cb = crc32('HIT') (entree du joueur dans un des volumes `area/value` de l'action), id = **0x385f20(StageType,
+  AreaType)** (champs hap `StageType`/`AreaType`, [action+0xb0/+0xb4]) puis 0x7c71d0(id). La zone reste jusqu'au
+  volume suivant : semantique **"dernier volume entre"** (pas de polygone de region). 47 actions dans les donnees
+  (st1/r100..r170, st2/r200, st5/r500..r530/r5ac, core_hap (Shopping Center), quest/qb30/31/32 (unites de
+  recuperation), qb40 (Bunker), qb70 (Copied City), p300). Autres ecrivains : sous-phases STG/combats (0x857ca0,
+  0x858a77, 0x8592d0 : 200, 210, 260, 95, -1) et 0x7c8d54 (155 Bunker).
+- Noms : 0x921da0 (UI) -> **0x86d150(id)** = cle de zone (table de sauts 0x86d380/octets 0x86d3b8) et **0x86f9d0(id)**
+  = cle de sous-zone (0x86fb48/0x86fbb4 ; 0x118 -> 094 Elevator). Textes `ui/ui_core_us.dat:messcore.mcd`
+  (CORE_MAP_AREA_*, CORE_SUB_MAP_AREA_*), `ui_dlc1/2/3_us` (036/121/061 'Arena'). Phase 0x400 -> CORE_MAP_AREA_998.
+- `GAArea.bxm` des salles = filtres graphiques (FilterName, FogId...), PAS les zones. `MinimapAreaAction` (0x00a4170d,
+  r140/r520, champs MinimapId/SubMinimapId) = etage de la mini-carte, garde dans `areas.json:minimap_volumes`.
+- Geometrie (`app::area::BoxArea` 0x18cffd98, `CylinderArea` 0x4238cc7f) : boite = polygone `points` (-1..1) x scale
+  en x/z autour de `position`, hauteur de position.y a position.y + scale.y*height (0x3dd290 compare y local a
+  [0, hauteur]) ; cylindre rayon radius*scale.x. Sens de la rotation Y DEDUIT (les deux sens donnent les memes
+  resultats a 1 entite pres).
+
+### Table id (0x385f20 -> 0x86d150 / 0x86f9d0)
+StageType : 0 City Ruins, 1 Desert, 2 Park, 3 Forest, 4 Flooded City, 5 Factory, 6 Tower, 7 Bunker, 8 Camp, 9 Pascal.
+| (ST,AT) | id | zone : sous-zone |
+|---|---|---|
+| 0,0 / 0,2 / 0,3 | 0 / 10 / 15 | City Ruins / : Shopping Center / : Deep Cave |
+| 0,4 | 20 | '???' (CORE_SUB_MAP_AREA_018) ; CORE_MAP_AREA_160 si UI_nameAS (aucun texte anglais) ; vaisseau (r200) |
+| 0,5 | 25 | Copied City (cle CORE_SUB_MAP_AREA_014 en zone principale) |
+| 0,6 / 0,7 / 0,8 | 170 / 175 / 180 | City Ruins : Hidden Dungeon / Emil's Residence / Nostalgic Room (170, 180 : aucun volume) |
+| 1,0..1,4 | 30..50 | Desert Zone : Border Area / (rien) / Sand Cave / Housing Complex / Pit Hollow |
+| 2,0..2,4 | 55, 60, 65, 70, 135 | Amusement Park : Main Square / Attraction Square / Theater / Under the Theater / God Box |
+| 3,0..3,3 | 75, 85, 90, 125 | Forest Zone / Forest Castle : Lower Castle / Upper Castle / Forest Zone : Meat Box |
+| 4,0 / 4,2 | 95 / 130 | Flooded City / : Soul Box |
+| 5,0 / 5,2 / 5,3 | 105 / 115 / 120 | Abandoned Factory / : His Grace's Room / : Underground Area |
+| 6,0..6,2 | 140..150 | The Tower : Lower Section / Upper Section / Peak |
+| 7,0 / 8,0 / 9,0 | 155 / 160 / 165 | The Bunker / Resistance Camp / Pascal's Village ('???' tant que UI_namePV est faux) |
+| 3,4 / 1,5 / 4,3 | 185 / 190 / 195 | DLC : Forest Castle : Arena (121) / Desert Zone (sans sous-zone) / Flooded City : Arena (061) ; aucun volume |
+CORE_MAP_AREA_000 Library, 031 Desert Housing, 080 Resource Unit, 111 Machine Village, CORE_SUB_MAP_AREA_013 Alien
+Ship : textes presents mais non references par l'exe (non utilises pour l'etiquetage).
+
+### Etiquetage statique (approximation de "dernier volume entre")
+1. Salle de l'entite : fichier st*/rXXX ; cellules wd5 (g5a000/g5a001 r5a0, g5a100 r5a1, g5a200 r5a2 : jetons de salle
+   des groupes qb30/31/32 ; g50001 r500, g50100 r501, g52001 r520) ; quest/qb40 = Bunker ; sinon jeton de groupe
+   0x5cda8ece d'UNE salle ou 'r100/r200共通' (core_hap). Volumes candidats : ceux de la salle (r100/r200 + core_hap),
+   espace a part pour r500 (Tour : volumes geants) et le Bunker, sinon tout le monde ouvert (hors r500/Bunker).
+2. Dans un volume -> le plus petit volume contenant (`inside_volume`, high ; medium si plusieurs zones ou indice
+   contraire). Espace a une seule zone (Bunker, r120, r140, r501, r530...) -> `single_area_scope` (high).
+3. Hors volume : les volumes des unites (125/130/135) et de Copied City (25) sont ignores hors de leur salle ; indice de
+   nom japonais de l'entite (hap/action/groupes : 城内 -> {85, 90}, 森部分 -> 75, 大砂漠 -> 35, 砂漠_団地 -> 45, 砂漠地下
+   -> {40, 50}, 砂漠_入口 -> 30, ショッピングモール -> 10 ... memes mots que les noms des actions ChangeArea ; DEDUIT) ->
+   volume le plus proche parmi ces zones (`group_name_hint`, medium) ; sinon volume le plus proche (`nearest_volume`,
+   medium si <= 40 m et marge > 15 m sur une autre zone, sinon low).
+4. Salles sans volume : r5a8 -> 185, r5a9 -> 195 (`room_default_guess`, low : salles DLC de data100.cpk pres des
+   ascenseurs 8 Forest_C / 9 Submerge_C ; DEDUIT).
+- Conflit : quest/qb30 (unite du parc) a un cylindre StageType 4/AreaType 2 (Soul Box) au meme endroit que sa boite
+  God Box (2/4) ; la boite est preferee (copie probable de qb32). Ordre reel des deux HIT non trace.
+
+### Resultats (v1.04)
+- world_positions.json : champ `area` = {area, sub_area, label ('City Ruins: Shopping Center'), area_id, method,
+  confidence, room, scope, room_source, volume{file, hap, action, distance}, group_hint, alternatives, note} sur
+  **2815/2815 positions (100 %)** : high 1663, medium 668, low 484. Coffres 265 (144/88/33), points de collecte 1090
+  (589/394/107), PNJ de quete 721, marchands 115, terminaux 24 (22 high), peche 479, objets uniques 121.
+  Resume : `summary.areas`. Champs existants inchanges (verifie).
+- areas.json : 36 ids avec cles/noms anglais, volumes (forme, aabb, conditions = chaine de groupes), salles, bornes,
+  nombre de coffres / points de collecte par sous-zone (`counts`) et par zone (`totals_by_area`).
+- Limites : position seule ne suffit pas toujours (zone = dernier volume traverse) ; libelles 'low' a verifier en jeu ;
+  conditions des volumes (groupes, ex. r110, qb30) non evaluees ; zones sans volume (170, 180, 190, 280) jamais
+  attribuees.
+
+## Difficulte : niveaux d'ennemis, ExpInfo, armes (tools/difficulty.py)
+
+Relancer : `python tools/difficulty.py [--out docs/research] [--refresh]` -> `difficulty.json` + `difficulty.md`
+(~2 min ; un .dat a la fois ; les `em/emXXXX.dat` sont extraits du CPK un par un, seuls leurs `*ExpInfo*.csv` sont
+gardes dans `%TEMP%/nier_research_cache/difficulty_expinfo.json`). Entrees : hap.pak/grp.pak (comme rf_enemies),
+phases.json, routes_full.json, enemies_by_area.json (zone, donnee d'unite), items/shops/chests/quest_rewards/
+world_positions.json.
+
+### Niveau d'un ennemi (exe v1.04) - confiance haute
+- Niveau final = `[em+0x28030]`. EmBase init (0x65f730) : valeur de depart `[em+0x594]` = setInfo+0x74 (copie
+  0x853b60) ; parametre de placement **`Lv`** (param/value name=Lv) la remplace ; puis **`Lv_B`** si SceneState
+  `Route/B`, **`Lv_C`** si `Route/C`, **`Lv_D`** si `Route/D` (jamais mis, cf. fins C/D). En C/D, Route/B reste mise
+  depuis la fin B (StateOn au 00_CD_Bunker_2B, aucun StateOff) : Lv_C, sinon Lv_B, sinon Lv (confiance moyenne).
+  Noms sensibles a la casse (les quelques `LV`/`LV_B` de params ne sont pas lus : DEDUIT).
+- Layouts hap : aucun champ niveau (analyseur 0x3e96c0 : position, rotation, scale, objId, setType, setRtn, setFlag) ;
+  setInfo+0x74 = 0 par defaut -> sans Lv, niveau 0 et stats de la ligne 1 (recherche 0x4034d0 : indice =
+  min(niv, nb lignes) - 1, borne a 0). 2460 placements sur 6890 (surtout em0030 des STG, evenements, boss scriptes).
+- Exception : bit 0x1000 de `[0x1029b00]` (mis par 0x515460 selon `[pl+0x15b60]`/`[pl+0x16a50]`, sans doute l'unite
+  de vol) et objId em0030 setType 0 : niveau = niveau du joueur, PV / 5 (0x661b2c, 0x661d03, SetLevel 0x631738).
+- Parametre `MaxLv` (0x6619bd) : niveau pris dans une table d'execution 0x1495640/0x14956c0 (32 objIds) ; inutilise.
+- SetLevel = EmBase vtable slot 104 (0x631700) : borne 1..99, PV = colonne PV x multiplicateur de classe.
+- Generateurs `敵発生機` (classe hap::EnemyGenerator, vtable 0xc30068 ; analyseur 0x346990 : `levelRange` +0x9c,
+  `relativeLevel` +0x3d0 ; objets `items/value` 0x352b60 : objId, rate +0x2c, **levelRange par objet +0x24**, setType,
+  setRtn, setFlag, type2type/type2). Niveau 0x3504a0 : si relativeLevel : (plage de l'objet si non nulle, sinon
+  **niveau du joueur** `[Pl0000+0x14bc]` via vfunc 0x2b0 = 0x436630) + tirage de la plage du generateur ; sinon plage
+  de l'objet si non nulle, sinon plage du generateur. Tirage LCG (0x177ef54) uniforme. Le niveau va dans setInfo+0x74,
+  puis les parametres Lv* de l'objet s'appliquent comme pour un layout. 152 objets ont une plage propre ;
+  relativeLevel=1 : animaux r100 (joueur +3..5), r170 ennemi du terminal, p300 `汚染ヨルハ` (+47..48 : a verifier).
+- Pas de niveau par difficulte dans ce chemin ; layouts `hard`/`extream` des haps : aucun placement em* (tous `normal`).
+
+### StateBind 'Level' (core_hap.pak) - confiance moyenne
+Champ `Level` par sous-phase (`'30'`, `'[Route/A] 7'`, `'[Route/B] 33'`) ; 0x35b780 le range en element de type 7,
+mais l'applicateur 0x31dcf0 (switch 0..6) l'ignore : consommateur non trouve. Valeurs = niveau prevu du joueur :
+A 1 -> 28, B 30 -> 45, C/D 47 -> 50. Coherent avec les ennemis (ex. A desert 7 / ennemis 5..13, B 33 / 31..34).
+
+### ExpInfo (CSV par personnage / ennemi) - confiance haute (colonnes PV/EXP), moyenne (autres)
+- Chargeur 0x40fdc0 : `%sexpinfo%02d.csv` (indice 4 pour em1100 setType 4..6 ; 0 sinon -> pas de suffixe),
+  sinon `%sexpinfo.csv`, dans le .dat de l'objet de base `[em+0x2819c]` (em0054 -> em0050 : DEDUIT). Analyseur
+  0x40a6d0 : texte, lignes `\r`, champs `,` (vide = 0), 99 lignes x 0x1c o (+0x20), nombre a +0xaf4.
+- **pl0000ExpInfo.csv** (mode 2) : col0 = EXP cumulee pour atteindre le niveau (0, 48, 139... 1 235 211 au 99) ;
+  col1 = PV max (800 -> 9057 ; 0x436640 -> +0x85c) ; col2 (500 -> 8111) et col3 (100 -> 4770) = rangs +8/+0xc
+  (col2 utilisee dans les calculs de degats : attaque, DEDUIT) ; col5 presente mais non chargee.
+- **emXXXXExpInfo.csv** (mode 1, 53 fichiers dont em0030ExpInfo01, em1100ExpInfo04, em8800ExpInfo01) : col0 = PV,
+  col1/col2 = +8/+0xc (non traces), col3 = **EXP a la mort** (0x574140 : x (1 + bonus puce 0x10), min 1 -> 0x7c9ef0),
+  col4 = +0x18 (`[em+0x27d54]`, non trace). Ex. Small Stubby Lv1 : 260 PV, 1 EXP ; mediane des types places : 16 EXP
+  au Lv1, ~1063 au Lv50 (~10 morts du meme niveau par niveau gagne).
+
+### Armes - core/core.dat:WeaponParam.csv
+Charge par 0x821fd0. Ligne : objId, serie (1..16), puis 4 niveaux x 8 champs : attaque min, attaque max, p2..p7
+(p2/p3 ressemblent a des longueurs de combo, p4..p6 = pourcentages, p7 = valeur d'aptitude : non traces).
+Attaque : Lv2 = x1.8, Lv3 = x2.8, Lv4 = x3.8 du Lv1. `WeaponInfoTable.bxm` Attack 100/200/300/400 = factice
+(identique pour toutes) ; `Category` 0 petite epee, 1 grande epee, 2 lance, 3 poings, 4 DLC/collaboration ; type
+fiable par plage d'objId (wp00xx, wp02xx, wp04xx, wp06xx). `weapon_ff_sword` (wp0075) / `weapon_dq_sword` (wp0076)
+n'ont pas de CORE_WP_NAME : Engine Blade / Cypress Stick par coherence des sources (DEDUIT). Faith : seulement des
+enregistrements BoxData (0xa14 groupe 0xa00, 0x6 groupe 0x5a1 = Soul Box) sans entite placee lue.
+
+### difficulty.json
+`routes.<A|B|C/D>.steps[]` (niveau StateBind, mediane des ennemis, niveau recommande, stats, boss),
+`.chapters[]`, `.world_areas` (placements sans sous-phase par zone), `.quests` ; `recommended_curve` ;
+`exp_simulation_scripted_kills_only` (borne basse : layouts des sous-phases seulement, A -> B -> C/D : niv. 25 / 35
+/ 52) ; `player_table`, `player_level_rate`, `enemy_tables`, `weapons[]` (niveaux, sources donnees + web, indice de
+puissance = attaque moyenne / mediane du type, tier) ; `placements[]` (champs bruts + `levels` par route).
+
+## Collisions COL2, Layout.lay et grille du monde (tools/reachability.py -> reachability.json)
+
+Relancer : `python tools/reachability.py extract` (une fois, ~25 min : 255 cellules wd*/g*.dat decompressees une
+a une, seuls les `.col` -> triangles `.npz` et `Layout.lay` sont gardes dans `%TEMP%/nier_research_cache/reachability`)
+puis `python tools/reachability.py run` (~15 min). Methode et seuils : `reachability.md`.
+
+### COL2 (`gXXXXX.col`, version 0x20151201) - verifie par lecture
+- En-tete (little-endian) : `4s 'COL2', u32 version, u32 namesOff, u32 namesCnt, u32 meshOff, u32 meshCnt,
+  u32 boneMapOff, u32 boneMapCnt, u32 boneMap2Off, u32 boneMap2Cnt, u32 meshMapOff, u32 meshMapCnt,
+  u32 treeOff, u32 treeCnt`. Noms : `namesCnt` x u32 offset -> chaine C (noms de maillage : 'HexGround',
+  'MtRobot2', 'SubmargeUnit'...). `meshOff` peut etre NON aligne (0x49).
+- Mesh (20 o) : `u32 flags, i32 nameIndex, i32 batchType, u32 batchOff, u32 batchCnt`.
+- Batch type 2 (20 o) : `i32 boneIndex, u32 vertOff, u32 vertCnt, u32 idxOff, u32 idxCnt` ; type 3 (16 o) sans
+  boneIndex. Toutes les cellules monde : type 2, boneIndex -1. Sommet = 4 x f32 (x, y, z, 1) ; indices u16 par
+  triangles.
+- `flags` : valeurs vues 0x3, 0x203, 0xff, 0x7f|(n<<24), 0x5f|(n<<24), 0x58|(n<<24), 0x3f|(n<<24), 0x10, 0x2, 0x1,
+  0x40... (octet bas = masque de categories qui collisionnent, octet haut = type de surface/son : HYPOTHESE, non
+  verifie). L'analyse prend TOUS les triangles.
+- Arbre (`treeOff`) : BVH, non utilise.
+- Seules wd1, wd3, wd5 ont des .col ; wd2, wd4, wda : aucun (wda/ga0000-2 = 64 o ou pas de col).
+
+### Layout.lay (`LAY\0`, f32 2.01)
+`4s, f32 version, u32 assetsOff, u32 assetsCnt, u32 instOff, u32 instCnt` ; instance = 112 o : `char nom[32]`
+(ex. 'bg0120_1'), `pos 3f+pad`, `rot 3f+pad` (radians), `scale 3f+pad`, `u32 ?` (6), remplissage. Positions
+LOCALES a la cellule (meme repere que son .col). Les collisions des decors bg/ba places ici ne sont PAS ajoutees.
+
+### Grille du monde wd1/wd3 : coordonnees LOCALES
+Les .col / Layout.lay des cellules `wd1/g1AABB.dat` et `wd3/g3AABB.dat` sont en repere local (|x|,|z| <= ~100-250).
+Les wd5/* sont deja en coordonnees monde. Nom construit par l'exe avec `wd%x\g%x%04x.dat` (RVA 0x8405b0, id u16
+passe tel quel) ; AA et BB sont a lire en DECIMAL (aucune cellule a-f). Grille HEXAGONALE de rayon 100 m :
+`Cx = 150 * (AA - 12)`, `Cz = 173.205 * (BB - 16) + 86.603 * (AA - 14)` ; monde = local + (Cx, 0, Cz).
+Deduit par recalage independant (vote sur ancres + objets) de 13 cellules (g11214 (0,-518), g11316 (150,-88),
+g11017 (-300,-173), g10920 (-450,260), g11617 (600,346), g11612 (596,-520), g11911 (1048,-436),
+g11812 (898,-348), g11716 (750,252), g11515 (448,-88), g11620 (600,866), g10922 (-462,604), g11416 (300,0) ;
+g11113 aberrant, recalage ambigu) : ecart a la formule <= 4 m (pas du vote : 2 m), sauf g10922 (12 m, vote
+peu marque). Validation : 233/233 positions de 2B
+relevees en jeu (tools/path_log.tsv) ont un sol a 0-0.5 m sous elles (mediane 0.02 m).
+wd3 = variantes des memes cellules (noms de maillage identiques, ex. 'building_11119_01' dans g31119) : ville
+apres l'effondrement ; traitee comme une carte distincte, la meilleure carte est choisie par position.
