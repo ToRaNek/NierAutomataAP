@@ -111,6 +111,16 @@ class NierGame:
         except OSError:
             return set()
 
+    def quests_done(self) -> set[int]:
+        """Quetes annexes terminees (tableau de statuts du bloc de sauvegarde)."""
+        import struct
+        from ..data import worlddb as db
+        try:
+            raw = self.mem.read(self.mem.base + db.QUEST_STATUS_RVA, 4 * db.QUEST_STATUS_COUNT)
+        except OSError:
+            return set()
+        return db.quests_done(list(struct.unpack(f"<{db.QUEST_STATUS_COUNT}i", raw)))
+
     def chest_counter(self) -> int:
         return read_u32(self.mem, self._off["chestCounter"])
 

@@ -234,21 +234,27 @@ def object_alive(mem, obj: int) -> bool:
 
 
 class PendingPickups:
-    """Ramassages en attente de confirmation. Verifie en jeu : l'objet peut disparaitre du sol un tour AVANT
-    que le temoin n'arrive dans l'inventaire ; on attend donc `window` secondes avant de conclure qu'il a
-    seulement ete decharge."""
+    """Ramassages en attente de confirmation. L'objet au sol et le temoin dans l'inventaire ne changent pas
+    forcement au meme tour (verifie en jeu : un ramassage a ete perdu ainsi) : on accepte les deux ordres,
+    a `window` secondes pres. Sans temoin, l'objet a seulement ete decharge."""
 
     def __init__(self, window: float = 6.0):
         self.window = window
         self.pending: dict[int, float] = {}
+        self.credit = None      # heure du dernier temoin pas encore attribue a un objet
 
     def update(self, gone: list[int], marker: bool, now: float) -> tuple[list[int], list[int]]:
         """Renvoie (emplacements ramasses, emplacements decharges sans ramassage)."""
         for i in gone:
             self.pending.setdefault(i, now)
-        if marker and self.pending:
+        if marker:
+            self.credit = now
+        elif self.credit is not None and now - self.credit > self.window:
+            self.credit = None
+        if self.credit is not None and self.pending:
             picked = sorted(self.pending)
             self.pending.clear()
+            self.credit = None
             return picked, []
         expired = sorted(i for i, t in self.pending.items() if now - t > self.window)
         for i in expired:

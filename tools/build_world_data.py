@@ -203,8 +203,12 @@ def main():
     # --- quetes
     quests = []
     avail = load("quest_availability.json")["quests"]
+    runtime = load("runtime_state.json")["quests"]
     for qid in sorted(avail):
         q = avail[qid]
+        status_index = (runtime.get(qid) or {}).get("status_index")
+        if status_index is None:
+            continue                              # pas de statut lisible en memoire
         values = set(q.get("values") or [])
         win = {k: v for k, v in (q.get("windows") or {}).items() if k in ("A", "B", "A+B", "C/D")}
         ab = [c[:5] for k in ("A+B", "A", "B") for c in win.get(k, [])]
@@ -220,6 +224,7 @@ def main():
         last = max(ab) if ab else ""
         missable = (region[0] != "C" and not cd and last < "10-01") or (region[0] == "C" and max(cd) < "17-01")
         quests.append({"id": qid, "name": f"Quest: {q['english_name']}", "region": region,
+                       "status_index": status_index,
                        "excluded": bool(missable or qid in HARD_QUESTS)})
     data["quests"] = quests
 

@@ -138,3 +138,19 @@ def test_pickup_same_tick_and_expiry():
     assert p.update(gone=[1], marker=True, now=0.0) == ([1], [])       # meme tour
     assert p.update(gone=[2], marker=False, now=1.0) == ([], [])
     assert p.update(gone=[], marker=False, now=8.0) == ([], [2])       # jamais de temoin : decharge, a reposer
+
+
+def test_pickup_confirmed_when_marker_arrives_before_object_disappears():
+    from nier_automata.game.ap_items import PendingPickups
+    p = PendingPickups(window=6.0)
+    assert p.update(gone=[], marker=True, now=0.0) == ([], [])         # temoin vu, objet encore au sol
+    assert p.update(gone=[3], marker=False, now=0.5) == ([3], [])      # l'objet disparait au tour suivant
+    assert p.update(gone=[5], marker=False, now=1.0) == ([], [])       # un temoin ne confirme qu'une fois
+
+
+def test_old_marker_does_not_confirm_a_later_unload():
+    from nier_automata.game.ap_items import PendingPickups
+    p = PendingPickups(window=6.0)
+    p.update(gone=[], marker=True, now=0.0)
+    assert p.update(gone=[7], marker=False, now=20.0) == ([], [])
+    assert p.update(gone=[], marker=False, now=27.0) == ([], [7])

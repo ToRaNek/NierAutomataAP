@@ -83,3 +83,15 @@ def test_scope_full_game_has_everything():
 def test_power_gate_is_gentle_for_small_games():
     # 4 regions, 32 armes : pas plus de 2 armes de plus par region (le prologue n'a que 5 emplacements)
     assert [db.required_weapons(i, 4, 32) for i in range(4)] == [0, 2, 4, 6]
+
+
+def test_quests_done_from_status_array():
+    # valeurs du jeu : -1 jamais suivie, 100+n en cours, 1 CLR (objectif atteint, pas rendue), 2/3/4 terminee
+    n = max(q["status_index"] for q in db.QUESTS) + 1
+    status = [-1] * n
+    status[db.QUESTS[0]["status_index"]] = 2
+    status[db.QUESTS[1]["status_index"]] = 1
+    status[db.QUESTS[2]["status_index"]] = 104
+    status[db.QUESTS[3]["status_index"]] = 4
+    assert db.quests_done(status) == {0, 3}
+    assert db.quests_done([]) == set()          # lecture ratee : rien

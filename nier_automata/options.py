@@ -38,7 +38,7 @@ class AccessPointChecks(DefaultOnToggle):
 
 class QuestChecks(Toggle):
     """Completing a side quest sends a check ("Quest: <name>"). Quests that can be missed never hold an
-    important item. EXPERIMENTAL: off by default."""
+    important item. EXPERIMENTAL (read from the game's quest status, not tested in game yet): off by default."""
     display_name = "Quest Checks"
 
 

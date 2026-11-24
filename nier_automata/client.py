@@ -382,6 +382,9 @@ async def ap_items_step(ctx: NierContext):
         logger.info("Picked up %s", db.PICKUPS[i]["name"])
     for i in expired:
         ctx.spots.forget(i)
+        logger.info("AP Item unloaded without pickup: %s", db.PICKUPS[i]["name"])
+    if marker and not picked:
+        logger.info("AP Item pickup marker seen, waiting for the object to disappear")
     if marker:
         ctx.nier._items.remove(apit.PICKUP_CARRIER)
 

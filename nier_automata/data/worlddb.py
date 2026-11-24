@@ -166,3 +166,14 @@ def scope_from_slot_data(sd: dict) -> Scope:
                       bool(sd.get("access_point_checks", False)), bool(sd.get("quest_checks", False)),
                       int(sd.get("weapon_checks", 0)), int(sd.get("max_level_check", 0)),
                       bool(sd.get("item_checks", False)))
+
+
+QUEST_STATUS_RVA = 0x14946D0     # i32 par quete (docs/research/runtime_state.md)
+QUEST_STATUS_COUNT = max((q["status_index"] for q in QUESTS), default=-1) + 1
+_QUEST_DONE = (2, 3, 4)          # DONE, END, FIN ; 1 = CLR (objectif atteint, pas encore rendue)
+
+
+def quests_done(status: list[int]) -> set[int]:
+    """Indices (QUESTS) des quetes terminees d'apres le tableau de statuts du jeu."""
+    return {i for i, q in enumerate(QUESTS)
+            if q["status_index"] < len(status) and status[q["status_index"]] in _QUEST_DONE}
