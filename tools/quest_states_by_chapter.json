@@ -1,0 +1,190 @@
+{
+ "A 02-01": {},
+ "A 03-01": {
+  "q180": "REQ",
+  "q160": "REQ"
+ },
+ "A 04-01": {
+  "q140": "REQ",
+  "q180": "REQ",
+  "q181": "REQ",
+  "q160": "REQ",
+  "q150": "REQ"
+ },
+ "A 05-01": {
+  "q140": "REQ",
+  "q180": "REQ",
+  "q500": "REQ",
+  "q110": "REQ",
+  "q181": "REQ",
+  "q160": "REQ",
+  "q150": "REQ"
+ },
+ "A 06-01": {
+  "q240": "REQ",
+  "q140": "REQ",
+  "q020": "REQ",
+  "q180": "REQ",
+  "q500": "REQ",
+  "q110": "REQ",
+  "q181": "REQ",
+  "q160": "BREAK",
+  "q150": "REQ"
+ },
+ "A 07-01": {
+  "q240": "REQ",
+  "q162": "REQ",
+  "q140": "REQ",
+  "q020": "REQ",
+  "q180": "REQ",
+  "q500": "REQ",
+  "q110": "REQ",
+  "q181": "REQ",
+  "q160": "BREAK",
+  "q150": "REQ"
+ },
+ "A 08-01": {
+  "q240": "REQ",
+  "q181": "BREAK",
+  "q020": "BREAK",
+  "q162": "BREAK",
+  "q500": "BREAK",
+  "q140": "BREAK",
+  "q160": "BREAK",
+  "q110": "BREAK",
+  "q180": "BREAK",
+  "q150": "REQ"
+ },
+ "A 09-01": {
+  "q240": "REQ",
+  "q181": "BREAK",
+  "q020": "BREAK",
+  "q162": "BREAK",
+  "q500": "BREAK",
+  "q140": "BREAK",
+  "q160": "BREAK",
+  "q110": "BREAK",
+  "q180": "BREAK",
+  "q150": "REQ"
+ },
+ "A 10-01": {
+  "q240": "REQ",
+  "q181": "BREAK",
+  "q020": "BREAK",
+  "q162": "BREAK",
+  "q500": "BREAK",
+  "q140": "BREAK",
+  "q160": "BREAK",
+  "q110": "BREAK",
+  "q180": "BREAK",
+  "q150": "REQ"
+ },
+ "B 02-01": {
+  "q240": "REQ",
+  "q181": "BREAK",
+  "q020": "BREAK",
+  "q162": "BREAK",
+  "q500": "BREAK",
+  "q140": "BREAK",
+  "q160": "BREAK",
+  "q110": "BREAK",
+  "q180": "BREAK",
+  "q150": "REQ"
+ },
+ "B 03-01": {
+  "q240": "REQ",
+  "q181": "BREAK",
+  "q020": "BREAK",
+  "q162": "BREAK",
+  "q500": "BREAK",
+  "q140": "BREAK",
+  "q160": "BREAK",
+  "q110": "BREAK",
+  "q180": "BREAK",
+  "q150": "REQ"
+ },
+ "B 04-01": {
+  "q240": "REQ",
+  "q181": "BREAK",
+  "q020": "BREAK",
+  "q162": "BREAK",
+  "q500": "BREAK",
+  "q140": "BREAK",
+  "q160": "BREAK",
+  "q110": "BREAK",
+  "q180": "BREAK",
+  "q150": "REQ"
+ },
+ "B 05-01": {
+  "q240": "REQ",
+  "q181": "BREAK",
+  "q020": "BREAK",
+  "q162": "BREAK",
+  "q500": "BREAK",
+  "q140": "BREAK",
+  "q160": "BREAK",
+  "q110": "BREAK",
+  "q180": "BREAK",
+  "q150": "REQ"
+ },
+ "B 06-01": {
+  "q240": "REQ",
+  "q181": "BREAK",
+  "q020": "BREAK",
+  "q162": "BREAK",
+  "q500": "BREAK",
+  "q140": "BREAK",
+  "q160": "BREAK",
+  "q110": "BREAK",
+  "q180": "BREAK",
+  "q150": "REQ"
+ },
+ "B 07-01": {
+  "q240": "REQ",
+  "q181": "BREAK",
+  "q020": "BREAK",
+  "q162": "BREAK",
+  "q500": "BREAK",
+  "q140": "BREAK",
+  "q160": "BREAK",
+  "q110": "BREAK",
+  "q180": "BREAK",
+  "q150": "REQ"
+ },
+ "B 08-01": {
+  "q240": "REQ",
+  "q181": "BREAK",
+  "q020": "BREAK",
+  "q162": "BREAK",
+  "q500": "BREAK",
+  "q140": "BREAK",
+  "q160": "BREAK",
+  "q110": "BREAK",
+  "q180": "BREAK",
+  "q150": "REQ"
+ },
+ "B 09-01": {
+  "q240": "REQ",
+  "q181": "BREAK",
+  "q020": "BREAK",
+  "q162": "BREAK",
+  "q500": "BREAK",
+  "q140": "BREAK",
+  "q160": "BREAK",
+  "q110": "BREAK",
+  "q180": "BREAK",
+  "q150": "REQ"
+ },
+ "B 10-01": {
+  "q240": "REQ",
+  "q181": "BREAK",
+  "q020": "BREAK",
+  "q162": "BREAK",
+  "q500": "BREAK",
+  "q140": "BREAK",
+  "q160": "BREAK",
+  "q110": "BREAK",
+  "q180": "BREAK",
+  "q150": "REQ"
+ }
+}
