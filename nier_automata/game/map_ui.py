@@ -35,9 +35,12 @@ def build_map_tab(ctx):
         def on_touch_down(self, touch):
             if touch.is_mouse_scrolling and self.parent.collide_point(*touch.pos):
                 factor = 1.15 if touch.button == "scrolldown" else 1 / 1.15
+                state["touched"] = True
                 if 0.3 <= self.scale * factor <= 12:
                     self.apply_transform(Matrix().scale(factor, factor, factor), anchor=touch.pos)
                 return True
+            if self.parent.collide_point(*touch.pos):
+                state["touched"] = True
             return super().on_touch_down(touch)
 
     class MapView(StencilView):
@@ -55,15 +58,18 @@ def build_map_tab(ctx):
     view.add_widget(scatter)
     root.add_widget(legend)
     root.add_widget(view)
-    state = {"fitted": False}
+    state = {"touched": False}
 
     def fit(*_):
-        if view.width > 10 and not state["fitted"]:
-            s = min(view.width / info.width, view.height / info.height)
-            scatter.scale = max(0.3, s)
-            scatter.pos = (view.x + (view.width - info.width * scatter.scale) / 2,
-                           view.y + (view.height - info.height * scatter.scale) / 2)
-            state["fitted"] = True
+        """Cadre la carte dans la vue tant que l'utilisateur n'a ni zoome ni deplace (la vue change de taille
+        apres sa creation : un cadrage unique laissait la carte minuscule dans un coin, vu sur capture)."""
+        if view.width > 50 and view.height > 50 and not state["touched"]:
+            s = max(0.3, min(view.width / info.width, view.height / info.height))
+            scatter.scale = s
+            scatter.pos = (view.x + (view.width - info.width * s) / 2,
+                           view.y + (view.height - info.height * s) / 2)
+
+    view.bind(size=fit, pos=fit)
 
     def to_canvas(m):
         px, py = info.to_pixel(m.x, m.z)
