@@ -122,3 +122,19 @@ def test_due_includes_collected_ap_items_in_scope():
     locs = location_name_to_id()
     due = due_locations(s, scope)
     assert locs[db.PICKUPS[inside]["name"]] in due and locs[db.PICKUPS[outside]["name"]] not in due
+
+
+def test_pickup_confirmed_even_if_marker_arrives_later():
+    from nier_automata.game.ap_items import PendingPickups
+    p = PendingPickups(window=6.0)
+    assert p.update(gone=[4], marker=False, now=10.0) == ([], [])      # objet disparu, temoin pas encore la
+    assert p.update(gone=[], marker=True, now=10.5) == ([4], [])       # le temoin arrive : ramasse
+    assert p.update(gone=[], marker=False, now=11.0) == ([], [])
+
+
+def test_pickup_same_tick_and_expiry():
+    from nier_automata.game.ap_items import PendingPickups
+    p = PendingPickups(window=6.0)
+    assert p.update(gone=[1], marker=True, now=0.0) == ([1], [])       # meme tour
+    assert p.update(gone=[2], marker=False, now=1.0) == ([], [])
+    assert p.update(gone=[], marker=False, now=8.0) == ([], [2])       # jamais de temoin : decharge, a reposer

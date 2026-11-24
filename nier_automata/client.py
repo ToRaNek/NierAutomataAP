@@ -144,6 +144,7 @@ class NierContext(CommonContext):
                 asyncio.create_task(self.send_msgs([{"cmd": "LocationScouts", "locations": ids, "create_as_hint": 0}]))
             self.spots = apit.SpotTracker(self.state, AP_SPOTS, allowed=self.scope.pickups)
             self.ap_tracked = {}
+            self.ap_pending = apit.PendingPickups()
             self.ap_pid = None
             self.ap_phase = None
             self.ability_lock = None
@@ -372,16 +373,16 @@ async def ap_items_step(ctx: NierContext):
             ctx.pickup_note.prepare(prefix, item)
         ctx.ap_prepared = near
 
-    # ramassage : objet detruit + porteur arrive dans l'inventaire
+    # ramassage : objet detruit + temoin dans l'inventaire (le temoin peut arriver un tour plus tard)
+    import time
     marker = ctx.nier._items.find(apit.PICKUP_CARRIER) is not None
-    gone = [o for o in ctx.ap_tracked if not apit.object_alive(mem, o)]
-    for o in gone:
-        i = ctx.ap_tracked.pop(o)
-        if marker:
-            ctx.spots.collected(i)
-            logger.info("Picked up %s", db.PICKUPS[i]["name"])
-        else:
-            ctx.state.ap_spawned_spots.discard(i)  # decharge sans ramassage : a reposer plus tard
+    gone = [ctx.ap_tracked.pop(o) for o in [o for o in ctx.ap_tracked if not apit.object_alive(mem, o)]]
+    picked, expired = ctx.ap_pending.update(gone, marker, time.monotonic())
+    for i in picked:
+        ctx.spots.collected(i)
+        logger.info("Picked up %s", db.PICKUPS[i]["name"])
+    for i in expired:
+        ctx.spots.forget(i)
     if marker:
         ctx.nier._items.remove(apit.PICKUP_CARRIER)
 

@@ -137,6 +137,11 @@ class SpotTracker:
     def collected(self, i: int) -> None:
         self.state.ap_spots_collected.add(i)
 
+    def forget(self, i: int) -> None:
+        """Objet decharge sans ramassage : on pourra le reposer."""
+        self._spawned.discard(i)
+        self.state.ap_spawned_spots.discard(i)
+
     def reset_session(self) -> None:
         """Changement de zone : les objets non ramasses sont decharges par le jeu, on pourra les reposer."""
         self._spawned.clear()
@@ -226,6 +231,29 @@ def object_alive(mem, obj: int) -> bool:
         return struct.unpack("<Q", mem.read(obj, 8))[0] == mem.base + SET_ITEM_VTABLE_RVA
     except OSError:
         return False
+
+
+class PendingPickups:
+    """Ramassages en attente de confirmation. Verifie en jeu : l'objet peut disparaitre du sol un tour AVANT
+    que le temoin n'arrive dans l'inventaire ; on attend donc `window` secondes avant de conclure qu'il a
+    seulement ete decharge."""
+
+    def __init__(self, window: float = 6.0):
+        self.window = window
+        self.pending: dict[int, float] = {}
+
+    def update(self, gone: list[int], marker: bool, now: float) -> tuple[list[int], list[int]]:
+        """Renvoie (emplacements ramasses, emplacements decharges sans ramassage)."""
+        for i in gone:
+            self.pending.setdefault(i, now)
+        if marker and self.pending:
+            picked = sorted(self.pending)
+            self.pending.clear()
+            return picked, []
+        expired = sorted(i for i, t in self.pending.items() if now - t > self.window)
+        for i in expired:
+            del self.pending[i]
+        return [], expired
 
 
 def resolve_pickups(tracked: dict, obj_of, marker_received: bool) -> list[int]:

@@ -33,11 +33,22 @@ def encode_fixed(text: str, units: int) -> bytes:
     return raw.ljust(units * 2, bytes(1))
 
 
+_SEND_WORDS, _RECV_WORDS = ("For", "Pour"), ("From", "De")
+
+
 def template_for(prefix: str, length: int = TEMPLATE_LEN) -> str:
-    """Modele "<prefixe><ITEM NAME>" tenant dans `length` caracteres (longueur du modele d'origine)."""
+    """Modele "<prefixe><ITEM NAME>" tenant dans `length` caracteres (longueur du modele d'origine, plus
+    courte en anglais). Si "For Niicotine: " ne tient pas : forme compacte ">Niicoti: " (envoi) ou
+    "<Niicoti: " (reception)."""
     room = length - len(PLACEHOLDER)
     if len(prefix) > room:
-        prefix = prefix[:room - 3].rstrip() + " : "
+        word, _, rest = prefix.partition(" ")
+        who = rest.rstrip(" :")
+        if word in _SEND_WORDS + _RECV_WORDS and who and room >= 5:
+            sign = ">" if word in _SEND_WORDS else "<"
+            prefix = f"{sign}{who[:room - 3]}: "
+        else:
+            prefix = prefix[:max(0, room - 3)].rstrip() + " : "
     return prefix + PLACEHOLDER
 
 

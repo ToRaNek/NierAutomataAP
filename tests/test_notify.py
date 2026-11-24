@@ -86,3 +86,12 @@ def test_own_filler_is_silent_in_multiplayer():
     assert msgs == [("Check: ", "Level 3")]                       # pas de ligne "For you"
     solo = messages_for_item_send(1, 1, 1, "Small Recovery", "Me", "Me", "Level 3", lang="en")
     assert solo == [("Check: ", "Level 3"), ("For you: ", "Small Recovery")]
+
+
+def test_compact_prefix_when_template_is_short():
+    from nier_automata.game.notify import template_for, PLACEHOLDER
+    assert template_for("For Niicotine: ", 21) == ">Niicoti: " + PLACEHOLDER      # anglais : 21 caracteres
+    assert template_for("From Niicotine: ", 21) == "<Niicoti: " + PLACEHOLDER
+    assert template_for("Pour Niicotine : ", 28) == "Pour Niicotine : " + PLACEHOLDER   # francais : ca tient
+    assert template_for("De Bob : ", 21) == "De Bob : " + PLACEHOLDER
+    assert template_for("Check: ", 21) == "Check: " + PLACEHOLDER
