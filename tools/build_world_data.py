@@ -55,6 +55,8 @@ AP_NAMES_REGION = {  # points d'acces : code -> region
     "ft_RME": "A09", "ft_RMI2": "A09", "ft_RMI": "A09",
 }
 HARD_QUESTS = {"q900", "q103", "q104"}   # tres longues : jamais d'objet important
+# ratables d'apres un joueur experimente (document du 2026-11-24) : jamais d'objet important
+MISSABLE_QUESTS = {"q500", "q720", "q240"}
 PICKUPS_PER_AREA = 8
 PICKUP_MIN_DIST = 30.0
 
@@ -177,6 +179,8 @@ def main():
         states = [x for x in c["conditions"].get("scene_states", []) if not x.startswith("NOT")]
         # coffre qui n'existe qu'apres / pendant une quete annexe (verifie en jeu : absent sinon)
         quest_gated = ("クリア後" in groups or "で有効" in groups or any(x[:1] == "q" and x[1:4].isdigit() for x in states))
+        # ville d'avant le cratere (st1/r100, phase p100) : le sol disparait au chapitre 5
+        pre_crater = c["file"] == "st1/r100.dat"
         if "sub221" in groups:                     # quete d'A2 au Village de Pascal (route C/D)
             region = "C14"
         rc = reach.get((c["file"], c["entity_id"]), {})
@@ -185,7 +189,9 @@ def main():
         chests.append({
             "area": label, "pos": [round(v, 2) for v in c["position"]], "region": region,
             "needs": [] if unknown else needs, "locked": locked,
-            "excluded": bool(missable or unknown or quest_gated or c["area"].get("confidence") == "low"),
+            "excluded": bool(missable or unknown or quest_gated or pre_crater
+                             or c["area"].get("confidence") == "low"),
+            "pre_crater": pre_crater,
             "quest_gated": bool(quest_gated),
             "contents": [it["id"] for it in c["box"].get("contents", [])][:4],
         })
@@ -272,7 +278,7 @@ def main():
         missable = (region[0] != "C" and not cd and last < "10-01") or (region[0] == "C" and max(cd) < "17-01")
         quests.append({"id": qid, "name": f"Quest: {q['english_name']}", "region": region,
                        "status_index": status_index,
-                       "excluded": bool(missable or qid in HARD_QUESTS)})
+                       "excluded": bool(missable or qid in HARD_QUESTS or qid in MISSABLE_QUESTS)})
     data["quests"] = quests
 
     OUT.write_text(json.dumps(data, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")

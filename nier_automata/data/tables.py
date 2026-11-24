@@ -95,6 +95,14 @@ SHOP_REGION = {"Resistance Camp": "A02", "Pascal's Village": "A05", "Forest Cast
 SHOP_MISSABLE = {"Forest Castle"}
 
 
+def shop_missable(place: str, regions) -> bool:
+    """Magasin qu'on peut perdre : la foret (quete ratable) ; le Village de Pascal quand la route C/D est jouee
+    (a la fin du chapitre 14, tuer Pascal ferme son magasin jusqu'a la selection de chapitre)."""
+    if place in SHOP_MISSABLE:
+        return True
+    return place == "Pascal's Village" and any(r.startswith("C") for r in regions)
+
+
 def pool_weapon_count(story_locations: int, total_locations: int, candidates: int) -> int:
     """Armes (objets "useful") dans le pool : jamais plus que les locations non exclues (histoire),
     et au plus la moitie des locations. Le reste est du filler, seul autorise sur les exclues."""

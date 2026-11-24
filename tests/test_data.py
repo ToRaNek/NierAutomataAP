@@ -108,3 +108,23 @@ def test_forest_shop_needs_a_missable_quest():
     # verifie en jeu : le marchand de la foret n'apparait qu'apres la quete "Camp Development" (ratable)
     from nier_automata.data.tables import SHOP_MISSABLE
     assert "Forest Castle" in SHOP_MISSABLE and "Resistance Camp" not in SHOP_MISSABLE
+
+
+def test_contact_knowledge_missables_never_hold_important_items():
+    # document du testeur (2026-11-24) + verification en jeu
+    from nier_automata.data import worlddb as db
+    q = {x["id"]: x for x in db.QUESTS}
+    assert q["q500"]["excluded"]      # The Wandering Couple : indisponible apres le chapitre 7
+    assert q["q720"]["excluded"]      # Gathering Keepsakes : exige Emil's Memories (routes A/B seulement)
+    assert q["q240"]["excluded"]      # Half-wit Inventor : routes A et B seulement
+    # coffres de la ville d'avant le cratere (chapitre 5) : le sol disparait
+    assert all(c["excluded"] for c in db.CHESTS if c.get("pre_crater"))
+    assert sum(1 for c in db.CHESTS if c.get("pre_crater")) == 3
+
+
+def test_pascal_shop_missable_only_when_route_c_is_played():
+    from nier_automata.data.tables import shop_missable
+    assert shop_missable("Forest Castle", ("A01", "A06"))
+    assert not shop_missable("Pascal's Village", ("A01", "A05", "B05"))
+    assert shop_missable("Pascal's Village", ("A05", "C14"))      # choix de fin du chapitre 14
+    assert not shop_missable("Resistance Camp", ("A02", "C11"))
