@@ -63,7 +63,9 @@ Scroll to zoom, drag to move.
 - Tested in game on all three routes with automated chapter jumps (`tools/campaign.py`): story checks for
   every chapter, 129 of 187 chests found at their expected position, ground AP Items placed on their spots.
   Chests that could not be confirmed (mostly inside separately loaded interiors) never hold an important
-  item. Not tested in game yet: the shops of Pascal's Village and the Forest Castle, quest checks, endings.
+  item. The three shops were bought from in game; the ending A goal was verified end to end; quest checks were
+  only verified by forcing a quest status in memory. The forest shop only exists after the missable side quest
+  "Camp Development", so its AP Items never hold an important item.
 - Mail titles: open an access point for ~10 s the first time after each game launch.
 - Don't load another save than the one of the seed.
 

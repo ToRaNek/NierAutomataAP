@@ -5,7 +5,7 @@ from worlds.LauncherComponents import Component, Type, components, launch_subpro
 from .data import worlddb as db
 from .data.items_data import FILLER_ITEMS, FUNDS_ITEMS, MATERIALS, TRAP_ITEMS
 from .data.tables import (
-    SHOP_PLACES_ORDER, SHOP_REGION, item_location, item_name_to_id, level_location, location_name_to_id,
+    SHOP_MISSABLE, SHOP_PLACES_ORDER, SHOP_REGION, item_location, item_name_to_id, level_location, location_name_to_id,
     pool_weapon_count, shop_location, weapon_location,
 )
 from .data.weapons import STARTING_WEAPONS, WEAPONS
@@ -77,7 +77,7 @@ class NierAutomataWorld(World):
         out += [(level_location(n), db.level_region(n), False, []) for n in range(2, s.max_level + 1)]
         for place in SHOP_PLACES_ORDER:
             if SHOP_REGION[place] in regions:
-                out += [(shop_location(place, k), SHOP_REGION[place], False, [])
+                out += [(shop_location(place, k), SHOP_REGION[place], place in SHOP_MISSABLE, [])
                         for k in range(1, self.options.shop_checks.value + 1)]
         # peuvent etre inatteignables (peu d'armes par route) : jamais d'objet important
         out += [(weapon_location(n), s.regions[0], True, []) for n in range(1, s.weapon_checks + 1)]

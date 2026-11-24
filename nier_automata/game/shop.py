@@ -33,6 +33,7 @@ SKIP_IMAGE_RVA = 0x8FFCD8
 ITEM_TABLE_RVA = 0x133BA60   # fiches objets (0x1A0 octets) : +0x0 id, +0x10 nom interne, +0x98 prix d'achat
 ITEM_ENTRY = 0x1A0
 PRICE_OFFSET = 0x98
+MIN_PAID_RATIO = 0.6   # part minimale du prix reellement debitee (remises des magasins)
 
 # Magasins sur la route A (les variantes d'un meme lieu partagent les emplacements).
 SHOP_PLACES: dict[str, list[str]] = {
@@ -236,7 +237,9 @@ def set_price(mem, names_to_ids: dict[str, int], carrier: str, price: int) -> No
     raw = mem.read(mem.base + ITEM_TABLE_RVA, ITEM_ENTRY * 1100)
     for k in range(1100):
         if raw[k * ITEM_ENTRY + 0x10:k * ITEM_ENTRY + 0x40].split(b"\0")[0] == carrier.encode():
-            mem.write(mem.base + ITEM_TABLE_RVA + k * ITEM_ENTRY + PRICE_OFFSET, struct.pack("<I", price))
+            for route in range(3):        # le jeu lit [fiche + 0x98 + 8 * route] (routes A, B, C)
+                mem.write(mem.base + ITEM_TABLE_RVA + k * ITEM_ENTRY + PRICE_OFFSET + 8 * route,
+                          struct.pack("<I", price))
             return
 
 
@@ -418,13 +421,14 @@ class PaymentWatch:
         self.drops = [(t, d) for t, d in self.drops if now - t <= self.window]
 
     def paid(self, price: int, now: float) -> bool:
-        return any(now - t <= self.window and d >= price for t, d in self.drops)
+        return any(now - t <= self.window and d >= int(price * MIN_PAID_RATIO) for t, d in self.drops)
 
     def consume(self, price: int, now: float) -> bool:
         """Consomme UN prix (deux achats dans la meme demi-seconde = une baisse de 2 x prix)."""
+        least = int(price * MIN_PAID_RATIO)      # remises du jeu (jusqu'a -40 %)
         for i, (t, d) in enumerate(self.drops):
-            if now - t <= self.window and d >= price:
-                if d - price >= price:
+            if now - t <= self.window and d >= least:
+                if d - price >= least:
                     self.drops[i] = (t, d - price)
                 else:
                     del self.drops[i]

@@ -233,3 +233,32 @@ def test_payment_consumed_once():
     w = shop.PaymentWatch(window=10.0)
     w.update(1000, now=0.0); w.update(700, now=1.0)
     assert w.consume(300, now=1.5) and not w.consume(300, now=2.0)
+
+
+def test_discounted_purchase_is_still_a_payment():
+    # le jeu applique des remises (Chateau : 70 % du prix ; Village : -10 % par arme machine amelioree)
+    w = shop.PaymentWatch(window=10.0)
+    w.update(5000, now=0.0)
+    w.update(5000 - 210, now=1.0)                  # 300 G a 70 %
+    assert w.consume(300, now=1.5) and not w.consume(300, now=1.6)
+    w.update(5000 - 210 - 100, now=2.0)            # un autre objet a 100 G : pas un AP Item
+    assert not w.consume(300, now=2.5)
+
+
+def test_price_written_for_every_route(monkeypatch):
+    writes = []
+
+    class Mem:
+        base = 0x1000
+
+        def read(self, addr, n):
+            raw = bytearray(n)
+            raw[0x10:0x10 + 16] = b"item_uq_podSkin1"
+            return bytes(raw)
+
+        def write(self, addr, data):
+            writes.append((addr - self.base - shop.ITEM_TABLE_RVA, data))
+
+    shop.set_price(Mem(), {}, "item_uq_podSkin1", 300)
+    # prix lu par le jeu : [fiche + 0x98 + 8 * route] (route A, B, C)
+    assert sorted(o for o, _ in writes) == [0x98, 0xA0, 0xA8]

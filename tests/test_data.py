@@ -102,3 +102,9 @@ def test_shop_locations_have_codes():
     assert all(n in ids for n in names)
     assert len({ids[n] for n in names}) == len(names)
     assert shop_location("Resistance Camp", 1) == "Shop Resistance Camp #1"
+
+
+def test_forest_shop_needs_a_missable_quest():
+    # verifie en jeu : le marchand de la foret n'apparait qu'apres la quete "Camp Development" (ratable)
+    from nier_automata.data.tables import SHOP_MISSABLE
+    assert "Forest Castle" in SHOP_MISSABLE and "Resistance Camp" not in SHOP_MISSABLE

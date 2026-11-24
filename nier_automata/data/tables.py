@@ -90,6 +90,9 @@ def location_name_to_id() -> dict[str, int]:
 
 
 SHOP_REGION = {"Resistance Camp": "A02", "Pascal's Village": "A05", "Forest Castle": "A06"}
+# Le marchand de la foret n'existe qu'apres la quete annexe "Camp Development" (q122), qu'on peut rater :
+# ses AP Items ne recoivent jamais d'objet important (verifie en jeu).
+SHOP_MISSABLE = {"Forest Castle"}
 
 
 def pool_weapon_count(story_locations: int, total_locations: int, candidates: int) -> int:
