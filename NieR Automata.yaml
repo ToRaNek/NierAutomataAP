@@ -1,29 +1,29 @@
-﻿# NieR:Automata (Archipelago) - modele de YAML
-name: TonPseudo
+﻿# NieR:Automata (Archipelago) - YAML template
+name: YourName
 game: NieR:Automata
 description: NieR:Automata - route A
 
 NieR:Automata:
-  # Objectif : story_progress (atteindre story_checks etapes de l'histoire) ou ending_a (fin A).
+  # Goal: story_progress (reach story_checks story steps) or ending_a (Ending A).
   goal: story_progress
-  # Etapes de l'histoire qui donnent un check "Story: <lieu>" (1-27). Avec story_progress, c'est aussi l'objectif.
+  # Story steps giving a "Story: <place>" check (1-27). With story_progress it is also the goal.
   story_checks: 12
-  # Armes trouvees (retirees de l'inventaire, envoient un check).
+  # Weapons found (removed from the inventory, send a check).
   weapon_checks: 8
-  # Coffres ouverts.
+  # Chests opened.
   chest_checks: 15
-  # Un check par niveau, de 2 jusqu'a ce niveau (0 = desactive).
+  # One check per level, from 2 up to this level (0 = off).
   max_level_check: 20
-  # AP Items au sol sur ton trajet ("AP Item: <lieu> #k").
+  # AP Items dropped on the ground along your path ("AP Item: <place> #k").
   ap_items: true
   ap_items_per_phase: 2
-  # AP Items vendus en tete des magasins (Camp, Village de Pascal, Chateau) et leur prix.
+  # AP Items sold at the top of the shops (Camp, Pascal's Village, Castle) and their price.
   shop_checks: 2
   shop_price: 300
-  # Capacites bloquees jusqu'a ce qu'on les recoive.
+  # Abilities locked until received (add "Pod Fire", "Pod Program" for a pod-less start).
   randomized_abilities: ["Double Jump", "Air Dash", "Ground Evade"]
-  # Pourcentage de pieges parmi les objets de remplissage.
+  # Percentage of traps among filler items.
   trap_percentage: 20
-  # Premier ramassage de chaque materiau = un check (beaucoup de checks).
+  # First pickup of each material = one check (many checks).
   item_checks: false
   death_link: false

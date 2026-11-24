@@ -225,13 +225,14 @@ class SpotTracker:
         self.state.ap_spawned_spots.clear()
 
 
-def pickup_text(me: int, receiver, item, receiver_name) -> tuple[str, str]:
+def pickup_text(me: int, receiver, item, receiver_name, lang: str = "fr") -> tuple[str, str]:
     """(prefixe du modele, nom d'objet) du message de ramassage d'un AP Item."""
+    from .i18n import t
     if item is None or receiver is None:
         return "", "AP Item"
     if receiver == me:
-        return "Check validé : ", item
-    return f"Pour {receiver_name} : ", item
+        return t(lang, "for_you"), item
+    return t(lang, "for", who=receiver_name), item
 
 
 def nearest_spawned(spots, spawned: set, collected: set, pos, radius: float):

@@ -33,36 +33,37 @@ def encode_fixed(text: str, units: int) -> bytes:
     return raw.ljust(units * 2, bytes(1))
 
 
-def template_for(prefix: str) -> str:
-    room = TEMPLATE_LEN - len(PLACEHOLDER)
+def template_for(prefix: str, length: int = TEMPLATE_LEN) -> str:
+    """Modele "<prefixe><ITEM NAME>" tenant dans `length` caracteres (longueur du modele d'origine)."""
+    room = length - len(PLACEHOLDER)
     if len(prefix) > room:
         prefix = prefix[:room - 3].rstrip() + " : "
     return prefix + PLACEHOLDER
 
 
-SHORT_PLACES = {"Resistance Camp": "Camp", "Pascal's Village": "Pascal", "Forest Castle": "Foret"}
-
-
-def short_location(location: str) -> str:
+def short_location(location: str, lang: str = "fr") -> str:
     """Nom de check court pour la notification (17 caracteres max)."""
+    from .i18n import short_place, t
     if location.startswith("Story: "):
         return location[7:]
     if location.startswith("Shop "):
         place, _, num = location[5:].rpartition(" #")
-        return f"Magasin {SHORT_PLACES.get(place, place)} #{num}"
+        return t(lang, "shop_short", place=short_place(lang, place), n=num)
     return location
 
 
 def messages_for_item_send(me: int, sender: int, receiver: int, item: str,
-                           sender_name: str, receiver_name: str, location: str) -> list[tuple[str, str]]:
+                           sender_name: str, receiver_name: str, location: str,
+                           lang: str = "fr") -> list[tuple[str, str]]:
     """(prefixe, texte) a afficher pour "sender a envoye item a receiver depuis location".
     Check valide par moi : "Check : <location>" puis "Pour <qui> : <objet>". Recu : "De <qui> : <objet>"."""
+    from .i18n import t
     item = item[:MAX_LEN]
     if sender == me:
-        to = "toi" if receiver == me else receiver_name
-        return [("Check : ", short_location(location)[:MAX_LEN]), (f"Pour {to} : ", item)]
+        to = t(lang, "for_you") if receiver == me else t(lang, "for", who=receiver_name)
+        return [(t(lang, "check"), short_location(location, lang)[:MAX_LEN]), (to, item)]
     if receiver == me:
-        return [(f"De {sender_name} : ", item)]
+        return [(t(lang, "from", who=sender_name), item)]
     return []
 
 
@@ -95,6 +96,26 @@ def _scan(mem, patterns: list[bytes]) -> dict[bytes, list[int]]:
     return out
 
 
+def _remember_template(pid: int, current: bytes) -> bytes:
+    """Texte d'origine du modele pour ce processus du jeu (lu une fois, garde sur disque)."""
+    import os
+    from pathlib import Path
+    d = Path(os.environ.get("LOCALAPPDATA", ".")) / "NierAutomataAP"
+    f = d / f"notify_template_{pid}.bin"
+    try:
+        data = f.read_bytes()
+        if len(data) == len(current):
+            return data
+    except OSError:
+        pass
+    try:
+        d.mkdir(parents=True, exist_ok=True)
+        f.write_bytes(current)
+    except OSError:
+        pass
+    return current
+
+
 class Notifier:
     """Adresses des textes a modifier (cherchees une fois par processus)."""
 
@@ -111,13 +132,18 @@ class Notifier:
                 self.carrier = a + len(key) + 4
                 self.carrier_orig = mem.read(self.carrier, (length - 1) * 2)
                 break
-        # modele retrouve par sa CLE (son texte a pu rester modifie par une session precedente)
+        # modele retrouve par sa CLE, quelle que soit la langue (sa longueur varie). Son texte d'origine est
+        # garde dans un fichier par processus : une session precedente a pu le laisser modifie.
         self.templates = []
+        self.tlen = TEMPLATE_LEN
+        self.orig_template = TEMPLATE.encode("utf-16-le")
         for a in found[tkey]:
             length = struct.unpack("<I", mem.read(a + len(tkey), 4))[0]
-            if length == TEMPLATE_LEN + 1:
+            if 10 <= length <= 80:
                 value = a + len(tkey) + 4
-                current = mem.read(value, TEMPLATE_LEN * 2)
+                self.tlen = length - 1
+                current = mem.read(value, self.tlen * 2)
+                self.orig_template = _remember_template(mem.pid, current)
                 copies = _scan(mem, [current + bytes(2)])[current + bytes(2)]
                 self.templates = sorted(set(copies) | {value})
                 self.restore()
@@ -129,7 +155,7 @@ class Notifier:
 
     def show(self, prefix: str, item: str) -> bool:
         from .spawner import remote_call
-        tpl = encode_fixed(template_for(prefix), TEMPLATE_LEN)
+        tpl = encode_fixed(template_for(prefix, self.tlen), self.tlen)
         for a in self.templates:
             self.mem.write(a, tpl)
         self.mem.write(self.carrier, encode_fixed(item, min(MAX_LEN, len(self.carrier_orig) // 2)))
@@ -137,14 +163,13 @@ class Notifier:
 
     def prepare(self, prefix: str, item: str) -> None:
         """Ecrit modele + nom du porteur sans donner l'objet (le joueur va le ramasser)."""
-        tpl = encode_fixed(template_for(prefix) if prefix else PLACEHOLDER, TEMPLATE_LEN)
+        tpl = encode_fixed(template_for(prefix, self.tlen) if prefix else PLACEHOLDER, self.tlen)
         for a in self.templates:
             self.mem.write(a, tpl)
         self.mem.write(self.carrier, encode_fixed(item, min(MAX_LEN, len(self.carrier_orig) // 2)))
 
     def restore(self) -> None:
-        orig = TEMPLATE.encode("utf-16-le")
         for a in self.templates:
-            self.mem.write(a, orig)
+            self.mem.write(a, self.orig_template)
         if self.carrier is not None:
             self.mem.write(self.carrier, self.carrier_orig)

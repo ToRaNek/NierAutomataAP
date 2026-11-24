@@ -53,11 +53,11 @@ class NierGame:
             self.mem.close()
         self.mem, self.version = ProcessMemory.attach(), None
         if self.mem is None:
-            self.error = "Jeu non lance"
+            self.error = "Game not running"
             return False
         self.version = detect_version(self.mem.exe_path)
         if self.version is None:
-            self.error = "Version de NieRAutomata.exe inconnue : seule la v1.04 Steam est supportee"
+            self.error = "Unknown NieRAutomata.exe version: only Steam v1.04 is supported"
             self.mem.close()
             self.mem = None
             return False

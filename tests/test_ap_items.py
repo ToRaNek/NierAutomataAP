@@ -73,7 +73,7 @@ def test_pickup_text_for_other_player():
 
 
 def test_pickup_text_for_self():
-    assert pickup_text(me=1, receiver=1, item="Phoenix Sword", receiver_name="ToRaNek") == ("Check validé : ", "Phoenix Sword")
+    assert pickup_text(me=1, receiver=1, item="Phoenix Sword", receiver_name="ToRaNek") == ("Pour toi : ", "Phoenix Sword")
 
 
 def test_pickup_text_unknown_content():

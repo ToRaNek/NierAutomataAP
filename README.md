@@ -1,49 +1,51 @@
-# NieR:Automata pour Archipelago
+# NieR:Automata for Archipelago
 
-Monde Archipelago (`.apworld`) et client pour **NieR:Automata (PC Steam, v1.04)**, route A.
-Le client lit et modifie la memoire du jeu en cours (aucun fichier du jeu n'est modifie).
+Archipelago world (`.apworld`) and client for **NieR:Automata (PC Steam, v1.04)**, route A.
+The client reads and edits the running game's memory (no game file is modified). In-game texts follow the
+game language (English by default, French supported). [Version francaise](README.fr.md)
 
-## Installation
-**Avec le lanceur** : telecharge `NierAutomataAP.exe` dans les Releases et lance-le. Il trouve Archipelago,
-installe/met a jour le `.apworld` dans `custom_worlds`, puis ouvre le client NieR:Automata.
-Un lien `archipelago://pseudo@serveur:port` peut lui etre passe (ou associe aux liens archipelago://).
+## Install
+**With the launcher**: download `NierAutomataAP.exe` from the Releases and run it. It finds Archipelago,
+installs/updates the `.apworld` in `custom_worlds`, then opens the NieR:Automata client.
+You can pass it an `archipelago://name@server:port` link.
 
-**A la main** : copie `nier_automata.apworld` dans `<Archipelago>/custom_worlds`, puis
-Launcher Archipelago -> *NieR:Automata Client*.
+**Manually**: copy `nier_automata.apworld` into `<Archipelago>/custom_worlds`, then
+Archipelago Launcher -> *NieR:Automata Client*.
 
-Prerequis : NieR:Automata **Steam v1.04**, Archipelago **0.6.8+**. Celui qui genere la partie doit aussi
-avoir le `.apworld`. Modele de reglages : `NieR Automata.yaml`.
+Requirements: NieR:Automata **Steam v1.04**, Archipelago **0.6.8+**. Whoever generates the game also needs the
+`.apworld`. Settings template: `NieR Automata.yaml`.
 
-## Jouer
-1. Lance le jeu et commence une **nouvelle partie** (une par seed).
-2. Lance le client et connecte-toi. Les sauvegardes sont copiees dans `%LOCALAPPDATA%\NierAutomataAP\backups`.
-3. Garde la fenetre du client ouverte : on y tape les commandes Archipelago (`!hint`, `!remaining`, chat...).
+## Playing
+1. Start the game and begin a **new game** (one per seed).
+2. Start the client and connect. Saves are backed up to `%LOCALAPPDATA%\NierAutomataAP\backups`.
+3. Keep the client window open: Archipelago commands (`!hint`, `!remaining`, chat...) are typed there.
 
 ## Checks
-- **Story: <lieu>** : chaque etape nommee de la route A (Camp Resistance, Village de Pascal, Boss Simone...).
-- **Weapon Found #n** : chaque arme trouvee (retiree de l'inventaire).
-- **Chest #n**, **Level n** : coffres ouverts, niveaux atteints.
-- **AP Item: <lieu> #k** : objets "AP Item" poses au sol sur ton trajet, 1 a 3 par etape.
-- **Shop <lieu> #k** : "AP Item" vendus en tete des magasins (Camp de la Resistance, Village de Pascal,
-  Chateau de la foret) ; la description dit ce qu'il contient et pour qui.
-- A plusieurs, tes checks contiennent uniquement des objets pour les autres joueurs.
+- **Story: <place>**: each named story step of route A (Resistance Camp, Pascal's Village, Simone...).
+- **Weapon Found #n**: each weapon found (removed from the inventory).
+- **Chest #n**, **Level n**: chests opened, levels reached.
+- **AP Item: <place> #k**: "AP Item" objects dropped on the ground along your path, 1 to 3 per story step.
+- **Shop <place> #k**: "AP Item" entries at the top of the shops (Resistance Camp, Pascal's Village,
+  Forest Castle); the description says what's inside and for whom.
+- In a multiworld, your checks only contain items for the other players.
 
-## Objets recus
-Armes, capacites (double saut, dash aerien, esquive au sol, tir du Pod, attaques...), soins, argent, pieges
-(degats 5/10 %, perte de 10 % des G, ennemis qui apparaissent).
+## Items received
+Weapons, abilities (double jump, air dash, ground evade, pod fire, pod programs, attacks...), recovery items,
+money, traps (5/10% damage, 10% money loss, enemy spawn).
 
-## En jeu
-- Notifications : "De Niicotine : X", "Check : Camp Resistance" puis "Pour Niicotine : X".
-- Messagerie (Courrier des points d'acces) : mail "Checks Archipelago" (checks restants) et mail
-  "Indice de <joueur>" (indices demandes par les autres sur ta partie).
-- DeathLink en option.
+## In game
+- Notifications: "From X: item", "Check: Resistance Camp" then "For X: item".
+- Mail (access point Mail menu): "Archipelago checks" (remaining checks) and "Hint from <player>"
+  (hints other players requested on your world).
+- Optional DeathLink.
 
-## Limites connues
-- Uniquement Steam v1.04, route A.
-- Titres des mails : ouvrir un point d'acces ~10 s la premiere fois apres chaque lancement du jeu.
-- Ne pas charger une autre sauvegarde que celle de la seed.
+## Known limits
+- Steam v1.04 only, route A.
+- Mail titles: open an access point for ~10 s the first time after each game launch.
+- Don't load another save than the one of the seed.
 
-## Developpement
-- Tests : `python -m pytest`
-- Build : `python build.py` (apworld) ; lanceur : `python launcher/build_exe.py`
-- Outils de retro-ingenierie dans `tools/` (sondes memoire, points d'arret materiels, lecture CPK/BXM/MCD).
+## Development
+- Tests: `python -m pytest`
+- Build: `python build.py` (apworld); launcher: `python launcher/build_exe.py`
+- Reverse-engineering tools in `tools/`; game data research (routes, endings, quests, chests, positions) in
+  `docs/research/`.

@@ -177,11 +177,12 @@ def identify(displayed: Iterable[int], shop_ids: dict[str, set[int]], carriers: 
     return min(fits, key=lambda s: len(shop_ids[s])) if fits and shown else None
 
 
-def description(me: int, receiver, item, receiver_name, progression: bool) -> str:
+def description(me: int, receiver, item, receiver_name, progression: bool, lang: str = "fr") -> str:
+    from .i18n import t
     if item is None or receiver is None:
-        return "Objet Archipelago"
-    who = "toi" if receiver == me else receiver_name
-    return f"Pour {who} : {item}" + (" (progression)" if progression else "")
+        return t(lang, "ap_item_default")
+    who = t(lang, "for_you") if receiver == me else t(lang, "for", who=receiver_name)
+    return who + item + (t(lang, "progression") if progression else "")
 
 
 def location_name(place: str, k: int) -> str:
@@ -306,7 +307,7 @@ class ShopSession:
 
     def describe(self, texts: dict[tuple[str, int], str]) -> None:
         for cid, slot in self.carriers.items():
-            t = texts.get(slot, "Objet Archipelago")
+            t = texts.get(slot, "Archipelago item")
             if self.described.get(cid) != t:
                 self.texts.set_text(f"CORE_ITEM_HELP_{cid}", t, width=34)
                 self.described[cid] = t

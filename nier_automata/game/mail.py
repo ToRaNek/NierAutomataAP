@@ -63,17 +63,19 @@ def unread_entry(raw: bytes, hour: int, minute: int) -> bytes:
     return struct.pack("<iIII", no, 0, (minute << 16) | hour, x)
 
 
-def checks_body(remaining: list[str], total: int) -> str:
-    lines = [f"Checks restants : {len(remaining)} / {total}", ""]
+def checks_body(remaining: list[str], total: int, lang: str = "fr") -> str:
+    from .i18n import t
+    lines = [t(lang, "checks_head", n=len(remaining), total=total), ""]
     lines += [f"- {n}" for n in sorted(remaining)]
     return "\n".join(lines)
 
 
-def hints_body(hints: list[tuple[str, str, str]]) -> str:
+def hints_body(hints: list[tuple[str, str, str]], lang: str = "fr") -> str:
     """hints : [(objet, pour qui, emplacement)] dans l'ordre d'arrivee ; le plus recent en premier."""
-    lines = ["Indices demandes par tes potes (objets caches dans ta partie) :", ""]
+    from .i18n import t
+    lines = [t(lang, "hints_head"), ""]
     for item, who, where in reversed(hints):
-        lines.append(f"{item} pour {who}\n  -> {where}")
+        lines.append(t(lang, "hint_line", item=item, who=who, where=where))
     return "\n".join(lines)
 
 
