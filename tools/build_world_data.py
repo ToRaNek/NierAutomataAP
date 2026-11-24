@@ -178,6 +178,11 @@ def main():
             "excluded": bool(missable or unknown or c["area"].get("confidence") == "low"),
             "contents": [it["id"] for it in c["box"].get("contents", [])][:4],
         })
+    # presence constatee en jeu : un coffre non retrouve ne recoit jamais d'objet important
+    seen = {tuple(p) for p in load("ingame_verified.json")["chests_present"]}
+    for c in chests:
+        c["verified"] = tuple(c["pos"]) in seen
+        c["excluded"] = bool(c["excluded"] or not c["verified"])
     chests.sort(key=lambda c: (c["area"], c["pos"][0], c["pos"][2], c["pos"][1]))
     n = defaultdict(int)
     for c in chests:
@@ -216,6 +221,7 @@ def main():
             continue                               # sous-zone tardive (egouts, grottes) : pas d'AP Item
         per_area[label].append({"pos": [round(v, 2) for v in p["position"]]})
     pickups = []
+    not_spawned = {tuple(p) for p in load("ingame_verified.json")["pickups_not_spawned"]}
     for label in sorted(per_area):
         pts = per_area[label]
         near = [a["pos"] for a in aps if AP_NAMES_REGION[a["code"]] == region_of(label)[0]]
@@ -226,7 +232,8 @@ def main():
         region, missable = region_of(label)
         for k, p in enumerate(spread(pts, PICKUPS_PER_AREA, PICKUP_MIN_DIST, anchor), 1):
             pickups.append({"area": label, "k": k, "name": f"AP Item: {label} #{k}", "pos": p["pos"],
-                            "region": region, "excluded": bool(missable)})
+                            "region": region,
+                            "excluded": bool(missable or tuple(p["pos"]) in not_spawned)})
     data["pickups"] = pickups
 
     # --- quetes

@@ -78,7 +78,7 @@ class Game:
         base, size = entity_region(self.m)
         data = self.m.read(base, size)
         best = None
-        for rva in (CHEST_VTABLE, LOCKED_CHEST_VTABLE):
+        for rva in (CHEST_VTABLE, LOCKED_CHEST_VTABLE, 0xC5A250):   # 0xC5A250 : verrouille, piratable (route B)
             vt = struct.pack("<Q", self.m.base + rva)
             i = data.find(vt)
             while i != -1:
@@ -92,7 +92,7 @@ class Game:
         return best[0] if best else None
 
     def opened(self, chest):
-        if getattr(self, "last_class", None) == LOCKED_CHEST_VTABLE:
+        if getattr(self, "last_class", None) != CHEST_VTABLE:
             return False                      # drapeau d'ouverture inconnu pour les coffres verrouilles
         return struct.unpack("<I", self.m.read(chest + CHEST_OPEN_OFFSET, 4))[0] != 0
 

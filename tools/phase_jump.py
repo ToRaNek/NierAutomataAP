@@ -17,6 +17,37 @@ def state(m):
             "machine": u(0xF64A9C), "scene": u(0x102A368)}
 
 
+def set_scene_state(m, name: str) -> None:
+    """Pose un etat de scene (PL/9S, Route/B...) : meme sequence que le menu Chapter Select (phase_jump.md 5A)."""
+    import zlib
+    cave = rp.install(m)
+    buf, tmp = cave + 0x300, cave + 0x380
+    raw = name.encode()
+    m.write(buf, raw + bytes(1))
+    rec = remote_call(m, m.base + 0x150E70, m.base + 0xF8C4E0, zlib.crc32(raw), buf, len(raw))
+    m.write(tmp, struct.pack("<Q", rec))
+    remote_call(m, m.base + 0x354B20, m.base + 0xFC2680, tmp)
+    remote_call(m, m.base + 0x150C60, tmp)
+
+
+def active_states(m, prefixes=("Route/", "PL/")) -> list:
+    b = m.base
+    ptr, n = struct.unpack("<QQ", m.read(b + 0xFC2718, 16))
+    out = []
+    for i in range(min(n, 4000)):
+        e = m.read(ptr + i * 0x20, 0x20)
+        rec = struct.unpack_from("<Q", e, 0x10)[0]
+        name = m.read(rec + 0x38, 0x30).split(bytes(1))[0].decode("ascii", "replace")
+        if name.startswith(prefixes):
+            out.append(name)
+    return out
+
+
+def set_route(m, route: str, character: str) -> None:
+    set_scene_state(m, f"PL/{character}")
+    set_scene_state(m, f"Route/{route}")
+
+
 def jump(m, phase: int, sub: str, wait: float = 90.0) -> bool:
     cave = rp.install(m)
     name = cave + 0x200

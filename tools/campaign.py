@@ -47,7 +47,7 @@ def alive():
 
 def main():
     route = sys.argv[1]
-    start = sys.argv[2] if len(sys.argv) > 2 else ""
+    start = sys.argv[2] if len(sys.argv) > 2 and not sys.argv[2].startswith("--") else ""
     key = {"A": "A", "B": "B", "C": "C/D"}[route]
     steps = PHASES[key]["steps"] if isinstance(PHASES[key], dict) else PHASES[key]
     first = {}
@@ -56,6 +56,12 @@ def main():
             first.setdefault(s["chapter"], s)
     rep = json.loads(REPORT.read_text(encoding="utf-8")) if REPORT.exists() else {}
     chapters = [c for c in db.CHAPTERS if c["route"] == route]
+    if "--redo" in sys.argv:                       # refaire les sauts et les regions de cette route
+        for k in [k for k in rep if k.startswith(route + " ")]:
+            del rep[k]
+        for d in ("regions", "regions_done"):
+            for k in [k for k in rep.get(d, {}) if k.startswith(route)]:
+                del rep[d][k]
     for n, ch in enumerate(chapters):
         cid = f"{route} {ch['chapter']}"
         last_of_region = n + 1 == len(chapters) or chapters[n + 1]["region"] != ch["region"]
@@ -70,6 +76,9 @@ def main():
             continue
         g = sweep.Game()
         try:
+            who = (s.get("character") or "2B").split()[0].split("+")[0]
+            who = who if who in ("2B", "9S", "A2") else {"A": "2B", "B": "9S", "C": "A2"}[route]
+            pj.set_route(g.m, route, {"A": "2B", "B": "9S"}.get(route, who))
             ok = pj.jump(g.m, int(s["phase"][1:], 16), s["subphase"])
         except OSError as ex:
             ok = False
