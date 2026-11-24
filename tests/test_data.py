@@ -158,3 +158,12 @@ def test_starter_kit_helps_the_early_game():
     assert all(n in ids for n in STARTER_KIT)
     assert any("Recovery" in n for n in STARTER_KIT) and "Melee Attack Up (L)" in STARTER_KIT
     assert ids["Cure All Status"] - ids["Small Recovery"] == 6      # les codes existants ne bougent pas
+
+
+def test_factory_underground_is_missable():
+    # avis du testeur : le sous-sol de l'usine n'est librement accessible que pendant une courte fenetre
+    from nier_automata.data import worlddb as db
+    under = [x for t in (db.CHESTS, db.PICKUPS) for x in t
+             if x["area"] in ("Abandoned Factory: Underground Area", "Abandoned Factory: His Grace's Room")]
+    assert len(under) > 10 and all(x["excluded"] for x in under)
+    assert any(not x["excluded"] for x in db.CHESTS if x["area"] == "Abandoned Factory")

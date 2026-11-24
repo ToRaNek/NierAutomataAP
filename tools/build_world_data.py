@@ -34,8 +34,10 @@ AREAS = {
     "Forest Zone": ("A", 6, False), "Forest Castle: Lower Castle": ("A", 6, False),
     "Forest Castle: Upper Castle": ("A", 6, False),
     "Flooded City": ("A", 7, False), "Copied City": ("A", 8, False),
-    "Abandoned Factory": ("A", 9, False), "Abandoned Factory: His Grace's Room": ("A", 9, False),
-    "Abandoned Factory: Underground Area": ("A", 9, False),
+    "Abandoned Factory": ("A", 9, False),
+    # sous-sol de l'usine : fenetre d'acces libre tres courte dans l'histoire (avis d'un joueur experimente)
+    "Abandoned Factory: His Grace's Room": ("A", 9, True),
+    "Abandoned Factory: Underground Area": ("A", 9, True),
     "Forest Zone: Meat Box": ("C", 13, True), "Flooded City: Soul Box": ("C", 15, True),
     "Amusement Park: God Box": ("C", 16, True),
     "The Tower: Lower Section": ("C", 17, True), "The Tower: Upper Section": ("C", 17, True),
