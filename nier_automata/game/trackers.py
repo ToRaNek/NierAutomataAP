@@ -3,7 +3,8 @@ from __future__ import annotations
 
 from typing import Iterable, Optional
 
-from ..data.phases import MENU_PHASES, ROUTE_A, phase_code, route_index
+from ..data import worlddb as db
+from ..data.phases import MENU_PHASES, phase_code
 from ..data.weapons import WEAPONS
 from .state import ClientState
 
@@ -54,22 +55,25 @@ class PhaseTracker:
 
 
 class StoryTracker:
-    """Chaque phase nommee de la route A (ROUTE_A) donne son check "Story: <lieu>" (n = rang dans la route),
-    si n <= max_count. On memorise le nom de la phase atteinte."""
+    """Un check par chapitre (toutes routes : A, puis B, puis C/D). La route en cours est memorisee : les
+    sous-phases "_AB_" sont communes aux routes A et B. Atteindre un chapitre de la route en cours valide
+    aussi tous les chapitres precedents (le client peut avoir manque une transition)."""
 
     def __init__(self, state: ClientState, max_count: int):
         self.state = state
         self.max_count = max_count
 
     def check(self, phase: str) -> Optional[int]:
-        i = route_index(phase)
-        if i is None:
+        """Renvoie l'indice (0..) du chapitre nouvellement atteint s'il est dans le perimetre, sinon None."""
+        self.state.route = db.next_route(self.state.route, phase)
+        i = db.match_chapter(phase, self.state.route)
+        if i is None or i in self.state.chapters:
             return None
-        key = ROUTE_A[i][0]
-        if key in self.state.story_codes:
-            return None
-        self.state.story_codes.add(key)
-        return i + 1 if i + 1 <= self.max_count else None
+        if db.CHAPTERS[i]["route"] == self.state.route:
+            self.state.chapters.update(range(i + 1))
+        else:
+            self.state.chapters.add(i)       # selection de chapitre vers une autre route
+        return i if i < self.max_count else None
 
 
 class ItemTracker:
@@ -95,43 +99,35 @@ class ItemTracker:
         return new
 
 
-CHEST_SPOT_RADIUS = 4.0
-
-
 class ChestTracker:
-    """Compteur de coffres du jeu : chaque hausse confirmee (2 lectures) = un coffre.
-    Un coffre est identifie par (code de phase, x, z) pour ne pas recompter apres un rechargement."""
+    """Coffres ouverts. Le compteur du jeu augmente a chaque ouverture (et a chaque ramassage au sol, ecarte
+    par `ground_pickup`) ; le coffre est celui de la base, non encore ouvert, le plus proche du joueur."""
 
-    def __init__(self, state: ClientState, max_count: int):
+    def __init__(self, state: ClientState, scope_chests):
         self.state = state
-        self.max_count = max_count
+        self.scope = frozenset(scope_chests)
+        self.enabled = bool(self.scope)
         self._last: Optional[int] = None
         self._prev: Optional[int] = None
 
-    def _known(self, code: str, pos) -> bool:
-        x, _, z = pos
-        return any(c == code and abs(x - sx) <= CHEST_SPOT_RADIUS and abs(z - sz) <= CHEST_SPOT_RADIUS
-                   for c, sx, sz in self.state.chest_spots)
-
-    def update(self, counter: int, code: Optional[str], pos, ground_pickup: bool = False) -> Optional[int]:
-        """ground_pickup : un objet au sol vient d'etre ramasse a cote du joueur (le compteur du jeu compte
-        aussi ces ramassages, verifie en jeu) -> la hausse est consommee sans check."""
+    def update(self, counter: int, pos, ground_pickup: bool = False) -> Optional[int]:
+        """Renvoie l'indice du coffre ouvert (worlddb.CHESTS) s'il est dans le perimetre, sinon None."""
         prev, self._prev = self._prev, counter
         if prev != counter:
             return None  # attendre une 2e lecture identique
         if self._last is None or counter < self._last:
-            self._last = counter  # baseline ou rechargement
+            self._last = counter  # reference ou rechargement
             return None
         if counter == self._last:
             return None
         self._last = counter
-        if ground_pickup or code is None or self._known(code, pos):
+        if ground_pickup or pos is None:
             return None
-        self.state.chest_spots.append((code, pos[0], pos[2]))
-        if self.state.chests_found >= self.max_count:
+        i = db.nearest(db.CHESTS, pos, self.state.chests_opened)
+        if i is None:
             return None
-        self.state.chests_found += 1
-        return self.state.chests_found
+        self.state.chests_opened.add(i)
+        return i if i in self.scope else None
 
 
 MAX_LEVEL = 99

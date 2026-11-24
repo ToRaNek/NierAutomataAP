@@ -35,91 +35,6 @@ IT0000 = 0x70000
 SET_ITEM_VTABLE_RVA = 0xC79AE8  # BehaviorSetItem (it0000) ; la vtable change quand l'objet est detruit
 
 
-def pick_spots(path, min_dist: float = 40.0, per_area: int = 5):
-    """path : [(phase, x, y, z)] enregistre en jouant. Renvoie [(code de zone, x, y, z)]."""
-    out: list[tuple[str, float, float, float]] = []
-    per: dict[str, list] = {}
-    for phase, x, y, z in path:
-        code = phase_code(phase)
-        if code is None:
-            continue
-        chosen = per.setdefault(code, [])
-        if len(chosen) >= per_area:
-            continue
-        # le code est une ETAPE de l'histoire, pas un lieu : dedoublonner sur toutes les etapes
-        if all(math.dist((x, y, z), (a, b, c)) >= min_dist for _, a, b, c in out):
-            chosen.append((x, y, z))
-            out.append((code, x, y, z))
-    return out
-
-
-def _route_key(phase: str, phase_limit: int):
-    from ..data.phases import ROUTE_A, ap_phase_indices, route_index
-    if not spawn_allowed(phase):
-        return None
-    i = route_index(phase)
-    if i is None or i not in ap_phase_indices(phase_limit):
-        return None
-    return ROUTE_A[i][0]
-
-
-NEAR_PATH_H, NEAR_PATH_V = 10.0, 3.0   # objet du jeu retenu s'il est pres du trajet reel du joueur (au sol)
-
-
-def near_path(p, path) -> bool:
-    return any(math.hypot(p[0] - q[0], p[2] - q[2]) <= NEAR_PATH_H and abs(p[1] - q[1]) <= NEAR_PATH_V
-               for q in path)
-
-
-def extend_spots(spots, found, phase: str, per_area: int = 2, phase_limit: int = 99,
-                 min_dist: float = 60.0, offset: float = 2.0, path=None):
-    """Nouveaux emplacements dans la phase d'histoire courante (cle = phase nommee de la route A, d'ou des
-    checks "AP Item: <lieu> #k"), au plus `per_area` par phase, a plus de `min_dist` m les uns des autres.
-    Candidats, dans l'ordre : objets poses par le jeu PRES DU TRAJET reel du joueur (au sol, pas sur un toit),
-    decales de `offset` m ; puis les points du trajet eux-memes. Sans trajet : les objets du jeu."""
-    code = _route_key(phase, phase_limit)
-    if code is None:
-        return []
-    taken = [(x, y, z) for _, x, y, z in spots]
-    in_area = sum(1 for c, *_ in spots if c == code)
-    items = [(round(x + offset, 1), round(y, 1), round(z, 1)) for x, y, z in sorted(found)
-             if path is None or near_path((x, y, z), path)]
-    walk = [(round(x, 1), round(y, 1), round(z, 1)) for x, y, z in (path or [])]
-    new = []
-    for p in items + walk:
-        if in_area + len(new) >= per_area:
-            break
-        if all(math.dist(p, q) >= min_dist for q in taken):
-            taken.append(p)
-            new.append((code, *p))
-    return new
-
-
-def fill_from_path(spots, phase: str, path, per_area: int = 2, phase_limit: int = 99):
-    """Fin d'une phase : places restantes sur des points du trajet (les plus espaces possible), pour que
-    chaque check reste faisable meme si la phase etait courte."""
-    code = _route_key(phase, phase_limit)
-    if code is None or not path:
-        return []
-    n = per_area - sum(1 for c, *_ in spots if c == code)
-    if n <= 0:
-        return []
-    step = max(1, len(path) // n)
-    picks = [path[min(i * step, len(path) - 1)] for i in range(n)]
-    return [(code, round(x + 1.5 * i, 1), round(y, 1), round(z, 1)) for i, (x, y, z) in enumerate(picks)]
-
-
-def fallback_spot(spots, phase: str, player_pos, per_area: int = 2, phase_limit: int = 99, offset: float = 2.0):
-    """Phase sans objet au sol (arene de boss...) : un emplacement a cote du joueur, pour que chaque check
-    "AP Item: <lieu> #k" reste faisable."""
-    code = _route_key(phase, phase_limit)
-    n = sum(1 for c, *_ in spots if c == code)
-    if code is None or n >= per_area:
-        return None
-    x, y, z = player_pos
-    return (code, round(x + offset + 2.0 * n, 1), round(y, 1), round(z, 1))
-
-
 def scan_ground_objects(mem) -> dict:
     """Objets ramassables poses par le jeu (hors AP Items) -> {objet: position}. Lit d'abord la seule zone
     memoire des entites (0,5 s, verifie en jeu), sinon toute la memoire."""
@@ -189,10 +104,12 @@ class GroundWatch:
 
 
 class SpotTracker:
-    def __init__(self, state: ClientState, spots, radius: float = 150.0):
+    def __init__(self, state: ClientState, spots, radius: float = 150.0, allowed=None):
+        """spots : [(etiquette, x, y, z)] ; allowed : indices retenus pour cette partie (None = tous)."""
         self.state = state
         self.spots = spots
         self.radius = radius
+        self.allowed = None if allowed is None else frozenset(allowed)
         self._spawned: set[int] = set()
 
     def set_game_process(self, pid: int) -> None:
@@ -208,7 +125,8 @@ class SpotTracker:
         if not spawn_allowed(phase):
             return []
         return [i for i, (c, x, y, z) in enumerate(self.spots)
-                if i not in self.state.ap_spots_collected and i not in self._spawned
+                if (self.allowed is None or i in self.allowed)
+                and i not in self.state.ap_spots_collected and i not in self._spawned
                 and i not in self.state.ap_spawned_spots
                 and math.dist((x, y, z), player_pos) <= self.radius]
 

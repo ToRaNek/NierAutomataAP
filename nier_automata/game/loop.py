@@ -3,9 +3,11 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 
+from ..data import worlddb as db
 from ..data.items_data import MATERIALS
-from ..data.phases import is_prologue, phase_code, route_index
-from ..data.tables import spot_location, chest_location, item_location, level_location, location_name_to_id, story_location, weapon_location
+from ..data.phases import is_prologue
+from ..data.tables import (access_point_location, chest_location, item_location, level_location,
+                           location_name_to_id, pickup_location, quest_location, story_location, weapon_location)
 from ..data.weapons import STARTING_WEAPONS, WEAPONS
 from .state import ClientState
 from .trackers import ChestTracker, ItemTracker, LevelTracker, StoryTracker, WeaponTracker
@@ -14,6 +16,8 @@ _LOCS = location_name_to_id()
 _WEAPON_NAME_BY_ID = {v: k for k, v in WEAPONS.items()}
 _MATERIAL_LOC_BY_ID = {v: _LOCS[item_location(k)] for k, v in MATERIALS.items()}
 
+GOAL_STORY, GOAL_ENDING_A = db.GOAL_STORY, db.GOAL_ENDING_A
+
 
 @dataclass
 class Trackers:
@@ -21,8 +25,8 @@ class Trackers:
     weapons: WeaponTracker
     items: ItemTracker
     chests: ChestTracker
-    levels: LevelTracker = None
-    max_level_check: int = 0
+    levels: LevelTracker
+    scope: db.Scope
 
 
 @dataclass
@@ -38,25 +42,23 @@ def new_state(seed: str, slot: int) -> ClientState:
                        ap_weapons={WEAPONS[n] for n in STARTING_WEAPONS})
 
 
-def due_locations(state: ClientState, story_checks: int, weapon_checks: int, chest_checks: int = 0,
-                  max_level_check: int = 0) -> set[int]:
+def due_locations(state: ClientState, scope: db.Scope) -> set[int]:
     """Locations meritees d'apres l'etat (renvoyees tant que le serveur ne les a pas confirmees)."""
-    reached = {route_index(c) for c in state.story_codes} - {None}
-    due = {_LOCS[story_location(i + 1)] for i in reached if i + 1 <= story_checks}
-    due |= {_LOCS[weapon_location(i)] for i in range(1, min(state.weapons_found, weapon_checks) + 1)}
-    due |= {_MATERIAL_LOC_BY_ID[i] for i in state.items_found if i in _MATERIAL_LOC_BY_ID}
-    due |= {_LOCS[chest_location(i)] for i in range(1, min(state.chests_found, chest_checks) + 1)}
-    due |= {_LOCS[level_location(n)] for n in range(2, min(state.max_level, max_level_check) + 1)}
-    for i in state.ap_spots_collected:
-        name = spot_location(state.ap_dynamic_spots, i) if i < len(state.ap_dynamic_spots) else None
-        if name in _LOCS:
-            due.add(_LOCS[name])
+    due = {_LOCS[story_location(i)] for i in state.chapters if i < scope.chapters}
+    due |= {_LOCS[weapon_location(i)] for i in range(1, min(state.weapons_found, scope.weapon_checks) + 1)}
+    if scope.item_checks:
+        due |= {_MATERIAL_LOC_BY_ID[i] for i in state.items_found if i in _MATERIAL_LOC_BY_ID}
+    due |= {_LOCS[chest_location(i)] for i in state.chests_opened & scope.chests}
+    due |= {_LOCS[pickup_location(i)] for i in state.ap_spots_collected & scope.pickups}
+    due |= {_LOCS[access_point_location(i)] for i in state.access_points & scope.access_points}
+    due |= {_LOCS[quest_location(i)] for i in state.quests_done & scope.quests}
+    due |= {_LOCS[level_location(n)] for n in range(2, min(state.max_level, scope.max_level) + 1)}
     return due
 
 
 def is_fresh(state: ClientState) -> bool:
     return (not state.linked and state.next_item_index == 0 and state.weapons_found == 0
-            and not state.story_codes)
+            and not state.chapters)
 
 
 def looks_like_new_game(game) -> bool:
@@ -64,28 +66,26 @@ def looks_like_new_game(game) -> bool:
     return game.owned_weapons() <= starting or is_prologue(game.phase())
 
 
-GOAL_STORY = 0
-GOAL_ENDING_A = 1
+def goal_reached(state: ClientState, phase: str, scope: db.Scope) -> bool:
+    if scope.goal == db.GOAL_STORY:
+        return (scope.chapters - 1) in state.chapters
+    if phase and phase.startswith(db.GOAL_PHASES[scope.goal]):
+        return True
+    # la route suivante a commence : la fin precedente a forcement ete vue
+    return (scope.goal == db.GOAL_ENDING_A and state.route in ("B", "C")) or \
+           (scope.goal == db.GOAL_ENDING_B and state.route == "C")
 
 
-def goal_reached(state: ClientState, phase: str, goal: int, story_checks: int, goal_prefix: str) -> bool:
-    if goal == GOAL_STORY:
-        return any(i is not None and i + 1 >= story_checks for i in map(route_index, state.story_codes))
-    return bool(phase) and phase.startswith(goal_prefix)
+def make_trackers(state: ClientState, scope: db.Scope) -> Trackers:
+    enabled = set(MATERIALS.values()) if scope.item_checks else set()
+    return Trackers(StoryTracker(state, scope.chapters), WeaponTracker(state, scope.weapon_checks),
+                    ItemTracker(state, enabled), ChestTracker(state, scope.chests), LevelTracker(state), scope)
 
 
-def make_trackers(state: ClientState, story_checks: int, weapon_checks: int,
-                  item_checks: bool = True, chest_checks: int = 0, max_level_check: int = 0) -> Trackers:
-    enabled = set(MATERIALS.values()) if item_checks else set()
-    return Trackers(StoryTracker(state, story_checks), WeaponTracker(state, weapon_checks),
-                    ItemTracker(state, enabled), ChestTracker(state, chest_checks),
-                    LevelTracker(state), max_level_check)
-
-
-def tick(game, state: ClientState, received: list[str], trackers: Trackers, goal_prefix: str,
-         goal: int = GOAL_ENDING_A) -> TickResult:
-    """game : in_game(), phase(), owned_weapons(), give(name) -> bool, remove_weapon(id) -> bool."""
+def tick(game, state: ClientState, received: list[str], trackers: Trackers) -> TickResult:
+    """game : in_game(), phase(), owned_weapons(), give(name) -> bool, remove_weapon(id) -> bool, ..."""
     result = TickResult()
+    scope = trackers.scope
     if not game.in_game():
         return result
     if is_fresh(state) and not looks_like_new_game(game):
@@ -111,7 +111,7 @@ def tick(game, state: ClientState, received: list[str], trackers: Trackers, goal
     owned = game.owned_weapons()
 
     # 3. armes trouvees naturellement
-    to_remove, n = trackers.weapons.scan(owned)
+    to_remove, _ = trackers.weapons.scan(owned)
     for wid in to_remove:
         game.remove_weapon(wid)
 
@@ -123,18 +123,24 @@ def tick(game, state: ClientState, received: list[str], trackers: Trackers, goal
     trackers.story.check(phase)
 
     # 6. coffres
-    if trackers.chests.max_count:
+    if trackers.chests.enabled:
         pos = game.position()
         picked = getattr(game, "ground_pickup", lambda p: False)(pos)
-        trackers.chests.update(game.chest_counter(), phase_code(phase), pos, ground_pickup=picked)
+        trackers.chests.update(game.chest_counter(), pos, ground_pickup=picked)
 
     # 7. niveaux
-    if trackers.max_level_check and hasattr(game, "level"):
+    if scope.max_level and hasattr(game, "level"):
         trackers.levels.update(game.level())
 
-    due = due_locations(state, trackers.story.max_count, trackers.weapons.max_found,
-                        trackers.chests.max_count, trackers.max_level_check)
+    # 8. points d'acces actives, quetes terminees (lectures memoire fournies par le jeu)
+    if scope.access_points and hasattr(game, "access_point_bits"):
+        bits = game.access_point_bits()
+        state.access_points.update(i for i in scope.access_points if db.ACCESS_POINTS[i]["bit"] in bits)
+    if scope.quests and hasattr(game, "quests_done"):
+        state.quests_done.update(i for i in game.quests_done() if i in scope.quests)
+
+    due = due_locations(state, scope)
     result.locations = sorted(due - state.sent_locations)
     state.sent_locations.update(result.locations)
-    result.goal = goal_reached(state, phase, goal, trackers.story.max_count, goal_prefix)
+    result.goal = goal_reached(state, phase, scope)
     return result

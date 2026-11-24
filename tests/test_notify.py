@@ -59,5 +59,30 @@ def test_shop_location_shortened_in_notification():
 
 
 def test_story_location_shortened_in_notification():
-    msgs = messages_for_item_send(1, 1, 2, "X", "ToRaNek", "Niicotine", "Story: Camp Resistance")
-    assert msgs[0] == ("Check : ", "Camp Resistance")
+    msgs = messages_for_item_send(1, 1, 2, "X", "ToRaNek", "Niicotine", "Story A 02-01: Landing at the City Ruins")
+    assert msgs[0] == ("Check : ", "Landing at the Ci")
+
+
+def test_short_names_for_new_check_types():
+    from nier_automata.game.notify import short_location
+    assert short_location("Story A 02-01: Landing at the City Ruins", "en") == "Landing at the Ci"
+    assert short_location("Chest: City Ruins: Shopping Center #12", "en") == "City Ruins: S #12"
+    assert short_location("AP Item: Desert Zone: Housing Complex #2", "en") == "Desert Zone: H #2"
+    assert short_location("Access Point: Desert: Camp", "en") == "Desert: Camp"
+    assert short_location("Quest: Lost Girl", "en") == "Lost Girl"
+    assert all(len(short_location(n, "en")) <= 17 for n in (
+        "Chest: Abandoned Factory: Underground Area #18", "Access Point: Forest Zone: Royal Chamber"))
+
+
+def test_access_point_bits_decoding():
+    from nier_automata.game.game import decode_bits
+    import struct
+    raw = struct.pack("<4I", 0x80000000 | (0x80000000 >> 3), 0x80000000 >> 1, 0, 0)
+    assert decode_bits(raw) == {0, 3, 33}
+
+
+def test_own_filler_is_silent_in_multiplayer():
+    msgs = messages_for_item_send(1, 1, 1, "Small Recovery", "Me", "Me", "Level 3", lang="en", hide_own=True)
+    assert msgs == [("Check: ", "Level 3")]                       # pas de ligne "For you"
+    solo = messages_for_item_send(1, 1, 1, "Small Recovery", "Me", "Me", "Level 3", lang="en")
+    assert solo == [("Check: ", "Level 3"), ("For you: ", "Small Recovery")]

@@ -59,13 +59,15 @@ def test_to_json_changes_with_state():
     assert s.to_json() != before
 
 
-def test_dynamic_spots_roundtrip(tmp_path):
+def test_progress_sets_roundtrip(tmp_path):
     from nier_automata.game.state import ClientState
     s = ClientState(seed="S", slot=1, save_slot=None)
-    s.ap_dynamic_spots.append(("30_AB", 1.5, 2.0, 3.0))
+    s.route = "B"; s.chapters.update({0, 1}); s.chests_opened.add(7); s.access_points.add(2)
+    s.quests_done.add(5); s.ap_spots_collected.add(9)
     p = tmp_path / "s.json"
     s.save(p)
-    assert ClientState.load(p).ap_dynamic_spots == [("30_AB", 1.5, 2.0, 3.0)]
+    r = ClientState.load(p)
+    assert (r.route, r.chapters, r.chests_opened, r.access_points, r.quests_done, r.ap_spots_collected) ==            ("B", {0, 1}, {7}, {2}, {5}, {9})
 
 
 def test_hints_roundtrip(tmp_path):

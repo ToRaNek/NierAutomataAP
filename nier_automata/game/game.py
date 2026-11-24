@@ -40,6 +40,18 @@ def backup_saves(src: Optional[Path] = None, dst_root: Optional[Path] = None) ->
     return dst
 
 
+ACCESS_POINT_BITS_RVA = 0x14957E0
+
+
+def decode_bits(raw: bytes) -> set[int]:
+    """Bit n = dword[n >> 5] & (0x80000000 >> (n & 31))."""
+    out = set()
+    for w in range(len(raw) // 4):
+        v = int.from_bytes(raw[w * 4:w * 4 + 4], "little")
+        out.update(w * 32 + b for b in range(32) if v & (0x80000000 >> b))
+    return out
+
+
 class NierGame:
     def __init__(self):
         self.mem: Optional[ProcessMemory] = None
@@ -91,6 +103,13 @@ class NierGame:
             return bool(self.ground and self.ground.picked_near(pos))
         except OSError:
             return False
+
+    def access_point_bits(self) -> set[int]:
+        """Points d'acces actives (bit n du tableau global, voir docs/research/access_points_resolved.json)."""
+        try:
+            return decode_bits(self.mem.read(self.mem.base + ACCESS_POINT_BITS_RVA, 16))
+        except OSError:
+            return set()
 
     def chest_counter(self) -> int:
         return read_u32(self.mem, self._off["chestCounter"])

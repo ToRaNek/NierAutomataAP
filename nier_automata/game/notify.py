@@ -41,27 +41,44 @@ def template_for(prefix: str, length: int = TEMPLATE_LEN) -> str:
     return prefix + PLACEHOLDER
 
 
+def _fit(text: str, limit: int = MAX_LEN) -> str:
+    """Tronque en gardant le numero final (" #12")."""
+    if len(text) <= limit:
+        return text
+    head, sep, num = text.rpartition(" #")
+    if sep and num.isdigit():
+        tail = " #" + num
+        return head[:limit - len(tail)].rstrip() + tail
+    return text[:limit]
+
+
 def short_location(location: str, lang: str = "fr") -> str:
     """Nom de check court pour la notification (17 caracteres max)."""
     from .i18n import short_place, t
-    if location.startswith("Story: "):
-        return location[7:]
+    if location.startswith("Story ") and ": " in location:
+        return _fit(location.split(": ", 1)[1])            # titre du chapitre
     if location.startswith("Shop "):
         place, _, num = location[5:].rpartition(" #")
-        return t(lang, "shop_short", place=short_place(lang, place), n=num)
-    return location
+        return _fit(t(lang, "shop_short", place=short_place(lang, place), n=num))
+    for prefix in ("Chest: ", "AP Item: ", "Access Point: ", "Quest: "):
+        if location.startswith(prefix):
+            return _fit(location[len(prefix):])
+    return _fit(location)
 
 
 def messages_for_item_send(me: int, sender: int, receiver: int, item: str,
                            sender_name: str, receiver_name: str, location: str,
-                           lang: str = "fr") -> list[tuple[str, str]]:
+                           lang: str = "fr", hide_own: bool = False) -> list[tuple[str, str]]:
     """(prefixe, texte) a afficher pour "sender a envoye item a receiver depuis location".
     Check valide par moi : "Check : <location>" puis "Pour <qui> : <objet>". Recu : "De <qui> : <objet>"."""
     from .i18n import t
     item = item[:MAX_LEN]
     if sender == me:
-        to = t(lang, "for_you") if receiver == me else t(lang, "for", who=receiver_name)
-        return [(t(lang, "check"), short_location(location, lang)[:MAX_LEN]), (to, item)]
+        check = (t(lang, "check"), short_location(location, lang)[:MAX_LEN])
+        if receiver == me:
+            # a plusieurs, un objet de remplissage peut retomber chez soi : applique sans message
+            return [check] if hide_own else [check, (t(lang, "for_you"), item)]
+        return [check, (t(lang, "for", who=receiver_name), item)]
     if receiver == me:
         return [(t(lang, "from", who=sender_name), item)]
     return []

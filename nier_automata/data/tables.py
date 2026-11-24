@@ -6,40 +6,38 @@ from .items_data import FILLER_ITEMS, FUNDS_ITEMS, MATERIALS, TRAP_ITEMS
 from .weapons import WEAPONS
 
 BASE_CODE = 0x4E41_0000
-from .phases import ROUTE_A
+from . import worlddb as db
 
-MAX_STORY = len(ROUTE_A)
+MAX_STORY = len(db.CHAPTERS)
 MAX_WEAPON_CHECKS = 30
-MAX_CHEST_CHECKS = 60
-GOAL_LOCATION = "Story: Ending A"
 
 
-def story_location(n: int) -> str:
-    """n-ieme phase nommee de la route A, ex. "Story: Camp Resistance"."""
-    return f"Story: {ROUTE_A[n - 1][1]}"
+def story_location(i: int) -> str:
+    """Nom du check du chapitre d'indice i (0 = premier chapitre de la route A)."""
+    return db.CHAPTERS[i]["name"]
 
 
 def weapon_location(n: int) -> str:
     return f"Weapon Found #{n}"
 
 
-AP_PER_PHASE_MAX = 3
+def chest_location(i: int) -> str:
+    return db.CHESTS[i]["name"]
 
 
-def ap_item_location(phase_index: int, k: int) -> str:
-    """AP Item au sol n k de la phase d'histoire `phase_index` (nom indicatif pour les indices)."""
-    return f"AP Item: {ROUTE_A[phase_index][1]} #{k}"
+def pickup_location(i: int) -> str:
+    return db.PICKUPS[i]["name"]
 
 
-def spot_location(spots, i: int) -> str:
-    """Nom du check de l'emplacement i (spots : [(cle de phase ROUTE_A, x, y, z)])."""
-    key = spots[i][0]
-    k = sum(1 for s in spots[:i + 1] if s[0] == key)
-    idx = next((j for j, (prefix, _) in enumerate(ROUTE_A) if prefix == key), None)
-    return ap_item_location(idx, k) if idx is not None else None
+def access_point_location(i: int) -> str:
+    return db.ACCESS_POINTS[i]["name"]
 
 
-# Magasins sur la route A (ordre fixe : il determine les codes).
+def quest_location(i: int) -> str:
+    return db.QUESTS[i]["name"]
+
+
+# Magasins (ordre fixe : il determine les codes).
 SHOP_PLACES_ORDER = ["Resistance Camp", "Pascal's Village", "Forest Castle"]
 MAX_SHOP_SLOTS = 4
 
@@ -60,10 +58,6 @@ def others_or_filler(player: int):
 
 def level_location(n: int) -> str:
     return f"Level {n}"
-
-
-def chest_location(n: int) -> str:
-    return f"Chest #{n}"
 
 
 def item_location(name: str) -> str:
@@ -89,23 +83,23 @@ def item_name_to_id() -> dict[str, int]:
 
 def location_name_to_id() -> dict[str, int]:
     locs: dict[str, int] = {}
-    for n in range(1, MAX_STORY + 1):
-        locs[story_location(n)] = BASE_CODE + 0x1000 + n
     for n in range(1, MAX_WEAPON_CHECKS + 1):
         locs[weapon_location(n)] = BASE_CODE + 0x2000 + n
     for i, name in enumerate(MATERIALS):
         locs[item_location(name)] = BASE_CODE + 0x3000 + i
-    for n in range(1, MAX_CHEST_CHECKS + 1):
-        locs[chest_location(n)] = BASE_CODE + 0x4000 + n
     for n in range(2, 100):
         locs[level_location(n)] = BASE_CODE + 0x5000 + n
-    for i in range(len(ROUTE_A)):
-        for k in range(1, AP_PER_PHASE_MAX + 1):
-            locs[ap_item_location(i, k)] = BASE_CODE + 0x6000 + i * 4 + k
     for i, place in enumerate(SHOP_PLACES_ORDER):
         for k in range(1, MAX_SHOP_SLOTS + 1):
             locs[shop_location(place, k)] = BASE_CODE + 0x7000 + i * 0x10 + k
+    for base, table in ((0x8000, db.CHAPTERS), (0x9000, db.CHESTS), (0xA000, db.PICKUPS),
+                        (0xB000, db.ACCESS_POINTS), (0xC000, db.QUESTS)):
+        for i, entry in enumerate(table):
+            locs[entry["name"]] = BASE_CODE + base + i
     return locs
+
+
+SHOP_REGION = {"Resistance Camp": "A02", "Pascal's Village": "A05", "Forest Castle": "A06"}
 
 
 def pool_weapon_count(story_locations: int, total_locations: int, candidates: int) -> int:

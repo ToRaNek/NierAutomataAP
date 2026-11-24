@@ -79,14 +79,25 @@ def test_is_goal():
 from nier_automata.game.trackers import StoryTracker
 
 
-def test_story_one_check_per_named_route_phase():
+def test_story_chapter_reached_marks_previous_ones():
+    from nier_automata.data import worlddb as db
     s = st()
-    t = StoryTracker(s, max_count=30)
-    assert t.check("00_60_A_RobotM_Pro_Tutorial") is None          # prologue : pas encore le boss
-    assert t.check("05_00_A_RobotM_Pro_ArmBoss_2nd") == 1          # boss du prologue
-    assert t.check("30_AB_Ruined_City_ForcedLanding") == 7
-    assert t.check("30_AB_Pascal_Village") == 23                    # meme code 30_AB, autre phase
-    assert t.check("30_AB_Pascal_Village") is None                  # deja compte
+    t = StoryTracker(s, max_count=200)
+    i = t.check("30_AB_Ruined_City_ForcedLanding")
+    assert db.CHAPTERS[i]["name"] == "Story A 02-01: Landing at the City Ruins"
+    assert s.chapters == set(range(i + 1))                       # les chapitres precedents sont valides
+    assert t.check("30_AB_Ruined_City_ForcedLanding") is None    # deja compte
+
+
+def test_story_route_b_uses_its_own_chapters():
+    from nier_automata.data import worlddb as db
+    s = st()
+    t = StoryTracker(s, max_count=200)
+    t.check("30_AB_Ruined_City_ForcedLanding")
+    t.check("00_00_B_RobotM_Pro_RobotBrother")                   # sous-phase propre a la route B
+    assert s.route == "B"
+    i = t.check("30_AB_Ruined_City_ForcedLanding")               # meme sous-phase, autre route
+    assert db.CHAPTERS[i]["route"] == "B" and db.CHAPTERS[i]["chapter"] == "02-01"
 
 
 def test_story_ignores_menu():
@@ -97,21 +108,14 @@ def test_story_ignores_menu():
 
 def test_story_capped():
     s = st()
-    t = StoryTracker(s, max_count=7)
-    assert t.check("40_AB_Resistance_Camp_Leader") is None          # 8e phase > 7
-    assert "40_AB_Resistance_Camp_Leader" in s.story_codes
+    t = StoryTracker(s, max_count=2)
+    assert t.check("30_AB_Ruined_City_ForcedLanding") is None     # chapitre hors perimetre
+    assert s.chapters                                             # mais memorise
 
 
 def test_story_survives_restart():
-    s = st(story_codes={"30_AB_Ruined_City_ForcedLanding"})
-    assert StoryTracker(s, max_count=30).check("30_AB_Ruined_City_ForcedLanding") is None
-
-
-def test_story_location_names_are_readable_and_short():
-    from nier_automata.data.tables import story_location
-    from nier_automata.data.phases import ROUTE_A
-    assert story_location(8) == "Story: Camp Resistance"
-    assert all(len(label) <= 17 for _, label in ROUTE_A)
+    s = st(chapters={0, 1, 2, 3, 4, 5})
+    assert StoryTracker(s, max_count=200).check("30_AB_Ruined_City_ForcedLanding") is None
 
 
 def test_unknown_weapon_id_ignored():
@@ -188,51 +192,46 @@ def test_item_baseline_needs_two_identical_reads():
 
 from nier_automata.game.trackers import ChestTracker
 
-P1 = (-554.5, 37.2, 276.8)
-P2 = (-300.0, 10.0, 100.0)
 
-
-def ch(s, n, code="00_80", pos=P1, t=None):
-    t = t or ChestTracker(s, max_count=10)
-    return t, t.update(n, code, pos)
+def chest_at(i, dx=1.0):
+    from nier_automata.data import worlddb as db
+    x, y, z = db.CHESTS[i]["pos"]
+    return (x + dx, y + 1.5, z)
 
 
 def test_chest_first_read_is_baseline():
     s = st()
-    t = ChestTracker(s, max_count=10)
-    assert t.update(3, "00_80", P1) is None
-    assert t.update(3, "00_80", P1) is None
-    assert s.chests_found == 0
+    t = ChestTracker(s, {0, 1})
+    assert t.update(5, chest_at(0)) is None
+    assert t.update(5, chest_at(0)) is None
+    assert s.chests_opened == set()
 
 
-def test_chest_increment_needs_two_reads():
+def test_chest_increment_needs_two_reads_and_names_the_nearest_chest():
     s = st()
-    t = ChestTracker(s, max_count=10)
-    t.update(3, "00_80", P1); t.update(3, "00_80", P1)
-    assert t.update(4, "00_80", P2) is None      # vu une fois
-    assert t.update(4, "00_80", P2) == 1         # confirme
-    assert s.chests_found == 1
+    t = ChestTracker(s, {0, 1})
+    t.update(5, chest_at(0)); t.update(5, chest_at(0))
+    assert t.update(6, chest_at(1)) is None          # 1re lecture : on attend
+    assert t.update(6, chest_at(1)) == 1
+    assert s.chests_opened == {1}
 
 
-def test_same_chest_after_reload_not_recounted():
+def test_same_chest_not_counted_twice_and_far_openings_ignored():
     s = st()
-    t = ChestTracker(s, max_count=10)
-    t.update(3, "00_80", P1); t.update(3, "00_80", P1)
-    t.update(4, "00_80", P2); t.update(4, "00_80", P2)
-    t.update(3, "00_80", P1); t.update(3, "00_80", P1)    # rechargement : compteur redescend
-    t.update(4, "00_80", P2)
-    assert t.update(4, "00_80", (P2[0] + 1, P2[1], P2[2] + 1)) is None  # meme coffre (meme endroit)
-    assert s.chests_found == 1
+    t = ChestTracker(s, {0, 1})
+    t.update(5, chest_at(0)); t.update(5, chest_at(0))
+    t.update(6, chest_at(0)); assert t.update(6, chest_at(0)) == 0
+    t.update(7, chest_at(0, dx=900.0))
+    assert t.update(7, chest_at(0, dx=900.0)) is None      # aucun coffre connu a cet endroit
+    assert s.chests_opened == {0}
 
 
-def test_chest_capped():
+def test_chest_outside_scope_is_remembered_but_not_sent():
     s = st()
-    t = ChestTracker(s, max_count=1)
-    t.update(0, "00_80", P1); t.update(0, "00_80", P1)
-    t.update(1, "00_80", P1); t.update(1, "00_80", P1)
-    t.update(2, "00_80", P2)
-    assert t.update(2, "00_80", P2) is None
-    assert s.chests_found == 1
+    t = ChestTracker(s, {1})
+    t.update(5, chest_at(0)); t.update(5, chest_at(0))
+    t.update(6, chest_at(0))
+    assert t.update(6, chest_at(0)) is None and s.chests_opened == {0}
 
 
 from nier_automata.game.trackers import LevelTracker
@@ -258,12 +257,11 @@ def test_level_never_decreases_and_ignores_garbage():
 
 def test_ground_pickup_does_not_count_as_chest():
     s = st()
-    t = ChestTracker(s, max_count=5)
-    pos = (0.0, 0.0, 0.0)
+    t = ChestTracker(s, {0, 1})
     for c in (3, 3):
-        t.update(c, "30_AB", pos)
-    t.update(4, "30_AB", pos, ground_pickup=True)
-    assert t.update(4, "30_AB", pos, ground_pickup=True) is None   # ramassage au sol : pas de check
-    assert s.chests_found == 0
-    t.update(5, "30_AB", (50.0, 0.0, 0.0))
-    assert t.update(5, "30_AB", (50.0, 0.0, 0.0)) == 1            # vrai coffre
+        t.update(c, chest_at(0))
+    t.update(4, chest_at(0), ground_pickup=True)
+    assert t.update(4, chest_at(0), ground_pickup=True) is None   # ramassage au sol : pas de check
+    assert s.chests_opened == set()
+    t.update(5, chest_at(1))
+    assert t.update(5, chest_at(1)) == 1                          # vrai coffre

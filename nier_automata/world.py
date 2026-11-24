@@ -2,13 +2,12 @@ from BaseClasses import Item, ItemClassification, Location, LocationProgressType
 from worlds.AutoWorld import WebWorld, World
 from worlds.LauncherComponents import Component, Type, components, launch_subprocess
 
+from .data import worlddb as db
 from .data.items_data import FILLER_ITEMS, FUNDS_ITEMS, MATERIALS, TRAP_ITEMS
-from .data.phases import GOAL_PHASE_PREFIX
 from .data.tables import (
-    GOAL_LOCATION, ap_item_location, chest_location, item_location, level_location, item_name_to_id, pool_weapon_count, location_name_to_id, story_location, weapon_location,
-    SHOP_PLACES_ORDER, others_only, others_or_filler, shop_location,
+    SHOP_PLACES_ORDER, SHOP_REGION, item_location, item_name_to_id, level_location, location_name_to_id,
+    others_only, others_or_filler, pool_weapon_count, shop_location, weapon_location,
 )
-from .data.phases import ROUTE_A, ap_phase_indices
 from .data.weapons import STARTING_WEAPONS, WEAPONS
 from .options import NierAutomataOptions
 
@@ -34,12 +33,13 @@ class NierLocation(Location):
 
 class NierWeb(WebWorld):
     theme = "stone"
-    tutorials = [Tutorial("Setup", "Installer l'apworld et lancer le client.", "French",
-                          "setup_fr.md", "setup/fr", ["ToRaNek"])]
+    tutorials = [Tutorial("Setup", "Install the apworld and start the client.", "English",
+                          "setup_en.md", "setup/en", ["ToRaNek"])]
 
 
 class NierAutomataWorld(World):
-    """NieR:Automata (route A). Checks : progression de l'histoire et armes trouvees."""
+    """NieR:Automata (all routes). Story chapters, named chests, AP Items on the game's collection points,
+    access points, shops and levels are checks; weapons and abilities are items."""
     game = GAME
     web = NierWeb()
     options_dataclass = NierAutomataOptions
@@ -48,40 +48,71 @@ class NierAutomataWorld(World):
     location_name_to_id = location_name_to_id()
     item_name_groups = {"Weapons": set(WEAPONS)}
 
-    def _ap_phase_count(self) -> int:
-        """Etapes d'histoire qui ont des AP Items : jusqu'a l'objectif (story_progress) ou toute la route A."""
-        return min(self.options.story_checks.value, len(ROUTE_A)) if self.options.goal.value == 0 else len(ROUTE_A)
+    scope: db.Scope
+    pool_weapons: list
 
-    def _location_names(self) -> list[str]:
-        names = [story_location(n) for n in range(1, self.options.story_checks.value + 1)]
-        names += [weapon_location(n) for n in range(1, self.options.weapon_checks.value + 1)]
-        names += [chest_location(n) for n in range(1, self.options.chest_checks.value + 1)]
-        names += [level_location(n) for n in range(2, self.options.max_level_check.value + 1)]
-        if self.options.item_checks:
-            names += [item_location(m) for m in MATERIALS]
-        if self.options.ap_items:
-            names += [ap_item_location(i, k) for i in ap_phase_indices(self._ap_phase_count())
-                      for k in range(1, self.options.ap_items_per_phase.value + 1)]
-        names += [shop_location(p, k) for p in SHOP_PLACES_ORDER for k in range(1, self.options.shop_checks.value + 1)]
-        return names
+    def generate_early(self) -> None:
+        o = self.options
+        self.scope = db.make_scope(
+            goal=o.goal.value, story_checks=o.story_checks.value, chest_checks=bool(o.chest_checks),
+            ap_items_per_area=o.ap_items_per_area.value if o.ap_items else 0,
+            access_point_checks=bool(o.access_point_checks), quest_checks=bool(o.quest_checks),
+            weapon_checks=o.weapon_checks.value, max_level_check=o.max_level_check.value,
+            item_checks=bool(o.item_checks))
+        self.spots = self._spots()
+        abilities = len(o.randomized_abilities.value)
+        open_locs = sum(1 for _, _, excluded, _ in self.spots if not excluded)
+        candidates = sorted(set(WEAPONS) - STARTING_WEAPONS)
+        n = pool_weapon_count(max(0, open_locs - abilities), len(self.spots), len(candidates))
+        self.pool_weapons = self.random.sample(candidates, n)
+
+    def _spots(self) -> list[tuple[str, str, bool, list]]:
+        """(nom, region, exclu, capacites requises) de chaque check de cette partie."""
+        s, regions = self.scope, set(self.scope.regions)
+        out = [(db.CHAPTERS[i]["name"], db.CHAPTERS[i]["region"], False, []) for i in range(s.chapters)]
+        for table, idx in ((db.CHESTS, s.chests), (db.PICKUPS, s.pickups), (db.ACCESS_POINTS, s.access_points),
+                           (db.QUESTS, s.quests)):
+            out += [(table[i]["name"], table[i]["region"], bool(table[i].get("excluded")),
+                     table[i].get("needs", [])) for i in sorted(idx)]
+        out += [(level_location(n), db.level_region(n), False, []) for n in range(2, s.max_level + 1)]
+        for place in SHOP_PLACES_ORDER:
+            if SHOP_REGION[place] in regions:
+                out += [(shop_location(place, k), SHOP_REGION[place], False, [])
+                        for k in range(1, self.options.shop_checks.value + 1)]
+        # peuvent etre inatteignables (peu d'armes par route) : jamais d'objet important
+        out += [(weapon_location(n), s.regions[0], True, []) for n in range(1, s.weapon_checks + 1)]
+        if s.item_checks:
+            out += [(item_location(m), s.regions[0], True, []) for m in MATERIALS]
+        return out
 
     def create_regions(self) -> None:
-        menu = Region("Menu", self.player, self.multiworld)
-        for name in self._location_names():
-            loc = NierLocation(self.player, name, self.location_name_to_id[name], menu)
-            if name.startswith(("Weapon Found", "Item: ")):
-                # Peut etre inatteignable (peu d'armes en route A) : jamais d'objet de progression ici.
+        player, regions = self.player, self.scope.regions
+        menu = Region("Menu", player, self.multiworld)
+        by_name = {r: Region(r, player, self.multiworld) for r in regions}
+        self.multiworld.regions += [menu, *by_name.values()]
+        menu.connect(by_name[regions[0]])
+        weapons = len(self.pool_weapons)
+        for i in range(1, len(regions)):
+            need = db.required_weapons(i, len(regions), weapons)
+            by_name[regions[i - 1]].connect(
+                by_name[regions[i]],
+                rule=(lambda state, n=need: state.has_group("Weapons", player, n)) if need else None)
+        locked = set(self.options.randomized_abilities.value)
+        for name, region, excluded, needs in self.spots:
+            loc = NierLocation(player, name, self.location_name_to_id[name], by_name[region])
+            if excluded:
                 loc.progress_type = LocationProgressType.EXCLUDED
-            menu.locations.append(loc)
-        goal_name = "Goal: Story Progress" if self.options.goal.value == 0 else GOAL_LOCATION
-        goal = NierLocation(self.player, goal_name, None, menu)
-        goal.place_locked_item(NierItem("Victory", ItemClassification.progression, None, self.player))
-        menu.locations.append(goal)
-        self.multiworld.regions.append(menu)
+            required = [a for a in needs if a in locked]
+            if required:
+                loc.access_rule = lambda state, req=tuple(required): state.has_all(req, player)
+            by_name[region].locations.append(loc)
+        goal = NierLocation(player, "Goal", None, by_name[regions[-1]])
+        goal.place_locked_item(NierItem("Victory", ItemClassification.progression, None, player))
+        by_name[regions[-1]].locations.append(goal)
 
     def create_item(self, name: str) -> NierItem:
         if name in WEAPONS or name in self.options.randomized_abilities.value:
-            cls = ItemClassification.useful
+            cls = ItemClassification.progression     # armes : logique de combat ; capacites : acces
         elif name in TRAP_ITEMS:
             cls = ItemClassification.trap
         else:
@@ -92,16 +123,10 @@ class NierAutomataWorld(World):
         return self.random.choice(list(FILLER_ITEMS) + list(FUNDS_ITEMS))
 
     def create_items(self) -> None:
-        count = len(self._location_names())
-        candidates = sorted(set(WEAPONS) - STARTING_WEAPONS)
-        open_locs = (self.options.story_checks.value + self.options.chest_checks.value
-                     + max(0, self.options.max_level_check.value - 1))
-        abilities = sorted(self.options.randomized_abilities.value)
-        n = pool_weapon_count(max(0, open_locs - len(abilities)), count, len(candidates))
-        weapons = self.random.sample(candidates, n)
-        pool = [self.create_item(a) for a in abilities] + [self.create_item(w) for w in weapons]
+        pool = [self.create_item(a) for a in sorted(self.options.randomized_abilities.value)]
+        pool += [self.create_item(w) for w in self.pool_weapons]
         traps = list(TRAP_ITEMS)
-        for _ in range(count - len(pool)):
+        for _ in range(len(self.spots) - len(pool)):
             if self.random.randint(1, 100) <= self.options.trap_percentage.value:
                 pool.append(self.create_item(self.random.choice(traps)))
             else:
@@ -111,32 +136,32 @@ class NierAutomataWorld(World):
     def set_rules(self) -> None:
         self.multiworld.completion_condition[self.player] = lambda state: state.has("Victory", self.player)
         if self.multiworld.players > 1:
-            # a plusieurs : chaque check donne aux AUTRES joueurs, s'ils ont assez d'objets pour tout remplir
+            # A plusieurs : jamais d'objet important pour soi dans son propre monde (le remplissage peut y
+            # retomber : une regle stricte partout fait echouer le remplissage aleatoire d'Archipelago).
+            # Les AP Items (sol et magasins) ne contiennent que des objets pour les autres, tant que les autres
+            # joueurs ont largement assez d'objets.
             mine = [loc for loc in self.multiworld.get_locations(self.player) if loc.address is not None]
+            special = {loc.name for loc in mine if loc.name.startswith(("AP Item: ", "Shop "))}
             others = sum(1 for it in self.multiworld.itempool if it.player != self.player)
-            strict = others >= len(mine)
-            if not strict:
-                import logging
-                logging.warning("NieR:Automata (%s) : pas assez d'objets chez les autres joueurs (%d < %d) ; "
-                                "seuls des objets de remplissage pourront etre pour soi.",
-                                self.player_name, others, len(mine))
+            strict = others >= 2 * len(special)
             for loc in mine:
-                loc.item_rule = others_only(self.player) if strict else others_or_filler(self.player)
+                exact = strict and loc.name in special
+                loc.item_rule = others_only(self.player) if exact else others_or_filler(self.player)
 
     def fill_slot_data(self) -> dict:
+        o = self.options
         return {
-            "story_checks": self.options.story_checks.value,
-            "weapon_checks": self.options.weapon_checks.value,
-            "item_checks": bool(self.options.item_checks),
-            "chest_checks": self.options.chest_checks.value,
-            "ap_items": bool(self.options.ap_items),
-            "ap_items_per_phase": self.options.ap_items_per_phase.value,
-            "ap_phase_count": self._ap_phase_count(),
-            "shop_checks": self.options.shop_checks.value,
-            "shop_price": self.options.shop_price.value,
-            "max_level_check": self.options.max_level_check.value,
-            "randomized_abilities": sorted(self.options.randomized_abilities.value),
-            "goal": self.options.goal.value,
-            "death_link": bool(self.options.death_link),
-            "goal_phase_prefix": GOAL_PHASE_PREFIX,
+            "goal": o.goal.value,
+            "story_checks": o.story_checks.value,
+            "chest_checks": bool(o.chest_checks),
+            "ap_items_per_area": o.ap_items_per_area.value if o.ap_items else 0,
+            "access_point_checks": bool(o.access_point_checks),
+            "quest_checks": bool(o.quest_checks),
+            "weapon_checks": o.weapon_checks.value,
+            "max_level_check": o.max_level_check.value,
+            "item_checks": bool(o.item_checks),
+            "shop_checks": o.shop_checks.value,
+            "shop_price": o.shop_price.value,
+            "randomized_abilities": sorted(o.randomized_abilities.value),
+            "death_link": bool(o.death_link),
         }

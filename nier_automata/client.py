@@ -9,15 +9,18 @@ import urllib.parse
 from CommonClient import CommonContext, get_base_parser, gui_enabled, logger, server_loop
 from NetUtils import ClientStatus
 
-from .data.phases import GOAL_PHASE_PREFIX, abilities_allowed, ap_phase_indices
+from .data import worlddb as db
+from .data.phases import abilities_allowed
 from .game import ap_items as apit
 from .game import notify
-from .data.tables import SHOP_PLACES_ORDER, ap_item_location as apit_loc, location_name_to_id, shop_location, spot_location
+from .data.tables import SHOP_PLACES_ORDER, SHOP_REGION, location_name_to_id, shop_location
 from .game import shop as shopm
 from .game import mail as mailm
 from .game import i18n
 
 LOC_IDS = location_name_to_id()
+# AP Items : a cote (1,5 m) des points de collecte du jeu retenus dans la base
+AP_SPOTS = [(p["region"], p["pos"][0] + 1.5, p["pos"][1], p["pos"][2]) for p in db.PICKUPS]
 from .data.items_data import FILLER_ITEMS
 from .game.abilities import AbilityLock
 from .game.deathlink import DeathTracker
@@ -37,8 +40,7 @@ class NierContext(CommonContext):
         self.nier = NierGame()
         self.state: ClientState | None = None
         self.trackers = None
-        self.goal_prefix = GOAL_PHASE_PREFIX
-        self.goal = 1
+        self.scope = None
         self.deaths = DeathTracker()
         self.saved_json = ""
         self.received_names: set[str] = set()
@@ -93,7 +95,8 @@ class NierContext(CommonContext):
                 msgs = notify.messages_for_item_send(self.slot, sender, receiver, name,
                                                      self.player_names.get(sender, "?"),
                                                      self.player_names.get(receiver, "?"), loc_name,
-                                                     lang=getattr(self, "lang", "en"))
+                                                     lang=getattr(self, "lang", "en"),
+                                                     hide_own=len(self.player_names) > 2)
                 logger.info("notification queued: %s", msgs)
                 self.notes.extend(msgs)
             except StopIteration:
@@ -109,14 +112,11 @@ class NierContext(CommonContext):
             self.saved_json = ""
             self.goal_sent = False
             self.deaths = DeathTracker()
-            self.trackers = make_trackers(self.state, sd.get("story_checks", 12), sd.get("weapon_checks", 8),
-                                          sd.get("item_checks", False), sd.get("chest_checks", 0),
-                                          sd.get("max_level_check", 0))
-            self.goal_prefix = sd.get("goal_phase_prefix", GOAL_PHASE_PREFIX)
-            self.goal = sd.get("goal", 1)
+            self.scope = db.scope_from_slot_data(sd)
+            self.trackers = make_trackers(self.state, self.scope)
             self.death_link_on = bool(sd.get("death_link", False))
             self.randomized_abilities = set(sd.get("randomized_abilities", []))
-            self.ap_items_on = bool(sd.get("ap_items", False))
+            self.ap_items_on = bool(self.scope.pickups)
             self.ap_contents = {}
             self.ap_flags = {}
             self.ap_prepared = None
@@ -134,20 +134,15 @@ class NierContext(CommonContext):
             self.shop_pid = None
             self.shop_applied = None
             self.shop_pay = shopm.PaymentWatch()
-            self.ap_per_phase = int(sd.get("ap_items_per_phase", 0))
-            self.ap_phase_count = int(sd.get("ap_phase_count", 0))
-            ground = [LOC_IDS[apit_loc(i, k)] for i in ap_phase_indices(self.ap_phase_count)
-                      for k in range(1, self.ap_per_phase + 1)] if self.ap_items_on else []
+            self.shop_slots = [(p, k) for p in SHOP_PLACES_ORDER if SHOP_REGION[p] in self.scope.regions
+                               for k in range(1, self.shop_checks + 1)]
+            ground = [LOC_IDS[db.PICKUPS[i]["name"]] for i in sorted(self.scope.pickups)]
             self.ap_ground_ids = set(ground)
-            shops = [LOC_IDS[shop_location(p, k)] for p in SHOP_PLACES_ORDER for k in range(1, self.shop_checks + 1)]
+            shops = [LOC_IDS[shop_location(p, k)] for p, k in self.shop_slots]
             ids = [i for i in ground + shops if i in self.server_locations]
             if ids:
                 asyncio.create_task(self.send_msgs([{"cmd": "LocationScouts", "locations": ids, "create_as_hint": 0}]))
-            self.spots = apit.SpotTracker(self.state, self.state.ap_dynamic_spots)
-            self.ap_discover_at = 0.0
-            self.ap_phase_since = 0.0
-            self.ap_path = {}   # phase -> positions au sol du joueur (trajet reel)
-            self.ap_discovering = False
+            self.spots = apit.SpotTracker(self.state, AP_SPOTS, allowed=self.scope.pickups)
             self.ap_tracked = {}
             self.ap_pid = None
             self.ap_phase = None
@@ -156,10 +151,7 @@ class NierContext(CommonContext):
                 asyncio.create_task(self.update_death_link(True))
             logger.info("Connected. Local state: %s", path)
             # Renvoyer les checks merites que le serveur n'a pas (coupure pendant un envoi).
-            missing = (due_locations(self.state, self.trackers.story.max_count,
-                                     self.trackers.weapons.max_found,
-                                     self.trackers.chests.max_count,
-                                     self.trackers.max_level_check) | self.state.sent_locations)                 - set(args.get("checked_locations", []))
+            missing = (due_locations(self.state, self.scope) | self.state.sent_locations)                 - set(args.get("checked_locations", []))
             if missing:
                 asyncio.create_task(self.send_msgs([{"cmd": "LocationChecks", "locations": sorted(missing)}]))
 
@@ -322,30 +314,12 @@ async def ground_step(ctx: NierContext):
     asyncio.create_task(run())
 
 
-async def discover_spots(ctx: NierContext, mem, phase: str):
-    """Releve les objets poses par le jeu autour du joueur et en fait de nouveaux emplacements d'AP Items."""
-    import time
-    try:
-        found = await asyncio.to_thread(apit.find_game_items, mem)
-        spots = ctx.state.ap_dynamic_spots
-        new = apit.extend_spots(spots, found, phase, ctx.ap_per_phase, ctx.ap_phase_count,
-                                path=ctx.ap_path.get(phase, []))
-        if new:
-            spots.extend(new)
-            logger.info("AP Items : %s", ", ".join(spot_location(spots, len(spots) - len(new) + j)
-                                                   for j in range(len(new))))
-    except OSError:
-        pass
-    finally:
-        ctx.ap_discovering = False
-
-
 async def ap_items_step(ctx: NierContext):
     """Pose les AP Items de la zone, prepare leur message quand le joueur approche, detecte le ramassage.
     Les objets sont suivis eux-memes (vraie position, disparition au ramassage)."""
-    if not getattr(ctx, "ap_items_on", False) or not ctx.ap_per_phase:
+    if not getattr(ctx, "ap_items_on", False):
         return
-    spots = ctx.state.ap_dynamic_spots
+    spots = AP_SPOTS
     mem = ctx.nier.mem
     if ctx.ap_pid != mem.pid:
         ok = await asyncio.to_thread(apit.install, mem)
@@ -361,7 +335,6 @@ async def ap_items_step(ctx: NierContext):
         for i in ctx.ap_tracked.values():
             ctx.spots.mark_spawned(i)
     phase = ctx.nier.phase()
-    import time
     if phase != ctx.ap_phase:
         if ctx.ap_phase is not None:
             # un changement d'etape ne decharge pas forcement la zone : on garde les objets encore au sol
@@ -369,29 +342,11 @@ async def ap_items_step(ctx: NierContext):
             ctx.spots.reset_session()
             for i in ctx.ap_tracked.values():
                 ctx.spots.mark_spawned(i)
-            # fin de l'etape precedente : places restantes sur son trajet (chaque check reste faisable)
-            filled = apit.fill_from_path(spots, ctx.ap_phase, ctx.ap_path.get(ctx.ap_phase, []),
-                                         ctx.ap_per_phase, ctx.ap_phase_count)
-            if filled:
-                spots.extend(filled)
-                logger.info("AP Items : %s", ", ".join(spot_location(spots, len(spots) - len(filled) + j)
-                                                       for j in range(len(filled))))
         ctx.ap_phase = phase
-        ctx.ap_discover_at = time.monotonic() + 5.0   # laisser la zone se charger
-        ctx.ap_phase_since = time.monotonic()
-    if (not ctx.ap_discovering and time.monotonic() >= ctx.ap_discover_at
-            and apit.fallback_spot(spots, phase, (0.0, 0.0, 0.0), ctx.ap_per_phase, ctx.ap_phase_count)):
-        ctx.ap_discovering = True
-        ctx.ap_discover_at = time.monotonic() + 60.0
-        asyncio.create_task(discover_spots(ctx, mem, phase))
     ent = ctx.nier.entity()
     if ent is None:
         return
     pos = struct.unpack("<3f", mem.read(ent + 0x50, 12))
-    if ctx.nier.grounded():
-        walk = ctx.ap_path.setdefault(phase, [])
-        if not walk or math.dist(walk[-1], pos) >= 5.0:
-            walk.append(pos)
     for i in ctx.spots.to_spawn(phase, pos):
         _, x, y, z = spots[i]
         obj = await asyncio.to_thread(apit.spawn_ap_item, mem, (x, y, z))
@@ -411,7 +366,7 @@ async def ap_items_step(ctx: NierContext):
         if near is None:
             ctx.pickup_note.restore()
         else:
-            rec, name = ctx.ap_contents.get(LOC_IDS[spot_location(spots, near)], (None, None))
+            rec, name = ctx.ap_contents.get(LOC_IDS[db.PICKUPS[near]["name"]], (None, None))
             prefix, item = apit.pickup_text(ctx.slot, rec, name, ctx.player_names.get(rec, "?") if rec else None,
                                             ctx.lang)
             ctx.pickup_note.prepare(prefix, item)
@@ -424,7 +379,7 @@ async def ap_items_step(ctx: NierContext):
         i = ctx.ap_tracked.pop(o)
         if marker:
             ctx.spots.collected(i)
-            logger.info("AP Item #%d picked up!", i + 1)
+            logger.info("Picked up %s", db.PICKUPS[i]["name"])
         else:
             ctx.state.ap_spawned_spots.discard(i)  # decharge sans ramassage : a reposer plus tard
     if marker:
@@ -437,7 +392,7 @@ async def shop_step(ctx: NierContext) -> list[int]:
         return []
     from pathlib import Path
     mem = ctx.nier.mem
-    slots = [(p, k) for p in SHOP_PLACES_ORDER for k in range(1, ctx.shop_checks + 1)]
+    slots = ctx.shop_slots
     if ctx.shop_pid != mem.pid:
         orig = Path(ctx.state_file).parent / f"shop_table_{mem.pid}.bin"
         owned = {c for c in shopm.CARRIER_POOL if ctx.nier._items.find(c) is not None}
@@ -448,7 +403,8 @@ async def shop_step(ctx: NierContext) -> list[int]:
     if not ctx.shop.ok:
         return []
     done = set(ctx.checked_locations) | ctx.state.sent_locations
-    active = {p: shopm.active_slots(p, ctx.shop_checks, done, lambda p, k: LOC_IDS[shop_location(p, k)])
+    active = {p: (shopm.active_slots(p, ctx.shop_checks, done, lambda p, k: LOC_IDS[shop_location(p, k)])
+                  if SHOP_REGION[p] in ctx.scope.regions else [])
               for p in SHOP_PLACES_ORDER}
     key = repr(active)
     if key != ctx.shop_applied:
@@ -496,7 +452,7 @@ async def game_iteration(ctx: NierContext):
             logger.info("Saves backed up to %s", dst)
         ctx.backed_up = True
     received = [ctx.item_names.lookup_in_game(i.item) for i in ctx.items_received]
-    result = tick(ctx.nier, ctx.state, received, ctx.trackers, ctx.goal_prefix, ctx.goal)
+    result = tick(ctx.nier, ctx.state, received, ctx.trackers)
     if result.refused:
         ctx._status("This save is already advanced: start a NEW game for this seed.")
         return
@@ -514,7 +470,7 @@ async def game_iteration(ctx: NierContext):
             logger.info("Step %s failed (%r)", step.__name__, e)
     if not ctx.mail_busy:
         asyncio.create_task(mail_step(ctx))
-    extra = sorted((due_locations(ctx.state, 0, 0) | set(bought)) - ctx.state.sent_locations)
+    extra = sorted((due_locations(ctx.state, ctx.scope) | set(bought)) - ctx.state.sent_locations)
     if extra:
         ctx.state.sent_locations.update(extra)
         ctx.state.save(ctx.state_file)          # achats : persistes avant l'envoi

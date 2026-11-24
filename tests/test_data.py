@@ -1,6 +1,6 @@
 from nier_automata.data.weapons import WEAPONS, STARTING_WEAPONS
 from nier_automata.data.items_data import FILLER_ITEMS
-from nier_automata.data.phases import GOAL_PHASE_PREFIX, phase_code
+from nier_automata.data.phases import phase_code
 from nier_automata.data.tables import (
     BASE_CODE, item_name_to_id, location_name_to_id, story_location, weapon_location,
 )
@@ -28,7 +28,7 @@ def test_location_names_and_codes_unique():
     locs = location_name_to_id()
     assert len(set(locs.values())) == len(locs)
     from nier_automata.data.tables import MAX_STORY
-    assert story_location(1) in locs and story_location(MAX_STORY) in locs
+    assert story_location(0) in locs and story_location(MAX_STORY - 1) in locs
     assert weapon_location(1) in locs and weapon_location(30) in locs
 
 
@@ -46,10 +46,6 @@ def test_phase_code_first_two_tokens():
     assert phase_code("SIGNIN") is None
     assert phase_code("START") is None
     assert phase_code("") is None
-
-
-def test_goal_prefix():
-    assert GOAL_PHASE_PREFIX == "EndRoll_A"  # generique de fin A
 
 
 def test_filler_never_material():
