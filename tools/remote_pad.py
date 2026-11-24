@@ -37,7 +37,20 @@ def find_cave(m):
     return m.base + SITE + 5 + struct.unpack("<i", cur[1:])[0]
 
 
+def isolate_keyboard(m):
+    """Si le jeu n'est pas au premier plan mais se croit actif (relance puis retour a une autre fenetre), il lit
+    le clavier global : les touches tapees ailleurs pilotent ses menus (vu en jeu : arrive sur "New Game").
+    On force son drapeau "inactif"."""
+    u = ctypes.windll.user32
+    u.GetForegroundWindow.restype = ctypes.c_void_p
+    u.FindWindowW.restype = ctypes.c_void_p
+    if u.GetForegroundWindow() != u.FindWindowW("NieR:Automata_MainWindow", None):
+        if struct.unpack("<I", m.read(m.base + 0xF83060, 4))[0] == 0:
+            m.write(m.base + 0xF83060, struct.pack("<I", 1))
+
+
 def install(m):
+    isolate_keyboard(m)
     cave = find_cave(m)
     if cave is None:
         k = m._k

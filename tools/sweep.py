@@ -146,6 +146,27 @@ class Game:
 
     side = 1
 
+    def face(self, target):
+        """Tourne le personnage vers la cible (petit pas de calibrage puis courte poussee vers elle)."""
+        for _ in range(3):
+            p0 = self.pos()
+            rp.move(self.m, self.cave, 0, -1, 0.15)
+            time.sleep(0.15)
+            p1 = self.pos()
+            fx, fz = p1[0] - p0[0], p1[2] - p0[2]
+            n = math.hypot(fx, fz)
+            if n < 0.03:
+                continue
+            fx, fz = fx / n, fz / n
+            rx, rz = -fz, fx
+            dx, dz = target[0] - p1[0], target[2] - p1[2]
+            d = math.hypot(dx, dz) or 1.0
+            f, r = (dx * fx + dz * fz) / d, (dx * rx + dz * rz) / d
+            rp.move(self.m, self.cave, r * self.side, -f, 0.12)
+            time.sleep(0.2)
+            return True
+        return False
+
     def interact_until(self, done, target):
         for k in range(6):
             if done():

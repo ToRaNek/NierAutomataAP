@@ -1,5 +1,6 @@
-"""9S : pirate le coffre verrouille devant lui. Maintient Y, attend le mini-jeu, repere le noyau (boule sombre)
-sur une capture, vise et tire jusqu'a la fin. Renvoie le compteur de coffres avant/apres."""
+"""9S : pirate le coffre verrouille devant lui, avec visee automatique.
+Maintient Y, attend l'ecran du mini-jeu (fond beige), puis a chaque capture repere le noyau (boule gris sombre),
+oriente le tir (stick droit) et tire, jusqu'a la fin du mini-jeu. Renvoie le compteur de coffres avant/apres."""
 import struct
 import sys
 import time
@@ -11,15 +12,24 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import capture  # noqa: E402
 import remote_pad as rp  # noqa: E402
 
+FIRE = 0x2000 | 0x4000 | 0x40
+SHIP = (0.5, 0.555)            # le vaisseau reste a cet endroit de l'ecran (fraction largeur, hauteur)
 
-def core_direction(img):
-    a = np.asarray(img.convert("RGB")).astype(int)
+
+def in_minigame(a):
     r, g, b = a[..., 0], a[..., 1], a[..., 2]
-    dark = (r < 95) & (g < 95) & (b < 95) & (abs(r - g) < 18) & (abs(g - b) < 18)     # gris sombre, pas violet
-    dark[:30] = False
+    beige = (r > 170) & (g > 165) & (b > 130) & (r - b > 15) & (r - b < 70)
+    return beige.mean() > 0.45
+
+
+def core(a):
+    """Centre (x, y) du noyau : plus gros amas gris sombre hors de l'anneau du vaisseau."""
+    r, g, b = a[..., 0], a[..., 1], a[..., 2]
+    dark = (r < 95) & (g < 95) & (b < 95) & (abs(r - g) < 18) & (abs(g - b) < 18)
     h, w = dark.shape
+    dark[:30] = False
     yy, xx = np.mgrid[0:h, 0:w]
-    dark &= ((xx - w * 0.5) ** 2 + (yy - h * 0.555) ** 2) > 95 ** 2      # anneau du vaisseau et minuteur
+    dark &= ((xx - w * SHIP[0]) ** 2 + (yy - h * SHIP[1]) ** 2) > 95 ** 2
     ys, xs = np.nonzero(dark)
     if len(xs) < 60:
         return None
@@ -29,14 +39,10 @@ def core_direction(img):
     near = (abs(xs - gx * 20 - 10) < 30) & (abs(ys - gy * 20 - 10) < 30)
     if near.sum() < 60:
         return None
-    cx, cy = xs[near].mean(), ys[near].mean()
-    h, w = dark.shape
-    dx, dy = cx - w * 0.5, cy - h * 0.555           # le vaisseau reste au centre de l'ecran
-    n = max(1.0, (dx * dx + dy * dy) ** 0.5)
-    return dx / n, dy / n, (round(cx), round(cy), int(near.sum()))
+    return float(xs[near].mean()), float(ys[near].mean())
 
 
-def hack(m, c, save=None):
+def hack(m, c, save=None, log=None):
     cnt = lambda: struct.unpack("<I", m.read(m.base + 0xF50F60, 4))[0]
 
     def state(buttons, rx=0.0, ry=0.0, lx=0.0, ly=0.0):
@@ -44,26 +50,42 @@ def hack(m, c, save=None):
         m.write(c + rp.CTL, struct.pack("<I", 1))
 
     before = cnt()
-    rp.set_state(m, c, 0x80)
-    time.sleep(2.5)
+    rp.set_state(m, c, 0x80)                       # maintenir Y : lancement du piratage
+    started = False
+    t0 = time.time()
+    while time.time() - t0 < 9:
+        a = np.asarray(capture.grab().convert("RGB")).astype(int)
+        if in_minigame(a):
+            started = True
+            break
+        if time.time() - t0 > 3.0:
+            rp.set_state(m, c, 0)
     rp.set_state(m, c, 0)
-    time.sleep(2.4)
-    info = None
-    for k in range(12):
+    if not started:
+        return {"started": False, "before": before, "after": cnt()}
+    shots, last = 0, (0.0, -1.0)
+    t1 = time.time()
+    while time.time() - t1 < 14:
         img = capture.grab()
-        d = core_direction(img)
-        if save and k == 0:
+        a = np.asarray(img.convert("RGB")).astype(int)
+        if not in_minigame(a):
+            break
+        h, w = a.shape[:2]
+        p = core(a)
+        if save and shots == 2:
             img.save(save)
-        if d is None:
-            time.sleep(0.2)
-            continue
-        info = d
-        far = ((d[2][0] - 480) ** 2 + (d[2][1] - 300) ** 2) ** 0.5 > 130
-        state(0x2000 | 0x4000 | 0x40, d[0], d[1], d[0] * 0.8 if far else 0.0, d[1] * 0.8 if far else 0.0)
-        time.sleep(0.35)
+        if p:
+            dx, dy = p[0] - w * SHIP[0], p[1] - h * SHIP[1]
+            n = max(1.0, (dx * dx + dy * dy) ** 0.5)
+            last = (dx / n, dy / n)
+            if log is not None:
+                log.append((round(time.time() - t1, 1), round(p[0]), round(p[1])))
+        state(FIRE, last[0], last[1])
+        shots += 1
     rp.set_state(m, c, 0)
     time.sleep(5)
-    return before, cnt(), info
+    return {"started": True, "frames": shots, "seconds": round(time.time() - t1 - 5, 1), "before": before,
+            "after": cnt()}
 
 
 if __name__ == "__main__":

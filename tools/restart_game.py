@@ -58,33 +58,11 @@ def main():
     time.sleep(12)
     c = rp.install(m)
     print("titre :", sub())
-    for attempt in range(4):                 # Continue -> emplacement -> Oui, jusqu'au menu START
-        for mask, wait in ((0x10, 3), (0x10, 2.5), (0x1, 1), (0x10, 2)):
-            rp.press(m, c, mask, 0.15)
-            time.sleep(wait)
-        ok = False
-        for _ in range(40):
-            if sub() == "START":
-                ok = True
-                break
-            time.sleep(1)
-        if ok:
-            break
-        for _ in range(3):                   # mauvais ecran : on revient en arriere et on recommence
-            rp.press(m, c, 0x20, 0.15)
-            time.sleep(1)
-    time.sleep(6)
-    g = NierGame()
-    g.attach()
-    for _ in range(3):
-        rp.press(m, c, 0x10, 0.15)           # Start Game
-        for _ in range(45):
-            if g.in_game():
-                break
-            time.sleep(1)
-        if g.in_game():
-            break
-    print("en jeu :", g.in_game(), g.phase())
+    # Les menus du titre ne sont PAS pilotes a l'aveugle : une sequence automatique est arrivee sur
+    # "New Game > Delete the current save data ?" (vu en jeu, annule a temps). Les faire avec tools/see.py
+    # en regardant chaque capture : A (Continue), A (emplacement), gauche puis A ("Load this save file?" Oui),
+    # puis A (Start Game).
+    print("au titre : continuer avec tools/see.py en verifiant chaque ecran")
 
 
 if __name__ == "__main__":

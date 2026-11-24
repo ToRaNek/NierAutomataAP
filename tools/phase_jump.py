@@ -50,7 +50,15 @@ def set_route(m, route: str, character: str) -> None:
 
 def jump(m, phase: int, sub: str, wait: float = 90.0) -> bool:
     cave = rp.install(m)
+    menus = lambda: struct.unpack("<I", m.read(m.base + 0x11EAC2C, 4))[0]
+    for _ in range(3):                       # menu pause ouvert (pause automatique hors focus) : le fermer
+        if menus() == 1:
+            break
+        rp.press(m, cave, 0x100, 0.15)
+        time.sleep(2.0)
     st = state(m)
+    if menus() != 1:
+        raise RuntimeError("un menu est ouvert : saut refuse")
     if st["machine"] != 2 or st["scene"] != 1:
         # un saut lance pendant une pause ou une transition bloque le jeu (vu en jeu) : on refuse
         raise RuntimeError(f"jeu pas pret pour un saut : {st}")
