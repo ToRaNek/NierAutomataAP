@@ -61,11 +61,10 @@ Scroll to zoom, drag to move.
 ## Known limits
 - Steam v1.04 only.
 - Tested in game on all three routes with automated chapter jumps and screen captures (`tools/`): story
-  checks for every chapter, 148 of 187 chests found at their expected position, ground AP Items placed on their
+  checks for every chapter, all 182 chests found at their expected position (interior rooms included), ground AP Items placed on their
   spots, purchases in the three shops, access points, the goals for endings A to E, and quest checks (by
-  setting the game's own quest states; no quest was actually played). The 39 chests that could not be
-  confirmed (mostly inside separately loaded interiors) never hold an important item. Opening a hack-locked
-  chest was not proven (the hacking minigame was not completed). The forest shop only exists after the missable
+  setting the game's own quest states; no quest was actually played). A hack-locked chest was opened as 9S by a bot playing the hacking minigame, and its check was sent.
+  Chests that only exist during or after a side quest never hold an important item. The forest shop only exists after the missable
   side quest "Camp Development", so its AP Items never hold an important item.
 - Mail titles: open an access point for ~10 s the first time after each game launch.
 - Don't load another save than the one of the seed.

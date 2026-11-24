@@ -144,6 +144,32 @@ class Game:
             if d2 > d + 0.3 and abs(r) > 0.5:
                 self.side = -self.side            # la droite etait inversee
 
+    def approach(self, target, stop=1.1, tries=14):
+        """Avance vers la cible sans rien supposer de la camera : on essaie de courtes poussees dans 8 directions
+        et on garde celle qui rapproche le plus. Le personnage finit tourne vers la cible."""
+        dist = lambda: math.hypot(target[0] - self.pos()[0], target[2] - self.pos()[2])
+        dirs = [(math.cos(k * math.pi / 4), math.sin(k * math.pi / 4)) for k in range(8)]
+        best = None
+        for _ in range(tries):
+            d0 = dist()
+            if d0 <= stop:
+                break
+            order = ([best] if best else []) + [d for d in dirs if d != best]
+            moved = False
+            for lx, ly in order:
+                rp.move(self.m, self.cave, lx, ly, 0.12)
+                time.sleep(0.12)
+                d1 = dist()
+                if d1 < d0 - 0.08:
+                    best, moved = (lx, ly), True
+                    break
+                d0 = d1
+            if not moved:
+                best = None
+        if best:                                  # derniere petite poussee : oriente le personnage
+            rp.move(self.m, self.cave, best[0], best[1], 0.06)
+        return dist()
+
     side = 1
 
     def face(self, target):
