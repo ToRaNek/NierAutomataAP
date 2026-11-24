@@ -64,7 +64,7 @@ rouge. Molette pour zoomer, glisser pour deplacer.
 - Teste en jeu sur les trois routes par sauts de chapitre automatiques et captures d'ecran (`tools/`) :
   checks d'histoire de chaque chapitre, les 182 coffres retrouves a la position prevue (interieurs compris), AP Items poses a
   leur emplacement, achats dans les trois magasins, points d'acces, objectifs des fins A a E, et checks de
-  quete (en posant les etats de quete du jeu ; aucune quete n'a ete jouee). Un coffre verrouille a ete ouvert avec 9S par un robot qui joue le mini-jeu de piratage, et son check
+  quete (une quete annexe jouee pour de vrai : acceptee, objets livres, ecran de recompense, check parti). Un coffre verrouille a ete ouvert avec 9S par un robot qui joue le mini-jeu de piratage, et son check
   est parti. Les coffres qui n'existent que pendant ou apres une quete annexe ne contiennent jamais d'objet
   important. Le marchand de la foret n'existe qu'apres la
   quete annexe ratable "Camp Development" : ses AP Items ne contiennent jamais d'objet important.
