@@ -66,9 +66,11 @@ def looks_like_new_game(game) -> bool:
     return game.owned_weapons() <= starting or is_prologue(game.phase())
 
 
-def goal_reached(state: ClientState, phase: str, scope: db.Scope) -> bool:
+def goal_reached(state: ClientState, phase: str, scope: db.Scope, endings=frozenset()) -> bool:
     if scope.goal == db.GOAL_STORY:
         return (scope.chapters - 1) in state.chapters
+    if db.GOAL_STATES.get(scope.goal, set()) & set(endings):
+        return True
     if phase and phase.startswith(db.GOAL_PHASES[scope.goal]):
         return True
     # la route suivante a commence : la fin precedente a forcement ete vue
@@ -143,5 +145,6 @@ def tick(game, state: ClientState, received: list[str], trackers: Trackers) -> T
     due = due_locations(state, scope)
     result.locations = sorted(due - state.sent_locations)
     state.sent_locations.update(result.locations)
-    result.goal = goal_reached(state, phase, scope)
+    endings = game.endings() if scope.goal != db.GOAL_STORY and hasattr(game, "endings") else frozenset()
+    result.goal = goal_reached(state, phase, scope, endings)
     return result

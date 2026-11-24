@@ -265,3 +265,20 @@ def test_linked_after_first_accepted_tick():
     assert s.linked
     g = FakeGame(phase=CITY, weapons={0x42E, 0x4EC, 0x41A})
     assert not tick(g, s, [], tr).refused    # arme hors depart apres le prologue : toujours accepte
+
+
+def test_goal_from_ending_scene_states():
+    # le jeu pose l'etat de scene "ending_A" (etc.) juste avant le generique : plus sur que le nom de phase
+    s, _ = setup()
+    assert goal_reached(s, "x", scope(goal=db.GOAL_ENDING_A), endings={"ending_A"}) is True
+    assert goal_reached(s, "x", scope(goal=db.GOAL_ENDING_B), endings={"ending_A"}) is False
+    assert goal_reached(s, "x", scope(goal=db.GOAL_ENDING_B), endings={"ending_A", "ending_B"}) is True
+    assert goal_reached(s, "x", scope(goal=db.GOAL_ENDING_CD), endings={"ending_D"}) is True
+    assert goal_reached(s, "x", scope(goal=db.GOAL_ENDING_CD), endings={"ending_B"}) is False
+
+
+def test_tick_reads_endings_from_game():
+    s, tr = setup(scope(goal=db.GOAL_ENDING_A), linked=True)
+    g = FakeGame(phase=CITY)
+    g.endings = lambda: {"ending_A"}
+    assert tick(g, s, [], tr).goal is True

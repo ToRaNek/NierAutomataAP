@@ -194,3 +194,12 @@ _POSITIONS = {e["name"]: tuple(e["pos"]) for table in (CHESTS, PICKUPS, ACCESS_P
 def location_position(name: str):
     """Position monde (x, y, z) d'un check qui a un lieu precis, sinon None."""
     return _POSITIONS.get(name)
+
+
+# etats de scene poses par le jeu quand une fin est obtenue (docs/research/endings_triggers.json)
+GOAL_STATES = {
+    GOAL_ENDING_A: {"ending_A"},
+    GOAL_ENDING_B: {"ending_B"},
+    GOAL_ENDING_CD: {"ending_C", "ending_D", "ending_CD"},
+}
+ENDING_STATES = ("ending_A", "ending_B", "ending_C", "ending_D", "ending_CD")

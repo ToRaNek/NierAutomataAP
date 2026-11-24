@@ -41,6 +41,7 @@ def backup_saves(src: Optional[Path] = None, dst_root: Optional[Path] = None) ->
 
 
 ACCESS_POINT_BITS_RVA = 0x14957E0
+SCENE_STATES_RVA = 0xFC2718       # {pointeur, nombre} des etats de scene actifs (entrees de 0x20 o)
 PHASE_ID_RVA = 0xF64B18           # descripteur {u32 phase, u32 hachage, nom} ; le nom est en +8
 CHEST_VTABLE_RVA = 0xC7D708      # objet coffre (ba2014/15/16)
 CHEST_OPEN_OFFSET = 0xA8C         # != 0 une fois ouvert
@@ -150,6 +151,30 @@ class NierGame:
             return int.from_bytes(self.mem.read(self.mem.base + PHASE_ID_RVA, 4), "little")
         except OSError:
             return None
+
+    def scene_states(self, wanted) -> set:
+        """Etats de scene actifs parmi `wanted` (tableau trie par crc32, docs/research/runtime_state.md)."""
+        import struct
+        import zlib
+        want = {zlib.crc32(n.encode()): n for n in wanted}
+        try:
+            ptr, n = struct.unpack("<QQ", self.mem.read(self.mem.base + SCENE_STATES_RVA, 16))
+            if not ptr or not 0 < n < 5000:
+                return set()
+            table = self.mem.read(ptr, n * 0x20)
+            out = set()
+            for i in range(n):
+                rec = struct.unpack_from("<Q", table, i * 0x20 + 0x10)[0]
+                h = struct.unpack("<I", self.mem.read(rec + 0x20, 4))[0]
+                if h in want:
+                    out.add(want[h])
+            return out
+        except OSError:
+            return set()
+
+    def endings(self) -> set:
+        from ..data import worlddb as db
+        return self.scene_states(db.ENDING_STATES)
 
     def chest_counter(self) -> int:
         return read_u32(self.mem, self._off["chestCounter"])
