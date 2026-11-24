@@ -31,7 +31,8 @@ Chaque check porte le nom de son lieu : un indice dit donc ou aller.
 - **Shop <lieu> #k** : "AP Item" vendus en tete des magasins (Camp de la Resistance, Village de Pascal,
   Chateau de la foret) ; la description dit ce qu'il contient et pour qui.
 - **Level n**, **Weapon Found #n** : niveaux atteints, armes trouvees (retirees de l'inventaire).
-- **Quest: <nom>** : quetes annexes (experimental, desactive par defaut).
+- **Quest: <nom>** : terminer une quete annexe. La plupart se ferment apres le chapitre 7 (verifie en jeu) :
+  elles ne contiennent jamais d'objet important ; le jeu donne toujours sa propre recompense.
 
 ## Objectifs et logique
 - `goal` : `story_progress` (finir le chapitre N d'une route, partie courte), `ending_a`, `ending_b`, `ending_cd`,

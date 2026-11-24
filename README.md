@@ -30,7 +30,8 @@ Everything is named after where it is, so a hint tells you where to go.
 - **Shop <place> #k**: "AP Item" entries at the top of the shops (Resistance Camp, Pascal's Village,
   Forest Castle); the description says what's inside and for whom.
 - **Level n**, **Weapon Found #n**: levels reached, weapons found (removed from the inventory).
-- **Quest: <name>**: side quests (experimental, off by default).
+- **Quest: <name>**: finishing a side quest. Most quests close after chapter 7 (checked in game), so they
+  never hold an important item; the game still gives its own reward.
 
 ## Goals and logic
 - `goal`: `story_progress` (finish chapter N of a route, short game), `ending_a`, `ending_b`, `ending_cd`, `ending_e`.
