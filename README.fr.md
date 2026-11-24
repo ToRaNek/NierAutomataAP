@@ -61,12 +61,13 @@ rouge. Molette pour zoomer, glisser pour deplacer.
 
 ## Limites connues
 - Uniquement Steam v1.04.
-- Teste en jeu sur les trois routes par sauts de chapitre automatiques (`tools/campaign.py`) : checks
-  d'histoire de chaque chapitre, 129 coffres sur 187 retrouves a la position prevue, AP Items poses a leur
-  emplacement. Les coffres non confirmes (surtout dans les interieurs charges a part) ne contiennent jamais
-  d'objet important. Les trois magasins ont ete testes a l'achat en jeu ; l'objectif fin A a ete verifie de bout en bout ; les
-  quetes n'ont ete verifiees qu'en forcant un statut de quete en memoire. Le marchand de la foret n'existe
-  qu'apres la quete annexe ratable "Camp Development" : ses AP Items ne contiennent jamais d'objet important.
+- Teste en jeu sur les trois routes par sauts de chapitre automatiques et captures d'ecran (`tools/`) :
+  checks d'histoire de chaque chapitre, 148 coffres sur 187 retrouves a la position prevue, AP Items poses a
+  leur emplacement, achats dans les trois magasins, points d'acces, objectifs des fins A a E, et checks de
+  quete (en posant les etats de quete du jeu ; aucune quete n'a ete jouee). Les 39 coffres non confirmes
+  (surtout dans les interieurs charges a part) ne contiennent jamais d'objet important. L'ouverture d'un coffre
+  verrouille n'est pas prouvee (mini-jeu de piratage non reussi). Le marchand de la foret n'existe qu'apres la
+  quete annexe ratable "Camp Development" : ses AP Items ne contiennent jamais d'objet important.
 - Titres des mails : ouvrir un point d'acces ~10 s la premiere fois apres chaque lancement du jeu.
 - Ne pas charger une autre sauvegarde que celle de la seed.
 
