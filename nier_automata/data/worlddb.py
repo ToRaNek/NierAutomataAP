@@ -186,3 +186,11 @@ def quests_done(status: list[int]) -> set[int]:
     """Indices (QUESTS) des quetes terminees d'apres le tableau de statuts du jeu."""
     return {i for i, q in enumerate(QUESTS)
             if q["status_index"] < len(status) and status[q["status_index"]] in _QUEST_DONE}
+
+
+_POSITIONS = {e["name"]: tuple(e["pos"]) for table in (CHESTS, PICKUPS, ACCESS_POINTS) for e in table}
+
+
+def location_position(name: str):
+    """Position monde (x, y, z) d'un check qui a un lieu precis, sinon None."""
+    return _POSITIONS.get(name)

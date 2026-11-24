@@ -188,6 +188,22 @@ class NierContext(CommonContext):
             logging_pairs = [("Client", "Archipelago")]
             base_title = "Archipelago NieR:Automata Client"
 
+            def build(inner):
+                container = super().build()
+                try:
+                    from .game.map_ui import build_map_tab
+                    tab = inner.add_client_tab("Map", build_map_tab(self))
+                    import os
+                    if os.environ.get("NIER_AP_START_TAB") == "Map":      # pour les tests automatiques
+                        from kivy.clock import Clock
+
+                        def show(_dt):
+                            inner.screens.switch_screens(tab)
+                        Clock.schedule_once(show, 6)
+                except Exception as e:      # la carte ne doit jamais empecher le client de demarrer
+                    logger.info("Map tab unavailable: %r", e)
+                return container
+
         self.ui = NierManager(self)
         self.ui_task = asyncio.create_task(self.ui.async_run(), name="UI")
 
