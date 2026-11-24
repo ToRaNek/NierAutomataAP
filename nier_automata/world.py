@@ -159,5 +159,6 @@ class NierAutomataWorld(World):
             "shop_checks": o.shop_checks.value,
             "shop_price": o.shop_price.value,
             "randomized_abilities": sorted(o.randomized_abilities.value),
+            "starter_kit": bool(o.starter_kit),
             "death_link": bool(o.death_link),
         }

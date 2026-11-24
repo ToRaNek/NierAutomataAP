@@ -110,7 +110,9 @@ class ApItemsPerArea(Range):
 
 class StarterKit(DefaultOnToggle):
     """Start with a few healing items, one Melee Attack Up (L) and one Melee Defense Up (L). The start of the
-    game is the hardest part and the first wall is the Amusement Park boss."""
+    game is the hardest part and the first wall is the Amusement Park boss. You also get a supply drop once
+    when you reach the two hard sections you cannot come back from: the boss rush at the end of route A
+    (chapter 10) and the first sequence of route C/D (chapter 11)."""
     display_name = "Starter Kit"
 
 

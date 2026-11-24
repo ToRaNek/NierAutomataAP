@@ -4,7 +4,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 
 from ..data import worlddb as db
-from ..data.items_data import MATERIALS
+from ..data.items_data import MATERIALS, SUPPLY_DROPS
 from ..data.phases import is_prologue
 from ..data.tables import (access_point_location, chest_location, item_location, level_location,
                            location_name_to_id, pickup_location, quest_location, story_location, weapon_location)
@@ -123,6 +123,14 @@ def tick(game, state: ClientState, received: list[str], trackers: Trackers) -> T
     # 5. progression de l'histoire
     phase = game.phase()
     trackers.story.check(phase, game.phase_id() if hasattr(game, "phase_id") else None)
+
+    # 5 bis. ravitaillement a l'entree des passages durs (une fois)
+    if getattr(scope, "supplies", False):
+        reached = {db.CHAPTERS[i]["region"] for i in state.chapters}
+        for region, names in SUPPLY_DROPS.items():
+            if region in reached and region not in state.supplies_given:
+                if all([game.give(n) for n in names]):
+                    state.supplies_given.add(region)
 
     # 6. coffres
     if trackers.chests.enabled:

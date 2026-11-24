@@ -29,6 +29,14 @@ TRAP_ITEMS: dict[str, tuple[str, int]] = {
     "Enemy Trap": ("spawn", 3),
 }
 
+# Ravitaillement donne une fois par le client a l'entree des deux passages durs sans retour possible (avis d'un
+# joueur experimente) : les 4 boss enchaines de la fin de la route A, et la premiere sequence de la route C/D.
+SUPPLY_DROPS: dict[str, list[str]] = {
+    "A10": ["Large Recovery", "Large Recovery", "Full Recovery", "Melee Attack Up (L)", "Melee Defense Up (L)"],
+    "C11": ["Large Recovery", "Large Recovery", "Full Recovery", "Full Recovery", "Melee Attack Up (L)",
+            "Melee Defense Up (L)"],
+}
+
 # Quantite donnee par objet recu.
 FILLER_QUANTITY: dict[str, int] = {"Small Recovery": 3, "Medium Recovery": 2}
 

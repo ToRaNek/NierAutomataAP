@@ -282,3 +282,25 @@ def test_tick_reads_endings_from_game():
     g = FakeGame(phase=CITY)
     g.endings = lambda: {"ending_A"}
     assert tick(g, s, [], tr).goal is True
+
+
+def test_supplies_given_once_before_the_two_hard_sections():
+    # avis du testeur : les 4 boss de fin de route A (chapitre 10) et le debut de la route C (chapitre 11)
+    from nier_automata.data.items_data import SUPPLY_DROPS
+    sc = scope(goal=db.GOAL_ENDING_E)
+    sc.supplies = True
+    s, tr = setup(sc, linked=True)
+    g = FakeGame(phase="160_A_Ruined_City_2B")                  # chapitre A 10-01
+    g.phase_id = lambda: 0x200
+    tick(g, s, [], tr)
+    want = {}
+    for n in SUPPLY_DROPS["A10"]:
+        want[n] = want.get(n, 0) + 1
+    assert g.items == want and "A10" in s.supplies_given
+    tick(g, s, [], tr)
+    assert g.items == want                                       # une seule fois
+    off, tr2 = setup(scope(goal=db.GOAL_ENDING_E), linked=True)  # option desactivee : rien
+    g2 = FakeGame(phase="160_A_Ruined_City_2B")
+    g2.phase_id = lambda: 0x200
+    tick(g2, off, [], tr2)
+    assert g2.items == {}

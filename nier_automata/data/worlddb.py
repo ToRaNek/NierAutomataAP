@@ -147,6 +147,7 @@ class Scope:
         self.weapon_checks: int = weapon_checks
         self.max_level: int = max_level
         self.item_checks: bool = item_checks
+        self.supplies: bool = False          # kit de depart + ravitaillements (option starter_kit)
 
 
 def make_scope(goal: int, story_checks: int, chest_checks: bool, ap_items_per_area: int,
@@ -170,6 +171,12 @@ def make_scope(goal: int, story_checks: int, chest_checks: bool, ap_items_per_ar
 
 
 def scope_from_slot_data(sd: dict) -> Scope:
+    scope = _scope_from_slot_data(sd)
+    scope.supplies = bool(sd.get("starter_kit", False))
+    return scope
+
+
+def _scope_from_slot_data(sd: dict) -> Scope:
     return make_scope(int(sd.get("goal", GOAL_STORY)), int(sd.get("story_checks", 12)),
                       bool(sd.get("chest_checks", False)), int(sd.get("ap_items_per_area", 0)),
                       bool(sd.get("access_point_checks", False)), bool(sd.get("quest_checks", False)),
