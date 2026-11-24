@@ -94,7 +94,7 @@ def main():
         region = ch["region"]
         res = rep.setdefault("regions", {}).setdefault(region, {})
         for c in db.CHESTS:
-            if c["region"] != region or res.get(c["name"]) in ("present", "already"):
+            if c["region"] != region or c["name"] in res:
                 continue
             pos = c["pos"]
             try:
@@ -114,7 +114,7 @@ def main():
                     return 2
             save(rep)
         for p in db.PICKUPS:
-            if p["region"] != region or p["k"] > 3 or res.get(p["name"]) == "spawned":
+            if p["region"] != region or p["k"] > 3 or p["name"] in res:
                 continue
             pos = p["pos"]
             try:

@@ -22,6 +22,7 @@ from nier_automata.game.spawner import entity_region  # noqa: E402
 
 CHEST_VTABLE = 0xC7D708
 CHEST_OPEN_OFFSET = 0xA8C
+LOCKED_CHEST_VTABLE = 0xCE9478     # coffre verrouille (ba2016, piratage 9S), vu en jeu
 REPORT = Path(__file__).with_name("sweep_report.json")
 DIRS = ((0, -1), (1, 0), (0, 1), (-1, 0), (0.7, -0.7), (-0.7, -0.7), (0.7, 0.7), (-0.7, 0.7))
 
@@ -76,19 +77,23 @@ class Game:
     def chest_at(self, p):
         base, size = entity_region(self.m)
         data = self.m.read(base, size)
-        vt = struct.pack("<Q", self.m.base + CHEST_VTABLE)
-        i = data.find(vt)
         best = None
-        while i != -1:
-            if i % 8 == 0 and i + 0x5C <= len(data):
-                q = struct.unpack_from("<3f", data, i + 0x50)
-                d = math.dist(q, p)
-                if d < 4 and (best is None or d < best[1]):
-                    best = (base + i, d)
-            i = data.find(vt, i + 8)
+        for rva in (CHEST_VTABLE, LOCKED_CHEST_VTABLE):
+            vt = struct.pack("<Q", self.m.base + rva)
+            i = data.find(vt)
+            while i != -1:
+                if i % 8 == 0 and i + 0x5C <= len(data):
+                    q = struct.unpack_from("<3f", data, i + 0x50)
+                    d = math.dist(q, p)
+                    if d < 4 and (best is None or d < best[1]):
+                        best = (base + i, d, rva)
+                i = data.find(vt, i + 8)
+        self.last_class = best[2] if best else None
         return best[0] if best else None
 
     def opened(self, chest):
+        if getattr(self, "last_class", None) == LOCKED_CHEST_VTABLE:
+            return False                      # drapeau d'ouverture inconnu pour les coffres verrouilles
         return struct.unpack("<I", self.m.read(chest + CHEST_OPEN_OFFSET, 4))[0] != 0
 
     def walk_to(self, target, stop=1.3):
