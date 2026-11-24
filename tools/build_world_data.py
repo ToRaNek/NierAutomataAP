@@ -173,13 +173,20 @@ def main():
         locked = c["objId"] == "ba2016"
         region, missable = region_of(label, locked, c["conditions"].get("routes") or ())
         region = refine(region, label, c)
+        groups = " ".join(c["conditions"].get("group_chain") or [])
+        states = [x for x in c["conditions"].get("scene_states", []) if not x.startswith("NOT")]
+        # coffre qui n'existe qu'apres / pendant une quete annexe (verifie en jeu : absent sinon)
+        quest_gated = ("クリア後" in groups or "で有効" in groups or any(x[:1] == "q" and x[1:4].isdigit() for x in states))
+        if "sub221" in groups:                     # quete d'A2 au Village de Pascal (route C/D)
+            region = "C14"
         rc = reach.get((c["file"], c["entity_id"]), {})
         needs = rc.get("needs")
         unknown = not isinstance(needs, list)
         chests.append({
             "area": label, "pos": [round(v, 2) for v in c["position"]], "region": region,
             "needs": [] if unknown else needs, "locked": locked,
-            "excluded": bool(missable or unknown or c["area"].get("confidence") == "low"),
+            "excluded": bool(missable or unknown or quest_gated or c["area"].get("confidence") == "low"),
+            "quest_gated": bool(quest_gated),
             "contents": [it["id"] for it in c["box"].get("contents", [])][:4],
         })
     # presence constatee en jeu : un coffre non retrouve ne recoit jamais d'objet important
