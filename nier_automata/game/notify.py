@@ -79,17 +79,15 @@ def short_location(location: str, lang: str = "fr") -> str:
 
 def messages_for_item_send(me: int, sender: int, receiver: int, item: str,
                            sender_name: str, receiver_name: str, location: str,
-                           lang: str = "fr", hide_own: bool = False) -> list[tuple[str, str]]:
+                           lang: str = "fr") -> list[tuple[str, str]]:
     """(prefixe, texte) a afficher pour "sender a envoye item a receiver depuis location".
     Check valide par moi : "Check : <location>" puis "Pour <qui> : <objet>". Recu : "De <qui> : <objet>"."""
     from .i18n import t
     item = item[:MAX_LEN]
     if sender == me:
         check = (t(lang, "check"), short_location(location, lang)[:MAX_LEN])
-        if receiver == me:
-            # a plusieurs, un objet de remplissage peut retomber chez soi : applique sans message
-            return [check] if hide_own else [check, (t(lang, "for_you"), item)]
-        return [check, (t(lang, "for", who=receiver_name), item)]
+        to = t(lang, "for_you") if receiver == me else t(lang, "for", who=receiver_name)
+        return [check, (to, item)]
     if receiver == me:
         return [(t(lang, "from", who=sender_name), item)]
     return []

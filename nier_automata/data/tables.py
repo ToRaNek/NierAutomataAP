@@ -46,16 +46,6 @@ def shop_location(place: str, k: int) -> str:
     return f"Shop {place} #{k}"
 
 
-def others_only(player: int):
-    """Regle d'emplacement : uniquement des objets destines aux AUTRES joueurs."""
-    return lambda item: item.player != player
-
-
-def others_or_filler(player: int):
-    """Repli (pas assez d'objets chez les autres) : pour soi, seulement du remplissage."""
-    return lambda item: item.player != player or not (item.advancement or item.useful)
-
-
 def level_location(n: int) -> str:
     return f"Level {n}"
 

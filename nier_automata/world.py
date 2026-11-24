@@ -6,7 +6,7 @@ from .data import worlddb as db
 from .data.items_data import FILLER_ITEMS, FUNDS_ITEMS, MATERIALS, TRAP_ITEMS
 from .data.tables import (
     SHOP_PLACES_ORDER, SHOP_REGION, item_location, item_name_to_id, level_location, location_name_to_id,
-    others_only, others_or_filler, pool_weapon_count, shop_location, weapon_location,
+    pool_weapon_count, shop_location, weapon_location,
 )
 from .data.weapons import STARTING_WEAPONS, WEAPONS
 from .options import NierAutomataOptions
@@ -135,18 +135,6 @@ class NierAutomataWorld(World):
 
     def set_rules(self) -> None:
         self.multiworld.completion_condition[self.player] = lambda state: state.has("Victory", self.player)
-        if self.multiworld.players > 1:
-            # A plusieurs : jamais d'objet important pour soi dans son propre monde (le remplissage peut y
-            # retomber : une regle stricte partout fait echouer le remplissage aleatoire d'Archipelago).
-            # Les AP Items (sol et magasins) ne contiennent que des objets pour les autres, tant que les autres
-            # joueurs ont largement assez d'objets.
-            mine = [loc for loc in self.multiworld.get_locations(self.player) if loc.address is not None]
-            special = {loc.name for loc in mine if loc.name.startswith(("AP Item: ", "Shop "))}
-            others = sum(1 for it in self.multiworld.itempool if it.player != self.player)
-            strict = others >= 2 * len(special)
-            for loc in mine:
-                exact = strict and loc.name in special
-                loc.item_rule = others_only(self.player) if exact else others_or_filler(self.player)
 
     def fill_slot_data(self) -> dict:
         o = self.options

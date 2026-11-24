@@ -1,6 +1,6 @@
 # NieR:Automata pour Archipelago
 
-Monde Archipelago (`.apworld`) et client pour **NieR:Automata (PC Steam, v1.04)**, route A.
+Monde Archipelago (`.apworld`) et client pour **NieR:Automata (PC Steam, v1.04)**, toutes les routes.
 Le client lit et modifie la memoire du jeu en cours (aucun fichier du jeu n'est modifie).
 
 ## Installation
@@ -20,13 +20,27 @@ avoir le `.apworld`. Modele de reglages : `NieR Automata.yaml`.
 3. Garde la fenetre du client ouverte : on y tape les commandes Archipelago (`!hint`, `!remaining`, chat...).
 
 ## Checks
-- **Story: <lieu>** : chaque etape nommee de la route A (Camp Resistance, Village de Pascal, Boss Simone...).
-- **Weapon Found #n** : chaque arme trouvee (retiree de l'inventaire).
-- **Chest #n**, **Level n** : coffres ouverts, niveaux atteints.
-- **AP Item: <lieu> #k** : objets "AP Item" poses au sol sur ton trajet, 1 a 3 par etape.
+Chaque check porte le nom de son lieu : un indice dit donc ou aller.
+- **Story A 02-01: Landing at the City Ruins** : un check par chapitre de l'histoire (109 sur les routes A, B
+  et C/D).
+- **Chest: City Ruins #12** : chaque coffre, nomme d'apres sa zone. Les coffres verrouilles demandent 9S
+  (a partir de la route B).
+- **AP Item: Desert Zone: Housing Complex #2** : objets "AP Item" poses sur les points de collecte du jeu,
+  1 a 8 par zone ; le ramasser affiche ce qu'il contient et pour qui.
+- **Access Point: Desert: Camp** : premiere activation de chaque point d'acces.
 - **Shop <lieu> #k** : "AP Item" vendus en tete des magasins (Camp de la Resistance, Village de Pascal,
   Chateau de la foret) ; la description dit ce qu'il contient et pour qui.
-- A plusieurs, tes checks contiennent uniquement des objets pour les autres joueurs.
+- **Level n**, **Weapon Found #n** : niveaux atteints, armes trouvees (retirees de l'inventaire).
+- **Quest: <nom>** : quetes annexes (experimental, desactive par defaut).
+
+## Objectifs et logique
+- `goal` : `story_progress` (atteindre N chapitres, partie courte), `ending_a`, `ending_b`, `ending_cd`,
+  `ending_e`. L'objectif fixe la part du jeu qui a des checks.
+- Les chapitres sont des regions logiques dans l'ordre de l'histoire. Les armes sont des objets de
+  progression : les chapitres avances en demandent plus, donc elles arrivent avant les zones difficiles.
+  Les checks de niveau suivent le niveau attendu par le jeu a chaque chapitre.
+- Les checks ratables (Bunker, Village de Pascal, zones de fin de route, quetes limitees dans le temps) ne
+  contiennent jamais d'objet important.
 
 ## Objets recus
 Armes, capacites (double saut, dash aerien, esquive au sol, tir du Pod, attaques...), soins, argent, pieges
@@ -39,7 +53,8 @@ Armes, capacites (double saut, dash aerien, esquive au sol, tir du Pod, attaques
 - DeathLink en option.
 
 ## Limites connues
-- Uniquement Steam v1.04, route A.
+- Uniquement Steam v1.04. La route A est testee en jeu ; les routes B et C/D sont generees a partir des
+  donnees du jeu et pas encore testees en jeu.
 - Titres des mails : ouvrir un point d'acces ~10 s la premiere fois apres chaque lancement du jeu.
 - Ne pas charger une autre sauvegarde que celle de la seed.
 

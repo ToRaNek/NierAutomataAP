@@ -102,19 +102,3 @@ def test_shop_locations_have_codes():
     assert all(n in ids for n in names)
     assert len({ids[n] for n in names}) == len(names)
     assert shop_location("Resistance Camp", 1) == "Shop Resistance Camp #1"
-
-
-def test_others_only_rule():
-    from nier_automata.data.tables import others_only
-    class It:  # objet minimal
-        def __init__(self, p): self.player = p
-    rule = others_only(1)
-    assert rule(It(2)) and not rule(It(1))
-
-
-def test_others_or_filler_rule():
-    from nier_automata.data.tables import others_or_filler
-    class It:
-        def __init__(self, p, adv=False, useful=False): self.player, self.advancement, self.useful = p, adv, useful
-    rule = others_or_filler(1)
-    assert rule(It(2, adv=True)) and rule(It(1)) and not rule(It(1, adv=True)) and not rule(It(1, useful=True))

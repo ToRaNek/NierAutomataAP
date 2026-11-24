@@ -1,25 +1,32 @@
-﻿# NieR:Automata (Archipelago) - YAML template
+# NieR:Automata (Archipelago) - YAML template
 name: YourName
 game: NieR:Automata
-description: NieR:Automata - route A
+description: NieR:Automata
 
 NieR:Automata:
-  # Goal: story_progress (reach story_checks story steps) or ending_a (Ending A).
+  # Goal, which also sets how much of the game has checks:
+  #   story_progress (reach story_checks chapters), ending_a, ending_b (routes A+B),
+  #   ending_cd (route C/D), ending_e.
   goal: story_progress
-  # Story steps giving a "Story: <place>" check (1-27). With story_progress it is also the goal.
+  # Chapters covered by story_progress, counted in order (route A = 37, then B, then C/D; 109 in total).
+  # Each one is a "Story A 02-01: Landing at the City Ruins" check; only the areas they open have checks.
   story_checks: 12
-  # Weapons found (removed from the inventory, send a check).
-  weapon_checks: 8
-  # Chests opened.
-  chest_checks: 15
-  # One check per level, from 2 up to this level (0 = off).
-  max_level_check: 20
-  # AP Items dropped on the ground along your path ("AP Item: <place> #k").
+  # Every chest is a check named after its area ("Chest: City Ruins #12").
+  chest_checks: true
+  # "AP Item" objects on the ground at the game's collection points ("AP Item: Desert Zone #2"), 1-8 per area.
   ap_items: true
-  ap_items_per_phase: 2
+  ap_items_per_area: 3
+  # First activation of each access point ("Access Point: Desert: Camp").
+  access_point_checks: true
+  # Side quests ("Quest: Lost Girl"). EXPERIMENTAL, keep off for now.
+  quest_checks: false
   # AP Items sold at the top of the shops (Camp, Pascal's Village, Castle) and their price.
   shop_checks: 2
   shop_price: 300
+  # One check per level, from 2 up to this level (never above the level expected in the covered chapters).
+  max_level_check: 20
+  # Weapons found in the game (removed from the inventory, send a check).
+  weapon_checks: 8
   # Abilities locked until received (add "Pod Fire", "Pod Program" for a pod-less start).
   randomized_abilities: ["Double Jump", "Air Dash", "Ground Evade"]
   # Percentage of traps among filler items.

@@ -95,8 +95,7 @@ class NierContext(CommonContext):
                 msgs = notify.messages_for_item_send(self.slot, sender, receiver, name,
                                                      self.player_names.get(sender, "?"),
                                                      self.player_names.get(receiver, "?"), loc_name,
-                                                     lang=getattr(self, "lang", "en"),
-                                                     hide_own=len(self.player_names) > 2)
+                                                     lang=getattr(self, "lang", "en"))
                 logger.info("notification queued: %s", msgs)
                 self.notes.extend(msgs)
             except StopIteration:
