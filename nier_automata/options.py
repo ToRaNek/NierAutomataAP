@@ -47,9 +47,9 @@ class AccessPointChecks(DefaultOnToggle):
     display_name = "Access Point Checks"
 
 
-class QuestChecks(Toggle):
+class QuestChecks(DefaultOnToggle):
     """Completing a side quest sends a check ("Quest: <name>"). Quests that can be missed never hold an
-    important item. EXPERIMENTAL (read from the game's quest status, not tested in game yet): off by default."""
+    important item, and no quest holds one when route C/D is played. The game still gives its own reward."""
     display_name = "Quest Checks"
 
 

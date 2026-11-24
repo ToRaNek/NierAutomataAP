@@ -20,8 +20,8 @@ NieR:Automata:
   ap_items_per_area: 3
   # First activation of each access point ("Access Point: Desert: Camp").
   access_point_checks: true
-  # Side quests ("Quest: Lost Girl"). EXPERIMENTAL, keep off for now.
-  quest_checks: false
+  # Side quests ("Quest: Lost Girl"). Quests that can be missed never hold an important item.
+  quest_checks: true
   # AP Items sold at the top of the shops (Camp, Pascal's Village, Castle) and their price.
   shop_checks: 2
   shop_price: 300
