@@ -74,6 +74,28 @@ class Game:
         x, y, z = self.pos()
         return abs(y - ty) < 6 and math.hypot(tx - x, tz - z) < 8
 
+    def hold(self, target, secs=3.0):
+        """Maintient le joueur a `target` (re-teleportation toutes les 0,2 s) le temps que le decor se charge."""
+        end = time.time() + secs
+        while time.time() < end:
+            self.tp(*target)
+            time.sleep(0.2)
+
+    def travel(self, target, settle=4.0):
+        """Deplacement sur par bonds de 120 m maintenus en altitude, puis maintien sur la cible."""
+        tx, ty, tz = target
+        for _ in range(60):
+            x, y, z = self.pos()
+            d = math.hypot(tx - x, tz - z)
+            if d <= 120:
+                break
+            f = 120 / d
+            self.hold((x + (tx - x) * f, max(y, ty) + 30, z + (tz - z) * f), 1.2)
+        self.hold((tx, ty + 0.5, tz), settle)
+        time.sleep(1.0)
+        x, y, z = self.pos()
+        return abs(y - ty) < 6 and math.hypot(tx - x, tz - z) < 8
+
     def chest_at(self, p):
         base, size = entity_region(self.m)
         data = self.m.read(base, size)
