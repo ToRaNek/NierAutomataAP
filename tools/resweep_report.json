@@ -1,0 +1,340 @@
+{
+ "Chest: Abandoned Factory #4": {
+  "tried": [
+   "140_30_B_RobotM_CR_UF_Rescue",
+   "140_35_B_RobotM_CR_UF_Rescue2"
+  ],
+  "result": "absent"
+ },
+ "Chest: Abandoned Factory #8": {
+  "tried": [
+   "140_30_B_RobotM_CR_UF_Rescue",
+   "140_35_B_RobotM_CR_UF_Rescue2"
+  ],
+  "result": "absent"
+ },
+ "Chest: Abandoned Factory #9": {
+  "tried": [
+   "140_30_B_RobotM_CR_UF_Rescue",
+   "150_B_Banker_9S"
+  ],
+  "result": "absent"
+ },
+ "Chest: Abandoned Factory: His Grace's Room #1": {
+  "tried": [
+   "140_30_B_RobotM_CR_UF_Rescue",
+   "140_35_B_RobotM_CR_UF_Rescue2"
+  ],
+  "result": "present",
+  "vtable": "0xc5a250"
+ },
+ "Chest: Abandoned Factory: Underground Area #11": {
+  "tried": [
+   "140_30_B_RobotM_CR_UF_Rescue",
+   "140_35_B_RobotM_CR_UF_Rescue2"
+  ],
+  "result": "present",
+  "vtable": "0xc5a250"
+ },
+ "Chest: City Ruins: Deep Cave #1": {
+  "tried": [
+   "00_AB_Ruined_City",
+   "200_70_AB_Ruined_City_end"
+  ],
+  "result": "absent"
+ },
+ "Chest: City Ruins: Deep Cave #2": {
+  "tried": [
+   "00_AB_Ruined_City",
+   "200_70_AB_Ruined_City_end"
+  ],
+  "result": "absent"
+ },
+ "Chest: City Ruins: Deep Cave #4": {
+  "tried": [
+   "00_AB_Ruined_City",
+   "200_70_AB_Ruined_City_end"
+  ],
+  "result": "absent"
+ },
+ "Chest: City Ruins: Deep Cave #8": {
+  "tried": [
+   "00_AB_Ruined_City",
+   "200_20_AB_Ruined_City_EveBattle"
+  ],
+  "result": "absent"
+ },
+ "Chest: City Ruins: Emil's Residence #1": {
+  "tried": [
+   "110_00_A_Copy_City",
+   "200_10_AB_Ruined_City_EveBattle"
+  ],
+  "result": "absent"
+ },
+ "Chest: Copied City #3": {
+  "tried": [
+   "110_00_A_Copy_City"
+  ],
+  "result": "present",
+  "vtable": "0xc7d708"
+ },
+ "Chest: Copied City #4": {
+  "tried": [
+   "110_00_A_Copy_City"
+  ],
+  "result": "present",
+  "vtable": "0xc7d708"
+ },
+ "Chest: Copied City #5": {
+  "tried": [
+   "110_00_A_Copy_City"
+  ],
+  "result": "present",
+  "vtable": "0xc7d708"
+ },
+ "Chest: Abandoned Factory #1": {
+  "tried": [
+   "140_30_A_RobotM_CR_GuruBattle",
+   "160_A_Ruined_City_2B"
+  ],
+  "result": "present",
+  "vtable": "0xc7d708"
+ },
+ "Chest: Abandoned Factory #2": {
+  "tried": [
+   "140_30_A_RobotM_CR_GuruBattle",
+   "140_20_A_RobotM_CR_GuruRoom"
+  ],
+  "result": "absent"
+ },
+ "Chest: Abandoned Factory #3": {
+  "tried": [
+   "140_30_A_RobotM_CR_GuruBattle",
+   "140_20_A_RobotM_CR_GuruRoom"
+  ],
+  "result": "absent"
+ },
+ "Chest: Abandoned Factory #6": {
+  "tried": [
+   "140_00_A_RobotM_CrazyReligion"
+  ],
+  "result": "present",
+  "vtable": "0xc7d708"
+ },
+ "Chest: Abandoned Factory #10": {
+  "tried": [
+   "140_00_A_RobotM_CrazyReligion",
+   "160_A_Ruined_City_2B"
+  ],
+  "result": "absent"
+ },
+ "Chest: Abandoned Factory #12": {
+  "tried": [
+   "140_00_A_RobotM_CrazyReligion"
+  ],
+  "result": "present",
+  "vtable": "0xc7d708"
+ },
+ "Chest: Abandoned Factory #11": {
+  "tried": [
+   "140_35_B_RobotM_CR_UF_Rescue2",
+   "140_30_B_RobotM_CR_UF_Rescue"
+  ],
+  "result": "absent"
+ },
+ "Chest: Abandoned Factory: Underground Area #5": {
+  "tried": [
+   "140_35_B_RobotM_CR_UF_Rescue2"
+  ],
+  "result": "present",
+  "vtable": "0xc5a250"
+ },
+ "Chest: Abandoned Factory: Underground Area #15": {
+  "tried": [
+   "140_35_B_RobotM_CR_UF_Rescue2"
+  ],
+  "result": "present",
+  "vtable": "0xc5a250"
+ },
+ "Chest: City Ruins: Deep Cave #5": {
+  "tried": [
+   "200_70_AB_Ruined_City_end",
+   "200_80_AB_Ruined_City_end"
+  ],
+  "result": "absent"
+ },
+ "Chest: City Ruins: Deep Cave #6": {
+  "tried": [
+   "200_70_AB_Ruined_City_end",
+   "200_80_AB_Ruined_City_end"
+  ],
+  "result": "absent"
+ },
+ "Chest: City Ruins: Deep Cave #9": {
+  "tried": [
+   "200_70_AB_Ruined_City_end",
+   "200_80_AB_Ruined_City_end"
+  ],
+  "result": "absent"
+ },
+ "Chest: Resistance Camp #8": {
+  "tried": [
+   "170_20_A_Resistance_Camp_2B"
+  ],
+  "result": "present",
+  "vtable": "0xc7d708"
+ },
+ "Chest: Resistance Camp #10": {
+  "tried": [
+   "170_20_A_Resistance_Camp_2B"
+  ],
+  "result": "present",
+  "vtable": "0xc7d708"
+ },
+ "Chest: Resistance Camp #11": {
+  "tried": [
+   "170_20_A_Resistance_Camp_2B"
+  ],
+  "result": "present",
+  "vtable": "0xc7d708"
+ },
+ "Chest: Abandoned Factory #5": {
+  "tried": [
+   "140_90_A_RobotM_CR_UF_Exit",
+   "140_30_A_RobotM_CR_GuruBattle"
+  ],
+  "result": "absent"
+ },
+ "Chest: Abandoned Factory #7": {
+  "tried": [
+   "140_90_A_RobotM_CR_UF_Exit",
+   "140_20_A_RobotM_CR_GuruRoom"
+  ],
+  "result": "absent"
+ },
+ "Chest: City Ruins: Deep Cave #3": {
+  "tried": [
+   "200_70_AB_Ruined_City_end",
+   "200_80_AB_Ruined_City_end"
+  ],
+  "result": "absent"
+ },
+ "Chest: City Ruins: Deep Cave #7": {
+  "tried": [
+   "200_70_AB_Ruined_City_end",
+   "200_80_AB_Ruined_City_end"
+  ],
+  "result": "absent"
+ },
+ "Chest: City Ruins: Deep Cave #10": {
+  "tried": [
+   "200_10_AB_Ruined_City_EveBattle",
+   "200_20_AB_Ruined_City_EveBattle"
+  ],
+  "result": "absent"
+ },
+ "Chest: City Ruins: Shopping Center #2": {
+  "tried": [
+   "40_30_AB_ShopM_EQ_EmilAppear",
+   "40_70_AB_ShopM_EmilQuest_End"
+  ],
+  "result": "absent"
+ },
+ "Chest: City Ruins: Shopping Center #3": {
+  "tried": [
+   "40_30_AB_ShopM_EQ_EmilAppear",
+   "40_70_AB_ShopM_EmilQuest_End"
+  ],
+  "result": "absent"
+ },
+ "Chest: Forest Zone #4": {
+  "tried": [
+   "60_08_B_Forest_Castle3"
+  ],
+  "result": "present",
+  "vtable": "0xc5a250"
+ },
+ "Chest: Forest Zone #11": {
+  "tried": [
+   "60_08_B_Forest_Castle3"
+  ],
+  "result": "present",
+  "vtable": "0xc5a250"
+ },
+ "Chest: Pascal's Village #3": {
+  "tried": [
+   "90_00_AB_Ruined_City"
+  ],
+  "result": "present",
+  "vtable": "0xc7d708"
+ },
+ "Chest: Pascal's Village #7": {
+  "tried": [
+   "90_00_AB_Ruined_City"
+  ],
+  "result": "absent"
+ },
+ "Chest: Resistance Camp #1": {
+  "tried": [
+   "170_10_A_Resistance_Camp_2B"
+  ],
+  "result": "present",
+  "vtable": "0xc7d708"
+ },
+ "Chest: Resistance Camp #2": {
+  "tried": [
+   "170_10_A_Resistance_Camp_2B"
+  ],
+  "result": "present",
+  "vtable": "0xc7d708"
+ },
+ "Chest: Abandoned Factory: Underground Area #18": {
+  "tried": [
+   "140_60_A_RobotM_CR_UF_Middle"
+  ],
+  "result": "absent"
+ },
+ "Chest: Amusement Park: Main Square #1": {
+  "tried": [
+   "70_AB_Amusement_Park"
+  ],
+  "result": "absent"
+ },
+ "Chest: Amusement Park: Under the Theater #1": {
+  "tried": [
+   "79_50_AB_Goto_Pascal_Village"
+  ],
+  "result": "absent"
+ },
+ "Chest: City Ruins #13": {
+  "tried": [
+   "00_AB_Ruined_City"
+  ],
+  "result": "absent"
+ },
+ "Chest: City Ruins: Shopping Center #4": {
+  "tried": [
+   "40_30_AB_ShopM_EQ_EmilAppear"
+  ],
+  "result": "absent"
+ },
+ "Chest: City Ruins: Shopping Center #6": {
+  "tried": [
+   "40_70_AB_ShopM_EmilQuest_End"
+  ],
+  "result": "present",
+  "vtable": "0xc5a250"
+ },
+ "Chest: Copied City #1": {
+  "tried": [
+   "115_AB_Copy_City_AdamDie"
+  ],
+  "result": "absent"
+ },
+ "Chest: Desert Zone: Sand Cave #4": {
+  "tried": [
+   "51_AB_MainDesert"
+  ],
+  "result": "absent"
+ }
+}

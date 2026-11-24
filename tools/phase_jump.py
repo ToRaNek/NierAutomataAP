@@ -50,6 +50,10 @@ def set_route(m, route: str, character: str) -> None:
 
 def jump(m, phase: int, sub: str, wait: float = 90.0) -> bool:
     cave = rp.install(m)
+    st = state(m)
+    if st["machine"] != 2 or st["scene"] != 1:
+        # un saut lance pendant une pause ou une transition bloque le jeu (vu en jeu) : on refuse
+        raise RuntimeError(f"jeu pas pret pour un saut : {st}")
     name = cave + 0x200
     m.write(name, sub.encode() + bytes(0x21 - len(sub)))
     m.write(m.base + 0x14958B0, struct.pack("<I", 0x40000000))
