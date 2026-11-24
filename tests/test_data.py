@@ -138,3 +138,12 @@ def test_quests_closed_in_game_before_the_end_of_route_a_are_missable():
         assert q[qid]["excluded"], qid
     for qid in ("q150", "q660", "q680", "q410"):                       # encore proposees au chapitre 10
         assert not q[qid]["excluded"], qid
+
+
+def test_no_important_item_in_quests_when_route_c_is_played():
+    # avis du testeur : en route C/D les quetes des routes A/B ne sont plus faisables
+    from nier_automata.data.tables import quest_excluded
+    q = {"excluded": False}
+    assert quest_excluded(q, ("A01", "A05", "C11"))
+    assert not quest_excluded(q, ("A01", "A05", "B05"))
+    assert quest_excluded({"excluded": True}, ("A01",))

@@ -6,7 +6,7 @@ from .data import worlddb as db
 from .data.items_data import FILLER_ITEMS, FUNDS_ITEMS, MATERIALS, TRAP_ITEMS
 from .data.tables import (
     SHOP_PLACES_ORDER, SHOP_REGION, item_location, item_name_to_id, level_location, location_name_to_id,
-    pool_weapon_count, shop_location, shop_missable, weapon_location,
+    pool_weapon_count, quest_excluded, shop_location, shop_missable, weapon_location,
 )
 from .data.weapons import STARTING_WEAPONS, WEAPONS
 from .options import NierAutomataOptions
@@ -72,7 +72,8 @@ class NierAutomataWorld(World):
         out = [(db.CHAPTERS[i]["name"], db.CHAPTERS[i]["region"], False, []) for i in range(s.chapters)]
         for table, idx in ((db.CHESTS, s.chests), (db.PICKUPS, s.pickups), (db.ACCESS_POINTS, s.access_points),
                            (db.QUESTS, s.quests)):
-            out += [(table[i]["name"], table[i]["region"], bool(table[i].get("excluded")),
+            out += [(table[i]["name"], table[i]["region"],
+                     quest_excluded(table[i], s.regions) if table is db.QUESTS else bool(table[i].get("excluded")),
                      table[i].get("needs", [])) for i in sorted(idx)]
         out += [(level_location(n), db.level_region(n), False, []) for n in range(2, s.max_level + 1)]
         for place in SHOP_PLACES_ORDER:

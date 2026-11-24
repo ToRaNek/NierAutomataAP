@@ -107,3 +107,9 @@ def pool_weapon_count(story_locations: int, total_locations: int, candidates: in
     """Armes (objets "useful") dans le pool : jamais plus que les locations non exclues (histoire),
     et au plus la moitie des locations. Le reste est du filler, seul autorise sur les exclues."""
     return max(0, min(candidates, story_locations, total_locations // 2))
+
+
+def quest_excluded(quest: dict, regions) -> bool:
+    """Une quete ne recoit jamais d'objet important si elle est ratable, ou des que la route C/D est jouee
+    (les quetes des routes A/B n'y sont plus faisables)."""
+    return bool(quest.get("excluded")) or any(r.startswith("C") for r in regions)
