@@ -72,6 +72,7 @@ Traps that use the game's own effects wait while a menu, a loading screen, a cut
 ## Map
 The client has a **Map** tab: a top-down map of the world built from the game's own collision data. Hinted
 locations are yellow, your remaining checks that have a precise location are grey, and you are the red dot.
+Indoor and underground rooms (caves, factory, shopping center...) are drawn in orange over the open world.
 Scroll to zoom, drag to move.
 
 ![Map tab](docs/map_tab.png)

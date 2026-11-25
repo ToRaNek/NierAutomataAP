@@ -26,3 +26,20 @@ def test_markers_hints_first_then_remaining_checks():
     assert ("check", c0["name"]) in kinds and ("check", c1["name"]) not in kinds     # deja en indice
     assert marks[-1].kind == "player" and (marks[-1].x, marks[-1].z) == (1.0, 3.0)
     assert not any("Level" in m.label for m in marks)
+
+
+def test_map_shows_indoor_rooms_in_orange():
+    # les salles interieures (grottes, sous-sols) sont dessinees en orange : un check de grotte tombe dessus
+    import io
+    import pytest
+    Image = pytest.importorskip("PIL.Image")
+    img = Image.open(io.BytesIO(wm.map_png())).convert("RGB")
+    info = wm.load_info()
+    cave = [c for c in db.CHESTS if "Deep Cave" in c["name"]]
+    assert cave
+    orange = 0
+    for c in cave:
+        px, py = info.to_pixel(c["pos"][0], c["pos"][2])
+        r, g, b = img.getpixel((int(px), int(py)))
+        orange += r > b + 40
+    assert orange >= len(cave) * 0.8

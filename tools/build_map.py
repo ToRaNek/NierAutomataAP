@@ -40,6 +40,27 @@ for i in np.argsort(ymax):
     c = (int(40 + 120 * v), int(60 + 120 * v), int(70 + 90 * v))
     d.polygon([((p[0] - x0) / SCALE, (p[2] - z0) / SCALE) for p in t[i]], fill=c)
 img = img.filter(ImageFilter.SMOOTH)
+
+# Interieurs (wd5, deja en coordonnees monde) : sols en orange translucide par-dessus le monde ouvert, pour que
+# les checks de grotte / sous-sol / salle ne paraissent pas poses en plein air. g50010 = un grand plan, ignore.
+INTERIOR = (255, 150, 60, 130)
+ov = Image.new("RGBA", img.size, (0, 0, 0, 0))
+od = ImageDraw.Draw(ov)
+n_int = 0
+for n, e in sorted(manifest.items()):
+    if not (n.startswith("wd5/") and e.get("col") and e["col"]["tris"]) or e["col"]["names"] == ["test"]             or n == "wd5/g50010.dat":
+        continue
+    with np.load(R.CACHE / f"{n.replace('/', '__')[:-4]}.npz") as z:
+        ti = z["tris"].astype(np.float32)
+    nrm = np.cross(ti[:, 1] - ti[:, 0], ti[:, 2] - ti[:, 0])
+    ln = np.linalg.norm(nrm, axis=1)
+    ti = ti[(ln > 1e-6) & (np.abs(nrm[:, 1]) / np.maximum(ln, 1e-6) > 0.5)
+            & (ti[:, :, 1].max(axis=1) < 300) & (ti[:, :, 1].min(axis=1) > -600)]
+    n_int += len(ti)
+    for tri in ti:
+        od.polygon([((p[0] - x0) / SCALE, (p[2] - z0) / SCALE) for p in tri], fill=INTERIOR)
+img.paste(ov, (0, 0), ov)
+print(n_int, "triangles d'interieur")
 img.save(OUT / "map.png", optimize=True)
 (OUT / "map.json").write_text(json.dumps({"x0": x0, "z0": z0, "scale": SCALE, "width": w, "height": h}))
 print(len(t), "triangles", w, "x", h, (OUT / "map.png").stat().st_size // 1024, "Ko")

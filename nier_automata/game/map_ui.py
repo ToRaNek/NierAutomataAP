@@ -14,7 +14,7 @@ def _map_file() -> str:
     d.mkdir(parents=True, exist_ok=True)
     f = d / "map.png"
     data = wm.map_png()
-    if not f.exists() or f.stat().st_size != len(data):
+    if not f.exists() or f.read_bytes() != data:      # contenu, pas taille : la carte change entre versions
         f.write_bytes(data)
     return str(f)
 
@@ -121,7 +121,7 @@ def build_map_tab(ctx):
         n_h = sum(1 for m in marks if m.kind == "hint")
         n_c = sum(1 for m in marks if m.kind == "check")
         last = next((m.label for m in reversed(marks) if m.kind == "hint"), "")
-        legend.text = f"  Hints: {n_h} (yellow)   Remaining checks with a location: {n_c} (grey)   You: red   {last}"
+        legend.text = f"  Hints: {n_h} (yellow)   Remaining checks with a location: {n_c} (grey)   You: red   Indoor / underground rooms: orange   {last}"
 
     Clock.schedule_interval(refresh, 0.5)
     return root

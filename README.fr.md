@@ -76,7 +76,8 @@ dialogue est a l'ecran.
 ## Carte
 Le client a un onglet **Map** : une carte du monde vue de dessus, construite a partir des collisions du jeu.
 Les lieux donnes par un indice sont en jaune, tes checks restants qui ont un lieu precis en gris, et toi en
-rouge. Molette pour zoomer, glisser pour deplacer.
+rouge. Les salles interieures et souterraines (grottes, usine, centre commercial...) sont en orange par-dessus
+le monde ouvert. Molette pour zoomer, glisser pour deplacer.
 
 ![Onglet Map](docs/map_tab.png)
 
