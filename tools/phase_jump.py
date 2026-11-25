@@ -68,9 +68,13 @@ def jump(m, phase: int, sub: str, wait: float = 90.0) -> bool:
     remote_call(m, m.base + 0x761460, m.base + 0x102A360, phase, name, 1, e=0)
     end = time.time() + wait
     time.sleep(3)
+    seen = False
     while time.time() < end:
         s = state(m)
-        if s["sub"] == sub and s["machine"] == 2 and s["scene"] == 1:
+        seen = seen or s["sub"] == sub
+        # certaines sous-phases ne durent qu'un chargement (13_B_bunker_Setup, 315_CD_Tower_Unite : ~12 s,
+        # scene 0) puis le jeu passe seul a la suivante : le saut a reussi des qu'on l'a vue et que le jeu est pret
+        if seen and s["machine"] == 2 and s["scene"] == 1:
             return True
         time.sleep(1)
     return False

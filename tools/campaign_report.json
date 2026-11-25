@@ -932,7 +932,14 @@
  },
  "C 17-08": {
   "subphase": "315_CD_Tower_Unite",
-  "jump": "failed"
+  "jump": "ok",
+  "note": "phase de 12 s (chargement) puis 320_CD_Tower_Summit",
+  "next": "320_CD_Tower_Summit",
+  "pos": [
+   214.3,
+   5242.8,
+   361.4
+  ]
  },
  "C 17-09": {
   "subphase": "332_CD_Tower_Talk",
@@ -986,7 +993,9 @@
  },
  "B 01-04": {
   "subphase": "13_B_bunker_Setup",
-  "jump": "failed"
+  "jump": "ok",
+  "note": "phase de 13 s (chargement) puis 16_AB_bunker_Order ; valide par le chapitre suivant",
+  "next": "16_AB_bunker_Order"
  },
  "B 01-05": {
   "subphase": "16_AB_bunker_Order",

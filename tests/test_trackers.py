@@ -285,3 +285,17 @@ def test_chest_falls_back_to_player_position_without_opened_objects():
     t.update(5, chest_at(0)); t.update(5, chest_at(0))
     t.update(6, chest_at(0), opened=lambda: [])
     assert t.update(6, chest_at(0), opened=lambda: []) == 0
+
+
+def test_chapter_whose_only_phase_lasts_one_loading_screen_is_still_validated():
+    # vu en jeu : 13_B_bunker_Setup (B 01-04) ne dure que ~13 s de chargement, le client peut ne jamais la lire ;
+    # la phase suivante (16_AB_bunker_Order, B 01-05) doit valider B 01-04 aussi
+    from nier_automata.data import worlddb as db
+    s = st()
+    t = StoryTracker(s, max_count=200)
+    t.check("00_00_B_RobotM_Pro_RobotBrother")                           # route B commencee
+    assert s.route == "B"
+    i = t.check("16_AB_bunker_Order")
+    names = {db.CHAPTERS[k]["name"] for k in s.chapters}
+    assert db.CHAPTERS[i]["route"] == "B" and db.CHAPTERS[i]["chapter"] == "01-05"
+    assert any(n.startswith("Story B 01-04") for n in names)
