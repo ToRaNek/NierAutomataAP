@@ -50,6 +50,13 @@ Everything is named after where it is, so a hint tells you where to go.
 - `starter_kit` (on by default): a few recovery items and one attack and one defense boost at the start,
   then a supply drop once when you enter the two hard sections you cannot come back from (the boss rush at
   the end of route A, and the start of route C/D).
+- `area_locks` (on by default): six areas are closed until you receive their **Pass**: Desert Zone, Amusement
+  Park, Pascal's Village, Forest Zone (with the castle), Flooded City and Abandoned Factory. Walking in without
+  the Pass puts you back a few meters, like an invisible wall, with "Locked: Desert Pass" in the game log. The
+  story needs these areas in order, so it waits for the Pass. Only the areas played before your goal get a Pass
+  (two with the default settings: Desert and Park). The prologue is never locked. The Copied City has no Pass
+  (the game places you inside, you do not walk in). With this option the route A side quests never hold an
+  important item (some of them send you into a closed area).
 
 ## Items received
 Weapons, the 16 Pod programs other than the starting laser (`pod_programs`), abilities (double jump, air
@@ -96,6 +103,9 @@ Scroll to zoom, drag to move.
 - The Self-Destruct and E-Drug traps were tried on foot as 2B, in a boss fight (both work), in a flying section
   and during a 9S hack (E-Drug shows there; Self-Destruct waits until you are back on foot, and the items
   received after it wait with it).
+- Area locks: tested in game at the entrance of each of the six areas (the wall holds on repeated tries, and the
+  Desert opens as soon as its Pass arrives from the server). If you connect while already standing inside a
+  closed area, the client leaves you there. No full playthrough with the locks has been done yet.
 - Mail titles: open an access point for ~10 s the first time after each game launch.
 - Don't load another save than the one of the seed.
 

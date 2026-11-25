@@ -170,6 +170,14 @@ class ItemChecks(Toggle):
     display_name = "Item Checks"
 
 
+class AreaLocks(DefaultOnToggle):
+    """Each big area of the game (Desert Zone, Amusement Park, Pascal's Village, Forest Zone, Flooded City,
+    Abandoned Factory) is closed until you receive its Pass: walking in puts you back where you
+    were, like an invisible wall. The story cannot go on without the Pass of the next area.
+    Only the areas played before your goal get a Pass."""
+    display_name = "Area Locks"
+
+
 class Goal(Choice):
     """Victory condition, which also sets how much of the game has checks.
     story_progress: finish chapter `story_chapter` of route `story_route` (short game, adjustable).
@@ -207,5 +215,6 @@ class NierAutomataOptions(PerGameCommonOptions):
     pod_program_checks: PodProgramChecks
     starter_kit: StarterKit
     randomized_abilities: RandomizedAbilities
+    area_locks: AreaLocks
     goal: Goal
     death_link: DeathLink

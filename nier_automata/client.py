@@ -10,7 +10,7 @@ from CommonClient import CommonContext, get_base_parser, gui_enabled, logger, se
 from NetUtils import ClientStatus
 
 from .data import worlddb as db
-from .data.phases import abilities_allowed
+from .data.phases import MENU_PHASES, abilities_allowed
 from .game import ap_items as apit
 from .game import notify
 from .data.tables import SHOP_PLACES_ORDER, SHOP_REGION, location_name_to_id, shop_location
@@ -23,6 +23,8 @@ LOC_IDS = location_name_to_id()
 AP_SPOTS = [(p["region"], p["pos"][0] + 1.5, p["pos"][1], p["pos"][2]) for p in db.PICKUPS]
 from .data.items_data import FILLER_ITEMS
 from .game.abilities import AbilityLock
+from .game.arealock import AreaLock, area_lock_active
+from .data.areas import zone_name
 from .game.deathlink import DeathTracker
 from .game.game import NierGame, backup_saves
 from .game.loop import due_locations, make_trackers, new_state, tick
@@ -118,6 +120,7 @@ class NierContext(CommonContext):
             self.nier.damage_trap_percent = int(sd.get("damage_trap_percent", 20))
             self.nier.lethal_traps = bool(sd.get("lethal_traps", False))
             self.nier.enemy_trap_basic = sd.get("enemy_trap_enemies", "basic") != "random"
+            self.area_lock = AreaLock(sd.get("area_passes", []))
             self.ap_items_on = bool(self.scope.pickups)
             self.ap_contents = {}
             self.ap_flags = {}
@@ -282,6 +285,46 @@ async def ability_loop(ctx: NierContext):
                                   allowed=abilities_allowed(ctx.nier.phase()), jammed=jammed)
         except Exception:
             pass
+
+
+async def area_loop(ctx: NierContext):
+    """Zones verrouillees (option area_locks) : 10 fois par seconde, remet le joueur en arriere s'il entre dans
+    une zone dont il n'a pas le Pass."""
+    import time
+    while not ctx.exit_event.is_set():
+        await asyncio.sleep(0.1)
+        try:
+            lock = getattr(ctx, "area_lock", None)
+            if lock is None or not lock.passes or ctx.state is None or not ctx.state.linked:
+                continue
+            game = ctx.nier
+            if game.mem is None:
+                lock.reset()
+                continue
+            if not game.in_game():
+                # un chargement de decor en marchant fait croire un instant que le jeu charge (vu en jeu : le mur
+                # etait oublie et le joueur passait) : on n'oublie le mur qu'au retour a l'ecran titre
+                if game.phase() in MENU_PHASES or not game.phase():
+                    lock.reset()
+                continue
+            area, pos = game.area_id(), game.entity_position()
+            if area is None or pos is None:
+                continue
+            active = area_lock_active(game.phase(), game.in_cutscene(), game.action(), game.hp())
+            back = lock.update(area, pos, time.monotonic(), ctx.received_names, active=active)
+            if back is None:
+                if lock.blocked_without_trail and not getattr(ctx, "area_warned", False):
+                    ctx.area_warned = True    # deja dans la zone a la connexion : rien a quoi revenir
+                    logger.info("Area lock: already inside a locked area (id %s), no position to go back to", area)
+                continue
+            ctx.area_warned = False
+            if game.push_back(back.pos, back.area_id):
+                logger.info("Area locked: %s (needs %s)", zone_name(back.pass_name), back.pass_name)
+                if back.notify:
+                    lang = getattr(ctx, "lang", "en")
+                    ctx.notes.append((i18n.t(lang, "area_locked"), back.pass_name))
+        except Exception as e:
+            logger.info("area lock failed: %r", e)
 
 
 async def mail_step(ctx: NierContext):
@@ -532,11 +575,13 @@ def launch(*launch_args):
         watcher = asyncio.create_task(game_loop(ctx), name="NierGameLoop")
         abilities = asyncio.create_task(ability_loop(ctx), name="NierAbilityLoop")
         notes = asyncio.create_task(notify_loop(ctx), name="NierNotifyLoop")
+        areas = asyncio.create_task(area_loop(ctx), name="NierAreaLoop")
         await ctx.exit_event.wait()
         ctx.server_address = None
         watcher.cancel()
         abilities.cancel()
         notes.cancel()
+        areas.cancel()
         ctx.release_abilities()
         await ctx.shutdown()
 

@@ -52,6 +52,13 @@ Chaque check porte le nom de son lieu : un indice dit donc ou aller.
 - `starter_kit` (active par defaut) : quelques soins et un bonus d'attaque et de defense au depart, puis un
   ravitaillement donne une fois a l'entree des deux passages durs sans retour (les boss enchaines de la fin
   de la route A, et le debut de la route C/D).
+- `area_locks` (active par defaut) : six zones restent fermees tant que tu n'as pas recu leur **Pass** : Desert,
+  Parc d'attractions, Village de Pascal, Foret (avec le chateau), Ville inondee et Usine abandonnee. Y entrer
+  sans le Pass te remet quelques metres en arriere, comme un mur invisible, avec "Ferme : Desert Pass" dans le
+  journal du jeu. L'histoire passe par ces zones dans l'ordre, donc elle attend le Pass. Seules les zones jouees
+  avant ton objectif ont un Pass (deux avec les reglages par defaut : Desert et Parc). Le prologue n'est jamais
+  verrouille. La Ville copiee n'a pas de Pass (le jeu t'y place, on n'y entre pas a pied). Avec cette option les
+  quetes annexes de la route A ne contiennent jamais d'objet important (certaines envoient dans une zone fermee).
 
 ## Objets recus
 Armes, les 16 programmes de Pod autres que le laser de depart (`pod_programs`), capacites (double saut, dash
@@ -101,6 +108,9 @@ le monde ouvert. Molette pour zoomer, glisser pour deplacer.
 - Les pieges Self-Destruct et E-Drug ont ete essayes a pied avec 2B, en combat de boss (les deux
   marchent), en sequence de vol et pendant un piratage de 9S (l'E-Drug s'y affiche ; le Self-Destruct attend
   le retour a pied, et les objets recus apres lui attendent avec lui).
+- Zones verrouillees : essayees en jeu a l'entree de chacune des six zones (le mur tient sur des essais repetes,
+  et le Desert s'ouvre des que son Pass arrive du serveur). Si tu te connectes alors que tu es deja dans une zone
+  fermee, le client te laisse la. Aucune partie complete n'a encore ete jouee avec les verrous.
 - Titres des mails : ouvrir un point d'acces ~10 s la premiere fois apres chaque lancement du jeu.
 - Ne pas charger une autre sauvegarde que celle de la seed.
 

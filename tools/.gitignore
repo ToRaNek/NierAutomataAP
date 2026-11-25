@@ -15,3 +15,4 @@ spots_items.tsv
 e2e_shop/
 e2e_shop_serve.py
 e2e_gen/
+e2e_lock/

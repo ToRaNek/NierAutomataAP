@@ -25,6 +25,7 @@ STRINGS: dict[str, dict[str, str]] = {
         "checks_head": "Remaining checks: {n} / {total}",
         "hints_head": "Hints your friends asked for (items hidden in your world):",
         "hint_line": "{item} for {who}\n  -> {where}",
+        "area_locked": "Locked: ",
     },
     "fr": {
         "from": "De {who} : ",
@@ -39,6 +40,7 @@ STRINGS: dict[str, dict[str, str]] = {
         "checks_head": "Checks restants : {n} / {total}",
         "hints_head": "Indices demandes par tes potes (objets caches dans ta partie) :",
         "hint_line": "{item} pour {who}\n  -> {where}",
+        "area_locked": "Ferme : ",
     },
 }
 

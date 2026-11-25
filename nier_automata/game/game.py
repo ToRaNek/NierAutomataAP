@@ -359,6 +359,69 @@ class NierGame:
             return False
         return True
 
+    def area_id(self) -> Optional[int]:
+        """Identifiant de la zone courante (dernier volume de zone traverse, docs/research/areas.json)."""
+        from ..data.areas import AREA_ID_RVA
+        try:
+            return struct.unpack("<i", self.mem.read(self.mem.base + AREA_ID_RVA, 4))[0]
+        except (OSError, AttributeError):
+            return None
+
+    def action(self) -> Optional[int]:
+        p = self.entity()
+        if p is None:
+            return None
+        try:
+            return struct.unpack("<I", self.mem.read(p + 0x670, 4))[0]
+        except OSError:
+            return None
+
+    def entity_position(self) -> Optional[tuple]:
+        p = self.entity()
+        if p is None:
+            return None
+        try:
+            return struct.unpack("<3f", self.mem.read(p + 0x50, 12))
+        except OSError:
+            return None
+
+    POSITION_GLOBAL_RVA = 0x1774F00    # copie globale de la position du joueur (camera)
+
+    def teleport(self, pos) -> bool:
+        """Deplace le joueur : toutes les copies de sa position dans son entite (ecrire la seule position +0x50
+        ne suffit pas, le jeu la recalcule) et la copie globale. Meme methode que tools/sweep.py (verifiee en jeu)."""
+        p = self.entity()
+        if p is None:
+            return False
+        try:
+            x, y, z = struct.unpack("<3f", self.mem.read(p + 0x50, 12))
+            dx, dy, dz = pos[0] - x, pos[1] - y, pos[2] - z
+            block = self.mem.read(p, 0x30000)
+            writes = []
+            for off in range(0, len(block) - 12, 4):
+                a, b, c = struct.unpack_from("<3f", block, off)
+                if abs(a - x) < 0.05 and abs(c - z) < 0.05 and abs(b - y) < 3:
+                    writes.append((p + off, struct.pack("<3f", a + dx, b + dy, c + dz)))
+            g = self.mem.base + self.POSITION_GLOBAL_RVA
+            gx, gy, gz = struct.unpack("<3f", self.mem.read(g, 12))
+            writes.append((g, struct.pack("<3f", gx + dx, gy + dy, gz + dz)))
+            for addr, raw in writes:
+                self.mem.write(addr, raw)
+        except OSError:
+            return False
+        return True
+
+    def push_back(self, pos, area_id: int) -> bool:
+        """Remet le joueur a `pos` et la zone courante a `area_id` (zone verrouillee : mur invisible)."""
+        from ..data.areas import AREA_ID_RVA
+        if not self.teleport(pos):
+            return False
+        try:
+            self.mem.write(self.mem.base + AREA_ID_RVA, struct.pack("<i", area_id))
+        except OSError:
+            return False
+        return True
+
     def grounded(self) -> Optional[bool]:
         """2B au sol = compteur de sauts (+0x14A8) a 0. None si illisible."""
         p = self.entity()

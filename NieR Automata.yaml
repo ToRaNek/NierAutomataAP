@@ -33,6 +33,9 @@ NieR:Automata:
   weapon_checks: 8
   # Abilities locked until received (add "Pod Fire", "Pod Program" for a pod-less start).
   randomized_abilities: ["Double Jump", "Air Dash", "Ground Evade"]
+  # Six areas (Desert, Park, Pascal's Village, Forest, Flooded City, Factory) are closed until you receive
+  # their Pass; only the areas played before your goal get one.
+  area_locks: true
   # The 16 Pod programs other than the starting laser are items found in the multiworld.
   pod_programs: true
   # Programs found in the game itself send a check and are taken back, like weapons (0-16, 0 = off).
