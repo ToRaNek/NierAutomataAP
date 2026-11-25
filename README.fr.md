@@ -65,7 +65,9 @@ aerien, esquive au sol, tir du Pod, attaques...), soins et bonus, argent, et pie
 - **E-Drug Trap** : l'effet E-Drug du jeu, image et son brouilles pendant 30 secondes.
 
 Les pieges qui utilisent les effets du jeu attendent tant qu'un menu ou un chargement est a l'ecran. Tous les
-pieges sauf le Money Trap attendent la fin d'une cinematique (5 minutes au plus).
+pieges sauf le Money Trap attendent la fin d'une cinematique (5 minutes au plus). Les courts mouvements de
+camera scriptes qui ne sont pas de vraies cinematiques (une chute vers une nouvelle zone, par exemple) ne
+sont pas detectes.
 
 ## En jeu
 - Notifications : "De Niicotine : X", "Check : Camp Resistance" puis "Pour Niicotine : X".
