@@ -197,9 +197,11 @@ class NierGame:
         if name in WEAPONS:
             return self._weapons.add(WEAPONS[name], 1)
         if name in POD_PROGRAMS:
-            if POD_PROGRAMS[name] in self.owned_programs():
-                return True
-            return self.give_with_popup(POD_PROGRAMS[name])
+            from .inventory import add_pod_program
+            try:
+                return add_pod_program(self.mem, POD_PROGRAMS[name])
+            except OSError:
+                return False
         if name in TRAP_ITEMS:
             return self.apply_trap(*TRAP_ITEMS[name])
         if name in FUNDS_ITEMS:

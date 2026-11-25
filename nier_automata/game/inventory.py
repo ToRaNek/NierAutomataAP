@@ -121,3 +121,17 @@ def read_pod_programs(mem) -> set:
     raw = mem.read(mem.base + POD_PROGRAMS_RVA, POD_PROGRAM_SLOTS * 8)
     ids = struct.unpack(f"<{POD_PROGRAM_SLOTS * 2}i", raw)[::2]
     return {i for i in ids if 2000 < i < 2100}
+
+
+def add_pod_program(mem, program_id: int) -> bool:
+    """Ajoute un programme dans le premier emplacement libre, sans le message du jeu. False si table pleine."""
+    import struct
+    base = mem.base + POD_PROGRAMS_RVA
+    ids = struct.unpack(f"<{POD_PROGRAM_SLOTS * 2}i", mem.read(base, POD_PROGRAM_SLOTS * 8))[::2]
+    if program_id in ids:
+        return True
+    for i, cur in enumerate(ids):
+        if cur == -1:
+            mem.write(base + i * 8, struct.pack("<2i", program_id, 1))
+            return True
+    return False

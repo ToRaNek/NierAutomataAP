@@ -108,3 +108,17 @@ def test_owned_pod_programs_read_from_the_game_table():
     raw = struct.pack("<4i", 2001, 1, 2003, 1) + struct.pack("<2i", -1, 1) * (POD_PROGRAM_SLOTS - 2)
     m.write(m.base + 0x148E680, raw)
     assert read_pod_programs(m) == {2001, 2003}
+
+
+def test_pod_program_added_silently_in_first_free_slot():
+    # le message du jeu bloque l'ecran jusqu'a un appui, un par programme : ecriture directe a la place
+    import struct
+    from nier_automata.game.inventory import POD_PROGRAM_SLOTS, add_pod_program, read_pod_programs
+    from nier_automata.game.memory import FakeMemory
+    m = FakeMemory()
+    m.write(m.base + 0x148E680, struct.pack("<2i", 2001, 1) + struct.pack("<2i", -1, 1) * (POD_PROGRAM_SLOTS - 1))
+    assert add_pod_program(m, 2009) and read_pod_programs(m) == {2001, 2009}
+    assert struct.unpack("<4i", m.read(m.base + 0x148E680, 16)) == (2001, 1, 2009, 1)
+    assert add_pod_program(m, 2009) and read_pod_programs(m) == {2001, 2009}      # deja possede : rien
+    m.write(m.base + 0x148E680, struct.pack("<2i", 2001, 1) * POD_PROGRAM_SLOTS)
+    assert not add_pod_program(m, 2010)                                            # table pleine

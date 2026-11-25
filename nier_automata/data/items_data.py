@@ -19,7 +19,8 @@ STARTER_KIT: list[str] = ["Medium Recovery", "Medium Recovery", "Large Recovery"
                           "Melee Attack Up (L)", "Melee Defense Up (L)"]
 
 # Programmes de Pod (identifiants du jeu, docs/research/pod_programs.json). Le laser R010 est celui de depart.
-# Donnes par la fonction du jeu (message "You obtained a Pod program", verifie en jeu).
+# Ecrits dans la table des programmes possedes, sans le message bloquant du jeu (la notification du client
+# annonce l'objet).
 POD_PROGRAMS: dict[str, int] = {
     "R020: Mirage": 2002, "R030: Hammer": 2003, "R040: Blade": 2004, "R050: Spear": 2005,
     "R070: M Shield": 2006, "A060: P Shield": 2007, "A080: Wave": 2008, "A090: Wire": 2009,
