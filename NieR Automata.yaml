@@ -45,6 +45,8 @@ NieR:Automata:
   damage_trap_percent: 20
   # true: a damage trap kills you when it removes more HP than you have left (false: 1 HP at worst).
   lethal_traps: false
+  # Enemy Trap: basic (small machines only) or random (small machines plus the area's medium machines).
+  enemy_trap_enemies: basic
   # First pickup of each material = one check (many checks).
   item_checks: false
   death_link: false

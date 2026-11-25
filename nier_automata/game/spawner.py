@@ -43,10 +43,31 @@ def choose_enemy_type(loaded: Sequence[tuple[int, str]],
     """loaded : (objId, nom de fiche) des ennemis vivants. Exclut les carcasses.
     basic_only : seulement les petites machines de base (em0000 / em0010) si la zone en a."""
     ids = sorted({oid for oid, name in loaded if oid >> 16 == 2 and name not in NOT_SPAWNABLE_NAMES})
-    # em0000-em001f : petites machines ; a partir de em4000 : geants, Adam / Eve (em5100), boss -> jamais clones
-    limit = 0x20 if basic_only else 0x4000
-    ids = [i for i in ids if i & 0xFFFF < limit]
+    # em0000-em001f : petites machines. Mode random : en plus, les types moyens essayes en jeu sans plantage.
+    # Jamais de boss (Adam em5100 se faisait cloner) ni de type non essaye (em1101 a fait planter le jeu).
+    ids = [i for i in ids if i & 0xFFFF < 0x20 or (not basic_only and i & 0xFFFF in RANDOM_PROVEN)]
     return rng(ids) if ids else None
+
+
+RANDOM_PROVEN = frozenset({0x003B, 0x004B, 0x005B, 0x010B, 0x200B})   # 3 exemplaires chacun, verifie en jeu
+MAX_ENEMIES = 42     # 33 charges + 12 apparitions passent, 13 a 15 font planter le jeu (vu deux fois)
+
+
+LEVEL_OFFSET = 0x28030          # niveau de l'ennemi (ecrit par SetLevel)
+SET_LEVEL_RVA = 0x631700        # EmBase::SetLevel(ennemi, niveau) : borne 1..99 et recalcule les statistiques
+
+
+def spawn_level(levels, oid: int) -> int:
+    """levels : (objId, niveau) des ennemis presents avant le piege."""
+    same = [lv for o, lv in levels if o == oid]
+    if same:
+        return max(same)
+    others = sorted(lv for _, lv in levels)
+    return others[(len(others) - 1) // 2] if others else 1
+
+
+def room_for_spawn(loaded_count: int, count: int) -> bool:
+    return loaded_count + count <= MAX_ENEMIES
 
 
 # --- acces au processus --------------------------------------------------------------------
@@ -99,6 +120,20 @@ def entity_region(mem):
     return mbi.BaseAddress or 0, mbi.RegionSize
 
 
+def enemy_entities(mem) -> list[tuple[int, int, str]]:
+    """(adresse, objId, nom) de tous les ennemis presents."""
+    ptrs: list = []
+    try:
+        player = struct.unpack("<Q", mem.read(mem.base + PLAYER_PTR_RVA, 8))[0]
+    except OSError:
+        player = 0
+    found = _scan_enemies(mem, 0, only=player, ptrs=ptrs) if player else []
+    if not found:
+        ptrs.clear()
+        found = _scan_enemies(mem, 0, ptrs=ptrs)
+    return [(p, o, n) for p, (o, n) in zip(ptrs, found)]
+
+
 def loaded_enemies(mem, want: int = 3) -> list[tuple[int, str]]:
     """(objId, nom) des ennemis vivants. Verifie en jeu : les entites (joueur et ennemis) sont dans la meme
     zone memoire (~370 Mo) ; on ne lit qu'elle (1-2 s au lieu de ~17 s), puis tout si rien n'y est trouve."""
@@ -113,7 +148,7 @@ def loaded_enemies(mem, want: int = 3) -> list[tuple[int, str]]:
     return _scan_enemies(mem, want)
 
 
-def _scan_enemies(mem, want: int, only: int = 0) -> list[tuple[int, str]]:
+def _scan_enemies(mem, want: int, only: int = 0, ptrs: Optional[list] = None) -> list[tuple[int, str]]:
     k = mem._k
     k.VirtualQueryEx.argtypes = [wintypes.HANDLE, ctypes.c_void_p, ctypes.POINTER(_MBI), ctypes.c_size_t]
     k.VirtualQueryEx.restype = ctypes.c_size_t
@@ -142,6 +177,8 @@ def _scan_enemies(mem, want: int, only: int = 0) -> list[tuple[int, str]]:
                     info = struct.unpack("<Q", mem.read(o + INFO_OFFSET, 8))[0]
                     name = mem.read(info + 0x8, 0x20).split(bytes(1))[0].decode("ascii", "replace") if info else ""
                     out.append((oid, name))
+                    if ptrs is not None:
+                        ptrs.append(o)
                 except OSError:
                     continue
             if want and enough_types(out, want):
@@ -205,11 +242,37 @@ def alloc(mem, data: bytes) -> int:
 
 def spawn_enemies(mem, player_pos, count: int = 3, radius: float = 4.0, basic_only: bool = False) -> int:
     """Fait apparaitre `count` ennemis d'un type deja charge. Renvoie le nombre demande (0 si impossible)."""
-    oid = choose_enemy_type(loaded_enemies(mem), basic_only=basic_only)
-    if oid is None:
+    before = enemy_entities(mem)
+    loaded = [(o, n) for _, o, n in before]
+    oid = choose_enemy_type(loaded, basic_only=basic_only)
+    if oid is None or not room_for_spawn(len(loaded), count):
         return 0
+    levels = []
+    for ptr, o, n in before:
+        if n not in NOT_SPAWNABLE_NAMES:
+            try:
+                levels.append((o, struct.unpack("<I", mem.read(ptr + LEVEL_OFFSET, 4))[0]))
+            except OSError:
+                pass
+    level = spawn_level(levels, oid)
     name = f"em{oid & 0xFFFF:04x}".encode() + b"\0"
     for pos in ring_positions(player_pos, count, radius):
         buf = alloc(mem, set_info_bytes(pos) + b"\0" * 0x70 + name)
         remote_call(mem, mem.base + REQUEST_CREATE_RVA, mem.base + MANAGER_RVA, buf + 0x100, oid, buf)
+    if level > 1:                      # les nouvelles machines naissent au niveau 1 : leur donner celui de la zone
+        import time
+        known = {ptr for ptr, _, _ in before}
+        done = 0
+        for _ in range(4):             # la creation se termine quelques images plus tard
+            time.sleep(0.5)
+            for ptr, o, _ in enemy_entities(mem):
+                if o == oid and ptr not in known:
+                    known.add(ptr)
+                    try:
+                        remote_call(mem, mem.base + SET_LEVEL_RVA, ptr, level)
+                        done += 1
+                    except OSError:
+                        pass
+            if done >= count:
+                break
     return count

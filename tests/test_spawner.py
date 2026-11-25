@@ -64,7 +64,7 @@ def test_enemy_trap_can_be_limited_to_basic_enemies():
     choose_enemy_type(loaded, rng=lambda xs: seen.append(xs) or xs[0], basic_only=True)
     assert seen[-1] == [0x20000, 0x20010]
     choose_enemy_type(loaded, rng=lambda xs: seen.append(xs) or xs[0])
-    assert seen[-1] == [0x20000, 0x20010, 0x21000]      # 0x28000 (gros) exclu
+    assert seen[-1] == [0x20000, 0x20010]               # 0x21000 jamais essaye en jeu, 0x28000 gros : exclus
     # aucun ennemi de base charge dans la zone : rien (le piege devient des degats), jamais un boss
     assert choose_enemy_type([(0x21000, "")], rng=lambda xs: xs[0], basic_only=True) is None
 
@@ -73,7 +73,33 @@ def test_enemy_trap_never_clones_a_boss():
     # vu en jeu (combat contre Adam, 0x25100) : le piege clonait le boss 3 fois
     arena = [(0x21080, ""), (0x21081, ""), (0x25100, "")]
     seen = []
-    assert choose_enemy_type(arena, rng=lambda xs: seen.append(xs) or xs[0]) == 0x21080
-    assert seen[-1] == [0x21080, 0x21081]
+    assert choose_enemy_type(arena, rng=lambda xs: xs[0]) is None
     assert choose_enemy_type(arena, rng=lambda xs: xs[0], basic_only=True) is None
     assert choose_enemy_type([(0x25100, "")], rng=lambda xs: xs[0]) is None
+
+
+def test_random_mode_only_uses_types_proven_in_game():
+    # mode random : petites machines + types moyens essayes en jeu sans plantage ; em1101 (volant) a fait
+    # planter le jeu, les types jamais essayes ne sont pas utilises
+    from nier_automata.game.spawner import RANDOM_PROVEN
+    zone = [(0x2000b, ""), (0x2003b, ""), (0x2010b, ""), (0x2200b, ""), (0x21101, ""), (0x23000, ""), (0x2b005, "")]
+    seen = []
+    choose_enemy_type(zone, rng=lambda xs: seen.append(xs) or xs[0])
+    assert seen[-1] == [0x2000b, 0x2003b, 0x2010b, 0x2200b]
+    assert 0x1101 not in RANDOM_PROVEN
+
+
+def test_spawn_refused_when_area_is_already_crowded():
+    # vu en jeu : 33 ennemis charges + 12 apparitions passent, quelques-unes de plus font planter le jeu
+    from nier_automata.game.spawner import room_for_spawn
+    assert room_for_spawn(loaded_count=33, count=3) and room_for_spawn(loaded_count=39, count=3)
+    assert not room_for_spawn(loaded_count=40, count=3)
+
+
+def test_spawned_enemies_take_the_level_of_the_area():
+    # vu en jeu : les machines creees par le piege etaient au niveau 1 ; elles prennent le niveau des machines
+    # du meme type deja presentes (a defaut, celui des autres ennemis de la zone)
+    from nier_automata.game.spawner import spawn_level
+    assert spawn_level([(0x20002, 7), (0x20002, 9), (0x20000, 12)], 0x20002) == 9
+    assert spawn_level([(0x20000, 12), (0x2b005, 30)], 0x20002) == 12       # pas ce type : mediane basse de la zone
+    assert spawn_level([], 0x20002) == 1

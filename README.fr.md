@@ -58,8 +58,11 @@ aerien, esquive au sol, tir du Pod, attaques...), soins et bonus, argent, et pie
 - **Damage Trap / Heavy Damage Trap** : `damage_trap_percent` des PV max (5-50, defaut 20), le double pour
   le lourd. Ne tue jamais (1 PV au pire) sauf si `lethal_traps` est active.
 - **Money Trap** : perte de 10 % des G.
-- **Enemy Trap** : 3 petites machines apparaissent a cote du joueur (un type deja present dans la zone ; s'il
-  n'y en a pas, des degats a la place). Les boss et les grosses machines ne sont jamais copies.
+- **Enemy Trap** : 3 machines d'un type deja present dans la zone apparaissent a cote du joueur, au niveau
+  des machines de la zone.
+  `enemy_trap_enemies` : `basic` (petites machines seulement) ou `random` (petites machines plus cinq types
+  moyens essayes en jeu). Les boss et les grosses machines ne sont jamais copies. Si la zone n'a pas d'ennemi
+  adapte, ou en contient deja une quarantaine (au-dela le jeu plantait), des degats a la place.
 - **System Failure: Light Attack / Heavy Attack / Pod Fire** : ce systeme ne repond plus pendant 20 secondes.
 - **Self-Destruct Trap** : l'autodestruction du jeu, court compte a rebours puis explosion, il reste 1 PV.
 - **E-Drug Trap** : l'effet E-Drug du jeu, image et son brouilles pendant 30 secondes.

@@ -91,6 +91,16 @@ class LethalTraps(Toggle):
     display_name = "Lethal Traps"
 
 
+class EnemyTrapEnemies(Choice):
+    """Enemies spawned by an Enemy Trap: basic (small machines only) or random (small machines plus the
+    medium machine types of the area). Bosses and big machines are never copied. When the area has no
+    suitable enemy, or is already crowded, the trap deals damage instead."""
+    display_name = "Enemy Trap Enemies"
+    option_basic = 0
+    option_random = 1
+    default = 0
+
+
 class MaxLevelCheck(Range):
     """Each level reached sends a "Level N" check, from level 2 up to this value (0 = off)."""
     display_name = "Max Level Check"
@@ -192,6 +202,7 @@ class NierAutomataOptions(PerGameCommonOptions):
     trap_percentage: TrapPercentage
     damage_trap_percent: DamageTrapPercent
     lethal_traps: LethalTraps
+    enemy_trap_enemies: EnemyTrapEnemies
     pod_programs: PodPrograms
     pod_program_checks: PodProgramChecks
     starter_kit: StarterKit

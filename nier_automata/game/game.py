@@ -65,6 +65,7 @@ class NierGame:
         self.jams = Jams()
         self.cutscene_hold = CutsceneHold()
         self.lethal_traps = False
+        self.enemy_trap_basic = True
         self.damage_trap_percent = 20       # options de la partie (slot_data)
 
     def attach(self) -> bool:
@@ -322,6 +323,8 @@ class NierGame:
         import time
         if kind != "money" and self.cutscene_hold.hold(self.in_cutscene(), time.monotonic()):
             return False
+        if kind != "money" and not self.hp():          # joueur mort ou absent : on attend (vu en jeu : le piege
+            return False                                # faisait encore apparaitre des ennemis sur l'ecran de mort)
         if kind.startswith("jam:"):
             self.jams.start(kind[4:], percent, time.monotonic())
             return True
@@ -330,9 +333,8 @@ class NierGame:
         if kind == "spawn":
             from .spawner import spawn_enemies
             pos = struct.unpack("<3f", self.mem.read(self.mem.base + self._off["playerLocation"], 12))
-            # petites machines seulement : un type moyen a fait planter le jeu, un boss se faisait cloner (vu en jeu)
             try:
-                if spawn_enemies(self.mem, pos, count=percent, basic_only=True):
+                if spawn_enemies(self.mem, pos, count=percent, basic_only=self.enemy_trap_basic):
                     return True
             except OSError:
                 return False

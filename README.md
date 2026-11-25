@@ -56,8 +56,11 @@ dash, ground evade, pod fire, attacks...), recovery items and boosts, money, and
 - **Damage Trap / Heavy Damage Trap**: `damage_trap_percent` of max HP (5-50, default 20), twice for the
   heavy one. Never kills (1 HP at worst) unless `lethal_traps` is on.
 - **Money Trap**: lose 10% of your money.
-- **Enemy Trap**: 3 small machines appear next to you (a type already present in the area; if the area has
-  none, you take damage instead). Bosses and big machines are never copied.
+- **Enemy Trap**: 3 machines of a type already present in the area appear next to you, at the level of
+  the area's own machines. `enemy_trap_enemies`:
+  `basic` (small machines only) or `random` (small machines plus five medium types tried in game). Bosses
+  and big machines are never copied. If the area has no suitable enemy, or already holds about 40 enemies
+  (more made the game crash), you take damage instead.
 - **System Failure: Light Attack / Heavy Attack / Pod Fire**: that system stops answering for 20 seconds.
 - **Self-Destruct Trap**: the game's own self-destruct, short countdown then explosion, leaves you at 1 HP.
 - **E-Drug Trap**: the game's E-Drug effect, picture and sound scrambled for 30 seconds.
