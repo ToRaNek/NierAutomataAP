@@ -31,6 +31,11 @@ Chaque check porte le nom de son lieu : un indice dit donc ou aller.
 - **Shop <lieu> #k** : "AP Item" vendus en tete des magasins (Camp de la Resistance, Village de Pascal,
   Chateau de la foret) ; la description dit ce qu'il contient et pour qui.
 - **Level n**, **Weapon Found #n** : niveaux atteints, armes trouvees (retirees de l'inventaire).
+- **Pod Program Found #n** : programmes de Pod obtenus dans le jeu lui-meme (magasin, quete, ramassage) ;
+  comme les armes ils sont repris, on garde ceux envoyes par le multimonde (`pod_program_checks`, 0 = ne
+  pas y toucher).
+- **Ending A / B / C / D** : chaque fin principale atteinte avant l'objectif (`ending_checks`). La fin qui
+  sert d'objectif n'est pas un check ; les fins "gag" ne le sont jamais.
 - **Quest: <nom>** : terminer une quete annexe. La plupart se ferment apres le chapitre 7 (verifie en jeu) :
   elles ne contiennent jamais d'objet important ; le jeu donne toujours sa propre recompense.
 
@@ -40,12 +45,27 @@ Chaque check porte le nom de son lieu : un indice dit donc ou aller.
 - Les chapitres sont des regions logiques dans l'ordre de l'histoire. Les armes sont des objets de
   progression : les chapitres avances en demandent plus, donc elles arrivent avant les zones difficiles.
   Les checks de niveau suivent le niveau attendu par le jeu a chaque chapitre.
-- Les checks ratables (Bunker, Village de Pascal, zones de fin de route, quetes limitees dans le temps) ne
-  contiennent jamais d'objet important.
+- Les checks ratables ou que beaucoup de joueurs ne trouvent jamais (Bunker, Village de Pascal, sous-sol
+  de l'usine abandonnee, champ petrolifere et bords isoles du desert, zones de fin de route, quetes limitees
+  dans le temps) ne contiennent jamais d'objet important.
+- `starter_kit` (active par defaut) : quelques soins et un bonus d'attaque et de defense au depart, puis un
+  ravitaillement donne une fois a l'entree des deux passages durs sans retour (les boss enchaines de la fin
+  de la route A, et le debut de la route C/D).
 
 ## Objets recus
-Armes, capacites (double saut, dash aerien, esquive au sol, tir du Pod, attaques...), soins, argent, pieges
-(degats 5/10 %, perte de 10 % des G, ennemis qui apparaissent).
+Armes, les 16 programmes de Pod autres que le laser de depart (`pod_programs`), capacites (double saut, dash
+aerien, esquive au sol, tir du Pod, attaques...), soins et bonus, argent, et pieges :
+- **Damage Trap / Heavy Damage Trap** : `damage_trap_percent` des PV max (5-50, defaut 20), le double pour
+  le lourd. Ne tue jamais sauf si `lethal_traps` est active.
+- **Money Trap** : perte de 10 % des G.
+- **Enemy Trap** : 3 ennemis apparaissent a cote du joueur (`enemy_trap_enemies` : `basic` petites machines
+  ou `random`).
+- **System Failure: Light Attack / Heavy Attack / Pod Fire** : ce systeme ne repond plus pendant 20 secondes.
+- **Self-Destruct Trap** : l'autodestruction du jeu, court compte a rebours puis explosion, il reste 1 PV.
+- **E-Drug Trap** : l'effet E-Drug du jeu, image et son brouilles pendant 30 secondes.
+
+Les pieges qui utilisent les effets du jeu attendent tant qu'un menu, un chargement, une cinematique ou un
+dialogue est a l'ecran.
 
 ## En jeu
 - Notifications : "De Niicotine : X", "Check : Camp Resistance" puis "Pour Niicotine : X".
@@ -69,6 +89,9 @@ rouge. Molette pour zoomer, glisser pour deplacer.
   est parti. Les coffres qui n'existent que pendant ou apres une quete annexe ne contiennent jamais d'objet
   important. Le marchand de la foret n'existe qu'apres la
   quete annexe ratable "Camp Development" : ses AP Items ne contiennent jamais d'objet important.
+- Les pieges Self-Destruct et E-Drug n'ont ete essayes qu'a pied avec 2B, pas pendant un piratage, une
+  sequence de vol ou un combat de boss. `lethal_traps` et le mode `random` du piege a ennemis ne sont
+  couverts que par les tests automatiques.
 - Titres des mails : ouvrir un point d'acces ~10 s la premiere fois apres chaque lancement du jeu.
 - Ne pas charger une autre sauvegarde que celle de la seed.
 

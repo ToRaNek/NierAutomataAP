@@ -30,6 +30,10 @@ Everything is named after where it is, so a hint tells you where to go.
 - **Shop <place> #k**: "AP Item" entries at the top of the shops (Resistance Camp, Pascal's Village,
   Forest Castle); the description says what's inside and for whom.
 - **Level n**, **Weapon Found #n**: levels reached, weapons found (removed from the inventory).
+- **Pod Program Found #n**: Pod programs obtained in the game itself (shop, quest, pickup); like weapons they
+  are taken back, you keep the ones the multiworld sends (`pod_program_checks`, 0 = leave them alone).
+- **Ending A / B / C / D**: each main ending reached before the goal (`ending_checks`). The goal ending is
+  not a check; joke endings are never checks.
 - **Quest: <name>**: finishing a side quest. Most quests close after chapter 7 (checked in game), so they
   never hold an important item; the game still gives its own reward.
 
@@ -39,16 +43,29 @@ Everything is named after where it is, so a hint tells you where to go.
 - Chapters are logic regions in story order. Weapons are progression items: later chapters expect more of
   them, so the weapons you need arrive before the harder areas. Level checks follow the level the game
   expects in each chapter.
-- Checks that can be missed (Bunker, Pascal's Village, late-route areas, timed quests) never hold an
-  important item.
+- Checks that can be missed or that many players never find (Bunker, Pascal's Village, the Abandoned
+  Factory underground, the desert Oil Field and its far edges, late-route areas, timed quests) never hold
+  an important item.
+- `starter_kit` (on by default): a few recovery items and one attack and one defense boost at the start,
+  then a supply drop once when you enter the two hard sections you cannot come back from (the boss rush at
+  the end of route A, and the start of route C/D).
 
 ## Items received
-Weapons, abilities (double jump, air dash, ground evade, pod fire, pod programs, attacks...), recovery items,
-money, traps (5/10% damage, 10% money loss, enemy spawn).
+Weapons, the 16 Pod programs other than the starting laser (`pod_programs`), abilities (double jump, air
+dash, ground evade, pod fire, attacks...), recovery items and boosts, money, and traps:
+- **Damage Trap / Heavy Damage Trap**: `damage_trap_percent` of max HP (5-50, default 20), twice for the
+  heavy one. Never kills unless `lethal_traps` is on.
+- **Money Trap**: lose 10% of your money.
+- **Enemy Trap**: 3 enemies appear next to you (`enemy_trap_enemies`: `basic` small machines or `random`).
+- **System Failure: Light Attack / Heavy Attack / Pod Fire**: that system stops answering for 20 seconds.
+- **Self-Destruct Trap**: the game's own self-destruct, short countdown then explosion, leaves you at 1 HP.
+- **E-Drug Trap**: the game's E-Drug effect, picture and sound scrambled for 30 seconds.
+
+Traps that use the game's own effects wait while a menu, a loading screen, a cutscene or a dialogue is up.
 
 ## In game
 - Notifications: "From X: item", "Check: Resistance Camp" then "For X: item".
-- Mail (access point Mail menu): "Archipelago checks" (remaining checks) and "Hint from <player>"
+- Mail (access point Mail menu): "Archipelago checks" (remaining checks, with a count per kind) and "Hint from <player>"
   (hints other players requested on your world).
 - Optional DeathLink.
 
@@ -67,6 +84,8 @@ Scroll to zoom, drag to move.
   reward screen, check sent). A hack-locked chest was opened as 9S by a bot playing the hacking minigame, and its check was sent.
   Chests that only exist during or after a side quest never hold an important item. The forest shop only exists after the missable
   side quest "Camp Development", so its AP Items never hold an important item.
+- The Self-Destruct and E-Drug traps were only tried on foot as 2B, not during hacking, flying sections or
+  boss fights. `lethal_traps` and the `random` enemy trap mode are covered by automated tests only.
 - Mail titles: open an access point for ~10 s the first time after each game launch.
 - Don't load another save than the one of the seed.
 
