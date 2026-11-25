@@ -98,3 +98,13 @@ def test_weapon_goes_to_its_dedicated_slot():
     assert w.find(0x41A).index == 5
     w.add(0x42E, 1)
     assert w.find(0x42E).index == 7
+
+
+def test_owned_pod_programs_read_from_the_game_table():
+    import struct
+    from nier_automata.game.inventory import POD_PROGRAM_SLOTS, read_pod_programs
+    from nier_automata.game.memory import FakeMemory
+    m = FakeMemory()
+    raw = struct.pack("<4i", 2001, 1, 2003, 1) + struct.pack("<2i", -1, 1) * (POD_PROGRAM_SLOTS - 2)
+    m.write(m.base + 0x148E680, raw)
+    assert read_pod_programs(m) == {2001, 2003}

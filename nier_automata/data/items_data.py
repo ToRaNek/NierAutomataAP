@@ -18,6 +18,15 @@ FILLER_ITEMS: dict[str, int] = {
 STARTER_KIT: list[str] = ["Medium Recovery", "Medium Recovery", "Large Recovery",
                           "Melee Attack Up (L)", "Melee Defense Up (L)"]
 
+# Programmes de Pod (identifiants du jeu, docs/research/pod_programs.json). Le laser R010 est celui de depart.
+# Donnes par la fonction du jeu (message "You obtained a Pod program", verifie en jeu).
+POD_PROGRAMS: dict[str, int] = {
+    "R020: Mirage": 2002, "R030: Hammer": 2003, "R040: Blade": 2004, "R050: Spear": 2005,
+    "R070: M Shield": 2006, "A060: P Shield": 2007, "A080: Wave": 2008, "A090: Wire": 2009,
+    "A100: Decoy": 2010, "A110: Slow": 2011, "A120: Repair": 2012, "A130: Bomb": 2015,
+    "A140: Gravity": 2019, "A150: Volt": 2021, "A160: Missile": 2022, "A170: Scanner": 2024,
+}
+
 # Argent recu (ajoute aux fonds, adresse "funds").
 FUNDS_ITEMS: dict[str, int] = {"500 G": 500, "1000 G": 1000, "2000 G": 2000}
 

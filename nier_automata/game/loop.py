@@ -4,7 +4,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 
 from ..data import worlddb as db
-from ..data.items_data import MATERIALS, SUPPLY_DROPS
+from ..data.items_data import MATERIALS, POD_PROGRAMS, SUPPLY_DROPS
 from ..data.phases import is_prologue
 from ..data.tables import (access_point_location, chest_location, ending_location, item_location, level_location,
                            location_name_to_id, pickup_location, quest_location, story_location, weapon_location)
@@ -112,6 +112,14 @@ def tick(game, state: ClientState, received: list[str], trackers: Trackers) -> T
         if name:
             game.give(name)
     owned = game.owned_weapons()
+    # idem pour les programmes de Pod recus
+    if hasattr(game, "owned_programs"):
+        got = [n for n in received[:state.next_item_index] if n in POD_PROGRAMS]
+        if got:
+            have = game.owned_programs()
+            for name in got:
+                if POD_PROGRAMS[name] not in have:
+                    game.give(name)
 
     # 3. armes trouvees naturellement
     to_remove, _ = trackers.weapons.scan(owned)

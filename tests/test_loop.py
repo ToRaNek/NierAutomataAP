@@ -326,3 +326,22 @@ def test_endings_are_checks():
     assert db.ending_checks(db.GOAL_ENDING_A, FULL_A.regions) == ()
     assert db.ending_checks(db.GOAL_ENDING_CD, sc.regions) == ("A", "B")
     assert db.ending_checks(db.GOAL_STORY, SCOPE.regions) == ()
+
+
+def test_pod_programs_are_items_and_come_back_after_a_reload():
+    # avis du testeur : les programmes de Pod doivent etre des objets AP, comme les armes
+    from nier_automata.data.items_data import POD_PROGRAMS
+    from nier_automata.data.tables import item_name_to_id
+    assert "R010: Laser" not in POD_PROGRAMS and POD_PROGRAMS["R020: Mirage"] == 2002 and len(POD_PROGRAMS) == 16
+    assert all(n in item_name_to_id() for n in POD_PROGRAMS)
+    s, tr = setup(linked=True)
+    g = FakeGame(phase="30_AB_Ruined_City_ForcedLanding")
+    g.programs = set()
+    g.owned_programs = lambda: set(g.programs)
+    give = g.give
+    g.give = lambda n: (g.programs.add(POD_PROGRAMS[n]) or True) if n in POD_PROGRAMS else give(n)
+    tick(g, s, ["R020: Mirage"], tr)
+    assert g.programs == {2002} and s.next_item_index == 1
+    g.programs.clear()                                   # sauvegarde rechargee : programme perdu
+    tick(g, s, ["R020: Mirage"], tr)
+    assert g.programs == {2002}

@@ -3,7 +3,7 @@ from worlds.AutoWorld import WebWorld, World
 from worlds.LauncherComponents import Component, Type, components, launch_subprocess
 
 from .data import worlddb as db
-from .data.items_data import FILLER_ITEMS, FUNDS_ITEMS, MATERIALS, STARTER_KIT, TRAP_ITEMS
+from .data.items_data import FILLER_ITEMS, FUNDS_ITEMS, MATERIALS, POD_PROGRAMS, STARTER_KIT, TRAP_ITEMS
 from .data.tables import (
     SHOP_PLACES_ORDER, SHOP_REGION, item_location, item_name_to_id, level_location, location_name_to_id,
     ending_location, pool_weapon_count, quest_excluded, shop_location, shop_missable, weapon_location,
@@ -121,6 +121,8 @@ class NierAutomataWorld(World):
     def create_item(self, name: str) -> NierItem:
         if name in WEAPONS or name in self.options.randomized_abilities.value:
             cls = ItemClassification.progression     # armes : logique de combat ; capacites : acces
+        elif name in POD_PROGRAMS:
+            cls = ItemClassification.useful
         elif name in TRAP_ITEMS:
             cls = ItemClassification.trap
         else:
@@ -133,6 +135,11 @@ class NierAutomataWorld(World):
     def create_items(self) -> None:
         pool = [self.create_item(a) for a in sorted(self.options.randomized_abilities.value)]
         pool += [self.create_item(w) for w in self.pool_weapons]
+        if self.options.pod_programs:
+            # jamais plus que la place restante hors checks exclus (les "useful" n'y vont pas)
+            room = sum(1 for _, _, excluded, _ in self.spots if not excluded) - len(pool)
+            programs = self.random.sample(sorted(POD_PROGRAMS), max(0, min(len(POD_PROGRAMS), room // 2)))
+            pool += [self.create_item(p) for p in programs]
         traps = list(TRAP_ITEMS)
         for _ in range(len(self.spots) - len(pool)):
             if self.random.randint(1, 100) <= self.options.trap_percentage.value:

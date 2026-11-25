@@ -7,7 +7,7 @@ from datetime import datetime
 from pathlib import Path
 from typing import Optional
 
-from ..data.items_data import FILLER_ITEMS, FILLER_QUANTITY, FUNDS_ITEMS, TRAP_ITEMS
+from ..data.items_data import FILLER_ITEMS, FILLER_QUANTITY, FUNDS_ITEMS, POD_PROGRAMS, TRAP_ITEMS
 from ..data.offsets import OFFSETS, detect_version
 from ..data.phases import MENU_PHASES
 from ..data.weapons import WEAPONS
@@ -193,6 +193,10 @@ class NierGame:
     def give(self, name: str) -> bool:
         if name in WEAPONS:
             return self._weapons.add(WEAPONS[name], 1)
+        if name in POD_PROGRAMS:
+            if POD_PROGRAMS[name] in self.owned_programs():
+                return True
+            return self.give_with_popup(POD_PROGRAMS[name])
         if name in TRAP_ITEMS:
             return self.apply_trap(*TRAP_ITEMS[name])
         if name in FUNDS_ITEMS:
@@ -206,6 +210,13 @@ class NierGame:
     def jammed(self) -> set:
         import time
         return self.jams.active(time.monotonic())
+
+    def owned_programs(self) -> set:
+        from .inventory import read_pod_programs
+        try:
+            return read_pod_programs(self.mem)
+        except OSError:
+            return set()
 
     def remove_weapon(self, weapon_id: int) -> bool:
         return self._weapons.remove(weapon_id)

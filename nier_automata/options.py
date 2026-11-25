@@ -115,6 +115,12 @@ class ApItemsPerArea(Range):
     default = 3
 
 
+class PodPrograms(DefaultOnToggle):
+    """The 16 Pod programs other than the starting laser (Mirage, Hammer, Blade, Wire, Scanner...) are
+    Archipelago items found in the multiworld. The ones the game hands out normally are still given."""
+    display_name = "Pod Programs"
+
+
 class StarterKit(DefaultOnToggle):
     """Start with a few healing items, one Melee Attack Up (L) and one Melee Defense Up (L). The start of the
     game is the hardest part and the first wall is the Amusement Park boss. You also get a supply drop once
@@ -158,6 +164,7 @@ class NierAutomataOptions(PerGameCommonOptions):
     chest_checks: ChestChecks
     max_level_check: MaxLevelCheck
     trap_percentage: TrapPercentage
+    pod_programs: PodPrograms
     starter_kit: StarterKit
     randomized_abilities: RandomizedAbilities
     goal: Goal

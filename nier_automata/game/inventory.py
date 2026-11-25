@@ -108,3 +108,16 @@ def weapon_table(mem: Memory, start: int, count: int = WEAPON_SLOTS) -> SlotTabl
     fixed = {wid: i for i, wid in enumerate(WEAPONS.values())}
     return SlotTable(mem, start, count, WEAPON_SLOT_SIZE, status_off=None, qty_off=4, stackable=False,
                      fixed_slots=fixed)
+
+
+# Programmes de Pod possedes : 31 emplacements {i32 identifiant (-1 = vide), i32 1} (trouve par comparaison
+# memoire avant/apres le don d'un programme, v1.04).
+POD_PROGRAMS_RVA = 0x148E680
+POD_PROGRAM_SLOTS = 31
+
+
+def read_pod_programs(mem) -> set:
+    import struct
+    raw = mem.read(mem.base + POD_PROGRAMS_RVA, POD_PROGRAM_SLOTS * 8)
+    ids = struct.unpack(f"<{POD_PROGRAM_SLOTS * 2}i", raw)[::2]
+    return {i for i in ids if 2000 < i < 2100}

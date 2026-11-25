@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 from .abilities import ABILITY_PATCHES
-from .items_data import FILLER_ITEMS, FUNDS_ITEMS, MATERIALS, TRAP_ITEMS
+from .items_data import FILLER_ITEMS, FUNDS_ITEMS, MATERIALS, POD_PROGRAMS, TRAP_ITEMS
 from .weapons import WEAPONS
 
 BASE_CODE = 0x4E41_0000
@@ -72,6 +72,8 @@ def item_name_to_id() -> dict[str, int]:
                        ("Light Attack", 0x404), ("Heavy Attack", 0x405), ("Pod Program", 0x406)):
         ids[name] = BASE_CODE + code
     ids["Ground Evade"] = BASE_CODE + 0x480
+    for i, name in enumerate(POD_PROGRAMS):
+        ids[name] = BASE_CODE + 0x500 + i
     return ids
 
 
