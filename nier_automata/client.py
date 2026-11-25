@@ -25,6 +25,8 @@ from .data.items_data import FILLER_ITEMS
 from .game.abilities import AbilityLock
 from .game.arealock import AreaLock, area_lock_active
 from .data.areas import zone_name
+from .data.routes import PARK, START
+from .game import phasejump
 from .game.deathlink import DeathTracker
 from .game.game import NierGame, backup_saves
 from .game.loop import due_locations, make_trackers, new_state, tick
@@ -322,9 +324,40 @@ async def area_loop(ctx: NierContext):
                 logger.info("Area locked: %s (needs %s)", zone_name(back.pass_name), back.pass_name)
                 if back.notify:
                     lang = getattr(ctx, "lang", "en")
-                    ctx.notes.append((i18n.t(lang, "area_locked"), back.pass_name))
+                    ctx.notes.insert(0, (i18n.t(lang, "area_locked"), back.pass_name))    # avant la file d'attente
         except Exception as e:
             logger.info("area lock failed: %r", e)
+
+
+ROUTE_JUMP_PAUSE = 30.0      # secondes entre deux sauts : laisse le chargement finir
+
+
+async def route_step(ctx: NierContext, locked: str, received: set) -> None:
+    """Routes verrouillees (option route_locks). `locked` = route que le joueur vient d'entamer sans son objet :
+    on le ramene dans la route precedente. Quand l'objet arrive, on l'emmene au debut de la route attendue."""
+    import time
+    keys = getattr(ctx.scope, "route_keys", None) or {}
+    if not keys:
+        return
+    st, mem = ctx.state, ctx.nier.mem
+    if st.waiting_route and "ABC".find(st.route) >= "ABC".find(st.waiting_route):
+        st.waiting_route = ""          # la route a deja commence (sauvegarde rechargee une fois l'objet recu)
+    now = time.monotonic()
+    if now < getattr(ctx, "route_next", 0.0) or ctx.nier.in_cutscene():
+        return
+    if locked:
+        if await asyncio.to_thread(phasejump.jump, mem, *PARK[locked]):
+            st.waiting_route = locked
+            ctx.route_next = now + ROUTE_JUMP_PAUSE
+            ctx.notes.insert(0, (i18n.t(getattr(ctx, "lang", "en"), "area_locked"), keys[locked]))   # avant la file
+            logger.info("Route %s locked (needs %s): back to %s", locked, keys[locked], PARK[locked][3])
+        return
+    waiting = st.waiting_route
+    if waiting and keys.get(waiting) in received:
+        if await asyncio.to_thread(phasejump.jump, mem, *START[waiting]):
+            st.waiting_route = ""
+            ctx.route_next = now + ROUTE_JUMP_PAUSE
+            logger.info("%s received: route %s starts (%s)", keys[waiting], waiting, START[waiting][3])
 
 
 async def mail_step(ctx: NierContext):
@@ -536,6 +569,10 @@ async def game_iteration(ctx: NierContext):
     # checks de base envoyes AVANT les etapes optionnelles (une erreur la-bas ne doit pas les perdre)
     if result.locations:
         await ctx.send_msgs([{"cmd": "LocationChecks", "locations": result.locations}])
+    try:
+        await route_step(ctx, result.locked_route, set(received))
+    except Exception as e:
+        logger.info("route lock failed: %r", e)
     bought: list[int] = []
     for step in (ground_step, ap_items_step, shop_step):
         try:

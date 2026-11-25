@@ -57,6 +57,11 @@ Everything is named after where it is, so a hint tells you where to go.
   (two with the default settings: Desert and Park). The prologue is never locked. The Copied City has no Pass
   (the game places you inside, you do not walk in). With this option the route A side quests never hold an
   important item (some of them send you into a closed area).
+- `route_locks` (on by default, only used when your goal goes past ending A): route B needs the **Route B
+  Access** item and route C/D the **Route C/D Access** item. If you start a route without its item, the client
+  takes you back to the start of chapter 7 of the route you just finished (Pascal's Village, open world, side
+  quests still open) so you can keep doing checks. When the item arrives, the client takes you to the start of
+  the new route by itself. Both moves are chapter jumps, like the game's own Chapter Select.
 
 ## Items received
 Weapons, the 16 Pod programs other than the starting laser (`pod_programs`), abilities (double jump, air
@@ -111,6 +116,9 @@ this, an underground check looks the same as whatever is above it on the surface
 - Area locks: tested in game at the entrance of each of the six areas (the wall holds on repeated tries, and the
   Desert opens as soon as its Pass arrives from the server). If you connect while already standing inside a
   closed area, the client leaves you there. No full playthrough with the locks has been done yet.
+- Route locks: tested in game for routes B and C/D (taken back without the item, route started when the item
+  arrives from the server, first check of the route sent). The "Locked" message of a route lock has not been
+  seen on screen yet. Tested by jumping to the start of each route, not by playing an ending for real.
 - Mail titles: open an access point for ~10 s the first time after each game launch.
 - Don't load another save than the one of the seed.
 

@@ -4,6 +4,7 @@ from worlds.LauncherComponents import Component, Type, components, launch_subpro
 
 from .data import worlddb as db
 from .data.areas import AREA_PASSES, pass_for_region, passes_in_scope
+from .data.routes import ROUTE_KEYS, keys_in_scope
 from .data.items_data import FILLER_ITEMS, FUNDS_ITEMS, MATERIALS, POD_PROGRAMS, STARTER_KIT, TRAP_ITEMS
 from .data.tables import (
     SHOP_PLACES_ORDER, SHOP_REGION, item_location, item_name_to_id, level_location, location_name_to_id,
@@ -64,11 +65,12 @@ class NierAutomataWorld(World):
         if o.ending_checks:
             self.scope.endings = db.ending_checks(self.scope.goal, self.scope.regions)
         self.passes = passes_in_scope(self.scope.regions) if o.area_locks else []
+        self.route_keys = keys_in_scope(self.scope.regions) if o.route_locks else {}
         self.spots = self._spots()
         abilities = len(o.randomized_abilities.value)
         open_locs = sum(1 for _, _, excluded, _ in self.spots if not excluded)
         candidates = sorted(set(WEAPONS) - STARTING_WEAPONS)
-        n = pool_weapon_count(max(0, open_locs - abilities - len(self.passes)), len(self.spots), len(candidates))
+        n = pool_weapon_count(max(0, open_locs - abilities - len(self.passes) - len(self.route_keys)), len(self.spots), len(candidates))
         self.pool_weapons = self.random.sample(candidates, n)
 
     def _story_checks(self) -> int:
@@ -112,10 +114,13 @@ class NierAutomataWorld(World):
         for i in range(1, len(regions)):
             need = db.required_weapons(i, len(regions), weapons)
             area_pass = pass_for_region(regions[i]) if self.passes else None   # zone fermee sans son Pass
+            wanted = [area_pass] if area_pass else []
+            if regions[i][0] != regions[i - 1][0] and regions[i][0] in self.route_keys:
+                wanted.append(self.route_keys[regions[i][0]])                    # premiere region d'une route
             rule = None
-            if need or area_pass:
-                rule = (lambda state, n=need, k=area_pass: state.has_group("Weapons", player, n)
-                        and (k is None or state.has(k, player)))
+            if need or wanted:
+                rule = (lambda state, n=need, k=tuple(wanted): state.has_group("Weapons", player, n)
+                        and state.has_all(k, player))
             by_name[regions[i - 1]].connect(by_name[regions[i]], rule=rule)
         locked = set(self.options.randomized_abilities.value)
         for name, region, excluded, needs in self.spots:
@@ -131,7 +136,7 @@ class NierAutomataWorld(World):
         by_name[regions[-1]].locations.append(goal)
 
     def create_item(self, name: str) -> NierItem:
-        if name in WEAPONS or name in AREA_PASSES or name in self.options.randomized_abilities.value:
+        if name in WEAPONS or name in AREA_PASSES or name in ROUTE_KEYS.values() or name in self.options.randomized_abilities.value:
             cls = ItemClassification.progression     # armes : logique de combat ; capacites : acces
         elif name in POD_PROGRAMS:
             cls = ItemClassification.useful
@@ -148,6 +153,7 @@ class NierAutomataWorld(World):
         pool = [self.create_item(a) for a in sorted(self.options.randomized_abilities.value)]
         pool += [self.create_item(w) for w in self.pool_weapons]
         pool += [self.create_item(k) for k in self.passes]
+        pool += [self.create_item(k) for k in self.route_keys.values()]
         if self.options.pod_programs:
             # jamais plus que la place restante hors checks exclus (les "useful" n'y vont pas)
             room = sum(1 for _, _, excluded, _ in self.spots if not excluded) - len(pool)
@@ -189,5 +195,6 @@ class NierAutomataWorld(World):
             "ending_checks": bool(o.ending_checks),
             "pod_program_checks": self.scope.program_checks,
             "area_passes": list(self.passes),
+            "route_keys": dict(self.route_keys),
             "death_link": bool(o.death_link),
         }

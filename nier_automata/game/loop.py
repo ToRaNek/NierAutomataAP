@@ -6,6 +6,7 @@ from dataclasses import dataclass, field
 from ..data import worlddb as db
 from ..data.items_data import MATERIALS, POD_PROGRAMS, SUPPLY_DROPS
 from ..data.phases import is_prologue
+from ..data.routes import locked_route
 from ..data.tables import (access_point_location, chest_location, ending_location, program_location, item_location, level_location,
                            location_name_to_id, pickup_location, quest_location, story_location, weapon_location)
 from ..data.weapons import STARTING_WEAPONS, WEAPONS
@@ -35,6 +36,7 @@ class TickResult:
     locations: list[int] = field(default_factory=list)
     goal: bool = False
     refused: bool = False
+    locked_route: str = ""      # route dont l'objet manque : le client ramene le joueur en arriere
 
 
 def new_state(seed: str, slot: int) -> ClientState:
@@ -150,7 +152,11 @@ def tick(game, state: ClientState, received: list[str], trackers: Trackers) -> T
 
     # 5. progression de l'histoire
     phase = game.phase()
-    trackers.story.check(phase, game.phase_id() if hasattr(game, "phase_id") else None)
+    keys = getattr(scope, "route_keys", None)
+    if keys:
+        result.locked_route = locked_route(state.route, db.next_route(state.route, phase), keys, set(received))
+    if not result.locked_route:     # route verrouillee : ni chapitre valide ni changement de route
+        trackers.story.check(phase, game.phase_id() if hasattr(game, "phase_id") else None)
 
     # 5 bis. ravitaillement a l'entree des passages durs (une fois)
     if getattr(scope, "supplies", False):

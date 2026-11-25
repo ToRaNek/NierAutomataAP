@@ -59,6 +59,12 @@ Chaque check porte le nom de son lieu : un indice dit donc ou aller.
   avant ton objectif ont un Pass (deux avec les reglages par defaut : Desert et Parc). Le prologue n'est jamais
   verrouille. La Ville copiee n'a pas de Pass (le jeu t'y place, on n'y entre pas a pied). Avec cette option les
   quetes annexes de la route A ne contiennent jamais d'objet important (certaines envoient dans une zone fermee).
+- `route_locks` (active par defaut, ne sert que si ton objectif depasse la fin A) : la route B demande l'objet
+  **Route B Access** et la route C/D l'objet **Route C/D Access**. Si tu commences une route sans son objet, le
+  client te ramene au debut du chapitre 7 de la route que tu viens de finir (Village de Pascal, monde ouvert,
+  quetes annexes encore ouvertes) pour que tu continues tes checks. Quand l'objet arrive, le client t'emmene
+  tout seul au debut de la nouvelle route. Les deux deplacements sont des sauts de chapitre, comme le menu
+  Chapter Select du jeu.
 
 ## Objets recus
 Armes, les 16 programmes de Pod autres que le laser de depart (`pod_programs`), capacites (double saut, dash
@@ -116,6 +122,9 @@ Sans ca, un check sous terre se confond avec ce qui est en surface au meme endro
 - Zones verrouillees : essayees en jeu a l'entree de chacune des six zones (le mur tient sur des essais repetes,
   et le Desert s'ouvre des que son Pass arrive du serveur). Si tu te connectes alors que tu es deja dans une zone
   fermee, le client te laisse la. Aucune partie complete n'a encore ete jouee avec les verrous.
+- Routes verrouillees : essayees en jeu pour les routes B et C/D (retour en arriere sans l'objet, route lancee
+  quand l'objet arrive du serveur, premier check de la route envoye). Le message "Ferme" d'une route n'a pas
+  encore ete vu a l'ecran. Essaye en sautant au debut de chaque route, pas en jouant une vraie fin.
 - Titres des mails : ouvrir un point d'acces ~10 s la premiere fois apres chaque lancement du jeu.
 - Ne pas charger une autre sauvegarde que celle de la seed.
 

@@ -150,6 +150,7 @@ class Scope:
         self.program_checks: int = 0         # programmes de Pod trouves dans le jeu = checks
         self.endings: tuple = ()             # fins qui sont des checks (option ending_checks)
         self.supplies: bool = False          # kit de depart + ravitaillements (option starter_kit)
+        self.route_keys: dict = {}           # {route: objet} des routes verrouillees (option route_locks)
 
 
 def make_scope(goal: int, story_checks: int, chest_checks: bool, ap_items_per_area: int,
@@ -176,6 +177,7 @@ def scope_from_slot_data(sd: dict) -> Scope:
     scope = _scope_from_slot_data(sd)
     scope.supplies = bool(sd.get("starter_kit", False))
     scope.program_checks = int(sd.get("pod_program_checks", 0))
+    scope.route_keys = dict(sd.get("route_keys", {}))
     if sd.get("ending_checks", False):
         scope.endings = ending_checks(scope.goal, scope.regions)
     return scope

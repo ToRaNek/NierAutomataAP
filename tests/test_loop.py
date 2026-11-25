@@ -374,3 +374,45 @@ def test_pod_program_found_in_the_game_is_a_check_and_is_taken_back():
         r = tick(g, s, ["R020: Mirage"], tr)
     assert s.programs_found == 2 and locs[program_location(2)] in s.sent_locations
     assert g.programs == {2001, 2002}
+
+
+ROUTE_B_START = "00_00_B_RobotM_Pro_RobotBrother"
+ROUTE_C_START = "00_10_CD_Bunker_Hangar_2B"
+
+
+def locked_scope():
+    sc = scope(goal=db.GOAL_ENDING_E)
+    sc.route_keys = {"B": "Route B Access", "C": "Route C/D Access"}
+    return sc
+
+
+def test_route_b_without_its_item_is_not_started():
+    s, tr = setup(locked_scope(), linked=True, chapters=set(range(37)))
+    r = tick(FakeGame(phase=ROUTE_B_START), s, [], tr)
+    assert r.locked_route == "B" and s.route == "A"
+    assert LOCS[story_location(37)] not in r.locations          # "Story B 01-01" pas envoye
+
+
+def test_route_b_with_its_item_starts_normally():
+    s, tr = setup(locked_scope(), linked=True, chapters=set(range(37)))
+    r = tick(FakeGame(phase=ROUTE_B_START), s, ["Route B Access"], tr)
+    assert r.locked_route == "" and s.route == "B"
+    assert LOCS[story_location(37)] in r.locations
+
+
+def test_route_c_needs_its_own_item():
+    s, tr = setup(locked_scope(), linked=True, chapters=set(range(74)), route="B")
+    assert tick(FakeGame(phase=ROUTE_C_START), s, ["Route B Access"], tr).locked_route == "C"
+    assert s.route == "B"
+    assert tick(FakeGame(phase=ROUTE_C_START), s, ["Route B Access", "Route C/D Access"], tr).locked_route == ""
+    assert s.route == "C"
+
+
+def test_no_route_lock_without_the_option():
+    s, tr = setup(scope(goal=db.GOAL_ENDING_E), linked=True, chapters=set(range(37)))
+    assert tick(FakeGame(phase=ROUTE_B_START), s, [], tr).locked_route == "" and s.route == "B"
+
+
+def test_shared_phases_never_lock():
+    s, tr = setup(locked_scope(), linked=True, chapters=set(range(6)))
+    assert tick(FakeGame(phase=CITY), s, [], tr).locked_route == ""          # "_AB_" : route A

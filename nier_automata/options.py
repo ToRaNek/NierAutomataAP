@@ -178,6 +178,14 @@ class AreaLocks(DefaultOnToggle):
     display_name = "Area Locks"
 
 
+class RouteLocks(DefaultOnToggle):
+    """Route B needs the "Route B Access" item and route C/D the "Route C/D Access" item. If you finish a route
+    without the item of the next one, the client takes you back to the start of chapter 7 of the route you just
+    finished, where you are free to keep doing checks; when the item arrives it takes you to the start of the new
+    route. Only used when your goal goes past ending A."""
+    display_name = "Route Locks"
+
+
 class Goal(Choice):
     """Victory condition, which also sets how much of the game has checks.
     story_progress: finish chapter `story_chapter` of route `story_route` (short game, adjustable).
@@ -216,5 +224,6 @@ class NierAutomataOptions(PerGameCommonOptions):
     starter_kit: StarterKit
     randomized_abilities: RandomizedAbilities
     area_locks: AreaLocks
+    route_locks: RouteLocks
     goal: Goal
     death_link: DeathLink

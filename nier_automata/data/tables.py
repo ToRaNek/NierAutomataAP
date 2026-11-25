@@ -3,6 +3,7 @@ from __future__ import annotations
 
 from .abilities import ABILITY_PATCHES
 from .areas import AREA_PASSES
+from .routes import ROUTE_KEYS
 from .items_data import FILLER_ITEMS, FUNDS_ITEMS, MATERIALS, POD_PROGRAMS, TRAP_ITEMS
 from .weapons import WEAPONS
 
@@ -84,6 +85,8 @@ def item_name_to_id() -> dict[str, int]:
         ids[name] = BASE_CODE + 0x500 + i
     for i, name in enumerate(AREA_PASSES):
         ids[name] = BASE_CODE + 0x600 + i
+    for i, name in enumerate(ROUTE_KEYS.values()):
+        ids[name] = BASE_CODE + 0x680 + i
     return ids
 
 
