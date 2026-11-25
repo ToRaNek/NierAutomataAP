@@ -345,3 +345,32 @@ def test_pod_programs_are_items_and_come_back_after_a_reload():
     g.programs.clear()                                   # sauvegarde rechargee : programme perdu
     tick(g, s, ["R020: Mirage"], tr)
     assert g.programs == {2002}
+
+
+def test_pod_program_found_in_the_game_is_a_check_and_is_taken_back():
+    # comme les armes : un programme obtenu dans le jeu envoie "Pod Program Found #n" et est retire ;
+    # un programme recu d'Archipelago reste
+    from nier_automata.data.items_data import POD_PROGRAMS
+    from nier_automata.data.tables import location_name_to_id, program_location
+    locs = location_name_to_id()
+    sc = scope()
+    sc.program_checks = 2
+    s, tr = setup(sc, linked=True)
+    g = FakeGame(phase="30_AB_Ruined_City_ForcedLanding")
+    g.programs = {2001}
+    g.owned_programs = lambda: set(g.programs)
+    g.remove_program = lambda i: g.programs.discard(i) or True
+    give = g.give
+    g.give = lambda n: (g.programs.add(POD_PROGRAMS[n]) or True) if n in POD_PROGRAMS else give(n)
+    tick(g, s, ["R020: Mirage"], tr)
+    g.programs.add(2009)                                  # achete / trouve dans le jeu
+    r1 = tick(g, s, ["R020: Mirage"], tr)                 # vu une fois : on attend la confirmation
+    r2 = tick(g, s, ["R020: Mirage"], tr)
+    assert locs[program_location(1)] not in r1.locations and locs[program_location(1)] in r2.locations
+    assert g.programs == {2001, 2002}                     # laser de depart + programme AP ; l'autre est repris
+    for pid in (2010, 2011):                              # au-dela du nombre de checks : repris, sans check
+        g.programs.add(pid)
+        tick(g, s, ["R020: Mirage"], tr)
+        r = tick(g, s, ["R020: Mirage"], tr)
+    assert s.programs_found == 2 and locs[program_location(2)] in s.sent_locations
+    assert g.programs == {2001, 2002}

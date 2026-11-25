@@ -135,3 +135,16 @@ def add_pod_program(mem, program_id: int) -> bool:
             mem.write(base + i * 8, struct.pack("<2i", program_id, 1))
             return True
     return False
+
+
+def remove_pod_program(mem, program_id: int) -> bool:
+    """Retire un programme et garde la liste sans trou (le jeu la remplit du debut)."""
+    import struct
+    base = mem.base + POD_PROGRAMS_RVA
+    ids = list(struct.unpack(f"<{POD_PROGRAM_SLOTS * 2}i", mem.read(base, POD_PROGRAM_SLOTS * 8))[::2])
+    if program_id not in ids:
+        return True
+    kept = [i for i in ids if i not in (program_id, -1)]
+    kept += [-1] * (POD_PROGRAM_SLOTS - len(kept))
+    mem.write(base, b"".join(struct.pack("<2i", i, 1) for i in kept))
+    return True

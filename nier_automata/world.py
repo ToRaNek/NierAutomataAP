@@ -6,7 +6,7 @@ from .data import worlddb as db
 from .data.items_data import FILLER_ITEMS, FUNDS_ITEMS, MATERIALS, POD_PROGRAMS, STARTER_KIT, TRAP_ITEMS
 from .data.tables import (
     SHOP_PLACES_ORDER, SHOP_REGION, item_location, item_name_to_id, level_location, location_name_to_id,
-    ending_location, pool_weapon_count, quest_excluded, shop_location, shop_missable, weapon_location,
+    ending_location, pool_weapon_count, program_location, quest_excluded, shop_location, shop_missable, weapon_location,
 )
 from .data.weapons import STARTING_WEAPONS, WEAPONS
 from .options import NierAutomataOptions
@@ -59,6 +59,7 @@ class NierAutomataWorld(World):
             access_point_checks=bool(o.access_point_checks), quest_checks=bool(o.quest_checks),
             weapon_checks=o.weapon_checks.value, max_level_check=o.max_level_check.value,
             item_checks=bool(o.item_checks))
+        self.scope.program_checks = o.pod_program_checks.value if o.pod_programs else 0
         if o.ending_checks:
             self.scope.endings = db.ending_checks(self.scope.goal, self.scope.regions)
         self.spots = self._spots()
@@ -89,6 +90,7 @@ class NierAutomataWorld(World):
                         for k in range(1, self.options.shop_checks.value + 1)]
         # peuvent etre inatteignables (peu d'armes par route) : jamais d'objet important
         out += [(weapon_location(n), s.regions[0], True, []) for n in range(1, s.weapon_checks + 1)]
+        out += [(program_location(n), s.regions[0], True, []) for n in range(1, s.program_checks + 1)]
         if s.item_checks:
             out += [(item_location(m), s.regions[0], True, []) for m in MATERIALS]
         return out
@@ -174,5 +176,6 @@ class NierAutomataWorld(World):
             "lethal_traps": bool(o.lethal_traps),
             "enemy_trap_enemies": o.enemy_trap_enemies.current_key,
             "ending_checks": bool(o.ending_checks),
+            "pod_program_checks": self.scope.program_checks,
             "death_link": bool(o.death_link),
         }

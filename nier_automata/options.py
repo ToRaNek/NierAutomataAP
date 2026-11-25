@@ -145,6 +145,17 @@ class PodPrograms(DefaultOnToggle):
     display_name = "Pod Programs"
 
 
+class PodProgramChecks(Range):
+    """Pod programs you get in the game itself (shop, quests, pickups) each send a check
+    ("Pod Program Found #n") and are taken back, like weapons: you only keep the programs the multiworld
+    sends you. These checks never hold an important item. 0 = the game's programs are left alone.
+    Ignored when pod_programs is off."""
+    display_name = "Pod Program Checks"
+    range_start = 0
+    range_end = 16
+    default = 4
+
+
 class StarterKit(DefaultOnToggle):
     """Start with a few healing items, one Melee Attack Up (L) and one Melee Defense Up (L). The start of the
     game is the hardest part and the first wall is the Amusement Park boss. You also get a supply drop once
@@ -192,6 +203,7 @@ class NierAutomataOptions(PerGameCommonOptions):
     enemy_trap_enemies: EnemyTrapEnemies
     lethal_traps: LethalTraps
     pod_programs: PodPrograms
+    pod_program_checks: PodProgramChecks
     starter_kit: StarterKit
     randomized_abilities: RandomizedAbilities
     goal: Goal

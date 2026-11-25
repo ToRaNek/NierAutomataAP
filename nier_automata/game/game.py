@@ -251,6 +251,13 @@ class NierGame:
         except OSError:
             return set()
 
+    def remove_program(self, program_id: int) -> bool:
+        from .inventory import remove_pod_program
+        try:
+            return remove_pod_program(self.mem, program_id)
+        except OSError:
+            return False
+
     def remove_weapon(self, weapon_id: int) -> bool:
         return self._weapons.remove(weapon_id)
 

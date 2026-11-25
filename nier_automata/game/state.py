@@ -35,6 +35,9 @@ class ClientState:
     access_points: set[int] = field(default_factory=set)      # indices de points d'acces actives
     quests_done: set[int] = field(default_factory=set)        # indices de quetes terminees
     max_level: int = 1
+    ap_programs: set[int] = field(default_factory=set)        # programmes de Pod recus d'Archipelago
+    found_program_ids: set[int] = field(default_factory=set)  # programmes trouves dans le jeu (comptes)
+    programs_found: int = 0
     endings_seen: set[str] = field(default_factory=set)       # lettres des fins vues (A, B, C, D)
     supplies_given: set[str] = field(default_factory=set)     # regions dont le ravitaillement a ete donne
     ap_spots_collected: set[int] = field(default_factory=set)  # indices d'AP Items ramasses (worlddb.PICKUPS)
@@ -61,6 +64,9 @@ class ClientState:
             "max_level": self.max_level,
             "supplies_given": sorted(self.supplies_given),
             "endings_seen": sorted(self.endings_seen),
+            "ap_programs": sorted(self.ap_programs),
+            "found_program_ids": sorted(self.found_program_ids),
+            "programs_found": self.programs_found,
             "ap_spots_collected": sorted(self.ap_spots_collected),
             "ap_spawned_pid": self.ap_spawned_pid,
             "ap_spawned_spots": sorted(self.ap_spawned_spots),
@@ -105,6 +111,9 @@ class ClientState:
                    max_level=d.get("max_level", 1),
                    supplies_given=set(d.get("supplies_given", [])),
                    endings_seen=set(d.get("endings_seen", [])),
+                   ap_programs=set(d.get("ap_programs", [])),
+                   found_program_ids=set(d.get("found_program_ids", [])),
+                   programs_found=d.get("programs_found", 0),
                    ap_spots_collected=set(d.get("ap_spots_collected", [])),
                    ap_spawned_pid=d.get("ap_spawned_pid", 0),
                    ap_spawned_spots=set(d.get("ap_spawned_spots", [])),

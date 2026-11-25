@@ -122,3 +122,15 @@ def test_pod_program_added_silently_in_first_free_slot():
     assert add_pod_program(m, 2009) and read_pod_programs(m) == {2001, 2009}      # deja possede : rien
     m.write(m.base + 0x148E680, struct.pack("<2i", 2001, 1) * POD_PROGRAM_SLOTS)
     assert not add_pod_program(m, 2010)                                            # table pleine
+
+
+def test_pod_program_removed_and_list_kept_compact():
+    import struct
+    from nier_automata.game.inventory import POD_PROGRAM_SLOTS, read_pod_programs, remove_pod_program
+    from nier_automata.game.memory import FakeMemory
+    m = FakeMemory()
+    m.write(m.base + 0x148E680, struct.pack("<6i", 2001, 1, 2009, 1, 2003, 1)
+            + struct.pack("<2i", -1, 1) * (POD_PROGRAM_SLOTS - 3))
+    assert remove_pod_program(m, 2009) and read_pod_programs(m) == {2001, 2003}
+    assert struct.unpack("<6i", m.read(m.base + 0x148E680, 24)) == (2001, 1, 2003, 1, -1, 1)
+    assert remove_pod_program(m, 2009)                    # deja absent

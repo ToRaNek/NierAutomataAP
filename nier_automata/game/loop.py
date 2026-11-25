@@ -6,7 +6,7 @@ from dataclasses import dataclass, field
 from ..data import worlddb as db
 from ..data.items_data import MATERIALS, POD_PROGRAMS, SUPPLY_DROPS
 from ..data.phases import is_prologue
-from ..data.tables import (access_point_location, chest_location, ending_location, item_location, level_location,
+from ..data.tables import (access_point_location, chest_location, ending_location, program_location, item_location, level_location,
                            location_name_to_id, pickup_location, quest_location, story_location, weapon_location)
 from ..data.weapons import STARTING_WEAPONS, WEAPONS
 from .state import ClientState
@@ -27,6 +27,7 @@ class Trackers:
     chests: ChestTracker
     levels: LevelTracker
     scope: db.Scope
+    programs_pending: set = field(default_factory=set)
 
 
 @dataclass
@@ -53,6 +54,8 @@ def due_locations(state: ClientState, scope: db.Scope) -> set[int]:
     due |= {_LOCS[access_point_location(i)] for i in state.access_points & scope.access_points}
     due |= {_LOCS[quest_location(i)] for i in state.quests_done & scope.quests}
     due |= {_LOCS[ending_location(e)] for e in state.endings_seen & set(getattr(scope, "endings", ()))}
+    due |= {_LOCS[program_location(n)]
+            for n in range(1, min(state.programs_found, getattr(scope, "program_checks", 0)) + 1)}
     due |= {_LOCS[level_location(n)] for n in range(2, min(state.max_level, scope.max_level) + 1)}
     return due
 
@@ -103,6 +106,8 @@ def tick(game, state: ClientState, received: list[str], trackers: Trackers) -> T
             break  # inventaire plein : on reessaie au prochain tour
         if name in WEAPONS:
             state.ap_weapons.add(WEAPONS[name])
+        if name in POD_PROGRAMS:
+            state.ap_programs.add(POD_PROGRAMS[name])
         state.next_item_index += 1
 
     # 2. reinjection des armes AP perdues (rechargement de save)
@@ -120,6 +125,20 @@ def tick(game, state: ClientState, received: list[str], trackers: Trackers) -> T
             for name in got:
                 if POD_PROGRAMS[name] not in have:
                     game.give(name)
+
+    # 2 bis. programmes de Pod trouves dans le jeu : un check chacun, puis repris (comme les armes)
+    max_programs = getattr(scope, "program_checks", 0)
+    if max_programs and hasattr(game, "owned_programs") and hasattr(game, "remove_program"):
+        natural = (game.owned_programs() & set(POD_PROGRAMS.values())) - state.ap_programs
+        confirmed = sorted(natural & trackers.programs_pending)      # vu deux tours de suite
+        trackers.programs_pending = natural
+        if confirmed:
+            pid = confirmed[0]
+            trackers.programs_pending.discard(pid)
+            if game.remove_program(pid) and pid not in state.found_program_ids \
+                    and state.programs_found < max_programs:
+                state.found_program_ids.add(pid)
+                state.programs_found += 1
 
     # 3. armes trouvees naturellement
     to_remove, _ = trackers.weapons.scan(owned)

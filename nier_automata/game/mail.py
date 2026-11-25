@@ -63,7 +63,7 @@ def unread_entry(raw: bytes, hour: int, minute: int) -> bytes:
     return struct.pack("<iIII", no, 0, (minute << 16) | hour, x)
 
 
-KIND_ORDER = ["Chest", "AP Item", "Story", "Access Point", "Quest", "Ending", "Shop", "Level", "Weapon Found", "Item"]
+KIND_ORDER = ["Chest", "AP Item", "Story", "Access Point", "Quest", "Ending", "Shop", "Level", "Weapon Found", "Pod Program Found", "Item"]
 
 
 def check_kinds(names) -> list[tuple[str, int]]:
