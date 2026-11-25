@@ -138,7 +138,10 @@ this, an underground check looks the same as whatever is above it on the surface
   played for real.
 - Tower keys: tested in game in front of the Tower with the real client and a server (no key: the door refuses;
   keys taken back when put in the inventory; keys sent by the server: 9S hacks the door and the story goes on).
-  The moment the game itself hands a key (end of each resource unit) has not been played.
+  The moment the game itself hands a key was played for the Forest key (end of its resource unit: the key
+  appears, the client takes it back 5 seconds later and it does not come back). The game also puts the keys back
+  when a later chapter loads; the client takes them back again within about 15 seconds. The Park key hand-over
+  was not played.
 - Mail titles: open an access point for ~10 s the first time after each game launch.
 - Don't load another save than the one of the seed.
 
