@@ -61,8 +61,7 @@ dash, ground evade, pod fire, attacks...), recovery items and boosts, money, and
 - **Self-Destruct Trap**: the game's own self-destruct, short countdown then explosion, leaves you at 1 HP.
 - **E-Drug Trap**: the game's E-Drug effect, picture and sound scrambled for 30 seconds.
 
-Traps that use the game's own effects wait while a menu or a loading screen is up. Cutscenes played inside the
-game world (a boss intro for example) are not detected, so a trap can start during one.
+Traps that use the game's own effects wait while a menu, a loading screen or a cutscene is up.
 
 ## In game
 - Notifications: "From X: item", "Check: Resistance Camp" then "For X: item".
@@ -88,7 +87,7 @@ Scroll to zoom, drag to move.
   side quest "Camp Development", so its AP Items never hold an important item.
 - The Self-Destruct and E-Drug traps were tried on foot as 2B, in a boss fight (both work), in a flying section
   and during a 9S hack (E-Drug shows there; Self-Destruct waits until you are back on foot, and the items
-  received after it wait with it). They are not held back during story cutscenes. `lethal_traps` and the `random` enemy trap mode are covered by automated tests only.
+  received after it wait with it). `lethal_traps` and the `random` enemy trap mode are covered by automated tests only.
 - Mail titles: open an access point for ~10 s the first time after each game launch.
 - Don't load another save than the one of the seed.
 

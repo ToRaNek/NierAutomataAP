@@ -217,6 +217,7 @@ class NierGame:
     ACTION_OFFSET = 0x670
     WORLD_LOADED_RVA = 0xF6E3C0
     MENU_RVA = 0x11EAC2C           # 1 = aucun menu ouvert
+    CUTSCENE_RVA = 0x11EAC4C       # 2 pendant une cinematique jouee dans le monde, 0 sinon (verifie en jeu)
 
     def _game_effect(self, kind: str) -> bool:
         """Lance un effet du jeu par sa propre fonction. False = pas maintenant (menu, chargement...)."""
@@ -230,7 +231,8 @@ class NierGame:
             menu, = struct.unpack("<I", self.mem.read(self.mem.base + self.MENU_RVA, 4))
             action, = struct.unpack("<I", self.mem.read(p + self.ACTION_OFFSET, 4))
             hp, = struct.unpack("<I", self.mem.read(p + HP_OFFSET, 4))
-            if not effect_allowed(loaded != 0, menu == 1, action, hp, kind):
+            cut, = struct.unpack("<I", self.mem.read(self.mem.base + self.CUTSCENE_RVA, 4))
+            if not effect_allowed(loaded != 0, menu == 1, action, hp, kind, cutscene=cut != 0):
                 return False
             if kind == "edrug":
                 remote_call(self.mem, self.mem.base + self.EDRUG_RVA, p)

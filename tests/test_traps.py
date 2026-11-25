@@ -78,3 +78,13 @@ def test_self_destruct_waits_while_flying_but_edrug_does_not():
     assert effect_allowed(world_loaded=True, menu_closed=True, action=0, hp=500, kind="selfdestruct")
     hack = {**fly, "action": 0x42}                                  # mini-jeu de piratage de 9S : pareil
     assert not effect_allowed(**hack, kind="selfdestruct") and effect_allowed(**hack, kind="edrug")
+
+
+def test_game_effects_wait_during_in_world_cutscene():
+    # vu en jeu (intro du boss Adam, 56_AB_Danchi_Boss_EV1 et 56_10) : monde charge, aucun menu, action 0,
+    # mais [0x11EAC4C] vaut 2 pendant la cinematique et 0 en combat / en ville
+    from nier_automata.game.traps import effect_allowed
+    ok = dict(world_loaded=True, menu_closed=True, action=0, hp=500)
+    for kind in ("selfdestruct", "edrug"):
+        assert not effect_allowed(**ok, kind=kind, cutscene=True)
+        assert effect_allowed(**ok, kind=kind, cutscene=False)

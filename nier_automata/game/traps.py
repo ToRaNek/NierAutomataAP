@@ -39,8 +39,11 @@ FLYING_ACTION = 0x84     # unite de vol : le jeu annule l'autodestruction aussit
 HACKING_ACTION = 0x42    # mini-jeu de piratage de 9S : meme annulation (verifie en jeu)
 
 
-def effect_allowed(world_loaded: bool, menu_closed: bool, action: int, hp: int, kind: str = "") -> bool:
+def effect_allowed(world_loaded: bool, menu_closed: bool, action: int, hp: int, kind: str = "",
+                   cutscene: bool = False) -> bool:
     """Peut-on lancer un effet du jeu sur le joueur maintenant ? Sinon le client reessaie au tour suivant."""
+    if cutscene:
+        return False
     if kind == "selfdestruct" and action in (FLYING_ACTION, HACKING_ACTION):
         return False
     return bool(world_loaded and menu_closed and action not in _BUSY_ACTIONS and hp > 1)
