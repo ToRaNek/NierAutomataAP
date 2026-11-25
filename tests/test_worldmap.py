@@ -43,3 +43,46 @@ def test_map_shows_indoor_rooms_in_orange():
         r, g, b = img.getpixel((int(px), int(py)))
         orange += r > b + 40
     assert orange >= len(cave) * 0.8
+
+
+def test_every_located_check_has_a_layer():
+    for table in (db.CHESTS, db.PICKUPS, db.ACCESS_POINTS):
+        for e in table:
+            assert db.location_layer(e["name"]) in ("surface", "indoor")
+    assert db.location_layer("Level 5") is None
+    cave = next(c for c in db.CHESTS if "Deep Cave" in c["name"])
+    assert db.location_layer(cave["name"]) == "indoor"
+    assert db.location_layer("Access Point: City Ruins: Cave") == "indoor"
+    assert db.location_layer("Access Point: Resistance Camp") == "surface"
+    assert db.location_layer(next(c["name"] for c in db.CHESTS if c["area"] == "Desert Zone")) == "surface"
+
+
+def test_markers_filtered_by_layer_keep_the_player():
+    cave = next(c for c in db.CHESTS if "Deep Cave" in c["name"])
+    city = next(c for c in db.CHESTS if c["area"] == "City Ruins")
+    names = {cave["name"], city["name"]}
+    hints = [("X", "Bob", cave["name"])]
+    labels = lambda layer: [(m.kind, m.label) for m in wm.markers(hints, names, (1.0, 2.0, 3.0), layer)]
+    assert ("check", city["name"]) in labels("surface") and not any(k == "hint" for k, _ in labels("surface"))
+    assert any(k == "hint" for k, _ in labels("indoor")) and ("check", city["name"]) not in labels("indoor")
+    assert len(labels("all")) == 3
+    for layer in db.LAYERS:
+        assert labels(layer)[-1][0] == "player"
+
+
+def test_one_map_image_per_layer():
+    import io
+    import pytest
+    Image = pytest.importorskip("PIL.Image")
+    info = wm.load_info()
+    sizes = {layer: Image.open(io.BytesIO(wm.map_png(layer))).size for layer in db.LAYERS}
+    assert set(sizes.values()) == {(info.width, info.height)}
+    # la carte "surface" n'a pas l'orange des interieurs : un coffre de grotte n'y tombe pas sur de l'orange
+    surface = Image.open(io.BytesIO(wm.map_png("surface"))).convert("RGB")
+    cave = [c for c in db.CHESTS if "Deep Cave" in c["name"]]
+    orange = 0
+    for c in cave:
+        px, py = info.to_pixel(c["pos"][0], c["pos"][2])
+        r, g, b = surface.getpixel((int(px), int(py)))
+        orange += r > b + 40
+    assert orange == 0

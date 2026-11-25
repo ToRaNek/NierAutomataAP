@@ -30,8 +30,11 @@ def load_info() -> MapInfo:
     return MapInfo(**json.loads(pkgutil.get_data(__name__.rsplit(".", 2)[0] + ".data", "map.json").decode()))
 
 
-def map_png() -> bytes:
-    return pkgutil.get_data(__name__.rsplit(".", 2)[0] + ".data", "map.png")
+MAP_FILES = {"all": "map.png", "surface": "map_surface.png", "indoor": "map_indoor.png"}
+
+
+def map_png(layer: str = "all") -> bytes:
+    return pkgutil.get_data(__name__.rsplit(".", 2)[0] + ".data", MAP_FILES[layer])
 
 
 @dataclass
@@ -42,19 +45,23 @@ class Marker:
     label: str
 
 
-def markers(hints, remaining, player: Optional[tuple]) -> list[Marker]:
-    """hints : [(objet, pour qui, nom du check)] ; remaining : noms des checks pas encore valides."""
+def markers(hints, remaining, player: Optional[tuple], layer: str = "all") -> list[Marker]:
+    """hints : [(objet, pour qui, nom du check)] ; remaining : noms des checks pas encore valides.
+    layer : "all", ou "surface" / "indoor" pour ne garder que les checks de ce niveau (le joueur reste affiche)."""
+    def shown(name):
+        return layer == "all" or db.location_layer(name) == layer
+
     out, hinted = [], set()
     for item, who, where in hints:
         pos = db.location_position(where)
-        if pos is None or where in hinted:
+        if pos is None or where in hinted or not shown(where):
             continue
         hinted.add(where)
         out.append(Marker("hint", pos[0], pos[2], f"{item} ({who}) - {where}"))
     checks = []
     for name in sorted(remaining):
         pos = db.location_position(name)
-        if pos is not None and name not in hinted:
+        if pos is not None and name not in hinted and shown(name):
             checks.append(Marker("check", pos[0], pos[2], name))
     out = checks + out                       # les indices sont dessines par-dessus
     if player is not None:

@@ -214,6 +214,25 @@ def quests_done(status: list[int]) -> set[int]:
 
 _POSITIONS = {e["name"]: tuple(e["pos"]) for table in (CHESTS, PICKUPS, ACCESS_POINTS) for e in table}
 
+# Lieux qui sont sur une carte separee ou sous terre (collisions wd5 / grotte) : affiches a part dans l'onglet Map,
+# sinon ils se superposent a ce qui est en surface au meme endroit.
+INDOOR_AREAS = frozenset({
+    "Abandoned Factory: His Grace's Room", "Abandoned Factory: Underground Area", "Amusement Park: God Box",
+    "Amusement Park: Under the Theater", "City Ruins: Deep Cave", "City Ruins: Emil's Residence", "Copied City",
+    "Flooded City: Soul Box", "Forest Zone: Meat Box", "The Tower: Lower Section", "The Tower: Upper Section",
+})
+INDOOR_ACCESS_POINTS = frozenset({
+    "Access Point: Factory: Hangar", "Access Point: Factory: Furnace", "Access Point: City Ruins: Cave",
+})
+LAYERS = ("all", "surface", "indoor")
+_LAYER = {e["name"]: "indoor" if e.get("area") in INDOOR_AREAS or e["name"] in INDOOR_ACCESS_POINTS else "surface"
+          for table in (CHESTS, PICKUPS, ACCESS_POINTS) for e in table}
+
+
+def location_layer(name: str):
+    """"surface" ou "indoor" pour un check qui a un lieu precis, sinon None."""
+    return _LAYER.get(name)
+
 
 def location_position(name: str):
     """Position monde (x, y, z) d'un check qui a un lieu precis, sinon None."""

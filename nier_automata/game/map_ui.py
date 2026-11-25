@@ -8,12 +8,15 @@ from pathlib import Path
 from . import worldmap as wm
 
 
-def _map_file() -> str:
+LAYER_LABELS = {"all": "All", "surface": "Surface", "indoor": "Indoor / underground"}
+
+
+def _map_file(layer: str = "all") -> str:
     """La carte est dans l'apworld (zip) : Kivy a besoin d'un vrai fichier."""
     d = Path(os.environ.get("LOCALAPPDATA", Path.home())) / "NierAutomataAP"
     d.mkdir(parents=True, exist_ok=True)
-    f = d / "map.png"
-    data = wm.map_png()
+    f = d / wm.MAP_FILES[layer]
+    data = wm.map_png(layer)
     if not f.exists() or f.read_bytes() != data:      # contenu, pas taille : la carte change entre versions
         f.write_bytes(data)
     return str(f)
@@ -28,6 +31,7 @@ def build_map_tab(ctx):
     from kivy.uix.label import Label
     from kivy.uix.scatter import Scatter
     from kivy.uix.stencilview import StencilView
+    from kivy.uix.togglebutton import ToggleButton
 
     info = wm.load_info()
 
@@ -39,8 +43,9 @@ def build_map_tab(ctx):
                 if 0.3 <= self.scale * factor <= 12:
                     self.apply_transform(Matrix().scale(factor, factor, factor), anchor=touch.pos)
                 return True
-            if self.parent.collide_point(*touch.pos):
-                state["touched"] = True
+            if not self.parent.collide_point(*touch.pos):
+                return False          # hors de la vue : la carte (plus grande que sa vue) ne prend pas le clic
+            state["touched"] = True
             return super().on_touch_down(touch)
 
     class MapView(StencilView):
@@ -56,9 +61,29 @@ def build_map_tab(ctx):
                   allow_stretch=True, keep_ratio=False)
     scatter.add_widget(image)
     view.add_widget(scatter)
+    state = {"touched": False, "layer": "all"}
+    files = {layer: _map_file(layer) for layer in wm.MAP_FILES}
+
+    def pick(layer):
+        def on_press(button):
+            button.state = "down"                 # un niveau reste toujours choisi
+            if state["layer"] != layer:
+                state["layer"] = layer
+                image.source = files[layer]
+                state["sig"] = None               # redessine les points pour ce niveau
+        return on_press
+
+    # niveaux : en surface et sous terre au meme endroit, les checks se superposaient sur une seule image
+    bar = BoxLayout(orientation="horizontal", size_hint_y=None, height=34, spacing=4)
+    for layer, text in LAYER_LABELS.items():
+        b = ToggleButton(text=text, group="nier_map_layer", state="down" if layer == "all" else "normal",
+                         size_hint_x=None, width=190)
+        b.bind(on_press=pick(layer))
+        bar.add_widget(b)
+    bar.add_widget(Label(text=""))
+    root.add_widget(bar)
     root.add_widget(legend)
     root.add_widget(view)
-    state = {"touched": False}
 
     def fit(*_):
         """Cadre la carte dans la vue tant que l'utilisateur n'a ni zoome ni deplace (la vue change de taille
@@ -91,11 +116,11 @@ def build_map_tab(ctx):
                 player = ctx.nier.position()
         except Exception:
             player = None
-        marks = wm.markers(hints, remaining, player)
+        marks = wm.markers(hints, remaining, player, state["layer"])
         zoom = max(scatter.scale, 0.3)
         # On ne redessine que si quelque chose a change (270 cercles recrees chaque seconde faisaient ramer la
         # molette) ; les checks sont UN seul lot de points au lieu d'un cercle de 180 segments chacun.
-        sig = (round(zoom, 1), len(remaining), len(hints),
+        sig = (state["layer"], round(zoom, 1), len(remaining), len(hints),
                None if player is None else (round(player[0]), round(player[2])))
         if sig == state.get("sig"):
             return
@@ -121,7 +146,8 @@ def build_map_tab(ctx):
         n_h = sum(1 for m in marks if m.kind == "hint")
         n_c = sum(1 for m in marks if m.kind == "check")
         last = next((m.label for m in reversed(marks) if m.kind == "hint"), "")
-        legend.text = f"  Hints: {n_h} (yellow)   Remaining checks with a location: {n_c} (grey)   You: red   Indoor / underground rooms: orange   {last}"
+        legend.text = (f"  {LAYER_LABELS[state['layer']]}   Hints: {n_h} (yellow)   Remaining checks with a location: "
+                       f"{n_c} (grey)   You: red   Indoor / underground rooms: orange   {last}")
 
     Clock.schedule_interval(refresh, 0.5)
     return root

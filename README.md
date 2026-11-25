@@ -89,6 +89,11 @@ locations are yellow, your remaining checks that have a precise location are gre
 Indoor and underground rooms (caves, factory, shopping center...) are drawn in orange over the open world.
 Scroll to zoom, drag to move.
 
+Three buttons at the top of the tab pick the level shown: **All** (everything on one picture), **Surface** (the
+open world alone, with its checks) and **Indoor / underground** (the separate maps and what is below ground:
+caves, Copied City, factory underground, Tower... with their checks, the open world dimmed as a guide). Without
+this, an underground check looks the same as whatever is above it on the surface.
+
 ![Map tab](docs/map_tab.png)
 
 ## Known limits

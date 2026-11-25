@@ -40,6 +40,7 @@ for i in np.argsort(ymax):
     c = (int(40 + 120 * v), int(60 + 120 * v), int(70 + 90 * v))
     d.polygon([((p[0] - x0) / SCALE, (p[2] - z0) / SCALE) for p in t[i]], fill=c)
 img = img.filter(ImageFilter.SMOOTH)
+img.save(OUT / "map_surface.png", optimize=True)      # monde ouvert seul (niveau "Surface" de l'onglet Map)
 
 # Interieurs (wd5, deja en coordonnees monde) : sols en orange translucide par-dessus le monde ouvert, pour que
 # les checks de grotte / sous-sol / salle ne paraissent pas poses en plein air. g50010 = un grand plan, ignore.
@@ -59,6 +60,12 @@ for n, e in sorted(manifest.items()):
     n_int += len(ti)
     for tri in ti:
         od.polygon([((p[0] - x0) / SCALE, (p[2] - z0) / SCALE) for p in tri], fill=INTERIOR)
+# niveau "Indoor" : le monde ouvert assombri sert de repere, les interieurs sont en orange plein
+dark = Image.eval(img, lambda v: v * 2 // 5).convert("RGB")
+solid = Image.new("RGBA", img.size, (0, 0, 0, 0))
+solid.paste((255, 165, 70, 255), (0, 0), ov.getchannel("A").point(lambda a: 255 if a else 0))
+dark.paste(solid, (0, 0), solid)
+dark.save(OUT / "map_indoor.png", optimize=True)
 img.paste(ov, (0, 0), ov)
 print(n_int, "triangles d'interieur")
 img.save(OUT / "map.png", optimize=True)

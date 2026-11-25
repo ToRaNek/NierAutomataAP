@@ -92,6 +92,11 @@ Les lieux donnes par un indice sont en jaune, tes checks restants qui ont un lie
 rouge. Les salles interieures et souterraines (grottes, usine, centre commercial...) sont en orange par-dessus
 le monde ouvert. Molette pour zoomer, glisser pour deplacer.
 
+Trois boutons en haut de l'onglet choisissent le niveau affiche : **All** (tout sur une image), **Surface**
+(le monde ouvert seul, avec ses checks) et **Indoor / underground** (les cartes separees et les souterrains :
+grottes, Ville copiee, sous-sol de l'usine, Tour... avec leurs checks, le monde ouvert assombri en repere).
+Sans ca, un check sous terre se confond avec ce qui est en surface au meme endroit.
+
 ![Onglet Map](docs/map_tab.png)
 
 ## Limites connues
