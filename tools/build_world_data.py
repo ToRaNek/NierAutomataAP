@@ -79,6 +79,16 @@ def region_of(area_label, locked=False, routes=()):
     return f"{route}{major:02d}", missable
 
 
+# zones du desert que beaucoup de joueurs ne trouvent jamais (avis d'un joueur experimente) : (x, z, rayon).
+# Le champ petrolifere est repere par son point d'acces ; l'oasis (un trou dans la tempete de sable, un seul
+# coffre) n'a pas de nom dans les fichiers : les deux groupes isoles au bord du desert sont traites pareil.
+HIDDEN_SPOTS = [(-892.0, -74.0, 150.0), (-1540.0, -600.0, 90.0), (-720.0, -1110.0, 60.0)]
+
+
+def hidden_spot(pos) -> bool:
+    return any(math.hypot(pos[0] - x, pos[2] - z) < r for x, z, r in HIDDEN_SPOTS)
+
+
 def refine(region, label, c):
     """Corrections verifiees en jeu (tools/sweep.py) : la zone "City Ruins" couvre aussi la ville d'apres
     l'effondrement (st2/r200, chapitre 05), les egouts et les grottes, pas accessibles au chapitre 02."""
@@ -194,7 +204,7 @@ def main():
         chests.append({
             "area": label, "pos": [round(v, 2) for v in c["position"]], "region": region,
             "needs": [] if unknown else needs, "locked": locked,
-            "excluded": bool(missable or unknown or quest_gated or pre_crater or before_bridge
+            "excluded": bool(missable or unknown or quest_gated or pre_crater or before_bridge or hidden_spot(c["position"])
                              or c["area"].get("confidence") == "low"),
             "pre_crater": pre_crater,
             "quest_gated": bool(quest_gated),
@@ -255,7 +265,7 @@ def main():
         for k, p in enumerate(spread(pts, PICKUPS_PER_AREA, PICKUP_MIN_DIST, anchor), 1):
             pickups.append({"area": label, "k": k, "name": f"AP Item: {label} #{k}", "pos": p["pos"],
                             "region": region,
-                            "excluded": bool(missable or tuple(p["pos"]) in not_spawned)})
+                            "excluded": bool(missable or tuple(p["pos"]) in not_spawned or hidden_spot(p["pos"]))})
     data["pickups"] = pickups
 
     # --- quetes

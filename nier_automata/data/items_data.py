@@ -34,7 +34,7 @@ TRAP_ITEMS: dict[str, tuple[str, int]] = {
 SUPPLY_DROPS: dict[str, list[str]] = {
     "A10": ["Large Recovery", "Large Recovery", "Full Recovery", "Melee Attack Up (L)", "Melee Defense Up (L)"],
     "C11": ["Large Recovery", "Large Recovery", "Full Recovery", "Full Recovery", "Melee Attack Up (L)",
-            "Melee Defense Up (L)"],
+            "Melee Defense Up (L)", "Melee Defense Up (L)", "Melee Defense Up (L)"],
 }
 
 # Quantite donnee par objet recu.

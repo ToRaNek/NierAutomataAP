@@ -174,3 +174,15 @@ def test_two_factory_chests_before_the_bridge_are_missable():
     pair = [c for c in db.CHESTS if c["area"] == "Abandoned Factory" and abs(c["pos"][0] + 490) < 2
             and abs(c["pos"][2] - 317) < 2]
     assert len(pair) == 2 and all(c["excluded"] for c in pair)
+
+
+def test_hidden_desert_spots_never_hold_important_items():
+    # avis du testeur : le champ petrolifere (point d'acces "Oil Field") et l'oasis sont des zones que
+    # beaucoup de joueurs ne trouvent jamais
+    import math
+    from nier_automata.data import worlddb as db
+    oil = next(a for a in db.ACCESS_POINTS if a["name"] == "Access Point: Desert: Oil Field")["pos"]
+    near = [x for t in (db.CHESTS, db.PICKUPS) for x in t
+            if math.hypot(x["pos"][0] - oil[0], x["pos"][2] - oil[2]) < 150]
+    assert len(near) >= 3 and all(x["excluded"] for x in near)
+    assert any(not c["excluded"] for c in db.CHESTS if c["area"] == "Desert Zone")
