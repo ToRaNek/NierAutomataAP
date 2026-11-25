@@ -90,9 +90,10 @@ le monde ouvert. Molette pour zoomer, glisser pour deplacer.
   est parti. Les coffres qui n'existent que pendant ou apres une quete annexe ne contiennent jamais d'objet
   important. Le marchand de la foret n'existe qu'apres la
   quete annexe ratable "Camp Development" : ses AP Items ne contiennent jamais d'objet important.
-- Les pieges Self-Destruct et E-Drug ont ete essayes a pied avec 2B, en sequence de vol et pendant un
-  piratage de 9S (l'E-Drug s'y affiche ; le Self-Destruct attend le retour a pied, et les objets recus apres
-  lui attendent avec lui), pas pendant un combat de boss. `lethal_traps` et le mode `random` du piege a ennemis ne sont
+- Les pieges Self-Destruct et E-Drug ont ete essayes a pied avec 2B, en combat de boss (les deux
+  marchent), en sequence de vol et pendant un piratage de 9S (l'E-Drug s'y affiche ; le Self-Destruct attend
+  le retour a pied, et les objets recus apres lui attendent avec lui). Ils ne sont pas retenus pendant les
+  cinematiques de l'histoire. `lethal_traps` et le mode `random` du piege a ennemis ne sont
   couverts que par les tests automatiques.
 - Titres des mails : ouvrir un point d'acces ~10 s la premiere fois apres chaque lancement du jeu.
 - Ne pas charger une autre sauvegarde que celle de la seed.

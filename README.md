@@ -85,9 +85,9 @@ Scroll to zoom, drag to move.
   reward screen, check sent). A hack-locked chest was opened as 9S by a bot playing the hacking minigame, and its check was sent.
   Chests that only exist during or after a side quest never hold an important item. The forest shop only exists after the missable
   side quest "Camp Development", so its AP Items never hold an important item.
-- The Self-Destruct and E-Drug traps were tried on foot as 2B, in a flying section and during a 9S hack (E-Drug
-  shows there; Self-Destruct waits until you are back on foot, and the items received after it wait with
-  it), not during boss fights. `lethal_traps` and the `random` enemy trap mode are covered by automated tests only.
+- The Self-Destruct and E-Drug traps were tried on foot as 2B, in a boss fight (both work), in a flying section
+  and during a 9S hack (E-Drug shows there; Self-Destruct waits until you are back on foot, and the items
+  received after it wait with it). They are not held back during story cutscenes. `lethal_traps` and the `random` enemy trap mode are covered by automated tests only.
 - Mail titles: open an access point for ~10 s the first time after each game launch.
 - Don't load another save than the one of the seed.
 
