@@ -61,12 +61,6 @@ def test_game_effect_traps_registered_and_guarded():
     assert not effect_allowed(**{**ok, "hp": 1})
 
 
-def test_lethal_traps_option():
-    # avis du testeur : "un piege ne tue jamais" doit etre une option
-    assert damage_after_trap(hp=30, max_hp=1000, percent=10) == 1
-    assert damage_after_trap(hp=30, max_hp=1000, percent=10, lethal=True) == 0
-    assert damage_after_trap(hp=500, max_hp=1000, percent=10, lethal=True) == 400
-
 
 def test_self_destruct_waits_while_flying_but_edrug_does_not():
     # vu en jeu (prologue en vol, action 0x84) : le jeu annule l'autodestruction en 0,5 s sans rien faire,
@@ -100,3 +94,25 @@ def test_cutscene_hold_delays_traps_but_never_forever():
     assert not h.hold(True, now=311)                 # 300 s de cinematique continue : on laisse passer
     assert not h.hold(False, now=320)
     assert h.hold(True, now=330)                     # nouvelle cinematique : le compteur repart
+
+
+def test_self_destruct_needs_several_clear_reads_in_a_row():
+    # vu en jeu : au debut du piratage l'action vaut 0xAF (lancement), puis 0x42, retombe a 0 pendant ~0,1 s,
+    # puis 0x42 ; une seule lecture a 0 ne suffit donc pas
+    from nier_automata.game.traps import effect_allowed, self_destruct_clear
+    ok = dict(world_loaded=True, menu_closed=True, hp=500, kind="selfdestruct")
+    assert not effect_allowed(action=0xAF, **ok)
+    assert self_destruct_clear([0, 0, 0])
+    assert not self_destruct_clear([0, 0x42, 0x42]) and not self_destruct_clear([0, 0, 0xAF])
+    assert not self_destruct_clear([0x84, 0, 0])
+
+
+def test_lethal_traps_option_kills_only_when_damage_exceeds_hp():
+    # avis du testeur : "un piege ne tue jamais" doit etre une option. Ecrire 0 PV ne tue pas (verifie en jeu) :
+    # le client passe par la vraie mort du jeu, donc la fonction dit seulement si le piege doit tuer.
+    from nier_automata.game.traps import trap_kills
+    assert damage_after_trap(hp=30, max_hp=1000, percent=10) == 1
+    assert not trap_kills(hp=30, max_hp=1000, percent=10, lethal=False)
+    assert trap_kills(hp=30, max_hp=1000, percent=10, lethal=True)
+    assert trap_kills(hp=100, max_hp=1000, percent=10, lethal=True)
+    assert not trap_kills(hp=500, max_hp=1000, percent=10, lethal=True)

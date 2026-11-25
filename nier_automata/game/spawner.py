@@ -43,8 +43,9 @@ def choose_enemy_type(loaded: Sequence[tuple[int, str]],
     """loaded : (objId, nom de fiche) des ennemis vivants. Exclut les carcasses.
     basic_only : seulement les petites machines de base (em0000 / em0010) si la zone en a."""
     ids = sorted({oid for oid, name in loaded if oid >> 16 == 2 and name not in NOT_SPAWNABLE_NAMES})
-    if basic_only:
-        ids = [i for i in ids if i & 0xFFFF < 0x20] or ids
+    # em0000-em001f : petites machines ; a partir de em4000 : geants, Adam / Eve (em5100), boss -> jamais clones
+    limit = 0x20 if basic_only else 0x4000
+    ids = [i for i in ids if i & 0xFFFF < limit]
     return rng(ids) if ids else None
 
 

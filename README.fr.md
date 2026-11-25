@@ -56,10 +56,10 @@ Chaque check porte le nom de son lieu : un indice dit donc ou aller.
 Armes, les 16 programmes de Pod autres que le laser de depart (`pod_programs`), capacites (double saut, dash
 aerien, esquive au sol, tir du Pod, attaques...), soins et bonus, argent, et pieges :
 - **Damage Trap / Heavy Damage Trap** : `damage_trap_percent` des PV max (5-50, defaut 20), le double pour
-  le lourd. Ne tue jamais sauf si `lethal_traps` est active.
+  le lourd. Ne tue jamais (1 PV au pire) sauf si `lethal_traps` est active.
 - **Money Trap** : perte de 10 % des G.
-- **Enemy Trap** : 3 ennemis apparaissent a cote du joueur (`enemy_trap_enemies` : `basic` petites machines
-  ou `random`).
+- **Enemy Trap** : 3 petites machines apparaissent a cote du joueur (un type deja present dans la zone ; s'il
+  n'y en a pas, des degats a la place). Les boss et les grosses machines ne sont jamais copies.
 - **System Failure: Light Attack / Heavy Attack / Pod Fire** : ce systeme ne repond plus pendant 20 secondes.
 - **Self-Destruct Trap** : l'autodestruction du jeu, court compte a rebours puis explosion, il reste 1 PV.
 - **E-Drug Trap** : l'effet E-Drug du jeu, image et son brouilles pendant 30 secondes.
@@ -94,8 +94,7 @@ le monde ouvert. Molette pour zoomer, glisser pour deplacer.
   quete annexe ratable "Camp Development" : ses AP Items ne contiennent jamais d'objet important.
 - Les pieges Self-Destruct et E-Drug ont ete essayes a pied avec 2B, en combat de boss (les deux
   marchent), en sequence de vol et pendant un piratage de 9S (l'E-Drug s'y affiche ; le Self-Destruct attend
-  le retour a pied, et les objets recus apres lui attendent avec lui). `lethal_traps` et le mode `random` du piege a ennemis ne sont
-  couverts que par les tests automatiques.
+  le retour a pied, et les objets recus apres lui attendent avec lui).
 - Titres des mails : ouvrir un point d'acces ~10 s la premiere fois apres chaque lancement du jeu.
 - Ne pas charger une autre sauvegarde que celle de la seed.
 

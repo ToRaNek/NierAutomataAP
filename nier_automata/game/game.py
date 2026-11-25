@@ -14,7 +14,7 @@ from ..data.weapons import WEAPONS
 import struct
 
 from .deathlink import HP_OFFSET, MAX_HP_COPY_OFFSET, add_funds
-from .traps import CutsceneHold, damage_after_trap, damage_percent, funds_after_trap
+from .traps import CutsceneHold, damage_after_trap, damage_percent, funds_after_trap, trap_kills
 from .inventory import item_table, weapon_table
 from .memory import ProcessMemory, read_cstr, read_u32
 
@@ -64,9 +64,8 @@ class NierGame:
         from .traps import Jams
         self.jams = Jams()
         self.cutscene_hold = CutsceneHold()
-        self.damage_trap_percent = 20       # options de la partie (slot_data)
-        self.enemy_trap_basic = True
         self.lethal_traps = False
+        self.damage_trap_percent = 20       # options de la partie (slot_data)
 
     def attach(self) -> bool:
         if self.mem is not None and self.mem.is_alive():
@@ -214,6 +213,7 @@ class NierGame:
         return True  # objet inconnu : ignore plutot que bloquer la file
 
     SET_ACTION_RVA = 0x433C70      # setAction(joueur, action, 0, 0, 0) ; 0x38 = explosion d'autodestruction
+    DEATH_ACTION = 0x35            # action de mort du joueur (suivie de 0x36 puis de l'ecran "Body Report")
     EDRUG_RVA = 0x52D160           # effet de l'objet E-Drug sur le joueur
     ACTION_OFFSET = 0x670
     WORLD_LOADED_RVA = 0xF6E3C0
@@ -243,6 +243,14 @@ class NierGame:
             if kind == "edrug":
                 remote_call(self.mem, self.mem.base + self.EDRUG_RVA, p)
                 return True
+            import time
+            from .traps import self_destruct_clear
+            reads = []
+            for _ in range(4):                 # 0,45 s : couvre le passage a 0 pendant un piratage
+                time.sleep(0.15)
+                reads.append(struct.unpack("<I", self.mem.read(p + self.ACTION_OFFSET, 4))[0])
+            if not self_destruct_clear(reads):
+                return False
             remote_call(self.mem, self.mem.base + self.SET_ACTION_RVA, p, 0x38, 0, 0, e=0)
         except OSError:
             return False
@@ -289,8 +297,12 @@ class NierGame:
         p = self.entity()
         if p is None:
             return False
+        # Ecrire 0 PV ne suffit pas (le jeu remet 1 PV, verifie en jeu) : il faut aussi l'action de mort que le
+        # jeu pose lui-meme quand un ennemi tue le joueur (0x35 puis 0x36, releve en jeu).
+        from .spawner import remote_call
         try:
             self.mem.write(p + HP_OFFSET, struct.pack("<I", 0))
+            remote_call(self.mem, self.mem.base + self.SET_ACTION_RVA, p, self.DEATH_ACTION, 0, 0, e=0)
         except OSError:
             return False
         return True
@@ -318,8 +330,12 @@ class NierGame:
         if kind == "spawn":
             from .spawner import spawn_enemies
             pos = struct.unpack("<3f", self.mem.read(self.mem.base + self._off["playerLocation"], 12))
-            if spawn_enemies(self.mem, pos, count=percent, basic_only=self.enemy_trap_basic):
-                return True
+            # petites machines seulement : un type moyen a fait planter le jeu, un boss se faisait cloner (vu en jeu)
+            try:
+                if spawn_enemies(self.mem, pos, count=percent, basic_only=True):
+                    return True
+            except OSError:
+                return False
             kind, percent = "damage", 1  # aucun ennemi charge dans la zone : degats a la place
         if kind == "money":
             funds = read_u32(self.mem, self._off["funds"])
@@ -334,7 +350,9 @@ class NierGame:
             if hp == 0 or max_hp == 0:
                 return False
             pct = damage_percent(percent, self.damage_trap_percent)
-            self.mem.write(p + HP_OFFSET, struct.pack("<I", damage_after_trap(hp, max_hp, pct, self.lethal_traps)))
+            if trap_kills(hp, max_hp, pct, self.lethal_traps):
+                return self.kill()
+            self.mem.write(p + HP_OFFSET, struct.pack("<I", damage_after_trap(hp, max_hp, pct)))
         except OSError:
             return False
         return True

@@ -117,7 +117,6 @@ class NierContext(CommonContext):
             self.randomized_abilities = set(sd.get("randomized_abilities", []))
             self.nier.damage_trap_percent = int(sd.get("damage_trap_percent", 20))
             self.nier.lethal_traps = bool(sd.get("lethal_traps", False))
-            self.nier.enemy_trap_basic = sd.get("enemy_trap_enemies", "basic") != "random"
             self.ap_items_on = bool(self.scope.pickups)
             self.ap_contents = {}
             self.ap_flags = {}

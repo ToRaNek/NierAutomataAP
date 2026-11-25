@@ -22,6 +22,8 @@ NieR:Automata:
   access_point_checks: true
   # Side quests ("Quest: Lost Girl"). Quests that can be missed never hold an important item.
   quest_checks: true
+  # Main endings reached before the goal ("Ending A", "Ending B"...). The goal ending itself is not a check.
+  ending_checks: true
   # AP Items sold at the top of the shops (Camp, Pascal's Village, Castle) and their price.
   shop_checks: 2
   shop_price: 300
@@ -31,10 +33,18 @@ NieR:Automata:
   weapon_checks: 8
   # Abilities locked until received (add "Pod Fire", "Pod Program" for a pod-less start).
   randomized_abilities: ["Double Jump", "Air Dash", "Ground Evade"]
+  # The 16 Pod programs other than the starting laser are items found in the multiworld.
+  pod_programs: true
+  # Programs found in the game itself send a check and are taken back, like weapons (0-16, 0 = off).
+  pod_program_checks: 4
   # Start with a few healing items and one attack and one defense boost (the early game is the hardest part).
   starter_kit: true
   # Percentage of traps among filler items.
   trap_percentage: 20
+  # Max HP removed by a Damage Trap (5-50; a Heavy Damage Trap removes twice as much, never kills).
+  damage_trap_percent: 20
+  # true: a damage trap kills you when it removes more HP than you have left (false: 1 HP at worst).
+  lethal_traps: false
   # First pickup of each material = one check (many checks).
   item_checks: false
   death_link: false

@@ -4,9 +4,15 @@ from __future__ import annotations
 import math
 
 
-def damage_after_trap(hp: int, max_hp: int, percent: int, lethal: bool = False) -> int:
-    """PV apres un piege de degats (% des PV max). Sans l'option lethal_traps un piege ne tue jamais (1 PV)."""
-    return max(0 if lethal else 1, hp - math.ceil(max_hp * percent / 100))
+def damage_after_trap(hp: int, max_hp: int, percent: int) -> int:
+    """PV apres un piege de degats (% des PV max). Un piege ne tue jamais : minimum 1 PV (ecrire 0 PV ne tue
+    pas, le jeu remet 1 PV : verifie en jeu ; un piege mortel passe par NierGame.kill, voir trap_kills)."""
+    return max(1, hp - math.ceil(max_hp * percent / 100))
+
+
+def trap_kills(hp: int, max_hp: int, percent: int, lethal: bool) -> bool:
+    """Avec l'option lethal_traps : le piege tue si ses degats atteignent les PV restants."""
+    return bool(lethal and hp - math.ceil(max_hp * percent / 100) <= 0)
 
 
 def damage_percent(factor: int, base_percent: int) -> int:
@@ -53,6 +59,14 @@ _BUSY_ACTIONS = {0x37, 0x38, 0x39, 0x41, 0x46, 0xC7, 0xAC, 0xAD}
 
 FLYING_ACTION = 0x84     # unite de vol : le jeu annule l'autodestruction aussitot (verifie en jeu)
 HACKING_ACTION = 0x42    # mini-jeu de piratage de 9S : meme annulation (verifie en jeu)
+HACK_START_ACTION = 0xAF  # animation de lancement / de sortie du piratage
+_NO_SELF_DESTRUCT = (FLYING_ACTION, HACKING_ACTION, HACK_START_ACTION)
+
+
+def self_destruct_clear(actions) -> bool:
+    """Plusieurs lectures de l'action a la suite : aucune ne doit etre un etat de vol ou de piratage
+    (pendant le piratage l'action retombe a 0 pendant ~0,1 s)."""
+    return not any(a in _NO_SELF_DESTRUCT or a in _BUSY_ACTIONS for a in actions)
 
 
 def effect_allowed(world_loaded: bool, menu_closed: bool, action: int, hp: int, kind: str = "",
@@ -60,6 +74,6 @@ def effect_allowed(world_loaded: bool, menu_closed: bool, action: int, hp: int, 
     """Peut-on lancer un effet du jeu sur le joueur maintenant ? Sinon le client reessaie au tour suivant."""
     if cutscene:
         return False
-    if kind == "selfdestruct" and action in (FLYING_ACTION, HACKING_ACTION):
+    if kind == "selfdestruct" and action in _NO_SELF_DESTRUCT:
         return False
     return bool(world_loaded and menu_closed and action not in _BUSY_ACTIONS and hp > 1)

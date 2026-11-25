@@ -86,18 +86,9 @@ class DamageTrapPercent(Range):
 
 
 class LethalTraps(Toggle):
-    """Off: a damage trap always leaves you at 1 HP at worst. On: a damage trap can kill you if you are low
-    on HP. A Self-Destruct Trap always leaves 1 HP, like the game's own self-destruct."""
+    """Off: a damage trap always leaves you at 1 HP at worst. On: a damage trap kills you when it removes
+    more HP than you have left (a real death, with the game's own death screen)."""
     display_name = "Lethal Traps"
-
-
-class EnemyTrapEnemies(Choice):
-    """Enemies spawned by an Enemy Trap: basic (small machines when the area has some) or random (any enemy
-    type present in the area, which can be a big one)."""
-    display_name = "Enemy Trap Enemies"
-    option_basic = 0
-    option_random = 1
-    default = 0
 
 
 class MaxLevelCheck(Range):
@@ -200,7 +191,6 @@ class NierAutomataOptions(PerGameCommonOptions):
     max_level_check: MaxLevelCheck
     trap_percentage: TrapPercentage
     damage_trap_percent: DamageTrapPercent
-    enemy_trap_enemies: EnemyTrapEnemies
     lethal_traps: LethalTraps
     pod_programs: PodPrograms
     pod_program_checks: PodProgramChecks

@@ -174,7 +174,6 @@ class NierAutomataWorld(World):
             "starter_kit": bool(o.starter_kit),
             "damage_trap_percent": o.damage_trap_percent.value,
             "lethal_traps": bool(o.lethal_traps),
-            "enemy_trap_enemies": o.enemy_trap_enemies.current_key,
             "ending_checks": bool(o.ending_checks),
             "pod_program_checks": self.scope.program_checks,
             "death_link": bool(o.death_link),

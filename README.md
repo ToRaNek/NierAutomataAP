@@ -54,9 +54,10 @@ Everything is named after where it is, so a hint tells you where to go.
 Weapons, the 16 Pod programs other than the starting laser (`pod_programs`), abilities (double jump, air
 dash, ground evade, pod fire, attacks...), recovery items and boosts, money, and traps:
 - **Damage Trap / Heavy Damage Trap**: `damage_trap_percent` of max HP (5-50, default 20), twice for the
-  heavy one. Never kills unless `lethal_traps` is on.
+  heavy one. Never kills (1 HP at worst) unless `lethal_traps` is on.
 - **Money Trap**: lose 10% of your money.
-- **Enemy Trap**: 3 enemies appear next to you (`enemy_trap_enemies`: `basic` small machines or `random`).
+- **Enemy Trap**: 3 small machines appear next to you (a type already present in the area; if the area has
+  none, you take damage instead). Bosses and big machines are never copied.
 - **System Failure: Light Attack / Heavy Attack / Pod Fire**: that system stops answering for 20 seconds.
 - **Self-Destruct Trap**: the game's own self-destruct, short countdown then explosion, leaves you at 1 HP.
 - **E-Drug Trap**: the game's E-Drug effect, picture and sound scrambled for 30 seconds.
@@ -89,7 +90,7 @@ Scroll to zoom, drag to move.
   side quest "Camp Development", so its AP Items never hold an important item.
 - The Self-Destruct and E-Drug traps were tried on foot as 2B, in a boss fight (both work), in a flying section
   and during a 9S hack (E-Drug shows there; Self-Destruct waits until you are back on foot, and the items
-  received after it wait with it). `lethal_traps` and the `random` enemy trap mode are covered by automated tests only.
+  received after it wait with it).
 - Mail titles: open an access point for ~10 s the first time after each game launch.
 - Don't load another save than the one of the seed.
 

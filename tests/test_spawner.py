@@ -64,6 +64,16 @@ def test_enemy_trap_can_be_limited_to_basic_enemies():
     choose_enemy_type(loaded, rng=lambda xs: seen.append(xs) or xs[0], basic_only=True)
     assert seen[-1] == [0x20000, 0x20010]
     choose_enemy_type(loaded, rng=lambda xs: seen.append(xs) or xs[0])
-    assert len(seen[-1]) == 4
-    # aucun ennemi de base charge dans la zone : n'importe lequel plutot que rien
-    assert choose_enemy_type([(0x21000, "")], rng=lambda xs: xs[0], basic_only=True) == 0x21000
+    assert seen[-1] == [0x20000, 0x20010, 0x21000]      # 0x28000 (gros) exclu
+    # aucun ennemi de base charge dans la zone : rien (le piege devient des degats), jamais un boss
+    assert choose_enemy_type([(0x21000, "")], rng=lambda xs: xs[0], basic_only=True) is None
+
+
+def test_enemy_trap_never_clones_a_boss():
+    # vu en jeu (combat contre Adam, 0x25100) : le piege clonait le boss 3 fois
+    arena = [(0x21080, ""), (0x21081, ""), (0x25100, "")]
+    seen = []
+    assert choose_enemy_type(arena, rng=lambda xs: seen.append(xs) or xs[0]) == 0x21080
+    assert seen[-1] == [0x21080, 0x21081]
+    assert choose_enemy_type(arena, rng=lambda xs: xs[0], basic_only=True) is None
+    assert choose_enemy_type([(0x25100, "")], rng=lambda xs: xs[0]) is None
