@@ -65,6 +65,11 @@ Chaque check porte le nom de son lieu : un indice dit donc ou aller.
   quetes annexes encore ouvertes) pour que tu continues tes checks. Quand l'objet arrive, le client t'emmene
   tout seul au debut de la nouvelle route. Les deux deplacements sont des sauts de chapitre, comme le menu
   Chapter Select du jeu.
+- `chapter_locks` (active par defaut, routes B et C/D seulement) : chaque grand chapitre apres le premier de la
+  route demande une cle de plus (**B Chapter Key**, 9 au plus ; **C/D Chapter Key**, 6 au plus). Sans assez de
+  cles, le client te ramene au debut de la derniere partie du chapitre precedent ; quand la cle arrive, il
+  t'emmene au debut du chapitre attendu. La route A n'a pas de cle de chapitre : ses zones sont fermees par les
+  Pass. Avec tous les verrous et la fin E en objectif, ca fait 23 verrous : 6 Pass, 2 objets de route, 15 cles.
 
 ## Objets recus
 Armes, les 16 programmes de Pod autres que le laser de depart (`pod_programs`), capacites (double saut, dash
@@ -125,6 +130,10 @@ Sans ca, un check sous terre se confond avec ce qui est en surface au meme endro
 - Routes verrouillees : essayees en jeu pour les routes B et C/D (retour en arriere sans l'objet, route lancee
   quand l'objet arrive du serveur, premier check de la route envoye). Le message "Ferme" d'une route n'a pas
   encore ete vu a l'ecran. Essaye en sautant au debut de chaque route, pas en jouant une vraie fin.
+- Chapitres verrouilles : essayes en jeu sur un chapitre de la route B et un de la route C/D (retour en arriere
+  sans la cle, chapitre lance quand la cle arrive, son check envoye). Les autres chapitres utilisent le meme code
+  et des debuts de chapitre deja atteints par saut pendant la campagne de test, mais chaque verrou n'a pas ete
+  essaye un par un.
 - Titres des mails : ouvrir un point d'acces ~10 s la premiere fois apres chaque lancement du jeu.
 - Ne pas charger une autre sauvegarde que celle de la seed.
 

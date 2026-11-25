@@ -1,0 +1,596 @@
+{
+"7": [
+"A",
+"2B",
+256,
+"51_AB_MainDesert"
+],
+"8": [
+"A",
+"2B",
+256,
+"51_10_AB_Danchi_EV"
+],
+"9": [
+"A",
+"2B",
+256,
+"56_AB_Danchi_Boss_EV1"
+],
+"10": [
+"A",
+"2B",
+256,
+"58_50_AB_Goto_AmusementPark"
+],
+"11": [
+"A",
+"2B",
+256,
+"70_AB_Amusement_Park"
+],
+"12": [
+"A",
+"2B",
+256,
+"70_10_AB_Park_Tank"
+],
+"13": [
+"A",
+"2B",
+256,
+"76_10_AB_Amusement_Park_Boss"
+],
+"14": [
+"A",
+"2B",
+256,
+"79_50_AB_Goto_Pascal_Village"
+],
+"15": [
+"A",
+"2B",
+512,
+"80_00_AB_Pascal_Village"
+],
+"16": [
+"A",
+"2B",
+256,
+"90_00_AB_Ruined_City"
+],
+"17": [
+"A",
+"2B",
+512,
+"00_AB_Ruined_City"
+],
+"18": [
+"A",
+"2B",
+512,
+"10_10_AB_Alien_Ship_Start"
+],
+"19": [
+"A",
+"2B",
+512,
+"20_AB_Bunker"
+],
+"20": [
+"A",
+"2B",
+512,
+"40_00_AB_ShopM_EmilQuest_Start"
+],
+"21": [
+"A",
+"2B",
+512,
+"40_70_AB_ShopM_EmilQuest_End"
+],
+"22": [
+"A",
+"2B",
+512,
+"60_10_AB_Forest_Castle_Castle"
+],
+"23": [
+"A",
+"2B",
+512,
+"60_20_AB_Forest_Castle_Throne"
+],
+"24": [
+"A",
+"2B",
+512,
+"80_00_AB_Pascal_Village"
+],
+"25": [
+"A",
+"2B",
+512,
+"80_20_AB_Submerge_City"
+],
+"28": [
+"A",
+"2B",
+512,
+"100_A_Submerge_City_2B"
+],
+"29": [
+"A",
+"2B",
+512,
+"130_00_A_Resistance_Camp"
+],
+"30": [
+"A",
+"2B",
+512,
+"140_40_A_RobotM_CR_UnderFactory"
+],
+"31": [
+"A",
+"2B",
+512,
+"140_90_A_RobotM_CR_UF_Exit"
+],
+"32": [
+"A",
+"2B",
+512,
+"160_A_Ruined_City_2B"
+],
+"33": [
+"A",
+"2B",
+512,
+"180_AB_Ruined_Front_Of_Camp"
+],
+"34": [
+"A",
+"2B",
+512,
+"190_AB_Pascal_Village"
+],
+"35": [
+"A",
+"2B",
+512,
+"200_00_AB_Ruined_City_Eve_EV"
+],
+"36": [
+"A",
+"2B",
+512,
+"200_80_AB_Ruined_City_end"
+],
+"37": [
+"B",
+"9S",
+256,
+"00_00_B_RobotM_Pro_RobotBrother"
+],
+"38": [
+"B",
+"9S",
+256,
+"00_80_B_RobotM_Pro_BossArea"
+],
+"39": [
+"B",
+"9S",
+256,
+"05_10_B_RobotM_ProBoss_phase1"
+],
+"40": [
+"B",
+"9S",
+256,
+"13_B_bunker_Setup"
+],
+"41": [
+"B",
+"9S",
+256,
+"16_AB_bunker_Order"
+],
+"42": [
+"B",
+"9S",
+256,
+"30_AB_Ruined_City_ForcedLanding"
+],
+"43": [
+"B",
+"9S",
+256,
+"50_AB_Desert_temple"
+],
+"44": [
+"B",
+"9S",
+256,
+"51_AB_MainDesert"
+],
+"45": [
+"B",
+"9S",
+256,
+"51_10_AB_Danchi_EV"
+],
+"46": [
+"B",
+"9S",
+256,
+"56_AB_Danchi_Boss_EV1"
+],
+"47": [
+"B",
+"9S",
+256,
+"58_50_AB_Goto_AmusementPark"
+],
+"48": [
+"B",
+"9S",
+256,
+"70_AB_Amusement_Park"
+],
+"49": [
+"B",
+"9S",
+256,
+"70_10_AB_Park_Tank"
+],
+"50": [
+"B",
+"9S",
+256,
+"76_10_AB_Amusement_Park_Boss"
+],
+"51": [
+"B",
+"9S",
+256,
+"79_50_AB_Goto_Pascal_Village"
+],
+"52": [
+"B",
+"9S",
+512,
+"80_00_AB_Pascal_Village"
+],
+"53": [
+"B",
+"9S",
+256,
+"90_00_AB_Ruined_City"
+],
+"54": [
+"B",
+"9S",
+512,
+"00_AB_Ruined_City"
+],
+"55": [
+"B",
+"9S",
+512,
+"10_10_AB_Alien_Ship_Start"
+],
+"56": [
+"B",
+"9S",
+512,
+"20_AB_Bunker"
+],
+"57": [
+"B",
+"9S",
+512,
+"40_00_AB_ShopM_EmilQuest_Start"
+],
+"58": [
+"B",
+"9S",
+512,
+"40_70_AB_ShopM_EmilQuest_End"
+],
+"59": [
+"B",
+"9S",
+512,
+"60_10_AB_Forest_Castle_Castle"
+],
+"60": [
+"B",
+"9S",
+512,
+"60_20_AB_Forest_Castle_Throne"
+],
+"61": [
+"B",
+"9S",
+512,
+"80_00_AB_Pascal_Village"
+],
+"62": [
+"B",
+"9S",
+512,
+"80_20_AB_Submerge_City"
+],
+"64": [
+"B",
+"9S",
+512,
+"96_B_Pod_Talk"
+],
+"65": [
+"B",
+"9S",
+512,
+"110_00_B_Copy_City"
+],
+"66": [
+"B",
+"9S",
+512,
+"120_AB_Bunker"
+],
+"67": [
+"B",
+"9S",
+512,
+"140_B_Banker_9S"
+],
+"68": [
+"B",
+"9S",
+512,
+"140_90_B_Banker_9S"
+],
+"69": [
+"B",
+"9S",
+512,
+"150_B_Banker_9S"
+],
+"70": [
+"B",
+"9S",
+512,
+"180_AB_Ruined_Front_Of_Camp"
+],
+"71": [
+"B",
+"9S",
+512,
+"190_AB_Pascal_Village"
+],
+"72": [
+"B",
+"9S",
+512,
+"200_00_AB_Ruined_City_Eve_EV"
+],
+"73": [
+"B",
+"9S",
+512,
+"200_80_AB_Ruined_City_end"
+],
+"74": [
+"C",
+"2B",
+768,
+"00_10_CD_Bunker_Hangar_2B"
+],
+"75": [
+"C",
+"9S",
+768,
+"10_CD_Ruined_City_9S"
+],
+"76": [
+"C",
+"2B",
+768,
+"20_CD_Ruined_City_2B"
+],
+"77": [
+"C",
+"9S",
+768,
+"26_10_CD_Ruined_City_9S"
+],
+"78": [
+"C",
+"2B",
+768,
+"30_00_CD_Bunker_2B"
+],
+"79": [
+"C",
+"2B",
+768,
+"50_CD_Submerge_City_2B"
+],
+"80": [
+"C",
+"9S",
+768,
+"50_20_CD_Ruined_City_2BDead_9S"
+],
+"81": [
+"C",
+"A2",
+768,
+"70_00_CD_1_Ruined_City"
+],
+"82": [
+"C",
+"A2",
+768,
+"80_CD_1_Desert_A2"
+],
+"83": [
+"C",
+"9S",
+768,
+"140_CD_1_Resistance_Camp_9S"
+],
+"84": [
+"C",
+"9S",
+768,
+"150_CD_Ruined_City_9S"
+],
+"85": [
+"C",
+"9S",
+768,
+"160_00_CD_1_Forest_Castle_9S"
+],
+"86": [
+"C",
+"9S",
+768,
+"160_10_CD_1_Forest_Castle_9S"
+],
+"87": [
+"C",
+"A2",
+768,
+"90_CD_2_Pascal_Village_A2_SQ"
+],
+"88": [
+"C",
+"A2",
+768,
+"95_CD_2_Pascal_Village_A2"
+],
+"89": [
+"C",
+"A2",
+768,
+"100_CD_2_Desert_A2"
+],
+"90": [
+"C",
+"A2",
+768,
+"110_CD_2_Pascal_Village_A2"
+],
+"91": [
+"C",
+"A2",
+768,
+"120_00_CD_2_RobotM_Shelter_A2"
+],
+"92": [
+"C",
+"9S",
+768,
+"180_00_CD_2_Forest_Castle_9S_2"
+],
+"93": [
+"C",
+"9S",
+768,
+"180_10_CD_2_Submerge_City_9S"
+],
+"94": [
+"C",
+"9S",
+768,
+"220_10_CD_GotoCamp_Yoroyoro_9S"
+],
+"95": [
+"C",
+"9S",
+768,
+"220_20_CD_ResiCamp_DeboPopo_HD"
+],
+"96": [
+"C",
+"A2",
+768,
+"200_CD_Robot_Mountain_A2"
+],
+"97": [
+"C",
+"9S",
+768,
+"240_10_CD_Amusement_Park_9S"
+],
+"98": [
+"C",
+"A2",
+768,
+"240_50_CD_Amusement_Park_A2"
+],
+"99": [
+"C",
+"9S",
+768,
+"250_CD_Unknown_9S"
+],
+"100": [
+"C",
+"9S",
+768,
+"275_CD_Tower_walk_9S"
+],
+"101": [
+"C",
+"A2",
+768,
+"280_CD_Ruined_City_A2"
+],
+"102": [
+"C",
+"A2",
+768,
+"290_CD_Tower_A2"
+],
+"103": [
+"C",
+"9S",
+768,
+"295_CD_Tower_SelfHack_9S"
+],
+"104": [
+"C",
+"A2",
+768,
+"297_CD_Tower_Library_A2"
+],
+"105": [
+"C",
+"A2",
+768,
+"300_00_CD_Tower_Elevator_A2"
+],
+"106": [
+"C",
+"A2",
+768,
+"315_CD_Tower_Unite"
+],
+"107": [
+"C",
+"9S",
+768,
+"332_CD_Tower_Talk"
+],
+"108": [
+"C",
+"9S",
+768,
+"340_C_Tower_9Swin"
+]
+}

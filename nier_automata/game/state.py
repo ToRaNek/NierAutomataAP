@@ -45,6 +45,7 @@ class ClientState:
     ap_spawned_spots: set[int] = field(default_factory=set)
     linked: bool = False  # partie deja acceptee pour cette seed
     waiting_route: str = ""  # route verrouillee dont on attend l'objet (joueur ramene dans la precedente)
+    waiting_chapter: int = -1  # chapitre verrouille dont on attend la cle (indice worlddb), -1 = aucun
     hints: list = field(default_factory=list)  # [(objet, pour qui, emplacement)] dans notre partie
 
     def to_dict(self) -> dict:
@@ -73,6 +74,7 @@ class ClientState:
             "ap_spawned_spots": sorted(self.ap_spawned_spots),
             "linked": self.linked,
             "waiting_route": self.waiting_route,
+            "waiting_chapter": self.waiting_chapter,
             "hints": [list(h) for h in self.hints],
         }
 
@@ -121,4 +123,5 @@ class ClientState:
                    ap_spawned_spots=set(d.get("ap_spawned_spots", [])),
                    linked=bool(d.get("linked", False)),
                    waiting_route=d.get("waiting_route", ""),
+                   waiting_chapter=d.get("waiting_chapter", -1),
                    hints=[tuple(h) for h in d.get("hints", [])])

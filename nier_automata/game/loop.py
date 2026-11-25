@@ -7,6 +7,7 @@ from ..data import worlddb as db
 from ..data.items_data import MATERIALS, POD_PROGRAMS, SUPPLY_DROPS
 from ..data.phases import is_prologue
 from ..data.routes import locked_route
+from ..data import chapterlocks
 from ..data.tables import (access_point_location, chest_location, ending_location, program_location, item_location, level_location,
                            location_name_to_id, pickup_location, quest_location, story_location, weapon_location)
 from ..data.weapons import STARTING_WEAPONS, WEAPONS
@@ -37,6 +38,7 @@ class TickResult:
     goal: bool = False
     refused: bool = False
     locked_route: str = ""      # route dont l'objet manque : le client ramene le joueur en arriere
+    locked_chapter: int = -1    # chapitre dont la cle manque (indice worlddb), -1 = aucun
 
 
 def new_state(seed: str, slot: int) -> ClientState:
@@ -155,8 +157,14 @@ def tick(game, state: ClientState, received: list[str], trackers: Trackers) -> T
     keys = getattr(scope, "route_keys", None)
     if keys:
         result.locked_route = locked_route(state.route, db.next_route(state.route, phase), keys, set(received))
-    if not result.locked_route:     # route verrouillee : ni chapitre valide ni changement de route
-        trackers.story.check(phase, game.phase_id() if hasattr(game, "phase_id") else None)
+    phase_id = game.phase_id() if hasattr(game, "phase_id") else None
+    chapter_keys = getattr(scope, "chapter_keys", None)
+    if chapter_keys and not result.locked_route:
+        i = db.match_chapter(phase, db.next_route(state.route, phase), phase_id)
+        if i is not None and i not in state.chapters and chapterlocks.locked(i, chapter_keys, received):
+            result.locked_chapter = i
+    if not result.locked_route and result.locked_chapter < 0:    # verrou : ni chapitre valide ni changement de route
+        trackers.story.check(phase, phase_id)
 
     # 5 bis. ravitaillement a l'entree des passages durs (une fois)
     if getattr(scope, "supplies", False):

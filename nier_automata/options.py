@@ -186,6 +186,14 @@ class RouteLocks(DefaultOnToggle):
     display_name = "Route Locks"
 
 
+class ChapterLocks(DefaultOnToggle):
+    """In routes B and C/D, each big chapter after the first one of the route needs one more key ("B Chapter Key",
+    "C/D Chapter Key"). Without enough keys the client takes you back to the start of the last part of the
+    previous chapter; when the key arrives it takes you to the start of the chapter you were waiting for.
+    Route A has no chapter keys: its areas are already closed by the Passes."""
+    display_name = "Chapter Locks"
+
+
 class Goal(Choice):
     """Victory condition, which also sets how much of the game has checks.
     story_progress: finish chapter `story_chapter` of route `story_route` (short game, adjustable).
@@ -225,5 +233,6 @@ class NierAutomataOptions(PerGameCommonOptions):
     randomized_abilities: RandomizedAbilities
     area_locks: AreaLocks
     route_locks: RouteLocks
+    chapter_locks: ChapterLocks
     goal: Goal
     death_link: DeathLink

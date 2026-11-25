@@ -26,6 +26,7 @@ from .game.abilities import AbilityLock
 from .game.arealock import AreaLock, area_lock_active
 from .data.areas import zone_name
 from .data.routes import PARK, START
+from .data import chapterlocks
 from .game import phasejump
 from .game.deathlink import DeathTracker
 from .game.game import NierGame, backup_saves
@@ -332,6 +333,41 @@ async def area_loop(ctx: NierContext):
 ROUTE_JUMP_PAUSE = 30.0      # secondes entre deux sauts : laisse le chargement finir
 
 
+async def chapter_step(ctx: NierContext, locked: int, received: list) -> None:
+    """Grands chapitres verrouilles (option chapter_locks) des routes B et C/D. `locked` = indice du chapitre que
+    le joueur vient d'atteindre sans assez de cles : on le ramene au debut du dernier sous-chapitre du grand
+    chapitre precedent. Quand la cle arrive, on l'emmene au debut du grand chapitre attendu."""
+    import time
+    keys = getattr(ctx.scope, "chapter_keys", None) or {}
+    if not keys:
+        return
+    st, mem = ctx.state, ctx.nier.mem
+    if st.waiting_chapter >= 0 and st.waiting_chapter in st.chapters:
+        st.waiting_chapter = -1
+    now = time.monotonic()
+    if now < getattr(ctx, "route_next", 0.0) or ctx.nier.in_cutscene():
+        return
+    if locked >= 0:
+        park, start = chapterlocks.park_chapter(locked), chapterlocks.start_chapter(locked)
+        if park is None or start is None:
+            return
+        if await asyncio.to_thread(phasejump.jump, mem, *chapterlocks.STARTS[park]):
+            st.waiting_chapter = start
+            ctx.route_next = now + ROUTE_JUMP_PAUSE
+            name = keys[db.CHAPTERS[locked]["route"]]
+            ctx.notes.insert(0, (i18n.t(getattr(ctx, "lang", "en"), "area_locked"), name))
+            logger.info("Chapter %s locked (needs %s): back to %s", db.CHAPTERS[locked]["chapter"], name,
+                        chapterlocks.STARTS[park][3])
+        return
+    w = st.waiting_chapter
+    if w >= 0 and not chapterlocks.locked(w, keys, received):
+        if await asyncio.to_thread(phasejump.jump, mem, *chapterlocks.STARTS[w]):
+            st.waiting_chapter = -1
+            ctx.route_next = now + ROUTE_JUMP_PAUSE
+            logger.info("Chapter key received: chapter %s starts (%s)", db.CHAPTERS[w]["chapter"],
+                        chapterlocks.STARTS[w][3])
+
+
 async def route_step(ctx: NierContext, locked: str, received: set) -> None:
     """Routes verrouillees (option route_locks). `locked` = route que le joueur vient d'entamer sans son objet :
     on le ramene dans la route precedente. Quand l'objet arrive, on l'emmene au debut de la route attendue."""
@@ -571,6 +607,7 @@ async def game_iteration(ctx: NierContext):
         await ctx.send_msgs([{"cmd": "LocationChecks", "locations": result.locations}])
     try:
         await route_step(ctx, result.locked_route, set(received))
+        await chapter_step(ctx, result.locked_chapter, received)
     except Exception as e:
         logger.info("route lock failed: %r", e)
     bought: list[int] = []

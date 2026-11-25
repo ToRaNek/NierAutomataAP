@@ -87,6 +87,7 @@ def item_name_to_id() -> dict[str, int]:
         ids[name] = BASE_CODE + 0x600 + i
     for i, name in enumerate(ROUTE_KEYS.values()):
         ids[name] = BASE_CODE + 0x680 + i
+    ids["B Chapter Key"], ids["C/D Chapter Key"] = BASE_CODE + 0x690, BASE_CODE + 0x691
     return ids
 
 

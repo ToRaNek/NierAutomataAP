@@ -38,6 +38,8 @@ NieR:Automata:
   area_locks: true
   # Route B needs "Route B Access" and route C/D needs "Route C/D Access" (only used past ending A).
   route_locks: true
+  # Routes B and C/D: each big chapter after the first needs one more "B Chapter Key" / "C/D Chapter Key".
+  chapter_locks: true
   # The 16 Pod programs other than the starting laser are items found in the multiworld.
   pod_programs: true
   # Programs found in the game itself send a check and are taken back, like weapons (0-16, 0 = off).
