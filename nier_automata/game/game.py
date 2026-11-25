@@ -65,6 +65,7 @@ class NierGame:
         self.jams = Jams()
         self.damage_trap_percent = 20       # options de la partie (slot_data)
         self.enemy_trap_basic = True
+        self.lethal_traps = False
 
     def attach(self) -> bool:
         if self.mem is not None and self.mem.is_alive():
@@ -315,7 +316,7 @@ class NierGame:
             if hp == 0 or max_hp == 0:
                 return False
             pct = damage_percent(percent, self.damage_trap_percent)
-            self.mem.write(p + HP_OFFSET, struct.pack("<I", damage_after_trap(hp, max_hp, pct)))
+            self.mem.write(p + HP_OFFSET, struct.pack("<I", damage_after_trap(hp, max_hp, pct, self.lethal_traps)))
         except OSError:
             return False
         return True

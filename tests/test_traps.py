@@ -59,3 +59,10 @@ def test_game_effect_traps_registered_and_guarded():
     assert not effect_allowed(**{**ok, "menu_closed": False})
     assert not effect_allowed(**{**ok, "action": 0x38})             # deja en autodestruction
     assert not effect_allowed(**{**ok, "hp": 1})
+
+
+def test_lethal_traps_option():
+    # avis du testeur : "un piege ne tue jamais" doit etre une option
+    assert damage_after_trap(hp=30, max_hp=1000, percent=10) == 1
+    assert damage_after_trap(hp=30, max_hp=1000, percent=10, lethal=True) == 0
+    assert damage_after_trap(hp=500, max_hp=1000, percent=10, lethal=True) == 400

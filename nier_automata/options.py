@@ -78,11 +78,17 @@ class TrapPercentage(Range):
 
 class DamageTrapPercent(Range):
     """Share of max HP removed by a Damage Trap. A Heavy Damage Trap removes twice as much (capped at 90%).
-    A trap never kills."""
+    A trap never kills unless lethal_traps is on."""
     display_name = "Damage Trap Percent"
     range_start = 5
     range_end = 50
     default = 20
+
+
+class LethalTraps(Toggle):
+    """Off: a damage trap always leaves you at 1 HP at worst. On: a damage trap (and the hit of a
+    Self-Destruct Trap) can kill you if you are low on HP."""
+    display_name = "Lethal Traps"
 
 
 class EnemyTrapEnemies(Choice):
@@ -184,6 +190,7 @@ class NierAutomataOptions(PerGameCommonOptions):
     trap_percentage: TrapPercentage
     damage_trap_percent: DamageTrapPercent
     enemy_trap_enemies: EnemyTrapEnemies
+    lethal_traps: LethalTraps
     pod_programs: PodPrograms
     starter_kit: StarterKit
     randomized_abilities: RandomizedAbilities
