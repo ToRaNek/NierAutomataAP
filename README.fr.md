@@ -145,9 +145,11 @@ Sans ca, un check sous terre se confond avec ce qui est en surface au meme endro
 - Cles de la Tour : essayees en jeu devant la Tour avec le vrai client et un serveur (sans cle la porte refuse ;
   cles reprises quand elles sont dans l'inventaire ; cles envoyees par le serveur : 9S pirate la porte et
   l'histoire continue). Le moment ou le jeu donne lui-meme une cle a ete joue pour la cle de la Foret (fin de
-  son unite de ressources : la cle apparait, le client la reprend 5 secondes plus tard et elle ne revient pas).
-  Le jeu remet aussi les cles au chargement d'un chapitre suivant ; le client les reprend en 15 secondes environ.
-  La remise de la cle du Parc n'a pas ete jouee.
+  son unite de ressources) et celle du Parc (dialogue des Pods au debut du chapitre 17) : le client reprend la
+  cle aussitot (il verifie dix fois par seconde) et elle ne revient pas. Le jeu remet aussi les cles au
+  chargement d'un chapitre suivant ; le client les reprend des que le jeu est jouable. La remise de la cle de
+  l'Ocean (fin d'un combat de boss) n'a pas ete jouee ; cette cle a seulement ete vue remise au chargement d'un
+  chapitre, puis reprise.
 - Titres des mails : ouvrir un point d'acces ~10 s la premiere fois apres chaque lancement du jeu.
 - Ne pas charger une autre sauvegarde que celle de la seed.
 

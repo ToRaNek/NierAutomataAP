@@ -323,6 +323,21 @@ def area_step(ctx: NierContext, now: float) -> None:
             ctx.notes.insert(0, (i18n.t(lang, "area_locked"), back.pass_name))    # avant la file d'attente
 
 
+def tower_keys_step(ctx: NierContext) -> None:
+    """Cles de la Tour donnees par le jeu : reprises tout de suite (10 fois par seconde). La boucle principale les
+    reprenait en quelques secondes, et le jeu les remet a chaque chargement de chapitre (vu en jeu)."""
+    scope, st, game = ctx.scope, ctx.state, ctx.nier
+    if scope is None or st is None or not getattr(scope, "tower_keys", False) or st.tower_opened or not st.linked:
+        return
+    if game.mem is None or not game.in_game():
+        return
+    from .data.towerkeys import to_remove
+    names = [ctx.item_names.lookup_in_game(i.item) for i in ctx.items_received][:st.next_item_index]
+    for kid in to_remove(game.owned_items(), names):
+        if game.remove_item(kid):
+            logger.info("Tower key taken back (the game gave it): item %s", kid)
+
+
 def area_thread(ctx: NierContext) -> None:
     """Zones verrouillees (option area_locks), 10 fois par seconde, dans un fil a part : dans la boucle principale
     du client, la premiere minute apres la connexion (notifications, pose des objets) espacait les verifications
@@ -332,6 +347,7 @@ def area_thread(ctx: NierContext) -> None:
         time.sleep(0.1)
         try:
             area_step(ctx, time.monotonic())
+            tower_keys_step(ctx)
         except Exception as e:
             logger.info("area lock failed: %r", e)
             time.sleep(1.0)
