@@ -66,3 +66,13 @@ def test_lethal_traps_option():
     assert damage_after_trap(hp=30, max_hp=1000, percent=10) == 1
     assert damage_after_trap(hp=30, max_hp=1000, percent=10, lethal=True) == 0
     assert damage_after_trap(hp=500, max_hp=1000, percent=10, lethal=True) == 400
+
+
+def test_self_destruct_waits_while_flying_but_edrug_does_not():
+    # vu en jeu (prologue en vol, action 0x84) : le jeu annule l'autodestruction en 0,5 s sans rien faire,
+    # le piege serait perdu ; l'E-Drug, lui, s'affiche normalement en vol
+    from nier_automata.game.traps import effect_allowed
+    fly = dict(world_loaded=True, menu_closed=True, action=0x84, hp=500)
+    assert not effect_allowed(**fly, kind="selfdestruct")
+    assert effect_allowed(**fly, kind="edrug")
+    assert effect_allowed(world_loaded=True, menu_closed=True, action=0, hp=500, kind="selfdestruct")

@@ -230,7 +230,7 @@ class NierGame:
             menu, = struct.unpack("<I", self.mem.read(self.mem.base + self.MENU_RVA, 4))
             action, = struct.unpack("<I", self.mem.read(p + self.ACTION_OFFSET, 4))
             hp, = struct.unpack("<I", self.mem.read(p + HP_OFFSET, 4))
-            if not effect_allowed(loaded != 0, menu == 1, action, hp):
+            if not effect_allowed(loaded != 0, menu == 1, action, hp, kind):
                 return False
             if kind == "edrug":
                 remote_call(self.mem, self.mem.base + self.EDRUG_RVA, p)
