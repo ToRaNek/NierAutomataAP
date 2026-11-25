@@ -6,7 +6,7 @@ from dataclasses import dataclass, field
 from ..data import worlddb as db
 from ..data.items_data import MATERIALS, SUPPLY_DROPS
 from ..data.phases import is_prologue
-from ..data.tables import (access_point_location, chest_location, item_location, level_location,
+from ..data.tables import (access_point_location, chest_location, ending_location, item_location, level_location,
                            location_name_to_id, pickup_location, quest_location, story_location, weapon_location)
 from ..data.weapons import STARTING_WEAPONS, WEAPONS
 from .state import ClientState
@@ -52,6 +52,7 @@ def due_locations(state: ClientState, scope: db.Scope) -> set[int]:
     due |= {_LOCS[pickup_location(i)] for i in state.ap_spots_collected & scope.pickups}
     due |= {_LOCS[access_point_location(i)] for i in state.access_points & scope.access_points}
     due |= {_LOCS[quest_location(i)] for i in state.quests_done & scope.quests}
+    due |= {_LOCS[ending_location(e)] for e in state.endings_seen & set(getattr(scope, "endings", ()))}
     due |= {_LOCS[level_location(n)] for n in range(2, min(state.max_level, scope.max_level) + 1)}
     return due
 
@@ -150,9 +151,17 @@ def tick(game, state: ClientState, received: list[str], trackers: Trackers) -> T
     if scope.quests and hasattr(game, "quests_done"):
         state.quests_done.update(i for i in game.quests_done() if i in scope.quests)
 
+    endings = frozenset()
+    if (scope.goal != db.GOAL_STORY or getattr(scope, "endings", ())) and hasattr(game, "endings"):
+        endings = game.endings()
+    state.endings_seen.update(e[-1] for e in endings if e[-2:] in ("_A", "_B", "_C", "_D"))
+    if state.route in ("B", "C"):
+        state.endings_seen.add("A")          # la route suivante a commence : la fin precedente a ete vue
+    if state.route == "C":
+        state.endings_seen.add("B")
+
     due = due_locations(state, scope)
     result.locations = sorted(due - state.sent_locations)
     state.sent_locations.update(result.locations)
-    endings = game.endings() if scope.goal != db.GOAL_STORY and hasattr(game, "endings") else frozenset()
     result.goal = goal_reached(state, phase, scope, endings)
     return result

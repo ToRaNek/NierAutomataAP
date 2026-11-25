@@ -35,6 +35,7 @@ class ClientState:
     access_points: set[int] = field(default_factory=set)      # indices de points d'acces actives
     quests_done: set[int] = field(default_factory=set)        # indices de quetes terminees
     max_level: int = 1
+    endings_seen: set[str] = field(default_factory=set)       # lettres des fins vues (A, B, C, D)
     supplies_given: set[str] = field(default_factory=set)     # regions dont le ravitaillement a ete donne
     ap_spots_collected: set[int] = field(default_factory=set)  # indices d'AP Items ramasses (worlddb.PICKUPS)
     ap_spawned_pid: int = 0
@@ -59,6 +60,7 @@ class ClientState:
             "quests_done": sorted(self.quests_done),
             "max_level": self.max_level,
             "supplies_given": sorted(self.supplies_given),
+            "endings_seen": sorted(self.endings_seen),
             "ap_spots_collected": sorted(self.ap_spots_collected),
             "ap_spawned_pid": self.ap_spawned_pid,
             "ap_spawned_spots": sorted(self.ap_spawned_spots),
@@ -102,6 +104,7 @@ class ClientState:
                    quests_done=set(d.get("quests_done", [])),
                    max_level=d.get("max_level", 1),
                    supplies_given=set(d.get("supplies_given", [])),
+                   endings_seen=set(d.get("endings_seen", [])),
                    ap_spots_collected=set(d.get("ap_spots_collected", [])),
                    ap_spawned_pid=d.get("ap_spawned_pid", 0),
                    ap_spawned_spots=set(d.get("ap_spawned_spots", [])),

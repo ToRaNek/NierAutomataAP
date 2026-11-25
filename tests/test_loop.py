@@ -304,3 +304,25 @@ def test_supplies_given_once_before_the_two_hard_sections():
     g2.phase_id = lambda: 0x200
     tick(g2, off, [], tr2)
     assert g2.items == {}
+
+
+def test_endings_are_checks():
+    # avis du testeur : les fins doivent etre des checks
+    from nier_automata.data.tables import ending_location, location_name_to_id
+    locs = location_name_to_id()
+    sc = scope(goal=db.GOAL_ENDING_E)
+    sc.endings = db.ending_checks(sc.goal, sc.regions)
+    assert sc.endings == ("A", "B", "C", "D")
+    s, tr = setup(sc, linked=True)
+    g = FakeGame(phase="30_AB_Ruined_City_ForcedLanding")
+    g.endings = lambda: {"ending_A"}
+    r = tick(g, s, [], tr)
+    assert locs[ending_location("A")] in r.locations and locs[ending_location("B")] not in r.locations
+    s.route = "C"                                    # route C commencee : la fin B a forcement ete vue
+    g.endings = lambda: set()
+    r = tick(g, s, [], tr)
+    assert locs[ending_location("B")] in r.locations
+    # la fin qui est l'objectif n'est pas un check ; rien si la partie s'arrete avant la fin A
+    assert db.ending_checks(db.GOAL_ENDING_A, FULL_A.regions) == ()
+    assert db.ending_checks(db.GOAL_ENDING_CD, sc.regions) == ("A", "B")
+    assert db.ending_checks(db.GOAL_STORY, SCOPE.regions) == ()

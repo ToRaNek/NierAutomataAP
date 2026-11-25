@@ -147,6 +147,7 @@ class Scope:
         self.weapon_checks: int = weapon_checks
         self.max_level: int = max_level
         self.item_checks: bool = item_checks
+        self.endings: tuple = ()             # fins qui sont des checks (option ending_checks)
         self.supplies: bool = False          # kit de depart + ravitaillements (option starter_kit)
 
 
@@ -173,6 +174,8 @@ def make_scope(goal: int, story_checks: int, chest_checks: bool, ap_items_per_ar
 def scope_from_slot_data(sd: dict) -> Scope:
     scope = _scope_from_slot_data(sd)
     scope.supplies = bool(sd.get("starter_kit", False))
+    if sd.get("ending_checks", False):
+        scope.endings = ending_checks(scope.goal, scope.regions)
     return scope
 
 
@@ -182,6 +185,18 @@ def _scope_from_slot_data(sd: dict) -> Scope:
                       bool(sd.get("access_point_checks", False)), bool(sd.get("quest_checks", False)),
                       int(sd.get("weapon_checks", 0)), int(sd.get("max_level_check", 0)),
                       bool(sd.get("item_checks", False)))
+
+
+# Fins qui sont des checks : region ou l'objet devient disponible (debut de la route suivante ; C et D a la
+# fin du jeu, seulement quand l'objectif est la fin E qui demande les deux). La fin objectif n'est pas un check.
+ENDING_REGION = {"A": "B01", "B": "C11", "C": "C17", "D": "C17"}
+
+
+def ending_checks(goal: int, regions) -> tuple:
+    out = [e for e in "AB" if ENDING_REGION[e] in regions]
+    if goal == GOAL_ENDING_E:
+        out += ["C", "D"]
+    return tuple(out)
 
 
 QUEST_STATUS_RVA = 0x14946D0     # i32 par quete (docs/research/runtime_state.md)

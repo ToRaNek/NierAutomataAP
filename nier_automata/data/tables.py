@@ -46,6 +46,10 @@ def shop_location(place: str, k: int) -> str:
     return f"Shop {place} #{k}"
 
 
+def ending_location(letter: str) -> str:
+    return f"Ending {letter}"
+
+
 def level_location(n: int) -> str:
     return f"Level {n}"
 
@@ -86,6 +90,8 @@ def location_name_to_id() -> dict[str, int]:
                         (0xB000, db.ACCESS_POINTS), (0xC000, db.QUESTS)):
         for i, entry in enumerate(table):
             locs[entry["name"]] = BASE_CODE + base + i
+    for i, letter in enumerate("ABCD"):
+        locs[ending_location(letter)] = BASE_CODE + 0xD000 + i
     return locs
 
 

@@ -53,6 +53,13 @@ class QuestChecks(DefaultOnToggle):
     display_name = "Quest Checks"
 
 
+class EndingChecks(DefaultOnToggle):
+    """Each main ending reached before the goal is a check ("Ending A", "Ending B", and "Ending C" / "Ending D"
+    when the goal is ending E). The ending that is the goal itself is not a check. Joke endings are never
+    checks."""
+    display_name = "Ending Checks"
+
+
 class RandomizedAbilities(OptionSet):
     """2B's abilities locked at the start and unlocked by an Archipelago item. Nothing is locked during the
     prologue/tutorial. Add "Pod Fire" and "Pod Program" for a pod-less start."""
@@ -145,6 +152,7 @@ class NierAutomataOptions(PerGameCommonOptions):
     ap_items_per_area: ApItemsPerArea
     access_point_checks: AccessPointChecks
     quest_checks: QuestChecks
+    ending_checks: EndingChecks
     shop_checks: ShopChecks
     shop_price: ShopPrice
     chest_checks: ChestChecks

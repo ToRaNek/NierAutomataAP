@@ -234,7 +234,9 @@ def main():
             continue
         pos = [round(v, 2) for v in ents[0]["position"]]
         aps.append({"code": code, "name": f"Access Point: {a['english_name']}", "region": AP_NAMES_REGION[code],
-                    "bit": a["activation_bit"], "pos": pos})
+                    "bit": a["activation_bit"], "pos": pos,
+                    # sous-sol de l'usine : fenetre d'acces courte (avis d'un joueur experimente)
+                    "excluded": a["english_name"] in ("Factory: Hangar", "Factory: Furnace")})
         anchors[code] = pos
     data["access_points"] = aps
 

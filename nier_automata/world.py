@@ -6,7 +6,7 @@ from .data import worlddb as db
 from .data.items_data import FILLER_ITEMS, FUNDS_ITEMS, MATERIALS, STARTER_KIT, TRAP_ITEMS
 from .data.tables import (
     SHOP_PLACES_ORDER, SHOP_REGION, item_location, item_name_to_id, level_location, location_name_to_id,
-    pool_weapon_count, quest_excluded, shop_location, shop_missable, weapon_location,
+    ending_location, pool_weapon_count, quest_excluded, shop_location, shop_missable, weapon_location,
 )
 from .data.weapons import STARTING_WEAPONS, WEAPONS
 from .options import NierAutomataOptions
@@ -59,6 +59,8 @@ class NierAutomataWorld(World):
             access_point_checks=bool(o.access_point_checks), quest_checks=bool(o.quest_checks),
             weapon_checks=o.weapon_checks.value, max_level_check=o.max_level_check.value,
             item_checks=bool(o.item_checks))
+        if o.ending_checks:
+            self.scope.endings = db.ending_checks(self.scope.goal, self.scope.regions)
         self.spots = self._spots()
         abilities = len(o.randomized_abilities.value)
         open_locs = sum(1 for _, _, excluded, _ in self.spots if not excluded)
@@ -79,6 +81,7 @@ class NierAutomataWorld(World):
             out += [(table[i]["name"], table[i]["region"],
                      quest_excluded(table[i], s.regions) if table is db.QUESTS else bool(table[i].get("excluded")),
                      table[i].get("needs", [])) for i in sorted(idx)]
+        out += [(ending_location(e), db.ENDING_REGION[e], False, []) for e in s.endings]
         out += [(level_location(n), db.level_region(n), False, []) for n in range(2, s.max_level + 1)]
         for place in SHOP_PLACES_ORDER:
             if SHOP_REGION[place] in regions:
@@ -160,5 +163,6 @@ class NierAutomataWorld(World):
             "shop_price": o.shop_price.value,
             "randomized_abilities": sorted(o.randomized_abilities.value),
             "starter_kit": bool(o.starter_kit),
+            "ending_checks": bool(o.ending_checks),
             "death_link": bool(o.death_link),
         }

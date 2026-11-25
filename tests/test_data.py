@@ -186,3 +186,9 @@ def test_hidden_desert_spots_never_hold_important_items():
             if math.hypot(x["pos"][0] - oil[0], x["pos"][2] - oil[2]) < 150]
     assert len(near) >= 3 and all(x["excluded"] for x in near)
     assert any(not c["excluded"] for c in db.CHESTS if c["area"] == "Desert Zone")
+
+
+def test_factory_underground_access_points_are_filler():
+    from nier_automata.data import worlddb as db
+    ex = {a["name"] for a in db.ACCESS_POINTS if a.get("excluded")}
+    assert ex == {"Access Point: Factory: Hangar", "Access Point: Factory: Furnace"}
