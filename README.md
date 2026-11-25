@@ -138,11 +138,11 @@ this, an underground check looks the same as whatever is above it on the surface
   played for real.
 - Tower keys: tested in game in front of the Tower with the real client and a server (no key: the door refuses;
   keys taken back when put in the inventory; keys sent by the server: 9S hacks the door and the story goes on).
-  The moment the game itself hands a key was played for the Forest key (end of its resource unit) and the Park
-  key (Pod dialogue at the start of chapter 17): the client takes the key back at once (it checks ten times per
-  second) and it does not come back. The game also puts the keys back when a later chapter loads; the client
-  takes them back as soon as the game is playable. The Ocean key hand-over (end of a boss fight) was not played;
-  that key was only seen put back on a chapter load, then taken back.
+  The moment the game itself hands a key was played for all three: the Forest key (end of its resource unit),
+  the Ocean key (after the boss in the Flooded City unit, fight played by hand: the game shows "Ocean Access
+  Key x 1" and the client takes it back within a second) and the Park key (Pod dialogue at the start of chapter
+  17). The client checks ten times per second and the keys do not come back. The game also puts the keys back
+  when a later chapter loads; the client takes them back as soon as the game is playable.
 - Mail titles: open an access point for ~10 s the first time after each game launch.
 - Don't load another save than the one of the seed.
 
