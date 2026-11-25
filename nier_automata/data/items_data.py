@@ -43,7 +43,7 @@ TRAP_ITEMS: dict[str, tuple[str, int]] = {
     "System Failure: Heavy Attack": ("jam:Heavy Attack", 20),
     "System Failure: Pod Fire": ("jam:Pod Fire", 20),
     # effets du jeu lui-meme, declenches par ses propres fonctions (verifie en jeu)
-    "Self-Destruct Trap": ("selfdestruct", 0),   # alarme, compte a rebours ~2 s, explosion, puis degats lourds
+    "Self-Destruct Trap": ("selfdestruct", 0),   # alarme, compte a rebours ~2 s, explosion : il reste 1 PV
     "E-Drug Trap": ("edrug", 0),                 # image et son brouilles 30 s + effets aleatoires
 }
 

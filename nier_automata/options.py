@@ -86,8 +86,8 @@ class DamageTrapPercent(Range):
 
 
 class LethalTraps(Toggle):
-    """Off: a damage trap always leaves you at 1 HP at worst. On: a damage trap (and the hit of a
-    Self-Destruct Trap) can kill you if you are low on HP."""
+    """Off: a damage trap always leaves you at 1 HP at worst. On: a damage trap can kill you if you are low
+    on HP. A Self-Destruct Trap always leaves 1 HP, like the game's own self-destruct."""
     display_name = "Lethal Traps"
 
 

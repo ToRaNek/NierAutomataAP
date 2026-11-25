@@ -238,8 +238,7 @@ class NierGame:
             remote_call(self.mem, self.mem.base + self.SET_ACTION_RVA, p, 0x38, 0, 0, e=0)
         except OSError:
             return False
-        self.apply_trap("damage", 2)       # l'explosion du jeu ne retire pas de PV par cet appel
-        return True
+        return True                        # l'explosion du jeu laisse 1 PV, comme une vraie autodestruction
 
     def jammed(self) -> set:
         import time
