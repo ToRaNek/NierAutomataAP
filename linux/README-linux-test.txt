@@ -1,7 +1,11 @@
-NieR:Automata for Archipelago - Linux / Proton TEST package (v0.3.2)
+NieR:Automata for Archipelago - Linux / Proton TEST package 2 (v0.4.0)
 
 STATUS: UNTESTED. The author has no Linux machine. This package exists so that Linux players can try it
 and report back. Nothing here changes your game files or your save.
+
+Changed since the first test package: "run" did nothing (a helper exe started the Archipelago launcher and
+exited at once, and the container dropped it). The script now copies the .apworld itself and starts the
+Archipelago launcher directly, in the foreground.
 
 Why a special package: the client reads and writes the running game's memory with Windows functions, so it
 must run inside the same Proton container as the game. A native Linux Archipelago, or a separate Wine
@@ -18,7 +22,9 @@ Steps
 4. Once: download "Setup.Archipelago.x.y.z.exe" (Windows installer, 0.6.8 or newer) from the Archipelago
    releases, then:
        ./nier-ap-linux-test.sh install /path/to/Setup.Archipelago.x.y.z.exe
-   Keep the default install folder.
+   Keep the default install folder. This installs the Windows Archipelago only inside the game's Proton
+   prefix: the client is started by the Archipelago launcher and must be a Windows program next to the game.
+   Your Linux Archipelago is not touched; keep using it to generate and host.
 5. Start the client:
        ./nier-ap-linux-test.sh run
    or with your room:  ./nier-ap-linux-test.sh run archipelago://YourName@host:port

@@ -19,7 +19,7 @@ APPID=524220
 BUS="com.steampowered.App${APPID}"
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 LOG="${HERE}/nier-ap-linux-test.log"
-EXE="${HERE}/NierAutomataAP.exe"
+APWORLD="${HERE}/nier_automata.apworld"
 
 say() { printf '%s\n' "$*" | tee -a "$LOG"; }
 
@@ -104,7 +104,7 @@ diag)
             say "Archipelago in the prefix: no -> run:  $0 install /path/to/Setup.Archipelago.exe"
         fi
     fi
-    [ -f "$EXE" ] && say "NierAutomataAP.exe: found" || say "NierAutomataAP.exe: MISSING next to this script"
+    [ -f "$APWORLD" ] && say "nier_automata.apworld: found" || say "nier_automata.apworld: MISSING next to this script"
     say "visible containers:"
     "$CLIENT" --list 2>&1 | tee -a "$LOG"
     need_game
@@ -118,12 +118,20 @@ install)
     in_game "$(readlink -f "$setup")" 2>&1 | tee -a "$LOG"
     ;;
 run)
-    [ -f "$EXE" ] || { say "ERROR: NierAutomataAP.exe must be next to this script."; exit 1; }
     need_client; need_game
     shift
-    say "Starting the NieR:Automata client in the game's container..."
+    PFX="$(find_prefix)" || { say "ERROR: game prefix not found (has the game been started once?)."; exit 1; }
+    AP="$PFX/drive_c/ProgramData/Archipelago"
+    [ -f "$AP/ArchipelagoLauncher.exe" ] || { say "ERROR: Archipelago is not installed in the game's prefix. Run:  $0 install /path/to/Setup.Archipelago.exe"; exit 1; }
+    [ -f "$APWORLD" ] || { say "ERROR: nier_automata.apworld must be next to this script."; exit 1; }
+    mkdir -p "$AP/custom_worlds" && cp -f "$APWORLD" "$AP/custom_worlds/" && say "apworld copied to $AP/custom_worlds"
+    say "Starting the NieR:Automata client in the game's container (this terminal stays busy while it runs)..."
     say "What to look for in the client window: 'Game detected (v1.04)'."
-    in_game "$EXE" "$@" 2>&1 | tee -a "$LOG"
+    say "Lines 'ld.so: ... gameoverlayrenderer.so ... wrong ELF class' are harmless."
+    # The Archipelago launcher is started directly and kept in the foreground: in the first test package a small
+    # helper exe started it and exited at once, and nothing opened (the container dropped the child with it).
+    in_game 'C:\ProgramData\Archipelago\ArchipelagoLauncher.exe' "NieR:Automata Client" "$@" 2>&1 | tee -a "$LOG"
+    say "client exit code: ${PIPESTATUS[0]}"
     ;;
 *)
     say "Usage: $0 diag | install Setup.Archipelago.exe | run [archipelago://name@host:port]"
