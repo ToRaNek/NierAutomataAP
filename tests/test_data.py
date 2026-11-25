@@ -167,3 +167,10 @@ def test_factory_underground_is_missable():
              if x["area"] in ("Abandoned Factory: Underground Area", "Abandoned Factory: His Grace's Room")]
     assert len(under) > 10 and all(x["excluded"] for x in under)
     assert any(not x["excluded"] for x in db.CHESTS if x["area"] == "Abandoned Factory")
+
+
+def test_two_factory_chests_before_the_bridge_are_missable():
+    from nier_automata.data import worlddb as db
+    pair = [c for c in db.CHESTS if c["area"] == "Abandoned Factory" and abs(c["pos"][0] + 490) < 2
+            and abs(c["pos"][2] - 317) < 2]
+    assert len(pair) == 2 and all(c["excluded"] for c in pair)

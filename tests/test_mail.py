@@ -71,3 +71,14 @@ def test_title_cave_list_swaps_hash_for_our_mails():
     assert ins[0] == ("mov", "edx, dword ptr [r14]")
     assert ("cmp", "edx, 0x1f") in ins and ("mov", "eax, 0x1111") in ins and ("mov", "ebp, eax") in ins
     assert ins[-1] == ("jmp", hex(base + mail.LIST_RETURN_RVA))
+
+
+def test_checks_mail_starts_with_a_count_per_kind():
+    # avis du testeur : le jeu ne dit nulle part combien de coffres / objets il reste -> il faut un suivi
+    from nier_automata.game.mail import checks_body
+    body = checks_body(["Chest: City Ruins #1", "Chest: City Ruins #2", "AP Item: Desert Zone #1",
+                        "Story A 02-01: Landing at the City Ruins", "Level 4", "Quest: Lost Girl"], 20, lang="en")
+    lines = body.split("\n")
+    assert lines[0] == "Remaining checks: 6 / 20"
+    assert lines[1] == "Chest 2 | AP Item 1 | Story 1 | Quest 1 | Level 1"
+    assert "- Chest: City Ruins #1" in lines

@@ -63,9 +63,25 @@ def unread_entry(raw: bytes, hour: int, minute: int) -> bytes:
     return struct.pack("<iIII", no, 0, (minute << 16) | hour, x)
 
 
+KIND_ORDER = ["Chest", "AP Item", "Story", "Access Point", "Quest", "Shop", "Level", "Weapon Found", "Item"]
+
+
+def check_kinds(names) -> list[tuple[str, int]]:
+    """Nombre de checks par type, dans un ordre fixe (le jeu n'affiche nulle part ce qu'il reste)."""
+    out = {}
+    for n in names:
+        kind = next((k for k in KIND_ORDER if n.startswith(k)), "Other")
+        out[kind] = out.get(kind, 0) + 1
+    return [(k, out[k]) for k in KIND_ORDER + ["Other"] if k in out]
+
+
 def checks_body(remaining: list[str], total: int, lang: str = "fr") -> str:
     from .i18n import t
-    lines = [t(lang, "checks_head", n=len(remaining), total=total), ""]
+    lines = [t(lang, "checks_head", n=len(remaining), total=total)]
+    counts = check_kinds(remaining)
+    if counts:
+        lines.append(" | ".join(f"{k} {n}" for k, n in counts))
+    lines.append("")
     lines += [f"- {n}" for n in sorted(remaining)]
     return "\n".join(lines)
 

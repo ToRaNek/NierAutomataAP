@@ -183,6 +183,9 @@ def main():
         quest_gated = ("クリア後" in groups or "で有効" in groups or any(x[:1] == "q" and x[1:4].isdigit() for x in states))
         # ville d'avant le cratere (st1/r100, phase p100) : le sol disparait au chapitre 5
         pre_crater = c["file"] == "st1/r100.dat"
+        # les 2 coffres cote a cote juste avant le pont de l'usine : faciles a rater (avis d'un joueur experimente ;
+        # identification par leur position, a confirmer)
+        before_bridge = label == "Abandoned Factory" and abs(c["position"][0] + 490) < 2 and abs(c["position"][2] - 317) < 2
         if "sub221" in groups:                     # quete d'A2 au Village de Pascal (route C/D)
             region = "C14"
         rc = reach.get((c["file"], c["entity_id"]), {})
@@ -191,7 +194,7 @@ def main():
         chests.append({
             "area": label, "pos": [round(v, 2) for v in c["position"]], "region": region,
             "needs": [] if unknown else needs, "locked": locked,
-            "excluded": bool(missable or unknown or quest_gated or pre_crater
+            "excluded": bool(missable or unknown or quest_gated or pre_crater or before_bridge
                              or c["area"].get("confidence") == "low"),
             "pre_crater": pre_crater,
             "quest_gated": bool(quest_gated),
