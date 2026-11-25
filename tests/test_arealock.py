@@ -141,3 +141,15 @@ def test_up_to_forest_leaves_the_two_late_areas_open():
     a = [r for r in db.REGIONS if r.startswith("A")]
     assert passes_in_scope(a) == list(AREA_PASSES)
     assert passes_in_scope(a, late=False) == ["Desert Pass", "Park Pass", "Village Pass", "Forest Pass"]
+
+
+def test_a_very_fast_player_cannot_jump_over_the_wall():
+    """Vu en jeu a 25 m/s : le joueur depassait l'endroit du refus entre deux lectures et n'etait plus repousse."""
+    lock = AreaLock([DESERT])
+    walk(lock, set(), [(t * 0.5, 0, (float(t), 0.0, 0.0)) for t in range(21)])
+    first = lock.update(30, (20.0, 0.0, 0.0), 11.0, set())
+    assert first.pos == (12.0, 0.0, 0.0)
+    far = lock.update(0, (45.0, 3.0, 0.0), 11.1, set())               # 25 m derriere le refus, zone "ville"
+    assert far is not None and far.pos == (12.0, 0.0, 0.0)
+    assert lock.update(0, (14.0, 0.0, 0.0), 11.2, set()) is None        # avant la ligne du mur : libre
+    assert lock.update(0, (12.0, 0.0, 9.0), 11.3, set()) is None        # a cote, sans avancer : libre

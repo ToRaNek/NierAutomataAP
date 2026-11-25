@@ -11,7 +11,7 @@ from ..data.phases import MENU_PHASES, is_prologue
 
 BACK_DISTANCE = 8.0      # on revient a la derniere position situee a 8 m au moins de l'endroit du refus
 KEEP_SECONDS = 15.0
-WALL_RADIUS = 0.5        # mur garde : refus si le joueur revient a moins de la moitie du chemin ancre -> refus
+WALL_RADIUS = 0.5        # position du mur sur le trajet ancre -> refus (0,5 = a mi-chemin)
 WALL_FORGET = 60.0       # mur oublie quand le joueur s'eloigne (le jeu resignalera la zone a son retour)
 MAX_DISTANCE = 120.0     # jamais de retour plus loin (position d'une autre carte : chargement, voyage rapide)
 MESSAGE_EVERY = 12.0
@@ -66,6 +66,18 @@ class AreaLock:
         self._trail = [(now, anchor, area)]
         return Pushback(anchor, area, missing, notify)
 
+    def _beyond_wall(self, pos) -> bool:
+        """Le joueur a-t-il depasse la ligne du mur ? Le mur est un plan a mi-chemin entre l'ancre et l'endroit du
+        refus, perpendiculaire au trajet : tout ce qui est au-dela est refuse, meme loin derriere. Avec une simple
+        boule autour de l'endroit du refus, un joueur tres rapide la sautait et passait (vu en jeu a 25 m/s)."""
+        anchor, refused, _, _ = self._wall
+        axis = [r - a for a, r in zip(anchor, refused)]
+        length2 = sum(v * v for v in axis)
+        if length2 < 1e-6:
+            return math.dist(pos, refused) <= 1.0
+        t = sum((p - a) * v for p, a, v in zip(pos, anchor, axis)) / length2
+        return t >= WALL_RADIUS
+
     def update(self, area_id: int, pos, now: float, owned, active: bool = True) -> Optional[Pushback]:
         """active = le joueur a la main (pas de cinematique, de vol, de prologue...)."""
         if pos is None or not active:
@@ -77,10 +89,8 @@ class AreaLock:
                 self._wall = None
         missing = self.locked(area_id, owned)
         if missing is None:
-            if self._wall is not None:
-                anchor, refused, _, _ = self._wall
-                if math.dist(pos, refused) <= WALL_RADIUS * math.dist(anchor, refused):
-                    return self._push(now)       # revenu pres de l'endroit du refus : meme mur
+            if self._wall is not None and self._beyond_wall(pos):
+                return self._push(now)           # repasse la ligne du mur : meme mur
             if self._trail and math.dist(self._trail[-1][1], pos) > 30.0:
                 self._trail.clear()          # saut de position : teleportation du jeu
             self._trail.append((now, pos, area_id))

@@ -130,6 +130,21 @@ def test_route(rep, route: str):
     rp.install(m)
     key = cl.CHAPTER_KEYS[route]
     regions = cl.route_regions(db.REGIONS, route)[1:]
+    # verrou de la route elle-meme : sans l'objet, retour au chapitre 7 de la route precedente ; avec, depart
+    from nier_automata.data.routes import PARK, ROUTE_KEYS, START
+    rr = rep.setdefault("routes", {}).setdefault(route, {})
+    if not (rr.get("locked_ok") and rr.get("opened_ok")):
+        wait_ready(m)
+        time.sleep(32)
+        st, who, phase, sub = START[route]
+        pj.set_route(m, st, who)
+        pj.jump(m, phase, sub, wait=60)
+        rkey = ROUTE_KEYS[route]
+        rr["locked_ok"] = wait_for(m, f"Route {route} locked (needs {rkey}): back to {PARK[route][3]}", PARK[route][3], 150)
+        send(rkey)
+        rr["opened_ok"] = wait_for(m, f"{rkey} received: route {route} starts ({sub})", sub, 150)
+        print("route", route, rr, flush=True)
+        save(rep)
     for region in regions:
         first = next(i for i, c in enumerate(db.CHAPTERS) if c["region"] == region)
         start, park = cl.start_chapter(first), cl.park_chapter(first)
