@@ -65,7 +65,8 @@ class NierAutomataWorld(World):
         self.scope.program_checks = o.pod_program_checks.value if o.pod_programs else 0
         if o.ending_checks:
             self.scope.endings = db.ending_checks(self.scope.goal, self.scope.regions)
-        self.passes = passes_in_scope(self.scope.regions) if o.area_locks else []
+        self.passes = (passes_in_scope(self.scope.regions, late=o.area_locks.value == 2)
+                       if o.area_locks.value else [])
         self.route_keys = keys_in_scope(self.scope.regions) if o.route_locks else {}
         self.chapter_keys = key_counts(self.scope.regions) if o.chapter_locks else {}
         self.spots = self._spots()
@@ -115,7 +116,9 @@ class NierAutomataWorld(World):
         weapons = len(self.pool_weapons)
         for i in range(1, len(regions)):
             need = db.required_weapons(i, len(regions), weapons)
-            area_pass = pass_for_region(regions[i]) if self.passes else None   # zone fermee sans son Pass
+            area_pass = pass_for_region(regions[i])                              # zone fermee sans son Pass
+            if area_pass not in self.passes:
+                area_pass = None
             wanted = [area_pass] if area_pass else []
             if regions[i][0] != regions[i - 1][0] and regions[i][0] in self.route_keys:
                 wanted.append(self.route_keys[regions[i][0]])                    # premiere region d'une route

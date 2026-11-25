@@ -33,9 +33,9 @@ NieR:Automata:
   weapon_checks: 8
   # Abilities locked until received (add "Pod Fire", "Pod Program" for a pod-less start).
   randomized_abilities: ["Double Jump", "Air Dash", "Ground Evade"]
-  # Six areas (Desert, Park, Pascal's Village, Forest, Flooded City, Factory) are closed until you receive
-  # their Pass; only the areas played before your goal get one.
-  area_locks: true
+  # Areas closed until you receive their Pass (only the areas played before your goal get one).
+  # up_to_forest: Desert, Park, Pascal's Village, Forest. all: also Flooded City and Factory. off: none.
+  area_locks: up_to_forest
   # Route B needs "Route B Access" and route C/D needs "Route C/D Access" (only used past ending A).
   route_locks: true
   # Routes B and C/D: each big chapter after the first needs one more "B Chapter Key" / "C/D Chapter Key".

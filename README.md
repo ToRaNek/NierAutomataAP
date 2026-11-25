@@ -50,8 +50,10 @@ Everything is named after where it is, so a hint tells you where to go.
 - `starter_kit` (on by default): a few recovery items and one attack and one defense boost at the start,
   then a supply drop once when you enter the two hard sections you cannot come back from (the boss rush at
   the end of route A, and the start of route C/D).
-- `area_locks` (on by default): six areas are closed until you receive their **Pass**: Desert Zone, Amusement
-  Park, Pascal's Village, Forest Zone (with the castle), Flooded City and Abandoned Factory. Walking in without
+- `area_locks` (`up_to_forest` by default, `all`, `off`): areas are closed until you receive their **Pass**:
+  Desert Zone, Amusement Park, Pascal's Village and Forest Zone (with the castle); with `all`, also Flooded City
+  and Abandoned Factory (these two come after chapter 7, when side quests are closed, so waiting there leaves
+  little to do). Walking in without
   the Pass puts you back a few meters, like an invisible wall, with "Locked: Desert Pass" in the game log. The
   story needs these areas in order, so it waits for the Pass. Only the areas played before your goal get a Pass
   (two with the default settings: Desert and Park). The prologue is never locked. The Copied City has no Pass
@@ -66,7 +68,8 @@ Everything is named after where it is, so a hint tells you where to go.
   needs one more key (**B Chapter Key**, up to 9; **C/D Chapter Key**, up to 6). Without enough keys the client
   takes you back to the start of the last part of the previous chapter; when the key arrives it takes you to the
   start of the chapter you were waiting for. Route A has no chapter keys: its areas are closed by the Passes.
-  With every lock on and ending E as the goal, that is 23 locks: 6 Passes, 2 route items, 15 chapter keys.
+  With ending E as the goal that is 21 locks by default (4 Passes, 2 route items, 15 chapter keys), 23 with
+  `area_locks: all`.
 
 ## Items received
 Weapons, the 16 Pod programs other than the starting laser (`pod_programs`), abilities (double jump, air

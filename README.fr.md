@@ -52,8 +52,10 @@ Chaque check porte le nom de son lieu : un indice dit donc ou aller.
 - `starter_kit` (active par defaut) : quelques soins et un bonus d'attaque et de defense au depart, puis un
   ravitaillement donne une fois a l'entree des deux passages durs sans retour (les boss enchaines de la fin
   de la route A, et le debut de la route C/D).
-- `area_locks` (active par defaut) : six zones restent fermees tant que tu n'as pas recu leur **Pass** : Desert,
-  Parc d'attractions, Village de Pascal, Foret (avec le chateau), Ville inondee et Usine abandonnee. Y entrer
+- `area_locks` (`up_to_forest` par defaut, `all`, `off`) : des zones restent fermees tant que tu n'as pas recu
+  leur **Pass** : Desert, Parc d'attractions, Village de Pascal et Foret (avec le chateau) ; avec `all`, aussi la
+  Ville inondee et l'Usine abandonnee (ces deux-la se jouent apres le chapitre 7, quand les quetes annexes sont
+  fermees : y attendre laisse peu a faire). Y entrer
   sans le Pass te remet quelques metres en arriere, comme un mur invisible, avec "Ferme : Desert Pass" dans le
   journal du jeu. L'histoire passe par ces zones dans l'ordre, donc elle attend le Pass. Seules les zones jouees
   avant ton objectif ont un Pass (deux avec les reglages par defaut : Desert et Parc). Le prologue n'est jamais
@@ -69,7 +71,8 @@ Chaque check porte le nom de son lieu : un indice dit donc ou aller.
   route demande une cle de plus (**B Chapter Key**, 9 au plus ; **C/D Chapter Key**, 6 au plus). Sans assez de
   cles, le client te ramene au debut de la derniere partie du chapitre precedent ; quand la cle arrive, il
   t'emmene au debut du chapitre attendu. La route A n'a pas de cle de chapitre : ses zones sont fermees par les
-  Pass. Avec tous les verrous et la fin E en objectif, ca fait 23 verrous : 6 Pass, 2 objets de route, 15 cles.
+  Pass. Avec la fin E en objectif ca fait 21 verrous par defaut (4 Pass, 2 objets de route, 15 cles), 23 avec
+  `area_locks: all`.
 
 ## Objets recus
 Armes, les 16 programmes de Pod autres que le laser de depart (`pod_programs`), capacites (double saut, dash

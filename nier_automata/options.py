@@ -170,12 +170,20 @@ class ItemChecks(Toggle):
     display_name = "Item Checks"
 
 
-class AreaLocks(DefaultOnToggle):
-    """Each big area of the game (Desert Zone, Amusement Park, Pascal's Village, Forest Zone, Flooded City,
-    Abandoned Factory) is closed until you receive its Pass: walking in puts you back where you
-    were, like an invisible wall. The story cannot go on without the Pass of the next area.
+class AreaLocks(Choice):
+    """Big areas of the game are closed until you receive their Pass: walking in puts you back where you were,
+    like an invisible wall. The story cannot go on without the Pass of the next area.
+    up_to_forest: Desert Zone, Amusement Park, Pascal's Village, Forest Zone.
+    all: also Flooded City and Abandoned Factory. These two come after chapter 7, when side quests are closed, so
+    waiting for their Pass leaves little to do.
     Only the areas played before your goal get a Pass."""
     display_name = "Area Locks"
+    option_off = 0
+    option_up_to_forest = 1
+    option_all = 2
+    alias_false = 0
+    alias_true = 2
+    default = 1
 
 
 class RouteLocks(DefaultOnToggle):

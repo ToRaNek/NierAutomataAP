@@ -23,10 +23,17 @@ AREA_PASSES: dict[str, tuple[str, str, frozenset]] = {
 _ZONE_OF = {i: name for name, (_, _, ids) in AREA_PASSES.items() for i in ids}
 
 
-def passes_in_scope(regions) -> list[str]:
-    """Pass utiles a une partie : ceux dont la zone est jouee (ordre de l'histoire)."""
+# Mode "up_to_forest" : pas de Pass pour la Ville inondee ni l'Usine. Avis du testeur : ces deux zones se jouent
+# apres le chapitre 7, quand les quetes annexes sont fermees ; y attendre un Pass laisse tres peu a faire.
+LATE_PASSES = frozenset({"Flooded City Pass", "Factory Pass"})
+
+
+def passes_in_scope(regions, late: bool = True) -> list[str]:
+    """Pass utiles a une partie : ceux dont la zone est jouee (ordre de l'histoire). late=False : sans les deux
+    zones tardives (Ville inondee, Usine)."""
     rs = set(regions)
-    return [name for name, (region, _, _) in AREA_PASSES.items() if region in rs]
+    return [name for name, (region, _, _) in AREA_PASSES.items()
+            if region in rs and (late or name not in LATE_PASSES)]
 
 
 def pass_for_area(area_id: int):

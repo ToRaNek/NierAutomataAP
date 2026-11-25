@@ -134,3 +134,10 @@ def test_pass_item_ids_are_stable_and_distinct():
 def test_pass_names_fit_in_a_game_notification():
     from nier_automata.game.notify import MAX_LEN
     assert all(len(n) <= MAX_LEN for n in AREA_PASSES)
+
+
+def test_up_to_forest_leaves_the_two_late_areas_open():
+    from nier_automata.data import worlddb as db
+    a = [r for r in db.REGIONS if r.startswith("A")]
+    assert passes_in_scope(a) == list(AREA_PASSES)
+    assert passes_in_scope(a, late=False) == ["Desert Pass", "Park Pass", "Village Pass", "Forest Pass"]
