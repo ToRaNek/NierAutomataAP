@@ -90,7 +90,7 @@ aerien, esquive au sol, tir du Pod, attaques...), soins et bonus, argent, et pie
   moyens essayes en jeu). Les boss et les grosses machines ne sont jamais copies. Si la zone n'a pas d'ennemi
   adapte, ou en contient deja une quarantaine (au-dela le jeu plantait), des degats a la place.
 - **System Failure: Light Attack / Heavy Attack / Pod Fire** : ce systeme ne repond plus pendant 20 secondes.
-- **Self-Destruct Trap** : l'autodestruction du jeu, court compte a rebours puis explosion, il reste 1 PV.
+- **Self-Destruct Trap** (`self_destruct_trap` : `rare` par defaut, `normal`, `off`) : l'autodestruction du jeu, court compte a rebours puis explosion, il reste 1 PV.
 - **E-Drug Trap** : l'effet E-Drug du jeu, image et son brouilles pendant 30 secondes.
 
 Les pieges qui utilisent les effets du jeu attendent tant qu'un menu ou un chargement est a l'ecran. Tous les

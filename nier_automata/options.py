@@ -209,6 +209,16 @@ class TowerKeys(DefaultOnToggle):
     display_name = "Tower Keys"
 
 
+class SelfDestructTrap(Choice):
+    """How often the Self-Destruct Trap shows up among the traps. It leaves you at 1 HP, so one hit taken at the
+    same moment kills you. rare: four times less often than each other trap."""
+    display_name = "Self-Destruct Trap"
+    option_off = 0
+    option_rare = 1
+    option_normal = 2
+    default = 1
+
+
 class Goal(Choice):
     """Victory condition, which also sets how much of the game has checks.
     story_progress: finish chapter `story_chapter` of route `story_route` (short game, adjustable).
@@ -242,6 +252,7 @@ class NierAutomataOptions(PerGameCommonOptions):
     damage_trap_percent: DamageTrapPercent
     lethal_traps: LethalTraps
     enemy_trap_enemies: EnemyTrapEnemies
+    self_destruct_trap: SelfDestructTrap
     pod_programs: PodPrograms
     pod_program_checks: PodProgramChecks
     starter_kit: StarterKit

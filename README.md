@@ -87,7 +87,7 @@ dash, ground evade, pod fire, attacks...), recovery items and boosts, money, and
   and big machines are never copied. If the area has no suitable enemy, or already holds about 40 enemies
   (more made the game crash), you take damage instead.
 - **System Failure: Light Attack / Heavy Attack / Pod Fire**: that system stops answering for 20 seconds.
-- **Self-Destruct Trap**: the game's own self-destruct, short countdown then explosion, leaves you at 1 HP.
+- **Self-Destruct Trap** (`self_destruct_trap`: `rare` by default, `normal`, `off`): the game's own self-destruct, short countdown then explosion, leaves you at 1 HP.
 - **E-Drug Trap**: the game's E-Drug effect, picture and sound scrambled for 30 seconds.
 
 Traps that use the game's own effects wait while a menu or a loading screen is up. Every trap except the Money

@@ -116,3 +116,12 @@ def test_lethal_traps_option_kills_only_when_damage_exceeds_hp():
     assert trap_kills(hp=30, max_hp=1000, percent=10, lethal=True)
     assert trap_kills(hp=100, max_hp=1000, percent=10, lethal=True)
     assert not trap_kills(hp=500, max_hp=1000, percent=10, lethal=True)
+
+
+def test_self_destruct_trap_can_be_rare_or_off():
+    from nier_automata.data.items_data import SELF_DESTRUCT_TRAP, TRAP_ITEMS, trap_weights
+    assert SELF_DESTRUCT_TRAP in TRAP_ITEMS
+    assert SELF_DESTRUCT_TRAP not in trap_weights(0) and len(trap_weights(0)) == len(TRAP_ITEMS) - 1
+    rare, normal = trap_weights(1), trap_weights(2)
+    assert rare[SELF_DESTRUCT_TRAP] * 4 == rare["Damage Trap"]
+    assert len(set(normal.values())) == 1 and set(normal) == set(TRAP_ITEMS)

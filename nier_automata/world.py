@@ -7,7 +7,7 @@ from .data.areas import AREA_PASSES, pass_for_region, passes_in_scope
 from .data.routes import ROUTE_KEYS, keys_in_scope
 from .data.chapterlocks import CHAPTER_KEYS, key_counts, keys_needed
 from .data.towerkeys import TOWER_KEYS, TOWER_REGION, keys_in_scope as tower_keys_in_scope
-from .data.items_data import FILLER_ITEMS, FUNDS_ITEMS, MATERIALS, POD_PROGRAMS, STARTER_KIT, TRAP_ITEMS
+from .data.items_data import FILLER_ITEMS, FUNDS_ITEMS, MATERIALS, POD_PROGRAMS, STARTER_KIT, TRAP_ITEMS, trap_weights
 from .data.tables import (
     SHOP_PLACES_ORDER, SHOP_REGION, item_location, item_name_to_id, level_location, location_name_to_id,
     ending_location, pool_weapon_count, program_location, quest_excluded, shop_location, shop_missable, weapon_location,
@@ -174,10 +174,11 @@ class NierAutomataWorld(World):
             room = sum(1 for _, _, excluded, _ in self.spots if not excluded) - len(pool)
             programs = self.random.sample(sorted(POD_PROGRAMS), max(0, min(len(POD_PROGRAMS), room // 2)))
             pool += [self.create_item(p) for p in programs]
-        traps = list(TRAP_ITEMS)
+        weights = trap_weights(self.options.self_destruct_trap.value)
+        traps, trap_w = list(weights), list(weights.values())
         for _ in range(len(self.spots) - len(pool)):
             if self.random.randint(1, 100) <= self.options.trap_percentage.value:
-                pool.append(self.create_item(self.random.choice(traps)))
+                pool.append(self.create_item(self.random.choices(traps, trap_w)[0]))
             else:
                 pool.append(self.create_item(self.get_filler_item_name()))
         self.multiworld.itempool += pool

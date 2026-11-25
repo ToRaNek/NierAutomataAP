@@ -56,6 +56,8 @@ NieR:Automata:
   lethal_traps: false
   # Enemy Trap: basic (small machines only) or random (small machines plus the area's medium machines).
   enemy_trap_enemies: basic
+  # Self-Destruct Trap leaves you at 1 HP: off, rare (4 times less often than each other trap) or normal.
+  self_destruct_trap: rare
   # First pickup of each material = one check (many checks).
   item_checks: false
   death_link: false

@@ -32,6 +32,17 @@ POD_PROGRAMS: dict[str, int] = {
 FUNDS_ITEMS: dict[str, int] = {"500 G": 500, "1000 G": 1000, "2000 G": 2000}
 
 # Pieges : (type, pourcentage).
+SELF_DESTRUCT_TRAP = "Self-Destruct Trap"
+
+
+def trap_weights(self_destruct: int) -> dict[str, int]:
+    """Poids de tirage de chaque piege. self_destruct : 0 = jamais, 1 = rare (4 fois moins que les autres), 2 = normal.
+    Avis du testeur : 1 PV restant, c'est la mort au moindre coup recu en meme temps."""
+    w = {name: 4 for name in TRAP_ITEMS}
+    w[SELF_DESTRUCT_TRAP] = {0: 0, 1: 1}.get(self_destruct, 4)
+    return {k: v for k, v in w.items() if v}
+
+
 TRAP_ITEMS: dict[str, tuple[str, int]] = {
     # degats : 1 x ou 2 x l'option damage_trap_percent (% des PV max), jamais mortel
     "Damage Trap": ("damage", 1),
