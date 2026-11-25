@@ -76,3 +76,5 @@ def test_self_destruct_waits_while_flying_but_edrug_does_not():
     assert not effect_allowed(**fly, kind="selfdestruct")
     assert effect_allowed(**fly, kind="edrug")
     assert effect_allowed(world_loaded=True, menu_closed=True, action=0, hp=500, kind="selfdestruct")
+    hack = {**fly, "action": 0x42}                                  # mini-jeu de piratage de 9S : pareil
+    assert not effect_allowed(**hack, kind="selfdestruct") and effect_allowed(**hack, kind="edrug")
