@@ -14,7 +14,7 @@ from ..data.weapons import WEAPONS
 import struct
 
 from .deathlink import HP_OFFSET, MAX_HP_COPY_OFFSET, add_funds
-from .traps import damage_after_trap, funds_after_trap
+from .traps import damage_after_trap, damage_percent, funds_after_trap
 from .inventory import item_table, weapon_table
 from .memory import ProcessMemory, read_cstr, read_u32
 
@@ -63,6 +63,8 @@ class NierGame:
         self.error: Optional[str] = None
         from .traps import Jams
         self.jams = Jams()
+        self.damage_trap_percent = 20       # options de la partie (slot_data)
+        self.enemy_trap_basic = True
 
     def attach(self) -> bool:
         if self.mem is not None and self.mem.is_alive():
@@ -266,9 +268,9 @@ class NierGame:
         if kind == "spawn":
             from .spawner import spawn_enemies
             pos = struct.unpack("<3f", self.mem.read(self.mem.base + self._off["playerLocation"], 12))
-            if spawn_enemies(self.mem, pos, count=percent):
+            if spawn_enemies(self.mem, pos, count=percent, basic_only=self.enemy_trap_basic):
                 return True
-            kind, percent = "damage", 10  # aucun ennemi charge dans la zone : degats a la place
+            kind, percent = "damage", 1  # aucun ennemi charge dans la zone : degats a la place
         if kind == "money":
             funds = read_u32(self.mem, self._off["funds"])
             self.mem.write(self.mem.base + self._off["funds"], struct.pack("<I", funds_after_trap(funds, percent)))
@@ -281,7 +283,8 @@ class NierGame:
             max_hp, = struct.unpack("<I", self.mem.read(p + MAX_HP_COPY_OFFSET, 4))
             if hp == 0 or max_hp == 0:
                 return False
-            self.mem.write(p + HP_OFFSET, struct.pack("<I", damage_after_trap(hp, max_hp, percent)))
+            pct = damage_percent(percent, self.damage_trap_percent)
+            self.mem.write(p + HP_OFFSET, struct.pack("<I", damage_after_trap(hp, max_hp, pct)))
         except OSError:
             return False
         return True

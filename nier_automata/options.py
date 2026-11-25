@@ -69,11 +69,29 @@ class RandomizedAbilities(OptionSet):
 
 
 class TrapPercentage(Range):
-    """Percentage of filler items replaced by traps (5%/10% max HP damage, 10% money loss, enemy spawn)."""
+    """Percentage of filler items replaced by traps (damage, 10% money loss, enemy spawn, system failures)."""
     display_name = "Trap Percentage"
     range_start = 0
     range_end = 100
     default = 20
+
+
+class DamageTrapPercent(Range):
+    """Share of max HP removed by a Damage Trap. A Heavy Damage Trap removes twice as much (capped at 90%).
+    A trap never kills."""
+    display_name = "Damage Trap Percent"
+    range_start = 5
+    range_end = 50
+    default = 20
+
+
+class EnemyTrapEnemies(Choice):
+    """Enemies spawned by an Enemy Trap: basic (small machines when the area has some) or random (any enemy
+    type present in the area, which can be a big one)."""
+    display_name = "Enemy Trap Enemies"
+    option_basic = 0
+    option_random = 1
+    default = 0
 
 
 class MaxLevelCheck(Range):
@@ -164,6 +182,8 @@ class NierAutomataOptions(PerGameCommonOptions):
     chest_checks: ChestChecks
     max_level_check: MaxLevelCheck
     trap_percentage: TrapPercentage
+    damage_trap_percent: DamageTrapPercent
+    enemy_trap_enemies: EnemyTrapEnemies
     pod_programs: PodPrograms
     starter_kit: StarterKit
     randomized_abilities: RandomizedAbilities

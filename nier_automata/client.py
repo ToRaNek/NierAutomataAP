@@ -115,6 +115,8 @@ class NierContext(CommonContext):
             self.trackers = make_trackers(self.state, self.scope)
             self.death_link_on = bool(sd.get("death_link", False))
             self.randomized_abilities = set(sd.get("randomized_abilities", []))
+            self.nier.damage_trap_percent = int(sd.get("damage_trap_percent", 20))
+            self.nier.enemy_trap_basic = sd.get("enemy_trap_enemies", "basic") != "random"
             self.ap_items_on = bool(self.scope.pickups)
             self.ap_contents = {}
             self.ap_flags = {}

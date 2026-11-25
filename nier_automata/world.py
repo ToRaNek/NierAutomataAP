@@ -170,6 +170,8 @@ class NierAutomataWorld(World):
             "shop_price": o.shop_price.value,
             "randomized_abilities": sorted(o.randomized_abilities.value),
             "starter_kit": bool(o.starter_kit),
+            "damage_trap_percent": o.damage_trap_percent.value,
+            "enemy_trap_enemies": o.enemy_trap_enemies.current_key,
             "ending_checks": bool(o.ending_checks),
             "death_link": bool(o.death_link),
         }

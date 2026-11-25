@@ -39,9 +39,12 @@ def ring_positions(center, count: int, radius: float) -> list[tuple[float, float
 
 
 def choose_enemy_type(loaded: Sequence[tuple[int, str]],
-                      rng: Callable[[list], int] = random.choice) -> Optional[int]:
-    """loaded : (objId, nom de fiche) des ennemis vivants. Exclut les carcasses."""
+                      rng: Callable[[list], int] = random.choice, basic_only: bool = False) -> Optional[int]:
+    """loaded : (objId, nom de fiche) des ennemis vivants. Exclut les carcasses.
+    basic_only : seulement les petites machines de base (em0000 / em0010) si la zone en a."""
     ids = sorted({oid for oid, name in loaded if oid >> 16 == 2 and name not in NOT_SPAWNABLE_NAMES})
+    if basic_only:
+        ids = [i for i in ids if i & 0xFFFF < 0x20] or ids
     return rng(ids) if ids else None
 
 
@@ -199,9 +202,9 @@ def alloc(mem, data: bytes) -> int:
     return p
 
 
-def spawn_enemies(mem, player_pos, count: int = 3, radius: float = 4.0) -> int:
+def spawn_enemies(mem, player_pos, count: int = 3, radius: float = 4.0, basic_only: bool = False) -> int:
     """Fait apparaitre `count` ennemis d'un type deja charge. Renvoie le nombre demande (0 si impossible)."""
-    oid = choose_enemy_type(loaded_enemies(mem))
+    oid = choose_enemy_type(loaded_enemies(mem), basic_only=basic_only)
     if oid is None:
         return 0
     name = f"em{oid & 0xFFFF:04x}".encode() + b"\0"

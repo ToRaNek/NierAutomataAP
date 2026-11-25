@@ -55,3 +55,15 @@ def test_enough_types_stops_scan():
     from nier_automata.game.spawner import enough_types
     assert not enough_types([(0x20000, "Corpse"), (0x20000, "")], 2)
     assert enough_types([(0x20000, ""), (0x20030, "")], 2)
+
+
+def test_enemy_trap_can_be_limited_to_basic_enemies():
+    # avis du testeur : option "seulement des ennemis de base" ou "completement aleatoire"
+    loaded = [(0x20000, ""), (0x20010, ""), (0x21000, ""), (0x28000, "")]
+    seen = []
+    choose_enemy_type(loaded, rng=lambda xs: seen.append(xs) or xs[0], basic_only=True)
+    assert seen[-1] == [0x20000, 0x20010]
+    choose_enemy_type(loaded, rng=lambda xs: seen.append(xs) or xs[0])
+    assert len(seen[-1]) == 4
+    # aucun ennemi de base charge dans la zone : n'importe lequel plutot que rien
+    assert choose_enemy_type([(0x21000, "")], rng=lambda xs: xs[0], basic_only=True) == 0x21000

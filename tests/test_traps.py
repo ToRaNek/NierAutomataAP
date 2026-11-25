@@ -22,7 +22,7 @@ def test_money_trap_takes_10_percent():
 
 def test_trap_items_registered():
     ids = item_name_to_id()
-    assert {"Damage Trap (5%)", "Damage Trap (10%)", "Money Trap"} <= set(TRAP_ITEMS)
+    assert {"Damage Trap", "Heavy Damage Trap", "Money Trap"} <= set(TRAP_ITEMS)
     assert all(name in ids for name in TRAP_ITEMS)
 
 
@@ -36,3 +36,12 @@ def test_system_failure_traps_registered():
                           ("System Failure: Heavy Attack", "Heavy Attack"),
                           ("System Failure: Pod Fire", "Pod Fire")):
         assert TRAP_ITEMS[name] == ("jam:" + ability, 20) and name in ids
+
+
+def test_damage_trap_strength_is_an_option():
+    # avis du testeur : 10 % des PV max ne sert a rien pour un joueur moyen -> reglable
+    from nier_automata.game.traps import damage_percent
+    assert TRAP_ITEMS["Damage Trap"] == ("damage", 1) and TRAP_ITEMS["Heavy Damage Trap"] == ("damage", 2)
+    assert damage_percent(1, 25) == 25 and damage_percent(2, 25) == 50
+    assert damage_percent(2, 50) == 90                       # plafonne : un piege ne vide jamais la barre
+    assert damage_after_trap(hp=1000, max_hp=1000, percent=damage_percent(2, 50)) == 100

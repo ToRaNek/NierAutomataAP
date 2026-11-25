@@ -32,8 +32,9 @@ FUNDS_ITEMS: dict[str, int] = {"500 G": 500, "1000 G": 1000, "2000 G": 2000}
 
 # Pieges : (type, pourcentage).
 TRAP_ITEMS: dict[str, tuple[str, int]] = {
-    "Damage Trap (5%)": ("damage", 5),
-    "Damage Trap (10%)": ("damage", 10),
+    # degats : 1 x ou 2 x l'option damage_trap_percent (% des PV max), jamais mortel
+    "Damage Trap": ("damage", 1),
+    "Heavy Damage Trap": ("damage", 2),
     "Money Trap": ("money", 10),
     "Enemy Trap": ("spawn", 3),
     # panne de systeme (comme les effets EMP du jeu) : la capacite ne repond plus pendant N secondes

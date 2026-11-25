@@ -9,6 +9,11 @@ def damage_after_trap(hp: int, max_hp: int, percent: int) -> int:
     return max(1, hp - math.ceil(max_hp * percent / 100))
 
 
+def damage_percent(factor: int, base_percent: int) -> int:
+    """% des PV max retire par un piege de degats (factor 1 ou 2 x le reglage), plafonne a 90."""
+    return max(1, min(90, factor * base_percent))
+
+
 def funds_after_trap(funds: int, percent: int) -> int:
     return funds - funds * percent // 100
 
