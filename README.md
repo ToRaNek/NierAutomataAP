@@ -70,7 +70,7 @@ cutscenes (a fall into a new area, for example) are not detected.
 - Notifications: "From X: item", "Check: Resistance Camp" then "For X: item".
 - Mail (access point Mail menu): "Archipelago checks" (remaining checks, with a count per kind) and "Hint from <player>"
   (hints other players requested on your world).
-- Optional DeathLink.
+- Optional DeathLink: a death received from another player is a real death in the game (death screen, respawn at your last save).
 
 ## Map
 The client has a **Map** tab: a top-down map of the world built from the game's own collision data. Hinted

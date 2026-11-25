@@ -73,7 +73,7 @@ sont pas detectes.
 - Notifications : "De Niicotine : X", "Check : Camp Resistance" puis "Pour Niicotine : X".
 - Messagerie (Courrier des points d'acces) : mail "Checks Archipelago" (checks restants) et mail
   "Indice de <joueur>" (indices demandes par les autres sur ta partie).
-- DeathLink en option.
+- DeathLink en option : une mort recue d'un autre joueur est une vraie mort dans le jeu (ecran de mort, retour a la derniere sauvegarde).
 
 ## Carte
 Le client a un onglet **Map** : une carte du monde vue de dessus, construite a partir des collisions du jeu.
