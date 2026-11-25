@@ -79,7 +79,7 @@ class NierGame:
             return False
         self.version = detect_version(self.mem.exe_path)
         if self.version is None:
-            self.error = "Unknown NieRAutomata.exe version: only Steam v1.04 is supported"
+            self.error = "Unknown NieRAutomata.exe version: only Steam v1.04 is supported (current Steam version, November 2026 update)"
             self.mem.close()
             self.mem = None
             return False

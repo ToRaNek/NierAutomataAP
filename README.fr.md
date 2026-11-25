@@ -11,7 +11,8 @@ Un lien `archipelago://pseudo@serveur:port` peut lui etre passe (ou associe aux 
 **A la main** : copie `nier_automata.apworld` dans `<Archipelago>/custom_worlds`, puis
 Launcher Archipelago -> *NieR:Automata Client*.
 
-Prerequis : NieR:Automata **Steam v1.04**, Archipelago **0.6.8+**. Celui qui genere la partie doit aussi
+Prerequis : NieR:Automata **Steam v1.04** (la version Steam actuelle : la mise a jour de novembre 2026,
+build Steam 26534214, il suffit de laisser Steam mettre le jeu a jour), Archipelago **0.6.8+**. Celui qui genere la partie doit aussi
 avoir le `.apworld`. Modele de reglages : `NieR Automata.yaml`.
 
 ## Jouer
@@ -87,7 +88,9 @@ le monde ouvert. Molette pour zoomer, glisser pour deplacer.
 ![Onglet Map](docs/map_tab.png)
 
 ## Limites connues
-- Uniquement Steam v1.04.
+- Uniquement Steam v1.04, c'est-a-dire la version Steam actuelle (mise a jour de novembre 2026, build
+  26534214). La version d'avant cette mise a jour n'est pas geree : le client affiche "Unknown NieRAutomata.exe
+  version" et ne fait rien.
 - Teste en jeu sur les trois routes par sauts de chapitre automatiques et captures d'ecran (`tools/`) :
   checks d'histoire de chaque chapitre, les 182 coffres retrouves a la position prevue (interieurs compris), AP Items poses a
   leur emplacement, achats dans les trois magasins, points d'acces, objectifs des fins A a E, et checks de

@@ -12,7 +12,8 @@ You can pass it an `archipelago://name@server:port` link.
 **Manually**: copy `nier_automata.apworld` into `<Archipelago>/custom_worlds`, then
 Archipelago Launcher -> *NieR:Automata Client*.
 
-Requirements: NieR:Automata **Steam v1.04**, Archipelago **0.6.8+**. Whoever generates the game also needs the
+Requirements: NieR:Automata **Steam v1.04** (the current Steam version: the November 2026 update, Steam
+build 26534214, so just let Steam update the game), Archipelago **0.6.8+**. Whoever generates the game also needs the
 `.apworld`. Settings template: `NieR Automata.yaml`.
 
 ## Playing
@@ -84,7 +85,8 @@ Scroll to zoom, drag to move.
 ![Map tab](docs/map_tab.png)
 
 ## Known limits
-- Steam v1.04 only.
+- Steam v1.04 only, which is the current Steam version (November 2026 update, build 26534214). The version
+  from before that update is not supported: the client says "Unknown NieRAutomata.exe version" and does nothing.
 - Tested in game on all three routes with automated chapter jumps and screen captures (`tools/`): story
   checks for every chapter, all 182 chests found at their expected position (interior rooms included), ground AP Items placed on their
   spots, purchases in the three shops, access points, the goals for endings A to E, and quest checks (one side quest played for real: accepted, items delivered,

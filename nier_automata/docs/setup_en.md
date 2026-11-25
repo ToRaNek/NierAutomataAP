@@ -1,7 +1,7 @@
 # NieR:Automata - Archipelago setup
 
 ## Requirements
-- NieR:Automata, **Steam v1.04**.
+- NieR:Automata, **Steam v1.04** (the current Steam version: November 2026 update, build 26534214).
 - Archipelago **0.6.8** or newer.
 
 ## Install
