@@ -2,3 +2,4 @@
 *.exe binary
 *.apworld binary
 *.bxm binary
+*.sh text eol=lf
