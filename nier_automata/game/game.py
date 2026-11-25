@@ -14,7 +14,7 @@ from ..data.weapons import WEAPONS
 import struct
 
 from .deathlink import HP_OFFSET, MAX_HP_COPY_OFFSET, add_funds
-from .traps import damage_after_trap, damage_percent, funds_after_trap
+from .traps import CutsceneHold, damage_after_trap, damage_percent, funds_after_trap
 from .inventory import item_table, weapon_table
 from .memory import ProcessMemory, read_cstr, read_u32
 
@@ -63,6 +63,7 @@ class NierGame:
         self.error: Optional[str] = None
         from .traps import Jams
         self.jams = Jams()
+        self.cutscene_hold = CutsceneHold()
         self.damage_trap_percent = 20       # options de la partie (slot_data)
         self.enemy_trap_basic = True
         self.lethal_traps = False
@@ -219,6 +220,12 @@ class NierGame:
     MENU_RVA = 0x11EAC2C           # 1 = aucun menu ouvert
     CUTSCENE_RVA = 0x11EAC4C       # 2 pendant une cinematique jouee dans le monde, 0 sinon (verifie en jeu)
 
+    def in_cutscene(self) -> bool:
+        try:
+            return struct.unpack("<I", self.mem.read(self.mem.base + self.CUTSCENE_RVA, 4))[0] != 0
+        except (OSError, AttributeError):
+            return False
+
     def _game_effect(self, kind: str) -> bool:
         """Lance un effet du jeu par sa propre fonction. False = pas maintenant (menu, chargement...)."""
         from .spawner import remote_call
@@ -231,8 +238,7 @@ class NierGame:
             menu, = struct.unpack("<I", self.mem.read(self.mem.base + self.MENU_RVA, 4))
             action, = struct.unpack("<I", self.mem.read(p + self.ACTION_OFFSET, 4))
             hp, = struct.unpack("<I", self.mem.read(p + HP_OFFSET, 4))
-            cut, = struct.unpack("<I", self.mem.read(self.mem.base + self.CUTSCENE_RVA, 4))
-            if not effect_allowed(loaded != 0, menu == 1, action, hp, kind, cutscene=cut != 0):
+            if not effect_allowed(loaded != 0, menu == 1, action, hp, kind):      # cinematique : apply_trap
                 return False
             if kind == "edrug":
                 remote_call(self.mem, self.mem.base + self.EDRUG_RVA, p)
@@ -300,9 +306,11 @@ class NierGame:
             return False
 
     def apply_trap(self, kind: str, percent: int) -> bool:
-        """False = pas applicable maintenant (pas d'entite) : le client reessaie au tour suivant."""
+        """False = pas applicable maintenant (pas d'entite, cinematique) : le client reessaie au tour suivant."""
+        import time
+        if kind != "money" and self.cutscene_hold.hold(self.in_cutscene(), time.monotonic()):
+            return False
         if kind.startswith("jam:"):
-            import time
             self.jams.start(kind[4:], percent, time.monotonic())
             return True
         if kind in ("selfdestruct", "edrug"):

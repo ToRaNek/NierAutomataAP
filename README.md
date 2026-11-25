@@ -61,7 +61,8 @@ dash, ground evade, pod fire, attacks...), recovery items and boosts, money, and
 - **Self-Destruct Trap**: the game's own self-destruct, short countdown then explosion, leaves you at 1 HP.
 - **E-Drug Trap**: the game's E-Drug effect, picture and sound scrambled for 30 seconds.
 
-Traps that use the game's own effects wait while a menu, a loading screen or a cutscene is up.
+Traps that use the game's own effects wait while a menu or a loading screen is up. Every trap except the Money
+Trap waits for the end of a cutscene (5 minutes at most).
 
 ## In game
 - Notifications: "From X: item", "Check: Resistance Camp" then "For X: item".

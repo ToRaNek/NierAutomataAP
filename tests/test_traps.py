@@ -88,3 +88,15 @@ def test_game_effects_wait_during_in_world_cutscene():
     for kind in ("selfdestruct", "edrug"):
         assert not effect_allowed(**ok, kind=kind, cutscene=True)
         assert effect_allowed(**ok, kind=kind, cutscene=False)
+
+
+def test_cutscene_hold_delays_traps_but_never_forever():
+    # tous les pieges (sauf l'argent) attendent la fin d'une cinematique ; si le signal du jeu restait bloque,
+    # on laisse passer apres max_wait pour ne pas geler la file d'objets
+    from nier_automata.game.traps import CutsceneHold
+    h = CutsceneHold(max_wait=300)
+    assert not h.hold(False, now=0)
+    assert h.hold(True, now=10) and h.hold(True, now=200)
+    assert not h.hold(True, now=311)                 # 300 s de cinematique continue : on laisse passer
+    assert not h.hold(False, now=320)
+    assert h.hold(True, now=330)                     # nouvelle cinematique : le compteur repart

@@ -31,6 +31,22 @@ class Jams:
         return {a for a, t in self.until.items() if t > now}
 
 
+class CutsceneHold:
+    """Retient les pieges pendant une cinematique, au plus `max_wait` secondes d'affilee."""
+
+    def __init__(self, max_wait: float = 300.0):
+        self.max_wait = max_wait
+        self.since = None
+
+    def hold(self, cutscene: bool, now: float) -> bool:
+        if not cutscene:
+            self.since = None
+            return False
+        if self.since is None:
+            self.since = now
+        return now - self.since < self.max_wait
+
+
 # actions du joueur pendant lesquelles on ne declenche rien (autodestruction en cours, etats speciaux)
 _BUSY_ACTIONS = {0x37, 0x38, 0x39, 0x41, 0x46, 0xC7, 0xAC, 0xAD}
 
