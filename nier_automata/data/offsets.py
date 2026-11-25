@@ -9,7 +9,8 @@ import hashlib
 from typing import Optional
 
 VERSIONS: dict[str, str] = {
-    "f814b0341d5d0eddb6a7e3266d1971609f889b7a80059c2fc7858cd239404c2e": "v1.04",  # v1.03
+    # L'exe d'avant la mise a jour Steam de novembre 2026 (f814b034..., "v1.03") n'est PAS accepte : toutes les
+    # adresses de fonctions du client ont ete relevees sur l'exe actuel, et l'ancien n'a jamais ete essaye.
     "09854c2d45d9a72e66357e72f50cee379bb2eafe35b3d64e5e88f4eddc8613fa": "v1.04",  # v1.04
 }
 
