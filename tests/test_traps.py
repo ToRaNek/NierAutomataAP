@@ -45,3 +45,17 @@ def test_damage_trap_strength_is_an_option():
     assert damage_percent(1, 25) == 25 and damage_percent(2, 25) == 50
     assert damage_percent(2, 50) == 90                       # plafonne : un piege ne vide jamais la barre
     assert damage_after_trap(hp=1000, max_hp=1000, percent=damage_percent(2, 50)) == 100
+
+
+def test_game_effect_traps_registered_and_guarded():
+    # avis du testeur : pieges autodestruction et E-Drug (effets du jeu lui-meme)
+    from nier_automata.game.traps import effect_allowed
+    ids = item_name_to_id()
+    assert TRAP_ITEMS["Self-Destruct Trap"] == ("selfdestruct", 0) and "Self-Destruct Trap" in ids
+    assert TRAP_ITEMS["E-Drug Trap"] == ("edrug", 0) and "E-Drug Trap" in ids
+    ok = dict(world_loaded=True, menu_closed=True, action=0, hp=500)
+    assert effect_allowed(**ok)
+    assert not effect_allowed(**{**ok, "world_loaded": False})      # chargement, dialogue, cinematique
+    assert not effect_allowed(**{**ok, "menu_closed": False})
+    assert not effect_allowed(**{**ok, "action": 0x38})             # deja en autodestruction
+    assert not effect_allowed(**{**ok, "hp": 1})

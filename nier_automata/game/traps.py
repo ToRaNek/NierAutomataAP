@@ -29,3 +29,12 @@ class Jams:
 
     def active(self, now: float) -> set:
         return {a for a, t in self.until.items() if t > now}
+
+
+# actions du joueur pendant lesquelles on ne declenche rien (autodestruction en cours, etats speciaux)
+_BUSY_ACTIONS = {0x37, 0x38, 0x39, 0x41, 0x46, 0xC7, 0xAC, 0xAD}
+
+
+def effect_allowed(world_loaded: bool, menu_closed: bool, action: int, hp: int) -> bool:
+    """Peut-on lancer un effet du jeu sur le joueur maintenant ? Sinon le client reessaie au tour suivant."""
+    return bool(world_loaded and menu_closed and action not in _BUSY_ACTIONS and hp > 1)

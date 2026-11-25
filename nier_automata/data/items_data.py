@@ -41,6 +41,9 @@ TRAP_ITEMS: dict[str, tuple[str, int]] = {
     "System Failure: Light Attack": ("jam:Light Attack", 20),
     "System Failure: Heavy Attack": ("jam:Heavy Attack", 20),
     "System Failure: Pod Fire": ("jam:Pod Fire", 20),
+    # effets du jeu lui-meme, declenches par ses propres fonctions (verifie en jeu)
+    "Self-Destruct Trap": ("selfdestruct", 0),   # alarme, compte a rebours ~2 s, explosion, puis degats lourds
+    "E-Drug Trap": ("edrug", 0),                 # image et son brouilles 30 s + effets aleatoires
 }
 
 # Ravitaillement donne une fois par le client a l'entree des deux passages durs sans retour possible (avis d'un

@@ -209,6 +209,35 @@ class NierGame:
             return self._items.add(FILLER_ITEMS[name], FILLER_QUANTITY.get(name, 1))
         return True  # objet inconnu : ignore plutot que bloquer la file
 
+    SET_ACTION_RVA = 0x433C70      # setAction(joueur, action, 0, 0, 0) ; 0x38 = explosion d'autodestruction
+    EDRUG_RVA = 0x52D160           # effet de l'objet E-Drug sur le joueur
+    ACTION_OFFSET = 0x670
+    WORLD_LOADED_RVA = 0xF6E3C0
+    MENU_RVA = 0x11EAC2C           # 1 = aucun menu ouvert
+
+    def _game_effect(self, kind: str) -> bool:
+        """Lance un effet du jeu par sa propre fonction. False = pas maintenant (menu, chargement...)."""
+        from .spawner import remote_call
+        from .traps import effect_allowed
+        p = self.entity()
+        if p is None:
+            return False
+        try:
+            loaded, = struct.unpack("<I", self.mem.read(self.mem.base + self.WORLD_LOADED_RVA, 4))
+            menu, = struct.unpack("<I", self.mem.read(self.mem.base + self.MENU_RVA, 4))
+            action, = struct.unpack("<I", self.mem.read(p + self.ACTION_OFFSET, 4))
+            hp, = struct.unpack("<I", self.mem.read(p + HP_OFFSET, 4))
+            if not effect_allowed(loaded != 0, menu == 1, action, hp):
+                return False
+            if kind == "edrug":
+                remote_call(self.mem, self.mem.base + self.EDRUG_RVA, p)
+                return True
+            remote_call(self.mem, self.mem.base + self.SET_ACTION_RVA, p, 0x38, 0, 0, e=0)
+        except OSError:
+            return False
+        self.apply_trap("damage", 2)       # l'explosion du jeu ne retire pas de PV par cet appel
+        return True
+
     def jammed(self) -> set:
         import time
         return self.jams.active(time.monotonic())
@@ -265,6 +294,8 @@ class NierGame:
             import time
             self.jams.start(kind[4:], percent, time.monotonic())
             return True
+        if kind in ("selfdestruct", "edrug"):
+            return self._game_effect(kind)
         if kind == "spawn":
             from .spawner import spawn_enemies
             pos = struct.unpack("<3f", self.mem.read(self.mem.base + self._off["playerLocation"], 12))
