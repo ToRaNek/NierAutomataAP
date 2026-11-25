@@ -15,6 +15,7 @@ class AbilityLock:
     def __init__(self, mem, randomized: set[str]):
         self.mem = mem
         self.randomized = {a for a in randomized if a in ABILITY_PATCHES or a in CONDITIONAL}
+        self.jammed: set[str] = set()      # pannes en cours (pieges "System Failure")
 
     def _set(self, patch_name: str, locked: bool) -> None:
         for p in ABILITY_PATCHES[patch_name]:
@@ -26,16 +27,22 @@ class AbilityLock:
             writer = getattr(self.mem, "write_code", self.mem.write)
             writer(addr, want)
 
-    def sync(self, received: set[str], grounded: Optional[bool] = None, allowed: bool = True) -> None:
+    def sync(self, received: set[str], grounded: Optional[bool] = None, allowed: bool = True,
+             jammed=frozenset()) -> None:
         if not allowed:
             self.unlock_all()
             return
+        jammed = {a for a in jammed if a in ABILITY_PATCHES}
         for name in self.randomized:
             if name in CONDITIONAL:
                 self._set(CONDITIONAL[name], locked=name not in received and grounded is True)
             else:
-                self._set(name, locked=name not in received)
+                self._set(name, locked=name not in received or name in jammed)
+        for name in (jammed | self.jammed) - self.randomized:
+            self._set(name, locked=name in jammed)
+        self.jammed = jammed
 
     def unlock_all(self) -> None:
-        for name in self.randomized:
+        for name in self.randomized | self.jammed:
             self._set(CONDITIONAL.get(name, name), locked=False)
+        self.jammed = set()

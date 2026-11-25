@@ -28,3 +28,11 @@ def test_trap_items_registered():
 
 def test_enemy_trap_registered():
     assert TRAP_ITEMS["Enemy Trap"] == ("spawn", 3)
+
+
+def test_system_failure_traps_registered():
+    ids = item_name_to_id()
+    for name, ability in (("System Failure: Light Attack", "Light Attack"),
+                          ("System Failure: Heavy Attack", "Heavy Attack"),
+                          ("System Failure: Pod Fire", "Pod Fire")):
+        assert TRAP_ITEMS[name] == ("jam:" + ability, 20) and name in ids

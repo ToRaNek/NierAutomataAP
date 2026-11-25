@@ -268,12 +268,15 @@ async def ability_loop(ctx: NierContext):
         except Exception:
             pass
         try:
-            if not ctx.randomized_abilities or ctx.state is None or ctx.nier.mem is None:
+            if ctx.state is None or ctx.nier.mem is None:
+                continue
+            jammed = ctx.nier.jammed()
+            if not ctx.randomized_abilities and not jammed and ctx.ability_lock is None:
                 continue
             if ctx.ability_lock is None or ctx.ability_lock.mem is not ctx.nier.mem:
                 ctx.ability_lock = AbilityLock(ctx.nier.mem, ctx.randomized_abilities)
             ctx.ability_lock.sync(ctx.received_names, ctx.nier.grounded(),
-                                  allowed=abilities_allowed(ctx.nier.phase()))
+                                  allowed=abilities_allowed(ctx.nier.phase()), jammed=jammed)
         except Exception:
             pass
 

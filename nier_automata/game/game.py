@@ -61,6 +61,8 @@ class NierGame:
         self.mem: Optional[ProcessMemory] = None
         self.version: Optional[str] = None
         self.error: Optional[str] = None
+        from .traps import Jams
+        self.jams = Jams()
 
     def attach(self) -> bool:
         if self.mem is not None and self.mem.is_alive():
@@ -201,6 +203,10 @@ class NierGame:
             return self._items.add(FILLER_ITEMS[name], FILLER_QUANTITY.get(name, 1))
         return True  # objet inconnu : ignore plutot que bloquer la file
 
+    def jammed(self) -> set:
+        import time
+        return self.jams.active(time.monotonic())
+
     def remove_weapon(self, weapon_id: int) -> bool:
         return self._weapons.remove(weapon_id)
 
@@ -242,6 +248,10 @@ class NierGame:
 
     def apply_trap(self, kind: str, percent: int) -> bool:
         """False = pas applicable maintenant (pas d'entite) : le client reessaie au tour suivant."""
+        if kind.startswith("jam:"):
+            import time
+            self.jams.start(kind[4:], percent, time.monotonic())
+            return True
         if kind == "spawn":
             from .spawner import spawn_enemies
             pos = struct.unpack("<3f", self.mem.read(self.mem.base + self._off["playerLocation"], 12))

@@ -27,6 +27,10 @@ TRAP_ITEMS: dict[str, tuple[str, int]] = {
     "Damage Trap (10%)": ("damage", 10),
     "Money Trap": ("money", 10),
     "Enemy Trap": ("spawn", 3),
+    # panne de systeme (comme les effets EMP du jeu) : la capacite ne repond plus pendant N secondes
+    "System Failure: Light Attack": ("jam:Light Attack", 20),
+    "System Failure: Heavy Attack": ("jam:Heavy Attack", 20),
+    "System Failure: Pod Fire": ("jam:Pod Fire", 20),
 }
 
 # Ravitaillement donne une fois par le client a l'entree des deux passages durs sans retour possible (avis d'un

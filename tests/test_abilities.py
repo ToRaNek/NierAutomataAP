@@ -121,3 +121,30 @@ def test_nothing_locked_when_not_allowed():
     lock.sync(received=set(), allowed=False)           # prologue / vaisseau : tout se debloque
     assert m.read(m.base + DJ.rva, 1) == DJ.original
     assert m.read(m.base + AD.rva, 6) == AD.original
+
+
+def test_system_failure_trap_locks_then_restores():
+    # avis du testeur : pieges "panne de systeme" (attaque legere / lourde / tir du Pod) comme les effets EMP
+    LA, = ABILITY_PATCHES["Light Attack"]
+    m = mem_with_originals()
+    lock = AbilityLock(m, randomized=set())                  # rien de randomise : seulement le piege
+    lock.sync(received=set(), jammed={"Light Attack"})
+    assert m.read(m.base + LA.rva, 5) == LA.locked
+    lock.sync(received=set(), jammed=set())
+    assert m.read(m.base + LA.rva, 5) == LA.original
+    # capacite randomisee pas encore recue : reste bloquee apres la panne
+    lock2 = AbilityLock(m, randomized={"Light Attack"})
+    lock2.sync(received=set(), jammed={"Light Attack"})
+    lock2.sync(received=set(), jammed=set())
+    assert m.read(m.base + LA.rva, 5) == LA.locked
+    lock2.unlock_all()
+    assert m.read(m.base + LA.rva, 5) == LA.original
+
+
+def test_jam_timer():
+    from nier_automata.game.traps import Jams
+    j = Jams()
+    j.start("Pod Fire", 20, now=100.0)
+    assert j.active(now=110.0) == {"Pod Fire"}
+    j.start("Pod Fire", 20, now=110.0)                       # un 2e piege prolonge
+    assert j.active(now=125.0) == {"Pod Fire"} and j.active(now=131.0) == set()
