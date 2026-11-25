@@ -155,8 +155,10 @@ this, an underground check looks the same as whatever is above it on the surface
 - New traps (Level Up, Teleport, System Failure: Evade / Double Jump): each one sent by a server to the real
   client and measured in game (levels +10, 78 m back to the position of 20 seconds before, both moves locked for
   20 seconds then released).
-- Gag endings: ending W played with the real client (the game goes to its "Ending_W" phase, the check is sent).
-  The 20 others use the same phase name pattern from the game data but were not played.
+- Gag endings: endings W (die in the prologue), U (self-destruct in the Bunker) and M (leave Pascal's Village
+  during its attack) were played with the real client: the game goes to its "Ending_<letter>" phase and the check
+  is sent. The 18 others use the same phase name in the game data, but could not be triggered by the test tools
+  (they need a story situation the chapter jump does not set up), so they are not proven.
 - Fish checks: the check is sent when the fish enters the inventory (tested by giving a Carp with the game's own
   give function). A real catch was not achieved by the test robot.
 - Mail titles: open an access point for ~10 s the first time after each game launch.
