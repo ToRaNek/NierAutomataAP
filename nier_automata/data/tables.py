@@ -5,7 +5,8 @@ from .abilities import ABILITY_PATCHES
 from .areas import AREA_PASSES
 from .routes import ROUTE_KEYS
 from .towerkeys import TOWER_KEYS
-from .items_data import FILLER_ITEMS, FUNDS_ITEMS, MATERIALS, POD_PROGRAMS, TRAP_ITEMS
+from .gagendings import GAG_ENDINGS
+from .items_data import FILLER_ITEMS, FISH, FUNDS_ITEMS, MATERIALS, POD_PROGRAMS, TRAP_ITEMS
 from .weapons import WEAPONS
 
 BASE_CODE = 0x4E41_0000
@@ -68,6 +69,10 @@ def item_location(name: str) -> str:
     return f"Item: {name}"
 
 
+def fish_location(name: str) -> str:
+    return f"Fish: {name}"
+
+
 def item_name_to_id() -> dict[str, int]:
     ids: dict[str, int] = {}
     for i, name in enumerate(WEAPONS):
@@ -113,6 +118,10 @@ def location_name_to_id() -> dict[str, int]:
         locs[program_location(n)] = BASE_CODE + 0xE000 + n
     for i, letter in enumerate("ABCD"):
         locs[ending_location(letter)] = BASE_CODE + 0xD000 + i
+    for i, letter in enumerate(GAG_ENDINGS):
+        locs[ending_location(letter)] = BASE_CODE + 0xD010 + i
+    for i, name in enumerate(FISH):
+        locs[fish_location(name)] = BASE_CODE + 0x3100 + i
     return locs
 
 

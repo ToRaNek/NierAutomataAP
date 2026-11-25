@@ -5,11 +5,12 @@ from worlds.LauncherComponents import Component, Type, components, launch_subpro
 from .data import worlddb as db
 from .data.areas import AREA_PASSES, pass_for_region, passes_in_scope
 from .data.routes import ROUTE_KEYS, keys_in_scope
+from .data import gagendings
 from .data.chapterlocks import CHAPTER_KEYS, key_counts, keys_needed
 from .data.towerkeys import TOWER_KEYS, TOWER_REGION, keys_in_scope as tower_keys_in_scope
-from .data.items_data import FILLER_ITEMS, FUNDS_ITEMS, MATERIALS, POD_PROGRAMS, STARTER_KIT, TRAP_ITEMS, trap_weights
+from .data.items_data import FISH, FILLER_ITEMS, FUNDS_ITEMS, MATERIALS, POD_PROGRAMS, STARTER_KIT, TRAP_ITEMS, trap_weights
 from .data.tables import (
-    SHOP_PLACES_ORDER, SHOP_REGION, item_location, item_name_to_id, level_location, location_name_to_id,
+    SHOP_PLACES_ORDER, SHOP_REGION, fish_location, item_location, item_name_to_id, level_location, location_name_to_id,
     ending_location, pool_weapon_count, program_location, quest_excluded, shop_location, shop_missable, weapon_location,
 )
 from .data.weapons import STARTING_WEAPONS, WEAPONS
@@ -102,6 +103,11 @@ class NierAutomataWorld(World):
         out += [(program_location(n), s.regions[0], True, []) for n in range(1, s.program_checks + 1)]
         if s.item_checks:
             out += [(item_location(m), s.regions[0], True, []) for m in MATERIALS]
+        if self.options.fish_checks:
+            out += [(fish_location(f), s.regions[0], True, []) for f in FISH]
+        if self.options.gag_ending_checks:
+            out += [(ending_location(e), gagendings.region_of(e, s.regions), True, [])
+                    for e in gagendings.letters_in_scope(s.regions)]
         return out
 
     def _quest_excluded(self, quest: dict) -> bool:
@@ -201,6 +207,8 @@ class NierAutomataWorld(World):
             "weapon_checks": o.weapon_checks.value,
             "max_level_check": o.max_level_check.value,
             "item_checks": bool(o.item_checks),
+            "fish_checks": bool(o.fish_checks),
+            "gag_ending_checks": bool(o.gag_ending_checks),
             "shop_checks": o.shop_checks.value,
             "shop_price": o.shop_price.value,
             "randomized_abilities": sorted(o.randomized_abilities.value),

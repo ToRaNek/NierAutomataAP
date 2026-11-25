@@ -4,12 +4,12 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 
 from ..data import worlddb as db
-from ..data.items_data import MATERIALS, POD_PROGRAMS, SUPPLY_DROPS
+from ..data.items_data import FISH, MATERIALS, POD_PROGRAMS, SUPPLY_DROPS
 from ..data.phases import is_prologue
 from ..data.routes import locked_route
 from ..data import chapterlocks
 from ..data import towerkeys
-from ..data.tables import (access_point_location, chest_location, ending_location, program_location, item_location, level_location,
+from ..data.tables import (fish_location, access_point_location, chest_location, ending_location, program_location, item_location, level_location,
                            location_name_to_id, pickup_location, quest_location, story_location, weapon_location)
 from ..data.weapons import STARTING_WEAPONS, WEAPONS
 from .state import ClientState
@@ -18,6 +18,7 @@ from .trackers import ChestTracker, ItemTracker, LevelTracker, StoryTracker, Wea
 _LOCS = location_name_to_id()
 _WEAPON_NAME_BY_ID = {v: k for k, v in WEAPONS.items()}
 _MATERIAL_LOC_BY_ID = {v: _LOCS[item_location(k)] for k, v in MATERIALS.items()}
+_FISH_LOC_BY_ID = {v: _LOCS[fish_location(k)] for k, v in FISH.items()}
 
 GOAL_STORY, GOAL_ENDING_A = db.GOAL_STORY, db.GOAL_ENDING_A
 
@@ -54,6 +55,9 @@ def due_locations(state: ClientState, scope: db.Scope) -> set[int]:
     due |= {_LOCS[weapon_location(i)] for i in range(1, min(state.weapons_found, scope.weapon_checks) + 1)}
     if scope.item_checks:
         due |= {_MATERIAL_LOC_BY_ID[i] for i in state.items_found if i in _MATERIAL_LOC_BY_ID}
+    if getattr(scope, "fish_checks", False):
+        due |= {_FISH_LOC_BY_ID[i] for i in state.items_found if i in _FISH_LOC_BY_ID}
+    due |= {_LOCS[ending_location(e)] for e in state.endings_seen & set(getattr(scope, "gag_endings", ()))}
     due |= {_LOCS[chest_location(i)] for i in state.chests_opened & scope.chests}
     due |= {_LOCS[pickup_location(i)] for i in state.ap_spots_collected & scope.pickups}
     due |= {_LOCS[access_point_location(i)] for i in state.access_points & scope.access_points}
@@ -89,6 +93,8 @@ def goal_reached(state: ClientState, phase: str, scope: db.Scope, endings=frozen
 
 def make_trackers(state: ClientState, scope: db.Scope) -> Trackers:
     enabled = set(MATERIALS.values()) if scope.item_checks else set()
+    if getattr(scope, "fish_checks", False):
+        enabled |= set(FISH.values())
     return Trackers(StoryTracker(state, scope.chapters), WeaponTracker(state, scope.weapon_checks),
                     ItemTracker(state, enabled), ChestTracker(state, scope.chests), LevelTracker(state), scope)
 

@@ -37,6 +37,11 @@ Chaque check porte le nom de son lieu : un indice dit donc ou aller.
   pas y toucher).
 - **Ending A / B / C / D** : chaque fin principale atteinte avant l'objectif (`ending_checks`). La fin qui
   sert d'objectif n'est pas un check ; les fins "gag" ne le sont jamais.
+- **Fish: <nom>** (`fish_checks`, desactive par defaut) : la premiere prise de chacune des 41 especes de
+  poissons. Ne contient jamais d'objet important.
+- **Ending F ... Ending Z** (`gag_ending_checks`, desactive par defaut) : chaque fin gag des routes que tu joues,
+  la premiere fois que tu l'obtiens. Ne contient jamais d'objet important. Une fin gag n'ecrit que son propre
+  drapeau dans ta sauvegarde ; ta progression n'est pas touchee (verifie octet par octet sur la fin W).
 - **Quest: <nom>** : terminer une quete annexe. La plupart se ferment apres le chapitre 7 (verifie en jeu) :
   elles ne contiennent jamais d'objet important ; le jeu donne toujours sa propre recompense.
 
@@ -92,6 +97,10 @@ aerien, esquive au sol, tir du Pod, attaques...), soins et bonus, argent, et pie
 - **System Failure: Light Attack / Heavy Attack / Pod Fire** : ce systeme ne repond plus pendant 20 secondes.
 - **Self-Destruct Trap** (`self_destruct_trap` : `rare` par defaut, `normal`, `off`) : l'autodestruction du jeu, court compte a rebours puis explosion, il reste 1 PV.
 - **E-Drug Trap** : l'effet E-Drug du jeu, image et son brouilles pendant 30 secondes.
+- **Level Up Trap** : les ennemis autour de toi gagnent 10 niveaux (des degats a la place s'il n'y en a pas).
+- **Teleport Trap** : tu es remis la ou tu etais il y a 20 secondes (jamais a plus de 150 m ; attend si tu voles
+  ou si tu pirates).
+- **System Failure: Evade / Double Jump** : ce mouvement ne repond plus pendant 20 secondes.
 
 Les pieges qui utilisent les effets du jeu attendent tant qu'un menu ou un chargement est a l'ecran. Tous les
 pieges sauf le Money Trap attendent la fin d'une cinematique (5 minutes au plus). Les courts mouvements de
@@ -150,6 +159,13 @@ Sans ca, un check sous terre se confond avec ce qui est en surface au meme endro
   Parc (dialogue des Pods au debut du chapitre 17). Le client verifie dix fois par seconde et les cles ne
   reviennent pas. Le jeu remet aussi les cles au chargement d'un chapitre suivant ; le client les reprend des
   que le jeu est jouable.
+- Nouveaux pieges (Level Up, Teleport, System Failure: Evade / Double Jump) : chacun envoye par un serveur au
+  vrai client et mesure en jeu (niveaux +10, retour de 78 m a la position d'il y a 20 secondes, les deux
+  mouvements bloques 20 secondes puis liberes).
+- Fins gag : la fin W jouee avec le vrai client (le jeu passe sur sa phase "Ending_W", le check part). Les 20
+  autres suivent le meme modele de nom de phase dans les donnees du jeu mais n'ont pas ete jouees.
+- Checks de poisson : le check part quand le poisson entre dans l'inventaire (essaye en donnant une carpe avec la
+  fonction de don du jeu). Une vraie prise n'a pas ete reussie par le robot de test.
 - Titres des mails : ouvrir un point d'acces ~10 s la premiere fois apres chaque lancement du jeu.
 - Ne pas charger une autre sauvegarde que celle de la seed.
 

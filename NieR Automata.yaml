@@ -58,6 +58,10 @@ NieR:Automata:
   enemy_trap_enemies: basic
   # Self-Destruct Trap leaves you at 1 HP: off, rare (4 times less often than each other trap) or normal.
   self_destruct_trap: rare
+  # First catch of each of the 41 fish species sends a "Fish: <name>" check (never an important item).
+  fish_checks: false
+  # Each joke ending (F to Z) of the routes you play sends an "Ending <letter>" check (never an important item).
+  gag_ending_checks: false
   # First pickup of each material = one check (many checks).
   item_checks: false
   death_link: false

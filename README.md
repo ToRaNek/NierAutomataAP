@@ -35,6 +35,11 @@ Everything is named after where it is, so a hint tells you where to go.
   are taken back, you keep the ones the multiworld sends (`pod_program_checks`, 0 = leave them alone).
 - **Ending A / B / C / D**: each main ending reached before the goal (`ending_checks`). The goal ending is
   not a check; joke endings are never checks.
+- **Fish: <name>** (`fish_checks`, off by default): the first catch of each of the 41 fish species. Never holds
+  an important item.
+- **Ending F ... Ending Z** (`gag_ending_checks`, off by default): each joke ending of the routes you play, the
+  first time you get it. Never holds an important item. A joke ending only writes its own flag in your save;
+  your progress is untouched (checked byte by byte on ending W).
 - **Quest: <name>**: finishing a side quest. Most quests close after chapter 7 (checked in game), so they
   never hold an important item; the game still gives its own reward.
 
@@ -89,6 +94,10 @@ dash, ground evade, pod fire, attacks...), recovery items and boosts, money, and
 - **System Failure: Light Attack / Heavy Attack / Pod Fire**: that system stops answering for 20 seconds.
 - **Self-Destruct Trap** (`self_destruct_trap`: `rare` by default, `normal`, `off`): the game's own self-destruct, short countdown then explosion, leaves you at 1 HP.
 - **E-Drug Trap**: the game's E-Drug effect, picture and sound scrambled for 30 seconds.
+- **Level Up Trap**: the enemies around you gain 10 levels (damage instead if there is none).
+- **Teleport Trap**: you are put back where you were 20 seconds ago (never further than 150 m; waits while you
+  are flying or hacking).
+- **System Failure: Evade / Double Jump**: that move stops answering for 20 seconds.
 
 Traps that use the game's own effects wait while a menu or a loading screen is up. Every trap except the Money
 Trap waits for the end of a cutscene (5 minutes at most). Short scripted camera moves that are not real
@@ -143,6 +152,13 @@ this, an underground check looks the same as whatever is above it on the surface
   Key x 1" and the client takes it back within a second) and the Park key (Pod dialogue at the start of chapter
   17). The client checks ten times per second and the keys do not come back. The game also puts the keys back
   when a later chapter loads; the client takes them back as soon as the game is playable.
+- New traps (Level Up, Teleport, System Failure: Evade / Double Jump): each one sent by a server to the real
+  client and measured in game (levels +10, 78 m back to the position of 20 seconds before, both moves locked for
+  20 seconds then released).
+- Gag endings: ending W played with the real client (the game goes to its "Ending_W" phase, the check is sent).
+  The 20 others use the same phase name pattern from the game data but were not played.
+- Fish checks: the check is sent when the fish enters the inventory (tested by giving a Carp with the game's own
+  give function). A real catch was not achieved by the test robot.
 - Mail titles: open an access point for ~10 s the first time after each game launch.
 - Don't load another save than the one of the seed.
 

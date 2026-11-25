@@ -153,6 +153,8 @@ class Scope:
         self.route_keys: dict = {}           # {route: objet} des routes verrouillees (option route_locks)
         self.chapter_keys: dict = {}         # {route: objet} des grands chapitres verrouilles (chapter_locks)
         self.tower_keys: bool = False        # cles d'acces de la Tour reprises et rendues (option tower_keys)
+        self.fish_checks: bool = False       # premiere prise de chaque poisson = check (option fish_checks)
+        self.gag_endings: tuple = ()         # fins gag qui sont des checks (option gag_ending_checks)
 
 
 def make_scope(goal: int, story_checks: int, chest_checks: bool, ap_items_per_area: int,
@@ -182,6 +184,10 @@ def scope_from_slot_data(sd: dict) -> Scope:
     scope.route_keys = dict(sd.get("route_keys", {}))
     scope.chapter_keys = dict(sd.get("chapter_keys", {}))
     scope.tower_keys = bool(sd.get("tower_keys", False))
+    scope.fish_checks = bool(sd.get("fish_checks", False))
+    if sd.get("gag_ending_checks", False):
+        from .gagendings import letters_in_scope
+        scope.gag_endings = letters_in_scope(scope.regions)
     if sd.get("ending_checks", False):
         scope.endings = ending_checks(scope.goal, scope.regions)
     return scope

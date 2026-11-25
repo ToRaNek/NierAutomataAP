@@ -276,3 +276,29 @@ def spawn_enemies(mem, player_pos, count: int = 3, radius: float = 4.0, basic_on
             if done >= count:
                 break
     return count
+
+
+MAX_ENEMY_LEVEL = 99
+LEVEL_UP_MAX_TARGETS = 20
+
+
+def raised_level(level: int, delta: int) -> int:
+    """Niveau apres le piege : +delta, borne a 99. 0 = valeur illisible, on n'y touche pas."""
+    return min(MAX_ENEMY_LEVEL, level + delta) if 1 <= level < MAX_ENEMY_LEVEL else 0
+
+
+def raise_enemy_levels(mem, delta: int) -> int:
+    """Piege "Level Up" : les ennemis presents (hors objets non clonables) gagnent `delta` niveaux par la fonction
+    du jeu EmBase::SetLevel, qui recalcule leurs statistiques. Renvoie le nombre d'ennemis modifies."""
+    done = 0
+    for ptr, _oid, name in enemy_entities(mem):
+        if name in NOT_SPAWNABLE_NAMES or done >= LEVEL_UP_MAX_TARGETS:
+            continue
+        try:
+            new = raised_level(struct.unpack("<I", mem.read(ptr + LEVEL_OFFSET, 4))[0], delta)
+            if new:
+                remote_call(mem, mem.base + SET_LEVEL_RVA, ptr, new)
+                done += 1
+        except OSError:
+            pass
+    return done

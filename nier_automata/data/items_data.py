@@ -56,6 +56,11 @@ TRAP_ITEMS: dict[str, tuple[str, int]] = {
     # effets du jeu lui-meme, declenches par ses propres fonctions (verifie en jeu)
     "Self-Destruct Trap": ("selfdestruct", 0),   # alarme, compte a rebours ~2 s, explosion : il reste 1 PV
     "E-Drug Trap": ("edrug", 0),                 # image et son brouilles 30 s + effets aleatoires
+    # ajoutes en 0.5.0 (toujours a la fin : les codes des objets suivent cet ordre)
+    "Level Up Trap": ("levelup", 10),            # les ennemis presents gagnent 10 niveaux
+    "Teleport Trap": ("teleport", 20),           # retour a la position d'il y a 20 secondes
+    "System Failure: Evade": ("jam:Evade", 20),
+    "System Failure: Double Jump": ("jam:Double Jump", 20),
 }
 
 # Ravitaillement donne une fois par le client a l'entree des deux passages durs sans retour possible (avis d'un
@@ -142,4 +147,19 @@ MATERIALS: dict[str, int] = {
     "Viscous Oil": 852,
     "Volt-Proof Salve": 50,
     "Warped Wire": 643,
+}
+
+
+# Poissons (option fish_checks) : la premiere prise de chaque espece est un check "Fish: <nom>". Identifiants
+# d'objet lus dans core/core.dat:FishParam.csv (docs/research/logic_gaps_resolved.json, section fishing).
+FISH: dict[str, int] = {
+    "Arowana": 8001, "Twinfish": 8002, "Killifish": 8003, "Carp": 8004, "Bloat Fish": 8005, "Koi Carp": 8006,
+    "Fur Carp": 8007, "Freshwater Ray": 8008, "Arapaima": 8009, "Oil Sardine": 8010, "Water Flea": 8011,
+    "Twoface": 8012, "Coelacanth": 8013, "Blowfish": 8014, "Swordfish": 8015, "Mackerel": 8016,
+    "Horseshoe Crab": 8017, "Beetle Fish": 8018, "Starfish": 8019, "Bream": 8020, "Basking Shark": 8021,
+    "Killifish Machine": 8022, "Koi Carp Machine": 8023, "Arapaima Machine": 8024, "Carp Machine": 8025,
+    "Bloat Fish Machine": 8026, "Blowfish Machine": 8027, "Swordfish Machine": 8028, "Starfish Machine": 8029,
+    "Bream Machine": 8030, "Coelacanth Machine": 8031, "Mackerel Machine": 8032, "Horseshoe Crab Machine": 8033,
+    "Arowana Machine": 8034, "Basking Shark Machine": 8035, "Freshwater Ray Machine": 8036,
+    "Machine Lifeform Head": 8037, "Tire": 8038, "Gas Cylinder": 8039, "Battery": 8040, "Broken Firearm": 8041,
 }

@@ -64,6 +64,8 @@ class NierGame:
         from .traps import Jams
         self.jams = Jams()
         self.cutscene_hold = CutsceneHold()
+        from .traps import Trail
+        self.trail = Trail()
         self.lethal_traps = False
         self.enemy_trap_basic = True
         self.damage_trap_percent = 20       # options de la partie (slot_data)
@@ -260,6 +262,17 @@ class NierGame:
             return False
         return True                        # l'explosion du jeu laisse 1 PV, comme une vraie autodestruction
 
+    _NO_TELEPORT_ACTIONS = frozenset({None, 0x84, 0x42, 0xAF, 0x2C, 0x35, 0x36})
+
+    def remember_position(self) -> None:
+        """Garde la position du joueur (piege "Teleport"). Appele a chaque tour du client, hors cinematique."""
+        import time
+        try:
+            if not self.in_cutscene() and self.action() not in self._NO_TELEPORT_ACTIONS:
+                self.trail.add(self.entity_position(), time.monotonic())
+        except OSError:
+            pass
+
     def jammed(self) -> set:
         import time
         return self.jams.active(time.monotonic())
@@ -336,6 +349,22 @@ class NierGame:
             return True
         if kind in ("selfdestruct", "edrug"):
             return self._game_effect(kind)
+        if kind == "levelup":
+            from .spawner import raise_enemy_levels
+            try:
+                if raise_enemy_levels(self.mem, percent):
+                    return True
+            except OSError:
+                return False
+            kind, percent = "damage", 1          # aucun ennemi present : degats a la place
+        if kind == "teleport":
+            if self.action() in self._NO_TELEPORT_ACTIONS:
+                return False                     # vol, piratage, mort : on attend
+            pos = self.entity_position()
+            target = self.trail.back(pos, time.monotonic(), percent)
+            if target is not None and self.teleport(target):
+                return True
+            kind, percent = "damage", 1          # aucune position connue : degats a la place
         if kind == "spawn":
             from .spawner import spawn_enemies
             pos = struct.unpack("<3f", self.mem.read(self.mem.base + self._off["playerLocation"], 12))

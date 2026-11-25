@@ -219,6 +219,18 @@ class SelfDestructTrap(Choice):
     default = 1
 
 
+class FishChecks(Toggle):
+    """Off by default. If on: the first catch of each of the 41 fish species sends a "Fish: <name>" check.
+    These checks never hold an important item (fishing is slow and some species are far into the game)."""
+    display_name = "Fish Checks"
+
+
+class GagEndingChecks(Toggle):
+    """Off by default. If on: each joke ending (F to Z) of the routes you play sends an "Ending <letter>" check
+    the first time you get it. These checks never hold an important item."""
+    display_name = "Gag Ending Checks"
+
+
 class Goal(Choice):
     """Victory condition, which also sets how much of the game has checks.
     story_progress: finish chapter `story_chapter` of route `story_route` (short game, adjustable).
@@ -239,6 +251,8 @@ class NierAutomataOptions(PerGameCommonOptions):
     story_chapter: StoryChapter
     weapon_checks: WeaponChecks
     item_checks: ItemChecks
+    fish_checks: FishChecks
+    gag_ending_checks: GagEndingChecks
     ap_items: ApItems
     ap_items_per_area: ApItemsPerArea
     access_point_checks: AccessPointChecks

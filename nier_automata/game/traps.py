@@ -77,3 +77,35 @@ def effect_allowed(world_loaded: bool, menu_closed: bool, action: int, hp: int, 
     if kind == "selfdestruct" and action in _NO_SELF_DESTRUCT:
         return False
     return bool(world_loaded and menu_closed and action not in _BUSY_ACTIONS and hp > 1)
+
+
+TRAIL_KEEP = 90.0            # secondes de positions gardees pour le piege "Teleport"
+TELEPORT_MAX = 150.0         # jamais de retour plus loin (autre carte, chargement)
+
+
+class Trail:
+    """Positions recentes du joueur. Le piege "Teleport" le ramene la ou il etait il y a `seconds` secondes."""
+
+    def __init__(self):
+        self._points: list = []
+
+    def add(self, pos, now: float) -> None:
+        if pos is None:
+            return
+        if self._points and _dist(self._points[-1][1], pos) > TELEPORT_MAX:
+            self._points.clear()                 # saut de position : chargement, voyage rapide
+        self._points.append((now, tuple(pos)))
+        self._points = [p for p in self._points if now - p[0] <= TRAIL_KEEP]
+
+    def back(self, pos, now: float, seconds: float):
+        """Position d'il y a au moins `seconds` secondes (la plus recente), sinon la plus ancienne connue.
+        None s'il n'y a rien d'utilisable ou si c'est trop loin."""
+        if not self._points or pos is None:
+            return None
+        older = [p for p in self._points if now - p[0] >= seconds]
+        target = (older[-1] if older else self._points[0])[1]
+        return target if _dist(target, pos) <= TELEPORT_MAX else None
+
+
+def _dist(a, b) -> float:
+    return sum((x - y) ** 2 for x, y in zip(a, b)) ** 0.5

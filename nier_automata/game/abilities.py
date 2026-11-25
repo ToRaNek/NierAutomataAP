@@ -34,11 +34,13 @@ class AbilityLock:
             return
         jammed = {a for a in jammed if a in ABILITY_PATCHES}
         for name in self.randomized:
-            if name in CONDITIONAL:
-                self._set(CONDITIONAL[name], locked=name not in received and grounded is True)
+            if name in CONDITIONAL:       # la panne du meme patch ("System Failure: Evade") bloque aussi en l'air
+                self._set(CONDITIONAL[name], locked=(name not in received and grounded is True)
+                          or CONDITIONAL[name] in jammed)
             else:
                 self._set(name, locked=name not in received or name in jammed)
-        for name in (jammed | self.jammed) - self.randomized:
+        shared = {CONDITIONAL[n] for n in self.randomized if n in CONDITIONAL}     # deja regles ci-dessus
+        for name in (jammed | self.jammed) - self.randomized - shared:
             self._set(name, locked=name in jammed)
         self.jammed = jammed
 

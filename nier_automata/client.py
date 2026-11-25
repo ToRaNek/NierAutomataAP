@@ -419,6 +419,26 @@ async def route_step(ctx: NierContext, locked: str, received: set) -> None:
             logger.info("%s received: route %s starts (%s)", keys[waiting], waiting, START[waiting][3])
 
 
+async def gag_ending_step(ctx: NierContext) -> None:
+    """Fins gag (option gag_ending_checks) : reconnues au nom de la phase "Ending_<lettre>"."""
+    wanted = getattr(ctx.scope, "gag_endings", ()) if ctx.scope else ()
+    if not wanted or ctx.state is None or not ctx.state.linked or ctx.nier.mem is None:
+        return
+    from .data.gagendings import ending_from_phase
+    try:
+        letter = ending_from_phase(ctx.nier.phase())
+    except OSError:
+        return
+    if letter in wanted and letter not in ctx.state.endings_seen:
+        ctx.state.endings_seen.add(letter)
+        ctx.state.save(ctx.state_file)
+        logger.info("Gag ending %s reached", letter)
+        new = sorted(due_locations(ctx.state, ctx.scope) - ctx.state.sent_locations)
+        if new:
+            ctx.state.sent_locations.update(new)
+            await ctx.send_msgs([{"cmd": "LocationChecks", "locations": new}])
+
+
 async def mail_step(ctx: NierContext):
     """Mails Archipelago : liste des checks restants (n 31) et indices demandes par les autres (n 32)."""
     if ctx.mail_busy:
@@ -606,10 +626,13 @@ async def shop_step(ctx: NierContext) -> list[int]:
 async def game_iteration(ctx: NierContext):
     if ctx.state is None or ctx.trackers is None:
         return
-    if not ctx.nier.in_game():
+    in_game = ctx.nier.in_game()
+    await gag_ending_step(ctx)          # les fins gag passent par une phase que "in_game" peut refuser
+    if not in_game:
         ctx.deaths.reset()
         ctx._status(ctx.nier.error or "Waiting for a loaded game...")
         return
+    ctx.nier.remember_position()
     if getattr(ctx, "lang_pid", None) != ctx.nier.mem.pid:
         ctx.lang = i18n.game_language(ctx.nier.mem)
         ctx.lang_pid = ctx.nier.mem.pid
