@@ -78,3 +78,11 @@ def test_waiting_chapter_is_saved(tmp_path):
     s = ClientState(seed="S", slot=1, save_slot=None, waiting_chapter=B03)
     s.save(tmp_path / "s.json")
     assert ClientState.load(tmp_path / "s.json").waiting_chapter == B03
+
+
+def test_starts_use_the_phase_of_their_own_chapter():
+    # "80_00_AB_Pascal_Village" existe dans p100 (chapitre 5) et p200 (chapitre 7) : une cle du chapitre 5 lancait
+    # le chapitre 7 (vu pendant la campagne d'essai des verrous)
+    for i, (_, _, phase, sub) in cl.STARTS.items():
+        c = db.CHAPTERS[i]
+        assert phase == c["phase_ids"][c["subphases"].index(sub)], (i, c["chapter"], sub)

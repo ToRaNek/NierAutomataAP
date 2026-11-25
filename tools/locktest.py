@@ -83,12 +83,14 @@ def glide(n, g, gate, seconds=18.0):
     return round(far, 1), round(length, 1)
 
 
-def test_areas(rep):
+def test_areas(rep, only="", suffix=""):
     n = NierGame()
     n.attach()
     g = sweep.Game()
     for name, gate in GATES.items():
-        r = rep.setdefault("areas", {}).setdefault(name, {})
+        if only and name != only:
+            continue
+        r = rep.setdefault("areas" + suffix, {}).setdefault(name, {})
         before = client_log().count(f"needs {name})")
         far, length = glide(n, g, gate)
         pushes = client_log().count(f"needs {name})") - before
@@ -125,7 +127,7 @@ def wait_for(m, text: str, sub: str, seconds: float) -> bool:
     return False
 
 
-def test_route(rep, route: str):
+def test_route(rep, route: str, only: str = ""):
     m = rp.ProcessMemory.attach()
     rp.install(m)
     key = cl.CHAPTER_KEYS[route]
@@ -133,7 +135,7 @@ def test_route(rep, route: str):
     # verrou de la route elle-meme : sans l'objet, retour au chapitre 7 de la route precedente ; avec, depart
     from nier_automata.data.routes import PARK, ROUTE_KEYS, START
     rr = rep.setdefault("routes", {}).setdefault(route, {})
-    if not (rr.get("locked_ok") and rr.get("opened_ok")):
+    if not only and not (rr.get("locked_ok") and rr.get("opened_ok")):
         wait_ready(m)
         time.sleep(32)
         st, who, phase, sub = START[route]
@@ -146,11 +148,13 @@ def test_route(rep, route: str):
         print("route", route, rr, flush=True)
         save(rep)
     for region in regions:
+        if only and region != only:
+            continue
         first = next(i for i, c in enumerate(db.CHAPTERS) if c["region"] == region)
         start, park = cl.start_chapter(first), cl.park_chapter(first)
         chap = db.CHAPTERS[start]["chapter"]
-        r = rep.setdefault("chapters", {}).setdefault(region, {})
-        if r.get("locked_ok") and r.get("opened_ok"):
+        r = rep.setdefault("chapters_retest" if only else "chapters", {}).setdefault(region, {})
+        if not only and r.get("locked_ok") and r.get("opened_ok"):
             continue
         st, who, phase, sub = cl.STARTS[start]
         if not wait_ready(m):
@@ -181,6 +185,10 @@ if __name__ == "__main__":
     part = sys.argv[1]
     if part == "areas":
         test_areas(report)
+    elif part == "area":                      # une seule zone, resultat range a part : python locktest.py area "Desert Pass"
+        test_areas(report, only=sys.argv[2], suffix="_retest")
+    elif part == "chapter":                   # un seul grand chapitre : python locktest.py chapter B05
+        test_route(report, sys.argv[2][0], only=sys.argv[2])
     else:
         test_route(report, part)
     print("fini", part, flush=True)

@@ -131,9 +131,11 @@ this, an underground check looks the same as whatever is above it on the surface
 - Route locks: tested in game for routes B and C/D (taken back without the item, route started when the item
   arrives from the server, first check of the route sent). The "Locked" message of a route lock has not been
   seen on screen yet. Tested by jumping to the start of each route, not by playing an ending for real.
-- Chapter locks: tested in game on one chapter of route B and one of route C/D (taken back without the key,
-  chapter started when the key arrives, its check sent). The other chapters use the same code and the chapter
-  starts already reached by jump during the test campaign, but each lock has not been tried one by one.
+- Every lock was tried one by one in game with the real client and a server (`tools/locktest.py`, results in
+  `tools/locktest_report.json`): the six area walls (character pushed through each entrance at 25 m/s, far faster
+  than running), both route locks and the 15 chapter locks (taken back without the item, check not sent while
+  locked, chapter started and check sent when the item arrives). These tests jump to chapters; no ending was
+  played for real.
 - Tower keys: tested in game in front of the Tower with the real client and a server (no key: the door refuses;
   keys taken back when put in the inventory; keys sent by the server: 9S hacks the door and the story goes on).
   The moment the game itself hands a key (end of each resource unit) has not been played.

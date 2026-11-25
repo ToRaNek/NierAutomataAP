@@ -1,0 +1,253 @@
+{
+ "areas": {
+  "Desert Pass": {
+   "without_pass": {
+    "reached_m": 60.0,
+    "of_m": 60.0,
+    "pushbacks": 4,
+    "ok": false
+   },
+   "with_pass": {
+    "reached_m": 60.7,
+    "of_m": 60.0,
+    "pushbacks": 0,
+    "zone": 30,
+    "ok": true
+   }
+  },
+  "Park Pass": {
+   "without_pass": {
+    "reached_m": 37.7,
+    "of_m": 75.0,
+    "pushbacks": 53,
+    "ok": true
+   },
+   "with_pass": {
+    "reached_m": 75.5,
+    "of_m": 75.0,
+    "pushbacks": 0,
+    "zone": 55,
+    "ok": true
+   }
+  },
+  "Village Pass": {
+   "without_pass": {
+    "reached_m": 35.2,
+    "of_m": 53.0,
+    "pushbacks": 49,
+    "ok": true
+   },
+   "with_pass": {
+    "reached_m": 52.0,
+    "of_m": 53.0,
+    "pushbacks": 0,
+    "zone": 165,
+    "ok": true
+   }
+  },
+  "Forest Pass": {
+   "without_pass": {
+    "reached_m": 31.7,
+    "of_m": 55.0,
+    "pushbacks": 38,
+    "ok": true
+   },
+   "with_pass": {
+    "reached_m": 56.4,
+    "of_m": 55.0,
+    "pushbacks": 0,
+    "zone": 75,
+    "ok": true
+   }
+  },
+  "Flooded City Pass": {
+   "without_pass": {
+    "reached_m": 27.6,
+    "of_m": 75.0,
+    "pushbacks": 45,
+    "ok": true
+   },
+   "with_pass": {
+    "reached_m": 75.1,
+    "of_m": 75.0,
+    "pushbacks": 0,
+    "zone": 0,
+    "ok": true
+   }
+  },
+  "Factory Pass": {
+   "without_pass": {
+    "reached_m": 52.6,
+    "of_m": 65.0,
+    "pushbacks": 78,
+    "ok": true
+   },
+   "with_pass": {
+    "reached_m": 65.1,
+    "of_m": 65.0,
+    "pushbacks": 0,
+    "zone": 105,
+    "ok": true
+   }
+  }
+ },
+ "routes": {
+  "B": {
+   "locked_ok": true,
+   "opened_ok": true
+  },
+  "C": {
+   "locked_ok": true,
+   "opened_ok": true
+  }
+ },
+ "chapters": {
+  "B02": {
+   "locked_ok": true,
+   "park": "16_AB_bunker_Order",
+   "check_sent_while_locked": false,
+   "opened_ok": true,
+   "check_sent_after_key": true,
+   "start": "30_AB_Ruined_City_ForcedLanding"
+  },
+  "B03": {
+   "locked_ok": true,
+   "park": "50_AB_Desert_temple",
+   "check_sent_while_locked": false,
+   "opened_ok": true,
+   "check_sent_after_key": true,
+   "start": "51_AB_MainDesert"
+  },
+  "B04": {
+   "locked_ok": true,
+   "park": "58_50_AB_Goto_AmusementPark",
+   "check_sent_while_locked": false,
+   "opened_ok": true,
+   "check_sent_after_key": true,
+   "start": "70_AB_Amusement_Park"
+  },
+  "B05": {
+   "locked_ok": false,
+   "park": "79_50_AB_Goto_Pascal_Village",
+   "check_sent_while_locked": false,
+   "opened_ok": true,
+   "check_sent_after_key": false,
+   "start": "80_00_AB_Pascal_Village"
+  },
+  "B06": {
+   "locked_ok": true,
+   "park": "10_10_AB_Alien_Ship_Start",
+   "check_sent_while_locked": false,
+   "opened_ok": true,
+   "check_sent_after_key": true,
+   "start": "20_AB_Bunker"
+  },
+  "B07": {
+   "locked_ok": true,
+   "park": "60_20_AB_Forest_Castle_Throne",
+   "check_sent_while_locked": false,
+   "opened_ok": true,
+   "check_sent_after_key": true,
+   "start": "80_00_AB_Pascal_Village"
+  },
+  "B08": {
+   "locked_ok": true,
+   "park": "96_B_Pod_Talk",
+   "check_sent_while_locked": false,
+   "opened_ok": true,
+   "check_sent_after_key": true,
+   "start": "110_00_B_Copy_City"
+  },
+  "B09": {
+   "locked_ok": true,
+   "park": "110_00_B_Copy_City",
+   "check_sent_while_locked": false,
+   "opened_ok": true,
+   "check_sent_after_key": true,
+   "start": "120_AB_Bunker"
+  },
+  "B10": {
+   "locked_ok": true,
+   "park": "140_90_B_Banker_9S",
+   "check_sent_while_locked": false,
+   "opened_ok": true,
+   "check_sent_after_key": true,
+   "start": "150_B_Banker_9S"
+  },
+  "C12": {
+   "locked_ok": true,
+   "park": "50_20_CD_Ruined_City_2BDead_9S",
+   "check_sent_while_locked": false,
+   "opened_ok": true,
+   "check_sent_after_key": true,
+   "start": "70_00_CD_1_Ruined_City"
+  },
+  "C13": {
+   "locked_ok": true,
+   "park": "80_CD_1_Desert_A2",
+   "check_sent_while_locked": false,
+   "opened_ok": true,
+   "check_sent_after_key": true,
+   "start": "140_CD_1_Resistance_Camp_9S"
+  },
+  "C14": {
+   "locked_ok": true,
+   "park": "160_10_CD_1_Forest_Castle_9S",
+   "check_sent_while_locked": false,
+   "opened_ok": true,
+   "check_sent_after_key": true,
+   "start": "90_CD_2_Pascal_Village_A2_SQ"
+  },
+  "C15": {
+   "locked_ok": true,
+   "park": "120_00_CD_2_RobotM_Shelter_A2",
+   "check_sent_while_locked": false,
+   "opened_ok": true,
+   "check_sent_after_key": true,
+   "start": "180_00_CD_2_Forest_Castle_9S_2"
+  },
+  "C16": {
+   "locked_ok": true,
+   "park": "220_20_CD_ResiCamp_DeboPopo_HD",
+   "check_sent_while_locked": false,
+   "opened_ok": true,
+   "check_sent_after_key": true,
+   "start": "200_CD_Robot_Mountain_A2"
+  },
+  "C17": {
+   "locked_ok": true,
+   "park": "240_50_CD_Amusement_Park_A2",
+   "check_sent_while_locked": false,
+   "opened_ok": true,
+   "check_sent_after_key": true,
+   "start": "250_CD_Unknown_9S"
+  }
+ },
+ "areas_retest": {
+  "Desert Pass": {
+   "without_pass": {
+    "reached_m": 42.5,
+    "of_m": 60.0,
+    "pushbacks": 30,
+    "ok": true
+   },
+   "with_pass": {
+    "reached_m": 60.7,
+    "of_m": 60.0,
+    "pushbacks": 0,
+    "zone": 30,
+    "ok": true
+   }
+  }
+ },
+ "chapters_retest": {
+  "B05": {
+   "locked_ok": true,
+   "park": "79_50_AB_Goto_Pascal_Village",
+   "check_sent_while_locked": false,
+   "opened_ok": true,
+   "check_sent_after_key": true,
+   "start": "80_00_AB_Pascal_Village"
+  }
+ }
+}

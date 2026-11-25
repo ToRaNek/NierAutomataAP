@@ -290,44 +290,51 @@ async def ability_loop(ctx: NierContext):
             pass
 
 
-async def area_loop(ctx: NierContext):
-    """Zones verrouillees (option area_locks) : 10 fois par seconde, remet le joueur en arriere s'il entre dans
-    une zone dont il n'a pas le Pass."""
+def area_step(ctx: NierContext, now: float) -> None:
+    """Un passage du mur de zone : remet le joueur en arriere s'il est entre dans une zone dont il n'a pas le Pass."""
+    lock = getattr(ctx, "area_lock", None)
+    if lock is None or not lock.passes or ctx.state is None or not ctx.state.linked:
+        return
+    game = ctx.nier
+    if game.mem is None:
+        lock.reset()
+        return
+    if not game.in_game():
+        # un chargement de decor en marchant fait croire un instant que le jeu charge (vu en jeu : le mur
+        # etait oublie et le joueur passait) : on n'oublie le mur qu'au retour a l'ecran titre
+        if game.phase() in MENU_PHASES or not game.phase():
+            lock.reset()
+        return
+    area, pos = game.area_id(), game.entity_position()
+    if area is None or pos is None:
+        return
+    active = area_lock_active(game.phase(), game.in_cutscene(), game.action(), game.hp())
+    back = lock.update(area, pos, now, ctx.received_names, active=active)
+    if back is None:
+        if lock.blocked_without_trail and not getattr(ctx, "area_warned", False):
+            ctx.area_warned = True    # deja dans la zone a la connexion : rien a quoi revenir
+            logger.info("Area lock: already inside a locked area (id %s), no position to go back to", area)
+        return
+    ctx.area_warned = False
+    if game.push_back(back.pos, back.area_id):
+        logger.info("Area locked: %s (needs %s)", zone_name(back.pass_name), back.pass_name)
+        if back.notify:
+            lang = getattr(ctx, "lang", "en")
+            ctx.notes.insert(0, (i18n.t(lang, "area_locked"), back.pass_name))    # avant la file d'attente
+
+
+def area_thread(ctx: NierContext) -> None:
+    """Zones verrouillees (option area_locks), 10 fois par seconde, dans un fil a part : dans la boucle principale
+    du client, la premiere minute apres la connexion (notifications, pose des objets) espacait les verifications
+    de 3 secondes et un joueur tres rapide avait le temps d'entrer avant d'etre repousse (vu en jeu)."""
     import time
     while not ctx.exit_event.is_set():
-        await asyncio.sleep(0.1)
+        time.sleep(0.1)
         try:
-            lock = getattr(ctx, "area_lock", None)
-            if lock is None or not lock.passes or ctx.state is None or not ctx.state.linked:
-                continue
-            game = ctx.nier
-            if game.mem is None:
-                lock.reset()
-                continue
-            if not game.in_game():
-                # un chargement de decor en marchant fait croire un instant que le jeu charge (vu en jeu : le mur
-                # etait oublie et le joueur passait) : on n'oublie le mur qu'au retour a l'ecran titre
-                if game.phase() in MENU_PHASES or not game.phase():
-                    lock.reset()
-                continue
-            area, pos = game.area_id(), game.entity_position()
-            if area is None or pos is None:
-                continue
-            active = area_lock_active(game.phase(), game.in_cutscene(), game.action(), game.hp())
-            back = lock.update(area, pos, time.monotonic(), ctx.received_names, active=active)
-            if back is None:
-                if lock.blocked_without_trail and not getattr(ctx, "area_warned", False):
-                    ctx.area_warned = True    # deja dans la zone a la connexion : rien a quoi revenir
-                    logger.info("Area lock: already inside a locked area (id %s), no position to go back to", area)
-                continue
-            ctx.area_warned = False
-            if game.push_back(back.pos, back.area_id):
-                logger.info("Area locked: %s (needs %s)", zone_name(back.pass_name), back.pass_name)
-                if back.notify:
-                    lang = getattr(ctx, "lang", "en")
-                    ctx.notes.insert(0, (i18n.t(lang, "area_locked"), back.pass_name))    # avant la file d'attente
+            area_step(ctx, time.monotonic())
         except Exception as e:
             logger.info("area lock failed: %r", e)
+            time.sleep(1.0)
 
 
 ROUTE_JUMP_PAUSE = 30.0      # secondes entre deux sauts : laisse le chargement finir
@@ -649,13 +656,13 @@ def launch(*launch_args):
         watcher = asyncio.create_task(game_loop(ctx), name="NierGameLoop")
         abilities = asyncio.create_task(ability_loop(ctx), name="NierAbilityLoop")
         notes = asyncio.create_task(notify_loop(ctx), name="NierNotifyLoop")
-        areas = asyncio.create_task(area_loop(ctx), name="NierAreaLoop")
+        import threading
+        threading.Thread(target=area_thread, args=(ctx,), name="NierAreaLock", daemon=True).start()
         await ctx.exit_event.wait()
         ctx.server_address = None
         watcher.cancel()
         abilities.cancel()
         notes.cancel()
-        areas.cancel()
         ctx.release_abilities()
         await ctx.shutdown()
 

@@ -137,10 +137,11 @@ Sans ca, un check sous terre se confond avec ce qui est en surface au meme endro
 - Routes verrouillees : essayees en jeu pour les routes B et C/D (retour en arriere sans l'objet, route lancee
   quand l'objet arrive du serveur, premier check de la route envoye). Le message "Ferme" d'une route n'a pas
   encore ete vu a l'ecran. Essaye en sautant au debut de chaque route, pas en jouant une vraie fin.
-- Chapitres verrouilles : essayes en jeu sur un chapitre de la route B et un de la route C/D (retour en arriere
-  sans la cle, chapitre lance quand la cle arrive, son check envoye). Les autres chapitres utilisent le meme code
-  et des debuts de chapitre deja atteints par saut pendant la campagne de test, mais chaque verrou n'a pas ete
-  essaye un par un.
+- Chaque verrou a ete essaye un par un en jeu avec le vrai client et un serveur (`tools/locktest.py`, resultats
+  dans `tools/locktest_report.json`) : les six murs de zone (personnage pousse a travers chaque entree a 25 m/s,
+  bien plus vite qu'en courant), les deux verrous de route et les 15 verrous de chapitre (retour en arriere sans
+  l'objet, check non envoye pendant le blocage, chapitre lance et check envoye quand l'objet arrive). Ces essais
+  sautent aux chapitres ; aucune fin n'a ete jouee pour de vrai.
 - Cles de la Tour : essayees en jeu devant la Tour avec le vrai client et un serveur (sans cle la porte refuse ;
   cles reprises quand elles sont dans l'inventaire ; cles envoyees par le serveur : 9S pirate la porte et
   l'histoire continue). Le moment ou le jeu donne lui-meme une cle (fin de chaque unite de ressources) n'a pas
