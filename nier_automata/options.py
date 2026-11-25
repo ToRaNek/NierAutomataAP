@@ -202,6 +202,13 @@ class ChapterLocks(DefaultOnToggle):
     display_name = "Chapter Locks"
 
 
+class TowerKeys(DefaultOnToggle):
+    """Route C/D: the three Access Keys that open the Tower (Forest, Ocean, Park) come from the multiworld. The
+    client takes back the ones the game gives you and hands them over when they arrive. Without the three keys
+    the Tower door cannot be hacked. Only used when your goal reaches the Tower (ending C/D or E)."""
+    display_name = "Tower Keys"
+
+
 class Goal(Choice):
     """Victory condition, which also sets how much of the game has checks.
     story_progress: finish chapter `story_chapter` of route `story_route` (short game, adjustable).
@@ -242,5 +249,6 @@ class NierAutomataOptions(PerGameCommonOptions):
     area_locks: AreaLocks
     route_locks: RouteLocks
     chapter_locks: ChapterLocks
+    tower_keys: TowerKeys
     goal: Goal
     death_link: DeathLink

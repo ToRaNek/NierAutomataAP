@@ -46,6 +46,7 @@ class ClientState:
     linked: bool = False  # partie deja acceptee pour cette seed
     waiting_route: str = ""  # route verrouillee dont on attend l'objet (joueur ramene dans la precedente)
     waiting_chapter: int = -1  # chapitre verrouille dont on attend la cle (indice worlddb), -1 = aucun
+    tower_opened: bool = False  # porte de la Tour franchie : on ne touche plus aux cles d'acces
     hints: list = field(default_factory=list)  # [(objet, pour qui, emplacement)] dans notre partie
 
     def to_dict(self) -> dict:
@@ -75,6 +76,7 @@ class ClientState:
             "linked": self.linked,
             "waiting_route": self.waiting_route,
             "waiting_chapter": self.waiting_chapter,
+            "tower_opened": self.tower_opened,
             "hints": [list(h) for h in self.hints],
         }
 
@@ -124,4 +126,5 @@ class ClientState:
                    linked=bool(d.get("linked", False)),
                    waiting_route=d.get("waiting_route", ""),
                    waiting_chapter=d.get("waiting_chapter", -1),
+                   tower_opened=bool(d.get("tower_opened", False)),
                    hints=[tuple(h) for h in d.get("hints", [])])

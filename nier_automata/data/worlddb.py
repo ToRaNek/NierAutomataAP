@@ -152,6 +152,7 @@ class Scope:
         self.supplies: bool = False          # kit de depart + ravitaillements (option starter_kit)
         self.route_keys: dict = {}           # {route: objet} des routes verrouillees (option route_locks)
         self.chapter_keys: dict = {}         # {route: objet} des grands chapitres verrouilles (chapter_locks)
+        self.tower_keys: bool = False        # cles d'acces de la Tour reprises et rendues (option tower_keys)
 
 
 def make_scope(goal: int, story_checks: int, chest_checks: bool, ap_items_per_area: int,
@@ -180,6 +181,7 @@ def scope_from_slot_data(sd: dict) -> Scope:
     scope.program_checks = int(sd.get("pod_program_checks", 0))
     scope.route_keys = dict(sd.get("route_keys", {}))
     scope.chapter_keys = dict(sd.get("chapter_keys", {}))
+    scope.tower_keys = bool(sd.get("tower_keys", False))
     if sd.get("ending_checks", False):
         scope.endings = ending_checks(scope.goal, scope.regions)
     return scope

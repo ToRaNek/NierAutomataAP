@@ -71,8 +71,12 @@ Chaque check porte le nom de son lieu : un indice dit donc ou aller.
   route demande une cle de plus (**B Chapter Key**, 9 au plus ; **C/D Chapter Key**, 6 au plus). Sans assez de
   cles, le client te ramene au debut de la derniere partie du chapitre precedent ; quand la cle arrive, il
   t'emmene au debut du chapitre attendu. La route A n'a pas de cle de chapitre : ses zones sont fermees par les
-  Pass. Avec la fin E en objectif ca fait 21 verrous par defaut (4 Pass, 2 objets de route, 15 cles), 23 avec
-  `area_locks: all`.
+  Pass. Avec la fin E en objectif ca fait 24 verrous par defaut (4 Pass, 2 objets de route, 15 cles de chapitre, 3 cles
+  de la Tour), 26 avec `area_locks: all`.
+- `tower_keys` (active par defaut, ne sert que si ton objectif atteint la Tour : fin C/D ou E) : les trois cles
+  d'acces de la route C/D (**Forest**, **Ocean**, **Park Access Key**) viennent du multimonde. Le client reprend
+  celles que le jeu te donne et te les rend quand elles arrivent. Sans les trois cles, la porte de la Tour
+  repousse 9S et ne se pirate pas.
 
 ## Objets recus
 Armes, les 16 programmes de Pod autres que le laser de depart (`pod_programs`), capacites (double saut, dash
@@ -137,6 +141,10 @@ Sans ca, un check sous terre se confond avec ce qui est en surface au meme endro
   sans la cle, chapitre lance quand la cle arrive, son check envoye). Les autres chapitres utilisent le meme code
   et des debuts de chapitre deja atteints par saut pendant la campagne de test, mais chaque verrou n'a pas ete
   essaye un par un.
+- Cles de la Tour : essayees en jeu devant la Tour avec le vrai client et un serveur (sans cle la porte refuse ;
+  cles reprises quand elles sont dans l'inventaire ; cles envoyees par le serveur : 9S pirate la porte et
+  l'histoire continue). Le moment ou le jeu donne lui-meme une cle (fin de chaque unite de ressources) n'a pas
+  ete joue.
 - Titres des mails : ouvrir un point d'acces ~10 s la premiere fois apres chaque lancement du jeu.
 - Ne pas charger une autre sauvegarde que celle de la seed.
 

@@ -40,6 +40,8 @@ NieR:Automata:
   route_locks: true
   # Routes B and C/D: each big chapter after the first needs one more "B Chapter Key" / "C/D Chapter Key".
   chapter_locks: true
+  # Route C/D: the three Access Keys that open the Tower come from the multiworld (goal ending C/D or E).
+  tower_keys: true
   # The 16 Pod programs other than the starting laser are items found in the multiworld.
   pod_programs: true
   # Programs found in the game itself send a check and are taken back, like weapons (0-16, 0 = off).

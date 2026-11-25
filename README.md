@@ -68,8 +68,12 @@ Everything is named after where it is, so a hint tells you where to go.
   needs one more key (**B Chapter Key**, up to 9; **C/D Chapter Key**, up to 6). Without enough keys the client
   takes you back to the start of the last part of the previous chapter; when the key arrives it takes you to the
   start of the chapter you were waiting for. Route A has no chapter keys: its areas are closed by the Passes.
-  With ending E as the goal that is 21 locks by default (4 Passes, 2 route items, 15 chapter keys), 23 with
-  `area_locks: all`.
+  With ending E as the goal that is 24 locks by default (4 Passes, 2 route items, 15 chapter keys, 3 Tower keys),
+  26 with `area_locks: all`.
+- `tower_keys` (on by default, only used when your goal reaches the Tower: ending C/D or E): the three Access
+  Keys of route C/D (**Forest**, **Ocean**, **Park Access Key**) come from the multiworld. The client takes back
+  the ones the game gives you and hands them over when they arrive. Without the three keys the Tower door pushes
+  9S away and cannot be hacked.
 
 ## Items received
 Weapons, the 16 Pod programs other than the starting laser (`pod_programs`), abilities (double jump, air
@@ -130,6 +134,9 @@ this, an underground check looks the same as whatever is above it on the surface
 - Chapter locks: tested in game on one chapter of route B and one of route C/D (taken back without the key,
   chapter started when the key arrives, its check sent). The other chapters use the same code and the chapter
   starts already reached by jump during the test campaign, but each lock has not been tried one by one.
+- Tower keys: tested in game in front of the Tower with the real client and a server (no key: the door refuses;
+  keys taken back when put in the inventory; keys sent by the server: 9S hacks the door and the story goes on).
+  The moment the game itself hands a key (end of each resource unit) has not been played.
 - Mail titles: open an access point for ~10 s the first time after each game launch.
 - Don't load another save than the one of the seed.
 

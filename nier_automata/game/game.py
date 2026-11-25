@@ -205,6 +205,9 @@ class NierGame:
                 return False
         if name in TRAP_ITEMS:
             return self.apply_trap(*TRAP_ITEMS[name])
+        from ..data.towerkeys import TOWER_KEYS
+        if name in TOWER_KEYS:
+            return self._items.find(TOWER_KEYS[name]) is not None or self._items.add(TOWER_KEYS[name], 1)
         if name in FUNDS_ITEMS:
             add_funds(self.mem, self._off["funds"], FUNDS_ITEMS[name])
             return True
@@ -277,6 +280,9 @@ class NierGame:
 
     def remove_weapon(self, weapon_id: int) -> bool:
         return self._weapons.remove(weapon_id)
+
+    def remove_item(self, item_id: int) -> bool:
+        return self._items.remove(item_id)
 
     def entity(self) -> Optional[int]:
         try:

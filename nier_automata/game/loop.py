@@ -8,6 +8,7 @@ from ..data.items_data import MATERIALS, POD_PROGRAMS, SUPPLY_DROPS
 from ..data.phases import is_prologue
 from ..data.routes import locked_route
 from ..data import chapterlocks
+from ..data import towerkeys
 from ..data.tables import (access_point_location, chest_location, ending_location, program_location, item_location, level_location,
                            location_name_to_id, pickup_location, quest_location, story_location, weapon_location)
 from ..data.weapons import STARTING_WEAPONS, WEAPONS
@@ -143,6 +144,17 @@ def tick(game, state: ClientState, received: list[str], trackers: Trackers) -> T
                     and state.programs_found < max_programs:
                 state.found_program_ids.add(pid)
                 state.programs_found += 1
+
+    # 2 ter. cles d'acces de la Tour : celles que le jeu donne sont reprises, celles du multimonde rendues
+    if getattr(scope, "tower_keys", False) and hasattr(game, "remove_item"):
+        if game.phase().startswith(towerkeys.TOWER_OPEN_PHASE):
+            state.tower_opened = True
+        if not state.tower_opened:
+            applied = received[:state.next_item_index]
+            for kid in towerkeys.to_remove(game.owned_items(), applied):
+                game.remove_item(kid)
+            for name in towerkeys.to_give_back(game.owned_items(), applied):
+                game.give(name)
 
     # 3. armes trouvees naturellement
     to_remove, _ = trackers.weapons.scan(owned)

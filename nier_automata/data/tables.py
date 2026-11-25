@@ -4,6 +4,7 @@ from __future__ import annotations
 from .abilities import ABILITY_PATCHES
 from .areas import AREA_PASSES
 from .routes import ROUTE_KEYS
+from .towerkeys import TOWER_KEYS
 from .items_data import FILLER_ITEMS, FUNDS_ITEMS, MATERIALS, POD_PROGRAMS, TRAP_ITEMS
 from .weapons import WEAPONS
 
@@ -88,6 +89,8 @@ def item_name_to_id() -> dict[str, int]:
     for i, name in enumerate(ROUTE_KEYS.values()):
         ids[name] = BASE_CODE + 0x680 + i
     ids["B Chapter Key"], ids["C/D Chapter Key"] = BASE_CODE + 0x690, BASE_CODE + 0x691
+    for i, name in enumerate(TOWER_KEYS):
+        ids[name] = BASE_CODE + 0x6A0 + i
     return ids
 
 
