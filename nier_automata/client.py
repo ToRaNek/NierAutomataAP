@@ -668,7 +668,8 @@ async def game_iteration(ctx: NierContext):
     if result.refused:
         ctx._status("This save is already advanced: start a NEW game for this seed.")
         return
-    ctx._status(f"Game detected ({ctx.nier.version}), phase {ctx.nier.phase()}")
+    how = ", through the mod" if getattr(ctx.nier, "via_mod", False) else ""
+    ctx._status(f"Game detected ({ctx.nier.version}{how}), phase {ctx.nier.phase()}")
     # checks de base envoyes AVANT les etapes optionnelles (une erreur la-bas ne doit pas les perdre)
     if result.locations:
         await ctx.send_msgs([{"cmd": "LocationChecks", "locations": result.locations}])

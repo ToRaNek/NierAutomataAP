@@ -60,6 +60,7 @@ class NierGame:
     def __init__(self):
         self.mem: Optional[ProcessMemory] = None
         self.version: Optional[str] = None
+        self.via_mod = False               # True : acces par le mod (socket), False : processus ouvert
         self.error: Optional[str] = None
         from .traps import Jams
         self.jams = Jams()
@@ -75,11 +76,23 @@ class NierGame:
             return True
         if self.mem is not None:
             self.mem.close()
-        self.mem, self.version = ProcessMemory.attach(), None
+        # Par le mod (dinput8.dll dans le dossier du jeu) s'il repond : seul moyen sous Linux / Proton. Sinon, sous
+        # Windows, en ouvrant le processus du jeu comme avant.
+        from .modlink import ModMemory
+        self.mem, self.version = None, None
+        if not os.environ.get("NIER_AP_NO_MOD"):
+            self.mem = ModMemory.attach()
+        self.via_mod = self.mem is not None
+        if self.mem is None and os.name == "nt":
+            self.mem = ProcessMemory.attach()
         if self.mem is None:
-            self.error = "Game not running"
+            self.error = "Game not running" if os.name == "nt" else                 "Game not found: start NieR:Automata with the mod (dinput8.dll) installed"
             return False
-        self.version = detect_version(self.mem.exe_path)
+        if self.via_mod:
+            from ..data.offsets import detect_version_mem
+            self.version = detect_version_mem(self.mem)
+        else:
+            self.version = detect_version(self.mem.exe_path)
         if self.version is None:
             self.error = "Unknown NieRAutomata.exe version: only Steam v1.04 is supported (current Steam version, November 2026 update)"
             self.mem.close()

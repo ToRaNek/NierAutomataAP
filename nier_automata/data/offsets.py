@@ -44,3 +44,21 @@ def detect_version(exe_path: str) -> Optional[str]:
         for chunk in iter(lambda: f.read(1 << 20), b""):
             h.update(chunk)
     return VERSIONS.get(h.hexdigest())
+
+
+# Meme exe reconnu par son en-tete lu dans la memoire du jeu (acces par le mod : le fichier n'est pas lisible
+# depuis Linux) : (date de compilation, taille de l'image) -> version
+HEADER_VERSIONS: dict[tuple, str] = {
+    (0x6AC89519, 0x18BE000): "v1.04",
+}
+
+
+def detect_version_mem(mem) -> Optional[str]:
+    import struct
+    try:
+        pe = struct.unpack("<I", mem.read(mem.base + 0x3C, 4))[0]
+        stamp = struct.unpack("<I", mem.read(mem.base + pe + 8, 4))[0]
+        image = struct.unpack("<I", mem.read(mem.base + pe + 24 + 56, 4))[0]
+    except (OSError, struct.error):
+        return None
+    return HEADER_VERSIONS.get((stamp, image))

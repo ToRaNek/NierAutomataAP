@@ -5,12 +5,16 @@
    la memoire du jeu et appelle ses fonctions. Le client n'a plus besoin d'ouvrir le processus du jeu de
    l'exterieur : c'est ce qui ne marche pas sous Linux / Proton.
 
-   Protocole (little-endian), une requete = 1 octet d'operation + champs, une reponse par requete :
+   Securite : la socket n'ecoute que sur 127.0.0.1 et exige une cle. A chaque lancement le mod tire 16 octets au
+   hasard et les ecrit dans %LOCALAPPDATA%\NierAutomataAP\mod_token (profil de l'utilisateur). Le client doit
+   envoyer ces 16 octets en premier ; sinon la connexion est fermee sans rien executer.
+
+   Protocole (little-endian), apres la cle : une requete = 1 octet d'operation + champs, une reponse par requete :
      1 INFO                               -> u32 version, u32 pid, u64 base de NieRAutomata.exe
      2 READ   u64 adresse, u32 taille      -> u8 ok, [taille octets si ok]
      3 WRITE  u64 adresse, u32 taille, u8 code, octets -> u8 ok      (code=1 : page de code, protection levee)
      4 QUERY  u64 adresse                  -> u8 ok, u64 base, u64 taille, u32 etat, u32 protection
-     5 ALLOC  u64 pres_de (hint), u32 taille      -> u64 adresse (0 = echec) ; pres_de=0 : n'importe ou
+     5 ALLOC  u64 adresse (0 = n'importe ou), u32 taille, u32 protection -> u64 adresse (0 = echec)
      6 FREE   u64 adresse                  -> u8 ok
      7 CALL   u64 fonction, 5 x u64 args, u32 delai_ms -> u8 ok, u64 rax   (appel dans un fil du jeu)
 
@@ -23,13 +27,17 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define MOD_VERSION 1
+#define MOD_VERSION 2
 #define DEFAULT_PORT 38291
 #define MAX_IO (16 * 1024 * 1024)
 
 typedef uint64_t (*fn5)(uint64_t, uint64_t, uint64_t, uint64_t, uint64_t);
 typedef struct { fn5 f; uint64_t a[5]; uint64_t ret; } call_t;
 
+BOOLEAN NTAPI SystemFunction036(PVOID buf, ULONG len);      /* RtlGenRandom (advapi32) */
+
+static uint8_t token[16];
+static int token_ready;
 static HMODULE real_dinput8;
 static FARPROC real_create;
 
@@ -59,24 +67,38 @@ static DWORD WINAPI call_thread(LPVOID arg) {
     return 0;
 }
 
-static uint64_t alloc_near(uint64_t hint, uint32_t size) {
-    if (!hint) return (uint64_t)VirtualAlloc(NULL, size, MEM_COMMIT | MEM_RESERVE, PAGE_EXECUTE_READWRITE);
-    /* a moins de 2 Go de `hint` : un saut relatif 32 bits doit pouvoir l'atteindre */
-    for (uint64_t d = 0x10000; d < 0x7F000000ULL; d += 0x10000) {
-        for (int sign = 0; sign < 2; sign++) {
-            uint64_t want = sign ? hint + d : hint - d;
-            if (sign == 0 && d > hint) continue;
-            void *p = VirtualAlloc((void *)(want & ~0xFFFFULL), size, MEM_COMMIT | MEM_RESERVE,
-                                   PAGE_EXECUTE_READWRITE);
-            if (p) return (uint64_t)p;
-        }
-    }
-    return 0;
+/* tire la cle et l'ecrit dans le profil de l'utilisateur ; 0 si impossible (alors le mod n'ecoute pas) */
+static int make_token(void) {
+    char dir[MAX_PATH], path[MAX_PATH + 32];
+    HANDLE f;
+    DWORD put = 0;
+    DWORD n = GetEnvironmentVariableA("LOCALAPPDATA", dir, sizeof dir);
+    if (!n || n >= sizeof dir - 32) return 0;
+    if (!SystemFunction036(token, sizeof token)) return 0;
+    lstrcatA(dir, "\\NierAutomataAP");
+    CreateDirectoryA(dir, NULL);
+    lstrcpyA(path, dir);
+    lstrcatA(path, "\\mod_token");
+    f = CreateFileA(path, GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+    if (f == INVALID_HANDLE_VALUE) return 0;
+    WriteFile(f, token, sizeof token, &put, NULL);
+    CloseHandle(f);
+    return put == sizeof token;
 }
 
 static void serve(SOCKET s) {
     HANDLE self = GetCurrentProcess();
-    char *buf = (char *)malloc(MAX_IO);
+    uint8_t got[sizeof token], diff = 0;
+    char *buf;
+    DWORD wait = 3000;
+    size_t i;
+    setsockopt(s, SOL_SOCKET, SO_RCVTIMEO, (const char *)&wait, sizeof wait);
+    if (!recv_all(s, got, sizeof got)) return;
+    for (i = 0; i < sizeof token; i++) diff |= got[i] ^ token[i];      /* comparaison a temps constant */
+    if (diff) return;
+    wait = 0;
+    setsockopt(s, SOL_SOCKET, SO_RCVTIMEO, (const char *)&wait, sizeof wait);
+    buf = (char *)malloc(MAX_IO);
     if (!buf) return;
     for (;;) {
         uint8_t op;
@@ -110,9 +132,9 @@ static void serve(SOCKET s) {
             r.state = mbi.State; r.protect = mbi.Protect;
             if (!send_all(s, &r, sizeof r)) break;
         } else if (op == 5) {
-            uint64_t hint, out; uint32_t size;
-            if (!recv_all(s, &hint, 8) || !recv_all(s, &size, 4)) break;
-            out = alloc_near(hint, size);
+            uint64_t at, out; uint32_t size, protect;
+            if (!recv_all(s, &at, 8) || !recv_all(s, &size, 4) || !recv_all(s, &protect, 4)) break;
+            out = (uint64_t)VirtualAlloc((void *)at, size, MEM_COMMIT | MEM_RESERVE, protect);
             if (!send_all(s, &out, 8)) break;
         } else if (op == 6) {
             uint64_t addr; uint8_t ok;
@@ -155,6 +177,8 @@ static DWORD WINAPI server_thread(LPVOID unused) {
     int port = DEFAULT_PORT, yes = 1;
     (void)unused;
     if (GetEnvironmentVariableA("NIER_AP_MOD_PORT", env, sizeof env) > 0 && atoi(env) > 0) port = atoi(env);
+    token_ready = make_token();
+    if (!token_ready) return 0;                        /* pas de cle : on n'ouvre rien */
     if (WSAStartup(MAKEWORD(2, 2), &w)) return 0;
     ls = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
     if (ls == INVALID_SOCKET) return 0;
