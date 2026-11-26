@@ -40,6 +40,10 @@ Everything is named after where it is, so a hint tells you where to go.
 - **Ending F ... Ending Z** (`gag_ending_checks`, off by default): each joke ending of the routes you play, the
   first time you get it. Never holds an important item. A joke ending only writes its own flag in your save;
   your progress is untouched (checked byte by byte on ending W).
+- **Chapters tab** (in the client): every chapter of your game, whether you have reached it, what is missing to
+  open it (route item, chapter keys, area Pass), whether its check is sent, and the joke endings you can get
+  there with how to get them. **Go** takes you back to a chapter you have already reached and that is not
+  locked, like the game's own Chapter Select. It never sends a check you have not earned.
 - **Quest: <name>**: finishing a side quest. Most quests close after chapter 7 (checked in game), so they
   never hold an important item; the game still gives its own reward.
 

@@ -42,6 +42,10 @@ Chaque check porte le nom de son lieu : un indice dit donc ou aller.
 - **Ending F ... Ending Z** (`gag_ending_checks`, desactive par defaut) : chaque fin gag des routes que tu joues,
   la premiere fois que tu l'obtiens. Ne contient jamais d'objet important. Une fin gag n'ecrit que son propre
   drapeau dans ta sauvegarde ; ta progression n'est pas touchee (verifie octet par octet sur la fin W).
+- **Onglet Chapters** (dans le client) : chaque chapitre de ta partie, s'il est atteint, ce qui manque pour
+  l'ouvrir (objet de route, cles de chapitre, Pass de zone), si son check est envoye, et les fins gag qu'on peut
+  y obtenir avec la marche a suivre. **Go** te ramene a un chapitre deja atteint et non verrouille, comme le menu
+  Chapter Select du jeu. Il n'envoie jamais un check que tu n'as pas gagne.
 - **Quest: <nom>** : terminer une quete annexe. La plupart se ferment apres le chapitre 7 (verifie en jeu) :
   elles ne contiennent jamais d'objet important ; le jeu donne toujours sa propre recompense.
 

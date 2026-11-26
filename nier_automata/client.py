@@ -58,6 +58,7 @@ class NierContext(CommonContext):
         self.backed_up = False
         self.goal_sent = False
         self.last_status = ""
+        self.chapter_request = None      # (nom, (route, personnage, phase, sous-phase)) demande par l'onglet
 
     async def server_auth(self, password_requested: bool = False):
         if password_requested and not self.password:
@@ -211,6 +212,15 @@ class NierContext(CommonContext):
                         Clock.schedule_once(show, 6)
                 except Exception as e:      # la carte ne doit jamais empecher le client de demarrer
                     logger.info("Map tab unavailable: %r", e)
+                try:
+                    from .game.chapters_ui import build_chapters_tab
+                    ctab = inner.add_client_tab("Chapters", build_chapters_tab(self))
+                    import os
+                    if os.environ.get("NIER_AP_START_TAB") == "Chapters":
+                        from kivy.clock import Clock
+                        Clock.schedule_once(lambda _dt: inner.screens.switch_screens(ctab), 6)
+                except Exception as e:
+                    logger.info("Chapters tab unavailable: %r", e)
                 return container
 
         self.ui = NierManager(self)
@@ -417,6 +427,17 @@ async def route_step(ctx: NierContext, locked: str, received: set) -> None:
             st.waiting_route = ""
             ctx.route_next = now + ROUTE_JUMP_PAUSE
             logger.info("%s received: route %s starts (%s)", keys[waiting], waiting, START[waiting][3])
+
+
+async def replay_step(ctx: NierContext) -> None:
+    """Saut demande depuis l'onglet Chapters : lance des que le jeu est pret (ni menu ni transition)."""
+    req = getattr(ctx, "chapter_request", None)
+    if not req or ctx.state is None or ctx.state.waiting_route or ctx.state.waiting_chapter >= 0:
+        return
+    label, target = req
+    if await asyncio.to_thread(phasejump.jump, ctx.nier.mem, *target):
+        ctx.chapter_request = None
+        logger.info("Chapter replay: %s (%s)", label, target[3])
 
 
 async def gag_ending_step(ctx: NierContext) -> None:
@@ -656,6 +677,10 @@ async def game_iteration(ctx: NierContext):
         await chapter_step(ctx, result.locked_chapter, received)
     except Exception as e:
         logger.info("route lock failed: %r", e)
+    try:
+        await replay_step(ctx)
+    except Exception as e:
+        logger.info("chapter replay failed: %r", e)
     bought: list[int] = []
     for step in (ground_step, ap_items_step, shop_step):
         try:
