@@ -15,7 +15,9 @@ typedef struct {
 
 void overlay_start(void);
 /* eye / target / fov : adresses absolues de la camera du jeu (vec3, vec3, float en radians) */
-void overlay_set(const overlay_wall_t *walls, int count, uint64_t eye, uint64_t target, uint64_t fov);
+/* player : adresse du pointeur vers le joueur (position en +0x50), 0 = le panneau n'arrete pas le joueur */
+void overlay_set(const overlay_wall_t *walls, int count, uint64_t eye, uint64_t target, uint64_t fov,
+                 uint64_t player);
 int overlay_status(void);   /* 1 pret, 0 pas encore dessine, -1 echec */
 
 #endif

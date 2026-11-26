@@ -17,7 +17,7 @@
      5 ALLOC  u64 adresse (0 = n'importe ou), u32 taille, u32 protection -> u64 adresse (0 = echec)
      6 FREE   u64 adresse                  -> u8 ok
      7 CALL   u64 fonction, 5 x u64 args, u32 delai_ms -> u8 ok, u64 rax   (appel dans un fil du jeu)
-     8 WALLS  u64 camera_position, u64 camera_cible, u64 camera_angle, u32 nombre, nombre x mur (84 octets :
+     8 WALLS  u64 camera_position, u64 camera_cible, u64 camera_angle, u64 pointeur_joueur, u32 nombre, nombre x mur (84 octets :
               6 floats x1 y z1 x2 z2 hauteur + 64 octets de texte) -> u8 ok       (nombre = 0 : plus de murs)
      9 WALLSTATE                          -> i32 : 1 murs dessines, 0 pas encore, -1 echec de l'affichage
 
@@ -31,7 +31,7 @@
 #include <string.h>
 #include "overlay.h"
 
-#define MOD_VERSION 3
+#define MOD_VERSION 4
 #define DEFAULT_PORT 38291
 #define MAX_IO (16 * 1024 * 1024)
 
@@ -167,13 +167,13 @@ static void serve(SOCKET s) {
             }
             if (!send_all(s, &r, sizeof r)) break;
         } else if (op == 8) {
-            struct { uint64_t eye, target, fov; uint32_t count; } __attribute__((packed)) q;
+            struct { uint64_t eye, target, fov, player; uint32_t count; } __attribute__((packed)) q;
             static overlay_wall_t w[OVERLAY_MAX_WALLS];
             uint8_t ok = 1;
             if (!recv_all(s, &q, sizeof q) || q.count > OVERLAY_MAX_WALLS) break;
             if (q.count && !recv_all(s, w, (int)(sizeof(overlay_wall_t) * q.count))) break;
             for (uint32_t i = 0; i < q.count; i++) w[i].text[sizeof w[i].text - 1] = 0;
-            overlay_set(w, (int)q.count, q.eye, q.target, q.fov);
+            overlay_set(w, (int)q.count, q.eye, q.target, q.fov, q.player);
             if (!send_all(s, &ok, 1)) break;
         } else if (op == 9) {
             int32_t st = overlay_status();

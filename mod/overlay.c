@@ -28,6 +28,7 @@ static CRITICAL_SECTION lock;
 static overlay_wall_t walls[OVERLAY_MAX_WALLS];
 static int wall_count, text_dirty = 1, ready, failed;
 static uint64_t cam_eye, cam_target, cam_fov;      /* adresses absolues, 0 = inconnues */
+static uint64_t player_ptr;                        /* adresse du pointeur vers le joueur, 0 = pas de blocage */
 static present_t real_present;
 static ID3D11Device *dev;
 static ID3D11DeviceContext *ctx;
@@ -64,13 +65,14 @@ static const char SHADER[] =
     "  col = lerp(col, float3(1, 1, 1), txt);"
     "  return float4(col, alpha * a); }";
 
-void overlay_set(const overlay_wall_t *w, int count, uint64_t eye, uint64_t target, uint64_t fov) {
+void overlay_set(const overlay_wall_t *w, int count, uint64_t eye, uint64_t target, uint64_t fov,
+                 uint64_t player) {
     if (count < 0) count = 0;
     if (count > OVERLAY_MAX_WALLS) count = OVERLAY_MAX_WALLS;
     EnterCriticalSection(&lock);
     if (count) memcpy(walls, w, sizeof(overlay_wall_t) * (size_t)count);
     wall_count = count;
-    cam_eye = eye; cam_target = target; cam_fov = fov;
+    cam_eye = eye; cam_target = target; cam_fov = fov; player_ptr = player;
     text_dirty = 1;
     LeaveCriticalSection(&lock);
 }
@@ -244,7 +246,7 @@ static void draw(IDXGISwapChain *sc) {
     }
     view_proj(eye, target, fov, (float)bd.Width / (float)bd.Height, cb.vp);
     cb.eye[0] = eye[0]; cb.eye[1] = eye[1]; cb.eye[2] = eye[2]; cb.eye[3] = 0;
-    cb.fade[0] = 90.0f; cb.fade[1] = 30.0f; cb.fade[2] = cb.fade[3] = 0;
+    cb.fade[0] = 60.0f; cb.fade[1] = 25.0f; cb.fade[2] = cb.fade[3] = 0;
     if (SUCCEEDED(ID3D11DeviceContext_Map(ctx, (ID3D11Resource *)cbuf, 0, D3D11_MAP_WRITE_DISCARD, 0, &map))) {
         memcpy(map.pData, &cb, sizeof cb);
         ID3D11DeviceContext_Unmap(ctx, (ID3D11Resource *)cbuf, 0);
@@ -273,7 +275,42 @@ static void draw(IDXGISwapChain *sc) {
     ID3D11Texture2D_Release(back);
 }
 
+/* Le panneau arrete le joueur : a chaque image, s'il a franchi la ligne du panneau (dans sa largeur et sa
+   hauteur), il est remis juste devant, cote ville. Le cote "zone" est a droite du segment (x1,z1)->(x2,z2).
+   Au-dela de DEPTH metres derriere la ligne on ne touche a rien (joueur deja dans la zone apres un chargement). */
+#define BLOCK_MARGIN 0.8f
+#define BLOCK_DEPTH 6.0f
+static void block_player(void) {
+    HANDLE self = GetCurrentProcess();
+    uint64_t pl = 0;
+    float p[3];
+    SIZE_T n = 0;
+    EnterCriticalSection(&lock);
+    if (!player_ptr || !wall_count
+        || !ReadProcessMemory(self, (void *)player_ptr, &pl, sizeof pl, &n) || n != sizeof pl || !pl
+        || !ReadProcessMemory(self, (void *)(pl + 0x50), p, sizeof p, &n) || n != sizeof p) {
+        LeaveCriticalSection(&lock);
+        return;
+    }
+    for (int i = 0; i < wall_count; i++) {
+        const overlay_wall_t *w = &walls[i];
+        float tx = w->x2 - w->x1, tz = w->z2 - w->z1, len = sqrtf(tx * tx + tz * tz), nx, nz, rx, rz, along, d;
+        if (len < 0.5f) continue;
+        tx /= len; tz /= len; nx = tz; nz = -tx;
+        rx = p[0] - (w->x1 + w->x2) * 0.5f; rz = p[2] - (w->z1 + w->z2) * 0.5f;
+        along = rx * tx + rz * tz; d = rx * nx + rz * nz;
+        if (fabsf(along) > len * 0.5f || p[1] < w->y - 4.0f || p[1] > w->y + w->height + 12.0f) continue;
+        if (d > -BLOCK_MARGIN && d < BLOCK_DEPTH) {
+            float back = d + BLOCK_MARGIN, out[3] = {p[0] - nx * back, p[1], p[2] - nz * back};
+            WriteProcessMemory(self, (void *)(pl + 0x50), out, sizeof out, &n);
+            break;
+        }
+    }
+    LeaveCriticalSection(&lock);
+}
+
 static HRESULT STDMETHODCALLTYPE hook_present(IDXGISwapChain *sc, UINT sync, UINT flags) {
+    if (wall_count) block_player();
     if (!failed && wall_count) {
         if (!ready) { if (init(sc)) ready = 1; else failed = 1; }
         if (ready) draw(sc);

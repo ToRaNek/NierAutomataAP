@@ -10,21 +10,22 @@ import struct
 
 from .areas import zone_name
 
-# Pass -> (x, y, z du point d'entree, direction d'arrivee (dx, dz))
+# Pass -> (x, y du SOL, z du point d'entree, direction d'arrivee (dx, dz)).
+# Hauteur du sol mesuree en jeu en laissant tomber le joueur sur place. La ou deux niveaux se superposent, c'est
+# celui du chemin qui est retenu : route surelevee de l'usine (20,7 m, pas le sol 19 m plus bas), rue du desert
+# (15,1 m, pas le toit a 46,8 m), galerie de la Ville inondee (-58,5 m, pas la surface a -17,6 m).
 GATES: dict[str, tuple] = {
-    "Desert Pass": ((-169.0, 14.2, 33.1), (-0.5, -0.866)),
-    "Park Pass": ((313.1, 4.6, 344.5), (1.0, 0.0)),
-    "Village Pass": ((397.1, 3.5, -35.0), (1.0, 0.0)),
-    "Forest Pass": ((75.4, 1.9, -227.0), (0.0, -1.0)),
-    "Flooded City Pass": ((471.9, -60.4, 595.0), (0.0, 1.0)),
-    "Factory Pass": ((-207.0, 6.6, 514.1), (-1.0, 0.0)),
+    "Desert Pass": ((-169.0, 15.1, 33.1), (-0.5, -0.866)),
+    "Park Pass": ((313.1, 0.1, 344.5), (1.0, 0.0)),
+    "Village Pass": ((397.1, 3.6, -35.0), (1.0, 0.0)),
+    "Forest Pass": ((75.4, 11.4, -227.0), (0.0, -1.0)),
+    "Flooded City Pass": ((471.9, -58.5, 595.0), (0.0, 1.0)),
+    "Factory Pass": ((-207.0, 20.7, 514.1), (-1.0, 0.0)),
 }
 BEFORE = 4.0        # metres avant le point d'entree, cote ville
 WIDTH = 36.0
-# Les hauteurs relevees sont approximatives (lues pendant le deplacement, pas au sol : a l'usine le chemin est une
-# route surelevee a 22 m). Le panneau couvre donc une grande hauteur, le motif et le texte se repetent dessus.
-HEIGHT = 36.0
-SINK = 12.0         # le pied du panneau descend sous la hauteur relevee
+HEIGHT = 6.0        # une rangee du motif : le panneau ne depasse plus sous le sol
+SINK = 0.5          # le pied s'enfonce a peine (terrain en pente)
 MAX_WALLS = 8
 WALL_SIZE = 88      # 6 floats + 64 octets de texte
 
