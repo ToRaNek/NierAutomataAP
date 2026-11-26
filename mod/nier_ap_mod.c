@@ -31,7 +31,7 @@
 #include <string.h>
 #include "overlay.h"
 
-#define MOD_VERSION 5
+#define MOD_VERSION 6
 #define DEFAULT_PORT 38291
 #define MAX_IO (16 * 1024 * 1024)
 

@@ -16,6 +16,7 @@
 #define TEX_W 1024
 #define TEX_H 128
 #define ROW_HEIGHT 6.0f           /* hauteur d'une rangee du motif, en metres */
+#define VIEW_RANGE 90.0f          /* au-dela, le panneau est invisible : rien n'est dessine */
 #define MAX_VERTS (OVERLAY_MAX_WALLS * 6)
 
 typedef struct { float x, y, z, u, v, wall; } vert_t;
@@ -205,6 +206,84 @@ static void view_proj(const float *e, const float *t, float fov, float aspect, f
     }
 }
 
+/* Etat graphique du jeu que le dessin des panneaux modifie : sauvegarde avant, remis apres. Le moteur du jeu ne
+   repose pas forcement tout a chaque image ; sans ca, ce qu'on laisse derriere nous peut fausser son rendu. */
+typedef struct {
+    ID3D11RenderTargetView *rtv[D3D11_SIMULTANEOUS_RENDER_TARGET_COUNT];
+    ID3D11DepthStencilView *dsv;
+    D3D11_VIEWPORT vp[D3D11_VIEWPORT_AND_SCISSORRECT_OBJECT_COUNT_PER_PIPELINE];
+    UINT nvp;
+    ID3D11RasterizerState *rs;
+    ID3D11BlendState *bs; FLOAT bf[4]; UINT mask;
+    ID3D11DepthStencilState *dss; UINT sref;
+    ID3D11InputLayout *il; D3D11_PRIMITIVE_TOPOLOGY topo;
+    ID3D11Buffer *vb; UINT stride, offset;
+    ID3D11VertexShader *vs; ID3D11PixelShader *ps; ID3D11GeometryShader *gs; ID3D11HullShader *hs;
+    ID3D11DomainShader *ds;
+    ID3D11ClassInstance *vsi[256], *psi[256], *gsi[256], *hsi[256], *dsi[256];
+    UINT nvsi, npsi, ngsi, nhsi, ndsi;
+    ID3D11Buffer *vscb, *pscb;
+    ID3D11ShaderResourceView *srv;
+    ID3D11SamplerState *smp;
+} saved_t;
+
+#define REL(x) do { if (x) IUnknown_Release((IUnknown *)(x)); } while (0)
+
+static void state_save(saved_t *b) {
+    memset(b, 0, sizeof *b);
+    ID3D11DeviceContext_OMGetRenderTargets(ctx, D3D11_SIMULTANEOUS_RENDER_TARGET_COUNT, b->rtv, &b->dsv);
+    b->nvp = D3D11_VIEWPORT_AND_SCISSORRECT_OBJECT_COUNT_PER_PIPELINE;
+    ID3D11DeviceContext_RSGetViewports(ctx, &b->nvp, b->vp);
+    ID3D11DeviceContext_RSGetState(ctx, &b->rs);
+    ID3D11DeviceContext_OMGetBlendState(ctx, &b->bs, b->bf, &b->mask);
+    ID3D11DeviceContext_OMGetDepthStencilState(ctx, &b->dss, &b->sref);
+    ID3D11DeviceContext_IAGetInputLayout(ctx, &b->il);
+    ID3D11DeviceContext_IAGetPrimitiveTopology(ctx, &b->topo);
+    ID3D11DeviceContext_IAGetVertexBuffers(ctx, 0, 1, &b->vb, &b->stride, &b->offset);
+    b->nvsi = b->npsi = b->ngsi = b->nhsi = b->ndsi = 256;
+    ID3D11DeviceContext_VSGetShader(ctx, &b->vs, b->vsi, &b->nvsi);
+    ID3D11DeviceContext_PSGetShader(ctx, &b->ps, b->psi, &b->npsi);
+    ID3D11DeviceContext_GSGetShader(ctx, &b->gs, b->gsi, &b->ngsi);
+    ID3D11DeviceContext_HSGetShader(ctx, &b->hs, b->hsi, &b->nhsi);
+    ID3D11DeviceContext_DSGetShader(ctx, &b->ds, b->dsi, &b->ndsi);
+    ID3D11DeviceContext_VSGetConstantBuffers(ctx, 0, 1, &b->vscb);
+    ID3D11DeviceContext_PSGetConstantBuffers(ctx, 0, 1, &b->pscb);
+    ID3D11DeviceContext_PSGetShaderResources(ctx, 0, 1, &b->srv);
+    ID3D11DeviceContext_PSGetSamplers(ctx, 0, 1, &b->smp);
+}
+
+static void state_restore(saved_t *b) {
+    UINT i;
+    ID3D11DeviceContext_OMSetRenderTargets(ctx, D3D11_SIMULTANEOUS_RENDER_TARGET_COUNT, b->rtv, b->dsv);
+    ID3D11DeviceContext_RSSetViewports(ctx, b->nvp, b->vp);
+    ID3D11DeviceContext_RSSetState(ctx, b->rs);
+    ID3D11DeviceContext_OMSetBlendState(ctx, b->bs, b->bf, b->mask);
+    ID3D11DeviceContext_OMSetDepthStencilState(ctx, b->dss, b->sref);
+    ID3D11DeviceContext_IASetInputLayout(ctx, b->il);
+    ID3D11DeviceContext_IASetPrimitiveTopology(ctx, b->topo);
+    ID3D11DeviceContext_IASetVertexBuffers(ctx, 0, 1, &b->vb, &b->stride, &b->offset);
+    ID3D11DeviceContext_VSSetShader(ctx, b->vs, b->vsi, b->nvsi);
+    ID3D11DeviceContext_PSSetShader(ctx, b->ps, b->psi, b->npsi);
+    ID3D11DeviceContext_GSSetShader(ctx, b->gs, b->gsi, b->ngsi);
+    ID3D11DeviceContext_HSSetShader(ctx, b->hs, b->hsi, b->nhsi);
+    ID3D11DeviceContext_DSSetShader(ctx, b->ds, b->dsi, b->ndsi);
+    ID3D11DeviceContext_VSSetConstantBuffers(ctx, 0, 1, &b->vscb);
+    ID3D11DeviceContext_PSSetConstantBuffers(ctx, 0, 1, &b->pscb);
+    ID3D11DeviceContext_PSSetShaderResources(ctx, 0, 1, &b->srv);
+    ID3D11DeviceContext_PSSetSamplers(ctx, 0, 1, &b->smp);
+    for (i = 0; i < D3D11_SIMULTANEOUS_RENDER_TARGET_COUNT; i++) REL(b->rtv[i]);
+    REL(b->dsv); REL(b->rs); REL(b->bs); REL(b->dss); REL(b->il); REL(b->vb);
+    REL(b->vs); REL(b->ps); REL(b->gs); REL(b->hs); REL(b->ds);
+    for (i = 0; i < b->nvsi; i++) REL(b->vsi[i]);
+    for (i = 0; i < b->npsi; i++) REL(b->psi[i]);
+    for (i = 0; i < b->ngsi; i++) REL(b->gsi[i]);
+    for (i = 0; i < b->nhsi; i++) REL(b->hsi[i]);
+    for (i = 0; i < b->ndsi; i++) REL(b->dsi[i]);
+    REL(b->vscb); REL(b->pscb); REL(b->srv); REL(b->smp);
+}
+
+static saved_t saved;
+
 static void draw(IDXGISwapChain *sc) {
     ID3D11Texture2D *back = NULL;
     ID3D11RenderTargetView *rtv = NULL;
@@ -218,6 +297,16 @@ static void draw(IDXGISwapChain *sc) {
     EnterCriticalSection(&lock);
     n = wall_count;
     if (!n || !read_floats(cam_eye, eye, 3) || !read_floats(cam_target, target, 3)) { LeaveCriticalSection(&lock); return; }
+    {   /* Aucun panneau a portee de vue (ils s'effacent a 60 m) : on ne touche a RIEN du rendu du jeu. */
+        int near_one = 0;
+        for (int i = 0; i < n && !near_one; i++) {
+            float cx = (walls[i].x1 + walls[i].x2) * 0.5f - eye[0], cz = (walls[i].z1 + walls[i].z2) * 0.5f - eye[2];
+            float half = 0.5f * sqrtf((walls[i].x2 - walls[i].x1) * (walls[i].x2 - walls[i].x1)
+                                      + (walls[i].z2 - walls[i].z1) * (walls[i].z2 - walls[i].z1));
+            if (sqrtf(cx * cx + cz * cz) < VIEW_RANGE + half) near_one = 1;
+        }
+        if (!near_one) { LeaveCriticalSection(&lock); return; }
+    }
     read_floats(cam_fov, &fov, 1);
     if (!(fov > 0.2f && fov < 2.5f)) fov = 0.873f;
     if (text_dirty) { upload_text(); text_dirty = 0; }
@@ -253,6 +342,7 @@ static void draw(IDXGISwapChain *sc) {
     }
     vp.TopLeftX = vp.TopLeftY = 0; vp.Width = (float)bd.Width; vp.Height = (float)bd.Height;
     vp.MinDepth = 0; vp.MaxDepth = 1;
+    state_save(&saved);
     ID3D11DeviceContext_OMSetRenderTargets(ctx, 1, &rtv, NULL);
     ID3D11DeviceContext_RSSetViewports(ctx, 1, &vp);
     ID3D11DeviceContext_RSSetState(ctx, raster);
@@ -271,6 +361,7 @@ static void draw(IDXGISwapChain *sc) {
     ID3D11DeviceContext_HSSetShader(ctx, NULL, NULL, 0);
     ID3D11DeviceContext_DSSetShader(ctx, NULL, NULL, 0);
     ID3D11DeviceContext_Draw(ctx, (UINT)n * 6, 0);
+    state_restore(&saved);
     ID3D11RenderTargetView_Release(rtv);
     ID3D11Texture2D_Release(back);
 }
