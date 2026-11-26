@@ -56,11 +56,11 @@ static const char SHADER[] =
     "  float stripe = step(0.5, frac((i.uv.x * 2.0 + i.uv.y) * 1.5));"
     "  float edge = step(i.uv.y, 0.06) + step(0.94, i.uv.y);"
     "  float3 col = lerp(float3(0.75, 0.08, 0.08), float3(0.95, 0.75, 0.1), stripe * 0.35);"
-    "  float alpha = 0.32 + 0.45 * saturate(edge);"
-    "  float band = step(0.36, i.uv.y) * step(i.uv.y, 0.64);"           /* bandeau du texte */
-    "  float txt = t.Sample(s, float3(frac(i.uv.x), (i.uv.y - 0.36) / 0.28, i.uv.z)).r * band;"
+    "  float alpha = 0.16 + 0.5 * saturate(edge);"
+    "  float band = step(0.28, i.uv.y) * step(i.uv.y, 0.72);"           /* bandeau du texte */
+    "  float txt = t.Sample(s, float3(frac(i.uv.x), (i.uv.y - 0.28) / 0.44, i.uv.z)).r * band;"
     "  col = lerp(col, float3(0.05, 0.02, 0.02), band * 0.7);"
-    "  alpha = max(alpha, band * 0.75);"
+    "  alpha = max(alpha, band * 0.6);"
     "  col = lerp(col, float3(1, 1, 1), txt);"
     "  return float4(col, alpha * a); }";
 
@@ -228,7 +228,7 @@ static void draw(IDXGISwapChain *sc) {
         float len = sqrtf((w->x2 - w->x1) * (w->x2 - w->x1) + (w->z2 - w->z1) * (w->z2 - w->z1));
         float rows = floorf(w->height / ROW_HEIGHT + 0.5f), rep;
         if (rows < 1) rows = 1;
-        rep = floorf(len / (ROW_HEIGHT * (float)TEX_W / (float)TEX_H * 0.28f) + 0.5f);   /* texte non deforme */
+        rep = floorf(len / (ROW_HEIGHT * (float)TEX_W / (float)TEX_H * 0.44f) + 0.5f);   /* texte non deforme */
         if (rep < 1) rep = 1;
         vert_t q[4] = {{w->x1, w->y, w->z1, 0, rows, (float)i}, {w->x2, w->y, w->z2, rep, rows, (float)i},
                        {w->x2, w->y + w->height, w->z2, rep, 0, (float)i},
