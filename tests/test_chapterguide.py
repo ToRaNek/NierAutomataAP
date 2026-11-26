@@ -115,25 +115,38 @@ class _Ctx:
         self.chapter_request = None
 
 
-def test_tab_entries_offer_go_only_for_open_reached_chapters():
+def test_tab_menu_groups_chapters_like_the_portal_client():
     from nier_automata.game import chapters_ui as ui
-    assert ui.entries(type("C", (), {"state": None, "scope": None})())[0].kind == "note"
+    assert ui.menu(type("C", (), {"state": None, "scope": None})()) == {}
     j = cg.chapter_index("A", "09-01")
     ctx = _Ctx(reached={j}, gag=("J", "K"), missing={db.CHAPTERS[j]["name"]})
-    es = ui.entries(ctx)
-    chap = next(e for e in es if e.kind == "chapter" and e.text.startswith("09-01"))
-    assert chap.enabled and chap.target == cl.STARTS[j] and "check: reach" in chap.text
-    end = next(e for e in es if e.text.startswith("Ending J"))
-    assert end.enabled and end.target[3] == "140_00_A_RobotM_CrazyReligion"
-    assert not next(e for e in es if e.text.startswith("Ending K")).enabled         # partout : pas de saut
-    other = next(e for e in es if e.kind == "chapter" and e.text.startswith("05-01"))
-    assert not other.enabled and other.target is None and "not reached" in other.text
+    m = ui.menu(ctx)
+    assert list(m)[0] == "Route A - Chapter 01" and list(m)[-1] == ui.ANYWHERE
+    items = m["Route A - Chapter 09"]
+    chap = next(i for i in items if i.title.startswith("09-01"))
+    assert chap.playable and chap.target == cl.STARTS[j] and chap.done == 0 and "Reach this chapter" in chap.validate[0]
+    end = next(i for i in items if i.title == "Ending J")
+    assert end.playable and end.target[3] == "140_00_A_RobotM_CrazyReligion" and "priests" in end.validate[0]
+    assert ui.count([chap, end]) == "0/2"
+    k = m[ui.ANYWHERE][0]
+    assert k.title == "Ending K" and not k.playable and k.target is None           # partout : pas de saut
+    other = m["Route A - Chapter 05"][0]
+    assert not other.playable and other.why == "Not reached yet"
     assert ui.request(ctx, end) and ctx.chapter_request == (end.label, end.target)
-    assert not ui.request(ctx, other)
+    assert not ui.request(ctx, other) and not ui.request(ctx, k)
 
 
-def test_tab_entries_show_what_a_locked_chapter_needs():
+def test_tab_menu_counts_what_is_done():
     from nier_automata.game import chapters_ui as ui
-    es = ui.entries(_Ctx(reached={B03}, ckeys=dict(cl.CHAPTER_KEYS)))
-    row = next(e for e in es if e.kind == "chapter" and "B Chapter Key 0/2" in e.text)
-    assert not row.enabled and "locked" in row.text
+    j = cg.chapter_index("A", "09-01")
+    m = ui.menu(_Ctx(reached={j}, gag=("J",), seen=("J",)))
+    items = m["Route A - Chapter 09"]
+    assert next(i for i in items if i.title == "Ending J").done == 1
+    assert next(i for i in items if i.title.startswith("09-01")).done == 1          # check absent des restants
+
+
+def test_tab_menu_shows_what_a_locked_chapter_needs():
+    from nier_automata.game import chapters_ui as ui
+    m = ui.menu(_Ctx(reached={B03}, ckeys=dict(cl.CHAPTER_KEYS)))
+    row = m["Route B - Chapter 03"][0]
+    assert not row.playable and row.why == "Locked" and "B Chapter Key 0/2" in row.required
