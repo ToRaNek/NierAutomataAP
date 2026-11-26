@@ -59,6 +59,8 @@ class NierContext(CommonContext):
         self.goal_sent = False
         self.last_status = ""
         self.chapter_request = None      # (nom, (route, personnage, phase, sous-phase)) demande par l'onglet
+        from .game.gatewall import GateWalls
+        self.gate_walls = GateWalls()    # panneaux des zones verrouillees (dessines par le mod)
 
     async def server_auth(self, password_requested: bool = False):
         if password_requested and not self.password:
@@ -678,6 +680,13 @@ async def game_iteration(ctx: NierContext):
         await chapter_step(ctx, result.locked_chapter, received)
     except Exception as e:
         logger.info("route lock failed: %r", e)
+    try:
+        lock = getattr(ctx, "area_lock", None)
+        if lock is not None and lock.passes:
+            if ctx.gate_walls.update(ctx.nier.mem, lock.passes, received):
+                logger.info("Area signs updated (%d locked)", len(set(lock.passes) - set(received)))
+    except Exception as e:
+        logger.info("area signs failed: %r", e)
     try:
         await replay_step(ctx)
     except Exception as e:

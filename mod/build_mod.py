@@ -8,7 +8,7 @@ ROOT = Path(__file__).resolve().parent.parent
 out = ROOT / "dist" / "dinput8.dll"
 out.parent.mkdir(exist_ok=True)
 cmd = ["zig", "cc", "-target", "x86_64-windows-gnu", "-shared", "-O2", "-s", "-Wall", "-Wextra",
-       str(ROOT / "mod" / "nier_ap_mod.c"), "-o", str(out), "-lws2_32", "-ladvapi32"]
+       str(ROOT / "mod" / "nier_ap_mod.c"), str(ROOT / "mod" / "overlay.c"), "-o", str(out), "-lws2_32", "-ladvapi32", "-ld3d11", "-ldxgi", "-lgdi32", "-luser32"]
 r = subprocess.run(cmd)
 if r.returncode:
     sys.exit(r.returncode)
