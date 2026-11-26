@@ -99,7 +99,8 @@ Optional checks, off by default, all of them "never important":
 - `gag_ending_checks`: +21 with `ending_e` (the joke endings F to Z of the routes you play).
 - `item_checks`: +71 (first pickup of each material).
 
-With everything on and `ending_e`: **617 checks**.
+With these three on and `ending_e`: **617 checks**. With every setting at its highest as well (8 AP Items per
+area, levels up to 50, 30 weapons found, 16 Pod programs found, 3 slots per shop): **783 checks**.
 
 ### How many progression locks
 A lock is an item you must receive before the game lets you go on.

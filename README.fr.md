@@ -105,7 +105,8 @@ Checks facultatifs, desactives par defaut, tous "jamais importants" :
 - `gag_ending_checks` : +21 avec `ending_e` (les fins gag F a Z des routes que tu joues).
 - `item_checks` : +71 (premier ramassage de chaque materiau).
 
-Avec tout active et `ending_e` : **617 checks**.
+Avec ces trois-la et `ending_e` : **617 checks**. Avec en plus tous les reglages au plus haut (8 AP Items par
+zone, niveaux jusqu'a 50, 30 armes trouvees, 16 programmes de Pod trouves, 3 cases par boutique) : **783 checks**.
 
 ### Combien de verrous de progression
 Un verrou est un objet qu'il faut recevoir avant que le jeu te laisse continuer.
