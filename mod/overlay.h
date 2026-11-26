@@ -18,6 +18,8 @@ void overlay_start(void);
 /* player : adresse du pointeur vers le joueur (position en +0x50), 0 = le panneau n'arrete pas le joueur */
 void overlay_set(const overlay_wall_t *walls, int count, uint64_t eye, uint64_t target, uint64_t fov,
                  uint64_t player);
+/* message colore (0xRRGGBB) en bas a gauche de l'ecran pendant ms millisecondes ; texte en UTF-8 */
+void overlay_note(const char *utf8, uint32_t rgb, uint32_t ms);
 int overlay_status(void);   /* 1 pret, 0 pas encore dessine, -1 echec */
 
 #endif

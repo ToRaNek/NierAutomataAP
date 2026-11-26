@@ -18,6 +18,10 @@
 #define ROW_HEIGHT 6.0f           /* hauteur d'une rangee du motif, en metres */
 #define VIEW_RANGE 90.0f          /* au-dela, le panneau est invisible : rien n'est dessine */
 #define MAX_VERTS (OVERLAY_MAX_WALLS * 6)
+#define NOTE_MAX 6                /* messages Archipelago affiches en meme temps */
+#define NOTE_W 1024
+#define NOTE_H 64
+#define NOTE_FADE_MS 700
 
 typedef struct { float x, y, z, u, v, wall; } vert_t;
 typedef struct { float vp[16]; float eye[4]; float fade[4]; } cbuf_t;
@@ -43,6 +47,12 @@ static ID3D11DepthStencilState *depth;
 static ID3D11SamplerState *sampler;
 static ID3D11Texture2D *tex;
 static ID3D11ShaderResourceView *tex_view;
+typedef struct { wchar_t text[128]; float rgb[3]; ULONGLONG until; int dirty; } note_t;
+static note_t notes[NOTE_MAX];
+static int note_count;
+static ID3D11PixelShader *ps_note;
+static ID3D11Texture2D *note_tex;
+static ID3D11ShaderResourceView *note_view;
 
 static const char SHADER[] =
     "cbuffer C : register(b0) { row_major float4x4 vp; float4 eye; float4 fade; };"
@@ -64,7 +74,12 @@ static const char SHADER[] =
     "  col = lerp(col, float3(0.05, 0.02, 0.02), band * 0.7);"
     "  alpha = max(alpha, band * 0.6);"
     "  col = lerp(col, float3(1, 1, 1), txt);"
-    "  return float4(col, alpha * a); }";
+    "  return float4(col, alpha * a); }"
+    /* message a l'ecran : texte de la couleur donnee (eye.rgb), avec une ombre pour rester lisible partout */
+    "float4 psnote(V i) : SV_Target {"
+    "  float a = t.Sample(s, i.uv).r;"
+    "  float sh = t.Sample(s, float3(i.uv.x - 0.0025, i.uv.y - 0.04, i.uv.z)).r;"
+    "  return float4(eye.rgb * a, max(a, sh * 0.85) * fade.x); }";
 
 void overlay_set(const overlay_wall_t *w, int count, uint64_t eye, uint64_t target, uint64_t fov,
                  uint64_t player) {
@@ -79,6 +94,28 @@ void overlay_set(const overlay_wall_t *w, int count, uint64_t eye, uint64_t targ
 }
 
 int overlay_status(void) { return failed ? -1 : ready; }
+
+/* Ajoute un message (UTF-8) en bas a gauche de l'ecran pendant `ms` millisecondes. Le plus ancien sort s'il n'y
+   a plus de place. */
+void overlay_note(const char *utf8, uint32_t rgb, uint32_t ms) {
+    EnterCriticalSection(&lock);
+    if (note_count == NOTE_MAX) {
+        memmove(&notes[0], &notes[1], sizeof(note_t) * (NOTE_MAX - 1));
+        note_count--;
+        for (int i = 0; i < note_count; i++) notes[i].dirty = 1;
+    }
+    {
+        note_t *n = &notes[note_count++];
+        memset(n, 0, sizeof *n);
+        MultiByteToWideChar(CP_UTF8, 0, utf8, -1, n->text, 127);
+        n->rgb[0] = (float)((rgb >> 16) & 255) / 255.0f;
+        n->rgb[1] = (float)((rgb >> 8) & 255) / 255.0f;
+        n->rgb[2] = (float)(rgb & 255) / 255.0f;
+        n->until = GetTickCount64() + (ms ? ms : 6000);
+        n->dirty = 1;
+    }
+    LeaveCriticalSection(&lock);
+}
 
 /* texte de chaque mur, dessine avec GDI dans une couche de la texture */
 static void upload_text(void) {
@@ -176,6 +213,15 @@ static int init(IDXGISwapChain *sc) {
     td.Format = DXGI_FORMAT_R8_UNORM; td.SampleDesc.Count = 1; td.BindFlags = D3D11_BIND_SHADER_RESOURCE;
     if (FAILED(ID3D11Device_CreateTexture2D(dev, &td, NULL, &tex))) return 0;
     if (FAILED(ID3D11Device_CreateShaderResourceView(dev, (ID3D11Resource *)tex, NULL, &tex_view))) return 0;
+    {
+        ID3DBlob *nb = NULL;
+        if (FAILED(compile(SHADER, sizeof SHADER - 1, NULL, NULL, NULL, "psnote", "ps_4_0", 0, 0, &nb, NULL))) return 0;
+        if (FAILED(ID3D11Device_CreatePixelShader(dev, ID3D10Blob_GetBufferPointer(nb), ID3D10Blob_GetBufferSize(nb),
+                                                  NULL, &ps_note))) return 0;
+        td.Width = NOTE_W; td.Height = NOTE_H; td.ArraySize = NOTE_MAX;
+        if (FAILED(ID3D11Device_CreateTexture2D(dev, &td, NULL, &note_tex))) return 0;
+        if (FAILED(ID3D11Device_CreateShaderResourceView(dev, (ID3D11Resource *)note_tex, NULL, &note_view))) return 0;
+    }
     return 1;
 }
 
@@ -400,11 +446,124 @@ static void block_player(void) {
     LeaveCriticalSection(&lock);
 }
 
+/* texte d'un message, dessine avec GDI dans sa couche de texture (aligne a gauche) */
+static void upload_note(int i) {
+    static uint8_t gray[NOTE_W * NOTE_H];
+    BITMAPINFO bi;
+    void *bits = NULL;
+    HDC dc = CreateCompatibleDC(NULL);
+    HBITMAP bmp;
+    HFONT font;
+    RECT r = {8, 0, NOTE_W, NOTE_H};
+    memset(&bi, 0, sizeof bi);
+    bi.bmiHeader.biSize = sizeof bi.bmiHeader;
+    bi.bmiHeader.biWidth = NOTE_W; bi.bmiHeader.biHeight = -NOTE_H;
+    bi.bmiHeader.biPlanes = 1; bi.bmiHeader.biBitCount = 32;
+    bmp = CreateDIBSection(dc, &bi, DIB_RGB_COLORS, &bits, NULL, 0);
+    if (!bmp || !bits) { DeleteDC(dc); return; }
+    SelectObject(dc, bmp);
+    font = CreateFontA(44, 0, 0, 0, FW_BOLD, 0, 0, 0, DEFAULT_CHARSET, 0, 0, ANTIALIASED_QUALITY, 0, "Arial");
+    SelectObject(dc, font);
+    SetBkMode(dc, TRANSPARENT);
+    SetTextColor(dc, RGB(255, 255, 255));
+    memset(bits, 0, NOTE_W * NOTE_H * 4);
+    DrawTextW(dc, notes[i].text, -1, &r, DT_LEFT | DT_VCENTER | DT_SINGLELINE | DT_NOPREFIX | DT_END_ELLIPSIS);
+    GdiFlush();
+    for (int p = 0; p < NOTE_W * NOTE_H; p++) gray[p] = ((uint8_t *)bits)[p * 4 + 1];
+    ID3D11DeviceContext_UpdateSubresource(ctx, (ID3D11Resource *)note_tex, (UINT)i, NULL, gray, NOTE_W, 0);
+    SelectObject(dc, GetStockObject(SYSTEM_FONT));
+    DeleteObject(font);
+    DeleteObject(bmp);
+    DeleteDC(dc);
+}
+
+/* messages Archipelago : lignes de texte colore en bas a gauche, par-dessus l'image finie */
+static void draw_notes(IDXGISwapChain *sc) {
+    ID3D11Texture2D *back = NULL;
+    ID3D11RenderTargetView *rtv = NULL;
+    D3D11_TEXTURE2D_DESC bd;
+    D3D11_MAPPED_SUBRESOURCE map;
+    D3D11_VIEWPORT vp;
+    float bf[4] = {0, 0, 0, 0}, rgb[NOTE_MAX][3], alpha[NOTE_MAX], lh = 0.075f, lw, x0 = -0.96f, bottom = -0.80f;
+    UINT stride = sizeof(vert_t), offset = 0;
+    ULONGLONG now = GetTickCount64();
+    int n, keep = 0;
+    EnterCriticalSection(&lock);
+    for (int i = 0; i < note_count; i++) {             /* retire les messages finis */
+        if (notes[i].until > now) {
+            if (keep != i) { notes[keep] = notes[i]; notes[keep].dirty = 1; }
+            keep++;
+        }
+    }
+    note_count = n = keep;
+    if (!n) { LeaveCriticalSection(&lock); return; }
+    for (int i = 0; i < n; i++) {
+        ULONGLONG left = notes[i].until - now;
+        if (notes[i].dirty) { upload_note(i); notes[i].dirty = 0; }
+        memcpy(rgb[i], notes[i].rgb, sizeof rgb[i]);
+        alpha[i] = left >= NOTE_FADE_MS ? 1.0f : (float)left / (float)NOTE_FADE_MS;
+    }
+    LeaveCriticalSection(&lock);
+    if (FAILED(IDXGISwapChain_GetBuffer(sc, 0, &IID_ID3D11Texture2D, (void **)&back))) return;
+    ID3D11Texture2D_GetDesc(back, &bd);
+    if (FAILED(ID3D11Device_CreateRenderTargetView(dev, (ID3D11Resource *)back, NULL, &rtv))) {
+        ID3D11Texture2D_Release(back); return;
+    }
+    lw = lh * ((float)NOTE_W / (float)NOTE_H) * ((float)bd.Height / (float)bd.Width);     /* texte non deforme */
+    if (FAILED(ID3D11DeviceContext_Map(ctx, (ID3D11Resource *)vbuf, 0, D3D11_MAP_WRITE_DISCARD, 0, &map))) {
+        ID3D11RenderTargetView_Release(rtv); ID3D11Texture2D_Release(back); return;
+    }
+    for (int i = 0; i < n; i++) {
+        vert_t *v = (vert_t *)map.pData + i * 6;
+        float y0 = bottom + lh * (float)(n - 1 - i), y1 = y0 + lh, x1 = x0 + lw;   /* le plus recent en bas */
+        vert_t q[4] = {{x0, y0, 0.5f, 0, 1, (float)i}, {x1, y0, 0.5f, 1, 1, (float)i},
+                       {x1, y1, 0.5f, 1, 0, (float)i}, {x0, y1, 0.5f, 0, 0, (float)i}};
+        v[0] = q[0]; v[1] = q[1]; v[2] = q[2]; v[3] = q[0]; v[4] = q[2]; v[5] = q[3];
+    }
+    ID3D11DeviceContext_Unmap(ctx, (ID3D11Resource *)vbuf, 0);
+    vp.TopLeftX = vp.TopLeftY = 0; vp.Width = (float)bd.Width; vp.Height = (float)bd.Height;
+    vp.MinDepth = 0; vp.MaxDepth = 1;
+    state_save(&saved);
+    ID3D11DeviceContext_OMSetRenderTargets(ctx, 1, &rtv, NULL);
+    ID3D11DeviceContext_RSSetViewports(ctx, 1, &vp);
+    ID3D11DeviceContext_RSSetState(ctx, raster);
+    ID3D11DeviceContext_OMSetBlendState(ctx, blend, bf, 0xFFFFFFFF);
+    ID3D11DeviceContext_OMSetDepthStencilState(ctx, depth, 0);
+    ID3D11DeviceContext_IASetInputLayout(ctx, layout);
+    ID3D11DeviceContext_IASetPrimitiveTopology(ctx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+    ID3D11DeviceContext_IASetVertexBuffers(ctx, 0, 1, &vbuf, &stride, &offset);
+    ID3D11DeviceContext_VSSetShader(ctx, vs, NULL, 0);
+    ID3D11DeviceContext_VSSetConstantBuffers(ctx, 0, 1, &cbuf);
+    ID3D11DeviceContext_PSSetShader(ctx, ps_note, NULL, 0);
+    ID3D11DeviceContext_PSSetConstantBuffers(ctx, 0, 1, &cbuf);
+    ID3D11DeviceContext_PSSetShaderResources(ctx, 0, 1, &note_view);
+    ID3D11DeviceContext_PSSetSamplers(ctx, 0, 1, &sampler);
+    ID3D11DeviceContext_GSSetShader(ctx, NULL, NULL, 0);
+    ID3D11DeviceContext_HSSetShader(ctx, NULL, NULL, 0);
+    ID3D11DeviceContext_DSSetShader(ctx, NULL, NULL, 0);
+    for (int i = 0; i < n; i++) {
+        cbuf_t cb;
+        memset(&cb, 0, sizeof cb);
+        cb.vp[0] = cb.vp[5] = cb.vp[10] = cb.vp[15] = 1.0f;          /* positions deja a l'ecran */
+        cb.eye[0] = rgb[i][0]; cb.eye[1] = rgb[i][1]; cb.eye[2] = rgb[i][2];
+        cb.fade[0] = alpha[i];
+        if (SUCCEEDED(ID3D11DeviceContext_Map(ctx, (ID3D11Resource *)cbuf, 0, D3D11_MAP_WRITE_DISCARD, 0, &map))) {
+            memcpy(map.pData, &cb, sizeof cb);
+            ID3D11DeviceContext_Unmap(ctx, (ID3D11Resource *)cbuf, 0);
+            ID3D11DeviceContext_Draw(ctx, 6, (UINT)i * 6);
+        }
+    }
+    state_restore(&saved);
+    ID3D11RenderTargetView_Release(rtv);
+    ID3D11Texture2D_Release(back);
+}
+
 static HRESULT STDMETHODCALLTYPE hook_present(IDXGISwapChain *sc, UINT sync, UINT flags) {
     if (wall_count) block_player();
-    if (!failed && wall_count) {
+    if (!failed && (wall_count || note_count)) {
         if (!ready) { if (init(sc)) ready = 1; else failed = 1; }
-        if (ready) draw(sc);
+        if (ready && wall_count) draw(sc);
+        if (ready && note_count) draw_notes(sc);
     }
     return real_present(sc, sync, flags);
 }

@@ -108,7 +108,9 @@ class NierContext(CommonContext):
                 msgs = notify.messages_for_item_send(self.slot, sender, receiver, name,
                                                      self.player_names.get(sender, "?"),
                                                      self.player_names.get(receiver, "?"), loc_name,
-                                                     lang=getattr(self, "lang", "en"))
+                                                     lang=getattr(self, "lang", "en"),
+                                                     limit=notify.NOTE_LIMIT if notify.mod_can_note(self.nier.mem)
+                                                     else notify.MAX_LEN)
                 filelog.info("notification queued: %s", msgs)
                 self.notes.extend(msgs)
             except StopIteration:
@@ -265,6 +267,14 @@ async def notify_loop(ctx: NierContext):
             if getattr(ctx, "ap_prepared", None) is not None:
                 continue
             mem = ctx.nier.mem
+            if notify.mod_can_note(mem):
+                # avec le mod : message en couleur a part du fil du jeu, sans passer par un faux objet ramasse
+                prefix, item = ctx.notes.pop(0)
+                kind = notify.note_kind(prefix, getattr(ctx, "lang", "en"))
+                shown = await asyncio.to_thread(notify.send_note, mem, prefix + item, notify.NOTE_COLORS[kind])
+                filelog.info("note shown by the mod (%s, %s): %s%s", shown, kind, prefix, item)
+                await asyncio.sleep(0.4)
+                continue
             if ctx.note_pid != mem.pid:
                 ctx.note_slot = await asyncio.to_thread(notify.Notifier, mem)
                 ctx.note_pid = mem.pid

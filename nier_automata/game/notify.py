@@ -63,29 +63,57 @@ def _fit(text: str, limit: int = MAX_LEN) -> str:
     return text[:limit]
 
 
-def short_location(location: str, lang: str = "fr") -> str:
-    """Nom de check court pour la notification (17 caracteres max)."""
+def short_location(location: str, lang: str = "fr", limit: int = MAX_LEN) -> str:
+    """Nom de check court pour la notification (17 caracteres max dans le fil du jeu)."""
     from .i18n import short_place, t
     if location.startswith("Story ") and ": " in location:
-        return _fit(location.split(": ", 1)[1])            # titre du chapitre
+        return _fit(location.split(": ", 1)[1], limit)     # titre du chapitre
     if location.startswith("Shop "):
         place, _, num = location[5:].rpartition(" #")
-        return _fit(t(lang, "shop_short", place=short_place(lang, place), n=num))
+        return _fit(t(lang, "shop_short", place=short_place(lang, place), n=num), limit)
     for prefix in ("Chest: ", "AP Item: ", "Access Point: ", "Quest: "):
         if location.startswith(prefix):
-            return _fit(location[len(prefix):])
-    return _fit(location)
+            return _fit(location[len(prefix):], limit)
+    return _fit(location, limit)
+
+
+# Messages affiches par le mod (dinput8.dll) : en couleur, a part du fil du jeu, sans la limite de 17 caracteres.
+OP_NOTE = 10
+NOTE_MOD_VERSION = 7
+NOTE_LIMIT = 60
+NOTE_MS = 7000
+NOTE_COLORS = {"check": 0xFFD34D, "mine": 0x7CE38B, "other": 0x6FB6FF}     # jaune, vert, bleu
+
+
+def note_kind(prefix: str, lang: str = "en") -> str:
+    """"check" (un check que j'ai fait), "mine" (un objet pour moi) ou "other" (un objet pour quelqu'un d'autre)."""
+    from .i18n import t
+    if prefix == t(lang, "check"):
+        return "check"
+    if prefix == t(lang, "for_you") or prefix.split(" ", 1)[0] in _RECV_WORDS:
+        return "mine"
+    return "other"
+
+
+def mod_can_note(mem) -> bool:
+    return getattr(mem, "mod_version", 0) >= NOTE_MOD_VERSION
+
+
+def send_note(mem, text: str, rgb: int, ms: int = NOTE_MS) -> bool:
+    raw = "".join(ch for ch in text if ch.isprintable()).encode("utf-8")[:159]
+    raw = raw.decode("utf-8", "ignore").encode("utf-8")              # ne coupe pas un caractere en deux
+    return mem._ask(struct.pack("<BII", OP_NOTE, rgb, ms) + raw.ljust(160, b"\0"), 1) == b"\x01"
 
 
 def messages_for_item_send(me: int, sender: int, receiver: int, item: str,
                            sender_name: str, receiver_name: str, location: str,
-                           lang: str = "fr") -> list[tuple[str, str]]:
+                           lang: str = "fr", limit: int = MAX_LEN) -> list[tuple[str, str]]:
     """(prefixe, texte) a afficher pour "sender a envoye item a receiver depuis location".
     Check valide par moi : "Check : <location>" puis "Pour <qui> : <objet>". Recu : "De <qui> : <objet>"."""
     from .i18n import t
-    item = item[:MAX_LEN]
+    item = item[:limit]
     if sender == me:
-        check = (t(lang, "check"), short_location(location, lang)[:MAX_LEN])
+        check = (t(lang, "check"), short_location(location, lang, limit)[:limit])
         to = t(lang, "for_you") if receiver == me else t(lang, "for", who=receiver_name)
         return [check, (to, item)]
     if receiver == me:

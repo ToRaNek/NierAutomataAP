@@ -19,6 +19,7 @@
      7 CALL   u64 fonction, 5 x u64 args, u32 delai_ms -> u8 ok, u64 rax   (appel dans un fil du jeu)
      8 WALLS  u64 camera_position, u64 camera_cible, u64 camera_angle, u64 pointeur_joueur, u32 nombre, nombre x mur (84 octets :
               6 floats x1 y z1 x2 z2 hauteur + 64 octets de texte) -> u8 ok       (nombre = 0 : plus de murs)
+    10 NOTE   u32 couleur 0xRRGGBB, u32 duree_ms, 160 octets de texte UTF-8 -> u8 ok   (message a l'ecran)
      9 WALLSTATE                          -> i32 : 1 murs dessines, 0 pas encore, -1 echec de l'affichage
 
    Compilation : python mod/build_mod.py   (zig cc, cible x86_64-windows-gnu) */
@@ -31,7 +32,7 @@
 #include <string.h>
 #include "overlay.h"
 
-#define MOD_VERSION 6
+#define MOD_VERSION 7
 #define DEFAULT_PORT 38291
 #define MAX_IO (16 * 1024 * 1024)
 
@@ -185,6 +186,13 @@ static void serve(SOCKET s) {
         } else if (op == 9) {
             int32_t st = overlay_status();
             if (!send_all(s, &st, 4)) break;
+        } else if (op == 10) {
+            struct { uint32_t rgb, ms; char text[160]; } __attribute__((packed)) q;
+            uint8_t ok = 1;
+            if (!recv_all(s, &q, sizeof q)) break;
+            q.text[sizeof q.text - 1] = 0;
+            overlay_note(q.text, q.rgb, q.ms);
+            if (!send_all(s, &ok, 1)) break;
         } else {
             break;                                     /* operation inconnue : on ferme */
         }

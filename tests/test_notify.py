@@ -88,3 +88,44 @@ def test_compact_prefix_when_template_is_short():
     assert template_for("Pour Niicotine : ", 28) == "Pour Niicotine : " + PLACEHOLDER   # francais : ca tient
     assert template_for("De Bob : ", 21) == "De Bob : " + PLACEHOLDER
     assert template_for("Check: ", 21) == "Check: " + PLACEHOLDER
+
+
+def test_note_kind_gives_the_colour_family():
+    from nier_automata.game import notify as n
+    assert n.note_kind("Check: ", "en") == "check" and n.note_kind("Check : ", "fr") == "check"
+    assert n.note_kind("For you: ", "en") == "mine" and n.note_kind("Pour toi : ", "fr") == "mine"
+    assert n.note_kind("From Bob: ", "en") == "mine" and n.note_kind("De Bob : ", "fr") == "mine"
+    assert n.note_kind("For Bob: ", "en") == "other" and n.note_kind("Pour Bob : ", "fr") == "other"
+    assert len(set(n.NOTE_COLORS.values())) == 3
+
+
+def test_notes_through_the_mod_are_not_cut_to_17_characters():
+    from nier_automata.game import notify as n
+    long_item, loc = "Type-40 Lance of the Usurper", "Chest: Abandoned Factory Underground #12"
+    short = n.messages_for_item_send(1, 1, 2, long_item, "Me", "Bob", loc, lang="en")
+    full = n.messages_for_item_send(1, 1, 2, long_item, "Me", "Bob", loc, lang="en", limit=n.NOTE_LIMIT)
+    assert len(short[1][1]) == n.MAX_LEN and full[1][1] == long_item
+    assert full[0][1] == "Abandoned Factory Underground #12" and len(short[0][1]) <= n.MAX_LEN
+
+
+def test_send_note_packs_colour_duration_and_utf8_text():
+    import struct
+    from nier_automata.game import notify as n
+
+    class Mem:
+        mod_version = 7
+
+        def __init__(self):
+            self.sent = []
+
+        def _ask(self, req, size):
+            self.sent.append(req)
+            return b"\x01"
+    m = Mem()
+    assert n.mod_can_note(m) and not n.mod_can_note(object())
+    assert n.send_note(m, "Pour Zoé : Épée\n", 0x112233, 5000)
+    op, rgb, ms = struct.unpack_from("<BII", m.sent[0])
+    assert (op, rgb, ms) == (n.OP_NOTE, 0x112233, 5000) and len(m.sent[0]) == 9 + 160
+    assert m.sent[0][9:].rstrip(b"\0").decode("utf-8") == "Pour Zoé : Épée"        # saut de ligne retire
+    n.send_note(m, "é" * 200, 0, 1)
+    assert m.sent[1][9:].rstrip(b"\0").decode("utf-8") == "é" * 79                  # coupe sans casser un caractere
