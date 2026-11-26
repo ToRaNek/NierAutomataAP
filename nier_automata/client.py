@@ -2,11 +2,16 @@
 from __future__ import annotations
 
 import asyncio
+import logging
 import math
 import struct
 import urllib.parse
 
 from CommonClient import CommonContext, get_base_parser, gui_enabled, logger, server_loop
+
+# Traces techniques : ecrites dans le fichier journal d'Archipelago (logs/Launcher_*.txt) mais pas dans la fenetre
+# du client, qui n'affiche que le journal "Client". La fenetre ne garde que ce qui sert au joueur.
+filelog = logging.getLogger("NieR")
 from NetUtils import ClientStatus
 
 from .data import worlddb as db
@@ -90,7 +95,7 @@ class NierContext(CommonContext):
                         self.mail_hint_unread = True
                         logger.info("Hint for %s: %s -> %s", hint[1], hint[0], hint[2])
             except Exception as e:
-                logger.info("hint ignored: %r", e)
+                filelog.info("hint ignored: %r", e)
         if cmd == "PrintJSON" and args.get("type") in ("ItemSend", "ItemCheat") and self.slot is not None:
             try:
                 it = args["item"]
@@ -104,12 +109,12 @@ class NierContext(CommonContext):
                                                      self.player_names.get(sender, "?"),
                                                      self.player_names.get(receiver, "?"), loc_name,
                                                      lang=getattr(self, "lang", "en"))
-                logger.info("notification queued: %s", msgs)
+                filelog.info("notification queued: %s", msgs)
                 self.notes.extend(msgs)
             except StopIteration:
                 pass
             except Exception as e:
-                logger.info("notification ignored: %r", e)
+                filelog.info("notification ignored: %r", e)
         if cmd == "Connected":
             sd = args.get("slot_data", {})
             seed = getattr(self, "server_seed_name", None) or self.seed_name or "seed"
@@ -213,7 +218,7 @@ class NierContext(CommonContext):
                             inner.screens.switch_screens(tab)
                         Clock.schedule_once(show, 6)
                 except Exception as e:      # la carte ne doit jamais empecher le client de demarrer
-                    logger.info("Map tab unavailable: %r", e)
+                    filelog.info("Map tab unavailable: %r", e)
                 try:
                     from .game.chapters_ui import build_chapters_tab
                     ctab = inner.add_client_tab("Chapters", build_chapters_tab(self))
@@ -222,7 +227,7 @@ class NierContext(CommonContext):
                         from kivy.clock import Clock
                         Clock.schedule_once(lambda _dt: inner.screens.switch_screens(ctab), 6)
                 except Exception as e:
-                    logger.info("Chapters tab unavailable: %r", e)
+                    filelog.info("Chapters tab unavailable: %r", e)
                 return container
 
         self.ui = NierManager(self)
@@ -264,18 +269,18 @@ async def notify_loop(ctx: NierContext):
                 ctx.note_slot = await asyncio.to_thread(notify.Notifier, mem)
                 ctx.note_pid = mem.pid
             if not ctx.note_slot.ok:
-                logger.info("notifications unavailable: game texts not found")
+                filelog.info("notifications unavailable: game texts not found")
                 ctx.notes.clear()
                 continue
             prefix, item = ctx.notes.pop(0)
             shown = await asyncio.to_thread(ctx.note_slot.show, prefix, item)
-            logger.info("notification shown (%s): %s%s", shown, prefix, item)
+            filelog.info("notification shown (%s): %s%s", shown, prefix, item)
             await asyncio.sleep(1.5)
             ctx.nier._items.remove(notify.CARRIER_ITEM)
             ctx.note_restore_at = time.monotonic() + 12.0
             await asyncio.sleep(1.0)          # une ligne toutes les 5 s : laisse le journal du jeu suivre
         except Exception as e:
-            logger.info("notification failed: %r", e)
+            filelog.info("notification failed: %r", e)
 
 
 async def ability_loop(ctx: NierContext):
@@ -347,7 +352,7 @@ def tower_keys_step(ctx: NierContext) -> None:
     names = [ctx.item_names.lookup_in_game(i.item) for i in ctx.items_received][:st.next_item_index]
     for kid in to_remove(game.owned_items(), names):
         if game.remove_item(kid):
-            logger.info("Tower key taken back (the game gave it): item %s", kid)
+            filelog.info("Tower key taken back (the game gave it): item %s", kid)
 
 
 def area_thread(ctx: NierContext) -> None:
@@ -361,7 +366,7 @@ def area_thread(ctx: NierContext) -> None:
             area_step(ctx, time.monotonic())
             tower_keys_step(ctx)
         except Exception as e:
-            logger.info("area lock failed: %r", e)
+            filelog.info("area lock failed: %r", e)
             time.sleep(1.0)
 
 
@@ -455,7 +460,7 @@ async def gag_ending_step(ctx: NierContext) -> None:
     if letter in wanted and letter not in ctx.state.endings_seen:
         ctx.state.endings_seen.add(letter)
         ctx.state.save(ctx.state_file)
-        logger.info("Gag ending %s reached", letter)
+        filelog.info("Gag ending %s reached", letter)
         new = sorted(due_locations(ctx.state, ctx.scope) - ctx.state.sent_locations)
         if new:
             ctx.state.sent_locations.update(new)
@@ -492,10 +497,10 @@ async def mail_step(ctx: NierContext):
                 if ctx.mail_hint_unread:
                     mailer.mark_unread(mailm.HINTS_MAIL)
                 ctx.mail_hint_new = ctx.mail_hint_unread = False
-                logger.info("Mail: hint from %s added", who)
+                filelog.info("Mail: hint from %s added", who)
         await asyncio.to_thread(mailer.locate_titles)
     except Exception as e:
-        logger.info("Mail unavailable: %r", e)
+        filelog.info("Mail unavailable: %r", e)
     finally:
         ctx.mail_busy = False
 
@@ -532,7 +537,7 @@ async def ap_items_step(ctx: NierContext):
     if ctx.ap_pid != mem.pid:
         ok = await asyncio.to_thread(apit.install, mem)
         ctx.ap_pid = mem.pid
-        logger.info("AP Items : %s", "hook installed" if ok else "unsupported game version")
+        filelog.info("AP Items : %s", "hook installed" if ok else "unsupported game version")
         if not ok:
             ctx.ap_items_on = False
             return
@@ -587,12 +592,12 @@ async def ap_items_step(ctx: NierContext):
     picked, expired = ctx.ap_pending.update(gone, marker, time.monotonic())
     for i in picked:
         ctx.spots.collected(i)
-        logger.info("Picked up %s", db.PICKUPS[i]["name"])
+        filelog.info("Picked up %s", db.PICKUPS[i]["name"])
     for i in expired:
         ctx.spots.forget(i)
-        logger.info("AP Item unloaded without pickup: %s", db.PICKUPS[i]["name"])
+        filelog.info("AP Item unloaded without pickup: %s", db.PICKUPS[i]["name"])
     if marker and not picked:
-        logger.info("AP Item pickup marker seen, waiting for the object to disappear")
+        filelog.info("AP Item pickup marker seen, waiting for the object to disappear")
     if marker:
         ctx.nier._items.remove(apit.PICKUP_CARRIER)
 
@@ -609,7 +614,7 @@ async def shop_step(ctx: NierContext) -> list[int]:
         owned = {c for c in shopm.CARRIER_POOL if ctx.nier._items.find(c) is not None}
         ctx.shop = await asyncio.to_thread(shopm.ShopSession, mem, orig, ctx.shop_price, slots, owned)
         ctx.shop_pid, ctx.shop_applied = mem.pid, None
-        logger.info("Shops: %s", f"AP Items installed ({len(ctx.shop.carriers)} slots)"
+        filelog.info("Shops: %s", f"AP Items installed ({len(ctx.shop.carriers)} slots)"
                     if ctx.shop.ok else "shop table not found")
     if not ctx.shop.ok:
         return []
@@ -641,7 +646,7 @@ async def shop_step(ctx: NierContext) -> list[int]:
         elif ctx.shop_price <= 0 or ctx.shop_pay.consume(ctx.shop_price, now):
             ctx.nier._items.remove(cid)
             sent.append(lid)
-            logger.info("AP Item bought: %s", shop_location(place, k))
+            filelog.info("AP Item bought: %s", shop_location(place, k))
         # sinon : porteur apparu SANS paiement (chargement...) -> pas de check, on attend
     return sent
 
@@ -659,7 +664,7 @@ async def game_iteration(ctx: NierContext):
     if getattr(ctx, "lang_pid", None) != ctx.nier.mem.pid:
         ctx.lang = i18n.game_language(ctx.nier.mem)
         ctx.lang_pid = ctx.nier.mem.pid
-        logger.info("Game language: %s", ctx.lang)
+        filelog.info("Game language: %s", ctx.lang)
     if not ctx.backed_up:
         dst = backup_saves()
         if dst:
@@ -679,18 +684,18 @@ async def game_iteration(ctx: NierContext):
         await route_step(ctx, result.locked_route, set(received))
         await chapter_step(ctx, result.locked_chapter, received)
     except Exception as e:
-        logger.info("route lock failed: %r", e)
+        filelog.info("route lock failed: %r", e)
     try:
         lock = getattr(ctx, "area_lock", None)
         if lock is not None and lock.passes:
             if ctx.gate_walls.update(ctx.nier.mem, lock.passes, received):
-                logger.info("Area signs updated (%d locked)", len(set(lock.passes) - set(received)))
+                filelog.info("Area signs updated (%d locked)", len(set(lock.passes) - set(received)))
     except Exception as e:
-        logger.info("area signs failed: %r", e)
+        filelog.info("area signs failed: %r", e)
     try:
         await replay_step(ctx)
     except Exception as e:
-        logger.info("chapter replay failed: %r", e)
+        filelog.info("chapter replay failed: %r", e)
     bought: list[int] = []
     for step in (ground_step, ap_items_step, shop_step):
         try:
@@ -698,7 +703,7 @@ async def game_iteration(ctx: NierContext):
             if step is shop_step and out:
                 bought = out
         except Exception as e:  # etape optionnelle : on continue
-            logger.info("Step %s failed (%r)", step.__name__, e)
+            filelog.info("Step %s failed (%r)", step.__name__, e)
     if not ctx.mail_busy:
         asyncio.create_task(mail_step(ctx))
     extra = sorted((due_locations(ctx.state, ctx.scope) | set(bought)) - ctx.state.sent_locations)
