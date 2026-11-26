@@ -69,6 +69,81 @@ Chaque check porte le nom de son lieu : un indice dit donc ou aller.
 - **Quest: <nom>** : terminer une quete annexe. La plupart se ferment apres le chapitre 7 (verifie en jeu) :
   elles ne contiennent jamais d'objet important ; le jeu donne toujours sa propre recompense.
 
+## En chiffres
+Tous les comptes sont ceux des **reglages par defaut**, une colonne par objectif (`goal`). Ils viennent de
+`python tools/count_checks.py` (meme calcul que le generateur) et ont ete compares a une vraie partie generee :
+484 checks comptes pour `ending_e`, 485 emplacements dans le spoiler, celui en plus etant
+l'objectif lui-meme.
+La colonne `story_progress` est son reglage par defaut : route A jusqu'au chapitre 4 (`story_route`,
+`story_chapter`).
+
+### Combien de checks
+| | `story_progress` | `ending_a` | `ending_b` | `ending_cd` | `ending_e` |
+|---|---:|---:|---:|---:|---:|
+| Chapitres d'histoire | 15 | 37 | 74 | 109 | 109 |
+| Coffres | 54 | 136 | 175 | 182 | 182 |
+| AP Items | 32 | 63 | 63 | 75 | 75 |
+| Points d'acces | 9 | 17 | 17 | 17 | 17 |
+| Quetes annexes | 8 | 39 | 50 | 60 | 60 |
+| Fins principales | 0 | 0 | 1 | 2 | 4 |
+| Niveaux | 9 | 19 | 19 | 19 | 19 |
+| Cases de boutique | 2 | 6 | 6 | 6 | 6 |
+| Armes trouvees | 8 | 8 | 8 | 8 | 8 |
+| Programmes de Pod trouves | 4 | 4 | 4 | 4 | 4 |
+| **Total** | **141** | **329** | **417** | **482** | **484** |
+| dont jamais d'objet important | 31 | 110 | 128 | 162 | 162 |
+
+- **Jamais d'objet important** : les checks que tu peux rater ou ne jamais trouver (voir *Objectifs et logique*).
+  Ils ne recoivent que des soins, des bonus, de l'argent ou des pieges : une seed n'en depend jamais.
+- **Niveaux** : un check par niveau de 2 a `max_level_check` (20 par defaut) ; un objectif court s'arrete avant.
+- **Cases de boutique** : `shop_checks` (2 par defaut) par boutique presente dans les chapitres que tu joues.
+- **Armes trouvees**, **Programmes de Pod trouves** : `weapon_checks` (8) et `pod_program_checks` (4).
+- **AP Items** : `ap_items_per_area` (3 par defaut, jusqu'a 8) par zone.
+
+Checks facultatifs, desactives par defaut, tous "jamais importants" :
+- `fish_checks` : +41 (un par espece de poisson).
+- `gag_ending_checks` : +21 avec `ending_e` (les fins gag F a Z des routes que tu joues).
+- `item_checks` : +71 (premier ramassage de chaque materiau).
+
+Avec tout active et `ending_e` : **617 checks**.
+
+### Combien de verrous de progression
+Un verrou est un objet qu'il faut recevoir avant que le jeu te laisse continuer.
+| | `story_progress` | `ending_a` | `ending_b` | `ending_cd` | `ending_e` |
+|---|---:|---:|---:|---:|---:|
+| Pass de zone | 2 | 4 | 4 | 4 | 4 |
+| Objets de route (Route B Access, Route C/D Access) | 0 | 0 | 1 | 2 | 2 |
+| Cles de chapitre (B Chapter Key, C/D Chapter Key) | 0 | 0 | 9 | 15 | 15 |
+| Cles de la Tour (Forest, Ocean, Park Access Key) | 0 | 0 | 0 | 3 | 3 |
+| **Total** | **2** | **4** | **14** | **24** | **24** |
+
+- **Pass de zone** : un par zone verrouillee que tu joues avant ton objectif. `area_locks: all` ajoute la Ville
+  inondee et l'Usine abandonnee : 26 verrous avec `ending_e`. `area_locks: off` : aucun.
+- **Objets de route** (`route_locks`) : un pour entrer dans la route B, un pour la route C/D.
+- **Cles de chapitre** (`chapter_locks`) : une cle de plus par grand chapitre apres le premier de sa route, 9 sur
+  la route B et 6 sur la route C/D. La route A n'en a pas : ses zones sont fermees par les Pass.
+- **Cles de la Tour** (`tower_keys`) : les trois cles d'acces que demande la porte de la Tour.
+- Chacune des quatre options se desactive separement.
+
+### Combien d'objets
+Il y a exactement un objet par check.
+| | `story_progress` | `ending_a` | `ending_b` | `ending_cd` | `ending_e` |
+|---|---:|---:|---:|---:|---:|
+| Armes | 37 | 37 | 37 | 37 | 37 |
+| Capacites | 3 | 3 | 3 | 3 | 3 |
+| Verrous de progression (tableau ci-dessus) | 2 | 4 | 14 | 24 | 24 |
+| Programmes de Pod | 16 | 16 | 16 | 16 | 16 |
+| Soins, bonus, argent et pieges | 83 | 269 | 347 | 402 | 404 |
+| **Total (un par check)** | **141** | **329** | **417** | **482** | **484** |
+
+- **Armes** : les 37 armes que tu n'as pas au depart. Ce sont des objets de progression : les chapitres suivants
+  en attendent davantage.
+- **Capacites** : celles de `randomized_abilities` (Double Jump, Air Dash et Ground Evade par defaut). Tu ne peux
+  pas t'en servir avant de les recevoir.
+- **Programmes de Pod** : les 16 programmes autres que le laser de depart (`pod_programs`).
+- **Le reste** : soins, bonus et argent, dont `trap_percentage` (20 par defaut) pour cent remplaces par des
+  pieges. Environ un objet sur cinq de cette derniere ligne est donc un piege.
+
 ## Objectifs et logique
 - `goal` : `story_progress` (finir le chapitre N d'une route, partie courte), `ending_a`, `ending_b`, `ending_cd`,
   `ending_e`. L'objectif fixe la part du jeu qui a des checks.

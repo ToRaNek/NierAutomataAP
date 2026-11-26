@@ -192,3 +192,17 @@ def test_factory_underground_access_points_are_filler():
     from nier_automata.data import worlddb as db
     ex = {a["name"] for a in db.ACCESS_POINTS if a.get("excluded")}
     assert ex == {"Access Point: Factory: Hangar", "Access Point: Factory: Furnace"}
+
+
+def test_count_checks_tool_is_consistent():
+    import sys
+    from pathlib import Path
+    sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "tools"))
+    import count_checks as cc
+    from nier_automata.data import worlddb as db
+    e = cc.count(db.GOAL_ENDING_E)
+    assert e["locks"] == {"Area Passes": 4, "Route items": 2, "Chapter keys": 15, "Tower keys": 3}
+    assert sum(e["items"].values()) == e["total"] == sum(t for t, _ in e["cats"].values())
+    assert e["cats"]["Story chapters"][0] == len(db.CHAPTERS) and e["excluded"] < e["total"]
+    assert cc.count(db.GOAL_ENDING_E, area_locks=2)["n_locks"] == 26 and cc.count(db.GOAL_ENDING_E, area_locks=0)["n_locks"] == 20
+    assert cc.count(db.GOAL_ENDING_A)["total"] < cc.count(db.GOAL_ENDING_B)["total"] < e["total"]

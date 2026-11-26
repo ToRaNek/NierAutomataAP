@@ -65,6 +65,79 @@ Everything is named after where it is, so a hint tells you where to go.
 - **Quest: <name>**: finishing a side quest. Most quests close after chapter 7 (checked in game), so they
   never hold an important item; the game still gives its own reward.
 
+## Numbers
+All counts are for the **default settings**, one column per `goal`. They come from `python tools/count_checks.py`
+(same computation as the generator) and were compared with a real generated game: 484 checks counted for
+`ending_e`, 485 locations in the spoiler, the extra one being the goal itself.
+The `story_progress` column is its default: route A up to chapter 4 (`story_route`, `story_chapter`).
+
+### How many checks
+| | `story_progress` | `ending_a` | `ending_b` | `ending_cd` | `ending_e` |
+|---|---:|---:|---:|---:|---:|
+| Story chapters | 15 | 37 | 74 | 109 | 109 |
+| Chests | 54 | 136 | 175 | 182 | 182 |
+| AP Items | 32 | 63 | 63 | 75 | 75 |
+| Access points | 9 | 17 | 17 | 17 | 17 |
+| Side quests | 8 | 39 | 50 | 60 | 60 |
+| Main endings | 0 | 0 | 1 | 2 | 4 |
+| Levels | 9 | 19 | 19 | 19 | 19 |
+| Shop slots | 2 | 6 | 6 | 6 | 6 |
+| Weapons found | 8 | 8 | 8 | 8 | 8 |
+| Pod programs found | 4 | 4 | 4 | 4 | 4 |
+| **Total** | **141** | **329** | **417** | **482** | **484** |
+| of which never hold an important item | 31 | 110 | 128 | 162 | 162 |
+
+- **Never hold an important item**: checks you can miss or may never find (see *Goals and logic*). They only
+  receive recovery items, boosts, money or traps, so a seed never depends on them.
+- **Levels**: one check per level from 2 to `max_level_check` (20 by default); a short goal stops earlier.
+- **Shop slots**: `shop_checks` (2 by default) per shop that exists in the chapters you play.
+- **Weapons found**, **Pod programs found**: `weapon_checks` (8) and `pod_program_checks` (4).
+- **AP Items**: `ap_items_per_area` (3 by default, up to 8) per area.
+
+Optional checks, off by default, all of them "never important":
+- `fish_checks`: +41 (one per fish species).
+- `gag_ending_checks`: +21 with `ending_e` (the joke endings F to Z of the routes you play).
+- `item_checks`: +71 (first pickup of each material).
+
+With everything on and `ending_e`: **617 checks**.
+
+### How many progression locks
+A lock is an item you must receive before the game lets you go on.
+| | `story_progress` | `ending_a` | `ending_b` | `ending_cd` | `ending_e` |
+|---|---:|---:|---:|---:|---:|
+| Area Passes | 2 | 4 | 4 | 4 | 4 |
+| Route items (Route B Access, Route C/D Access) | 0 | 0 | 1 | 2 | 2 |
+| Chapter keys (B Chapter Key, C/D Chapter Key) | 0 | 0 | 9 | 15 | 15 |
+| Tower keys (Forest, Ocean, Park Access Key) | 0 | 0 | 0 | 3 | 3 |
+| **Total** | **2** | **4** | **14** | **24** | **24** |
+
+- **Area Passes**: one per locked area you play before your goal. `area_locks: all` adds Flooded City and
+  Abandoned Factory: 26 locks with `ending_e`. `area_locks: off`: none.
+- **Route items** (`route_locks`): one to enter route B, one to enter route C/D.
+- **Chapter keys** (`chapter_locks`): one more key for each big chapter after the first of its route, 9 on
+  route B and 6 on route C/D. Route A has none: its areas are closed by the Passes.
+- **Tower keys** (`tower_keys`): the three Access Keys the Tower door asks for.
+- Each of the four options can be turned off on its own.
+
+### How many items
+There is exactly one item per check.
+| | `story_progress` | `ending_a` | `ending_b` | `ending_cd` | `ending_e` |
+|---|---:|---:|---:|---:|---:|
+| Weapons | 37 | 37 | 37 | 37 | 37 |
+| Abilities | 3 | 3 | 3 | 3 | 3 |
+| Progression locks (table above) | 2 | 4 | 14 | 24 | 24 |
+| Pod programs | 16 | 16 | 16 | 16 | 16 |
+| Recovery items, boosts, money and traps | 83 | 269 | 347 | 402 | 404 |
+| **Total (one per check)** | **141** | **329** | **417** | **482** | **484** |
+
+- **Weapons**: the 37 weapons you do not start with. They are progression items: later chapters expect more of
+  them.
+- **Abilities**: the ones listed in `randomized_abilities` (Double Jump, Air Dash and Ground Evade by default).
+  You cannot use them until they arrive.
+- **Pod programs**: the 16 programs other than the starting laser (`pod_programs`).
+- **The rest**: recovery items, boosts and money, with `trap_percentage` (20 by default) of them replaced by
+  traps. So about one item in five of that last row is a trap.
+
 ## Goals and logic
 - `goal`: `story_progress` (finish chapter N of a route, short game), `ending_a`, `ending_b`, `ending_cd`, `ending_e`.
   The goal sets how much of the game has checks.
