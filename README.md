@@ -12,6 +12,24 @@ You can pass it an `archipelago://name@server:port` link.
 **Manually**: copy `nier_automata.apworld` into `<Archipelago>/custom_worlds`, then
 Archipelago Launcher -> *NieR:Automata Client*.
 
+**The mod (`dinput8.dll`, optional on Windows)**: a small file placed next to `NieRAutomata.exe`. The launcher
+copies it there by itself (it looks for the game in your Steam libraries; `--game="folder"` to tell it where,
+`--no-mod` to skip it). By hand: copy `dinput8.dll` from the Releases into the game folder. It does two things:
+- it draws a striped sign with the name of the missing Pass across the entrance of every locked area, and stops
+  you there (see *Area locks*);
+- it lets the client talk to the game through a local connection instead of opening the game's process from
+  outside, which is what is needed on Linux / Proton.
+
+Without the mod everything else works as before on Windows: a locked area just puts you back where you were.
+If another mod already uses `dinput8.dll` in your game folder, the launcher leaves it alone and says so.
+The connection only listens on your own machine and asks for a key the mod writes in your user profile at each
+game start. To remove the mod, delete `dinput8.dll` from the game folder.
+
+**Linux / Proton (not tested by the author)**: put `dinput8.dll` in the game folder and set the Steam launch
+options to `WINEDLLOVERRIDES="dinput8=n,b" %command%`. Then run the Archipelago client natively. The client
+looks for the mod's key in the game's Proton prefix under the usual Steam folders; if your library is elsewhere,
+set `NIER_AP_MOD_TOKEN_FILE` to `.../compatdata/524220/pfx/drive_c/users/steamuser/AppData/Local/NierAutomataAP/mod_token`.
+
 Requirements: NieR:Automata **Steam v1.04** (the current Steam version: the November 2026 update, Steam
 build 26534214, so just let Steam update the game), Archipelago **0.6.8+**. Whoever generates the game also needs the
 `.apworld`. Settings template: `NieR Automata.yaml`.
@@ -63,7 +81,8 @@ Everything is named after where it is, so a hint tells you where to go.
   Desert Zone, Amusement Park, Pascal's Village and Forest Zone (with the castle); with `all`, also Flooded City
   and Abandoned Factory (these two come after chapter 7, when side quests are closed, so waiting there leaves
   little to do). Walking in without
-  the Pass puts you back a few meters, like an invisible wall, with "Locked: Desert Pass" in the game log. The
+  the Pass puts you back a few meters, like an invisible wall, with "Locked: Desert Pass" in the game log
+  (with the mod: a sign across the entrance names the Pass and stops you, see *Install*). The
   story needs these areas in order, so it waits for the Pass. Only the areas played before your goal get a Pass
   (two with the default settings: Desert and Park). The prologue is never locked. The Copied City has no Pass
   (the game places you inside, you do not walk in). With this option the route A side quests never hold an
@@ -138,6 +157,12 @@ this, an underground check looks the same as whatever is above it on the surface
 - The Self-Destruct and E-Drug traps were tried on foot as 2B, in a boss fight (both work), in a flying section
   and during a 9S hack (E-Drug shows there; Self-Destruct waits until you are back on foot, and the items
   received after it wait with it).
+- Area signs (mod): with a generated game, a server and the real client, at each of the six entrances: the sign
+  is drawn across the way and stops the character pushed at 10 m/s (far faster than running), and the Factory
+  sign went away when its Pass arrived from the server. The character was moved by the test tools, not with a
+  controller. The sign is drawn over the finished picture, so it shows through whatever stands in front of it;
+  it fades beyond 60 m. A jump of more than 6 m in one frame gets past it: the client's own wall is still there
+  for that. The mod serves one program at a time (the client). Linux / Proton: not tested by the author.
 - Area locks: tested in game at the entrance of each of the six areas (the wall holds on repeated tries, and the
   Desert opens as soon as its Pass arrives from the server). If you connect while already standing inside a
   closed area, the client leaves you there. No full playthrough with the locks has been done yet.
@@ -171,6 +196,9 @@ this, an underground check looks the same as whatever is above it on the surface
 
 ## Development
 - Tests: `python -m pytest`
-- Build: `python build.py` (apworld); launcher: `python launcher/build_exe.py`
+- Build: `python build.py` (apworld); mod: `python mod/build_mod.py` (needs `zig`); launcher:
+  `python launcher/build_exe.py` (builds and embeds both)
+- Mod sources and its socket protocol: `mod/nier_ap_mod.c`, `mod/overlay.c`; client side:
+  `nier_automata/game/modlink.py`
 - Reverse-engineering tools in `tools/`; game data research (routes, endings, quests, chests, positions) in
   `docs/research/`.

@@ -103,3 +103,13 @@ def test_spawned_enemies_take_the_level_of_the_area():
     assert spawn_level([(0x20002, 7), (0x20002, 9), (0x20000, 12)], 0x20002) == 9
     assert spawn_level([(0x20000, 12), (0x2b005, 30)], 0x20002) == 12       # pas ce type : mediane basse de la zone
     assert spawn_level([], 0x20002) == 1
+
+
+def test_near_addresses_stay_within_a_relative_jump():
+    from nier_automata.game.spawner import near_addresses
+    base = 0x7FF60AC00000
+    out = list(near_addresses(base))
+    assert out[0] == base - 0x10000000                       # plage habituelle d'abord
+    assert all(a % 0x10000 == 0 and abs(a - base) < 0x7F000000 for a in out)
+    assert any(a > base + 0x18BE000 for a in out) and any(base - a < 0x10000000 for a in out)
+    assert len(out) == len(set(out))

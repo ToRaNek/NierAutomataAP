@@ -58,8 +58,9 @@ def install(m):
         h = k.OpenProcess(0x1F0FFF, False, m.pid)
         k.VirtualAllocEx.argtypes = [wintypes.HANDLE, ctypes.c_void_p, ctypes.c_size_t, wintypes.DWORD, wintypes.DWORD]
         k.VirtualAllocEx.restype = ctypes.c_void_p
-        for delta in range(0x18000000, 0x7F000000, 0x1000000):
-            cave = k.VirtualAllocEx(h, ctypes.c_void_p((m.base - delta) & ~0xFFFF), 0x1000, 0x3000, 0x40)
+        from nier_automata.game.spawner import near_addresses
+        for near in near_addresses(m.base):
+            cave = k.VirtualAllocEx(h, ctypes.c_void_p(near), 0x1000, 0x3000, 0x40)
             if cave:
                 break
         k.CloseHandle(h)

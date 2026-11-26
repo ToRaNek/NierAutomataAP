@@ -55,6 +55,10 @@ def token_files(env=None, home: Optional[Path] = None) -> list:
 def read_token(env=None, home: Optional[Path] = None) -> Optional[bytes]:
     for f in token_files(env, home):
         try:
+            if os.name != "nt":
+                # Sous Linux / Proton le mod cree le fichier avec les droits par defaut : on le reserve a son
+                # proprietaire (la cle change a chaque lancement du jeu).
+                os.chmod(f, 0o600)
             data = f.read_bytes()
         except OSError:
             continue

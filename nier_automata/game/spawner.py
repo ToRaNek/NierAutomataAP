@@ -189,6 +189,18 @@ def _scan_enemies(mem, want: int, only: int = 0, ptrs: Optional[list] = None) ->
     return out
 
 
+def near_addresses(base: int):
+    """Adresses ou tenter une allocation a moins de 2 Go de l'exe (portee d'un saut relatif). D'abord la plage
+    habituelle sous l'exe ; puis plus pres dessous, puis au-dessus : selon le lancement, Windows occupe toute la
+    premiere plage et rien ne s'y alloue (vu en jeu : erreur 487 sur les 103 essais)."""
+    for delta in range(0x10000000, 0x7F000000, 0x1000000):
+        yield (base - delta) & ~0xFFFF
+    for delta in range(0x100000, 0x10000000, 0x100000):
+        yield (base - delta) & ~0xFFFF
+    for delta in range(0x2000000, 0x7E000000, 0x1000000):
+        yield (base + delta) & ~0xFFFF
+
+
 def remote_call(mem, func: int, a: int = 0, b: int = 0, c: int = 0, d: int = 0, timeout_ms: int = 5000,
                 e: int = 0) -> int:
     """Appelle func(a, b, c, d, e) dans le jeu (nouveau fil) et renvoie rax. La page de code est liberee."""

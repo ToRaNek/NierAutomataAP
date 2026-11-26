@@ -14,6 +14,8 @@ Verifie en jeu (v1.04, 2026-11-23) :
 """
 from __future__ import annotations
 
+from .spawner import near_addresses  # noqa: E402
+
 import re
 import struct
 import time
@@ -363,8 +365,8 @@ def install_title_hooks(mem) -> bool:
             continue
         h = k.OpenProcess(0x1F0FFF, False, mem.pid)
         cave = None
-        for delta in range(0x10000000, 0x7F000000, 0x1000000):
-            cave = k.VirtualAllocEx(h, ctypes.c_void_p((mem.base - delta) & ~0xFFFF), 0x1000, 0x3000, 0x40)
+        for near in near_addresses(mem.base):
+            cave = k.VirtualAllocEx(h, ctypes.c_void_p(near), 0x1000, 0x3000, 0x40)
             if cave:
                 break
         k.CloseHandle(h)

@@ -9,6 +9,8 @@ Verifie en jeu (v1.04, 2026-11-23) :
 """
 from __future__ import annotations
 
+from .spawner import near_addresses  # noqa: E402
+
 import math
 import struct
 from typing import Optional
@@ -302,8 +304,8 @@ def install(mem) -> bool:
     k.VirtualAllocEx.argtypes = [wintypes.HANDLE, ctypes.c_void_p, ctypes.c_size_t, wintypes.DWORD, wintypes.DWORD]
     k.VirtualAllocEx.restype = ctypes.c_void_p
     cave: Optional[int] = None
-    for delta in range(0x10000000, 0x7F000000, 0x1000000):
-        cave = k.VirtualAllocEx(h, ctypes.c_void_p((mem.base - delta) & ~0xFFFF), 0x1000, 0x3000, 0x40)
+    for near in near_addresses(mem.base):
+        cave = k.VirtualAllocEx(h, ctypes.c_void_p(near), 0x1000, 0x3000, 0x40)
         if cave:
             break
     k.CloseHandle(h)

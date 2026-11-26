@@ -15,6 +15,26 @@ Prerequis : NieR:Automata **Steam v1.04** (la version Steam actuelle : la mise a
 build Steam 26534214, il suffit de laisser Steam mettre le jeu a jour), Archipelago **0.6.8+**. Celui qui genere la partie doit aussi
 avoir le `.apworld`. Modele de reglages : `NieR Automata.yaml`.
 
+**Le mod (`dinput8.dll`, facultatif sous Windows)** : un petit fichier pose a cote de `NieRAutomata.exe`. Le
+lanceur l'y copie tout seul (il cherche le jeu dans tes bibliotheques Steam ; `--game="dossier"` pour lui dire ou,
+`--no-mod` pour ne pas l'installer). A la main : copie `dinput8.dll` des Releases dans le dossier du jeu. Il fait
+deux choses :
+- il dessine un panneau raye avec le nom du Pass manquant en travers de l'entree de chaque zone verrouillee, et
+  t'y arrete (voir *Zones verrouillees*) ;
+- il permet au client de parler au jeu par une connexion locale au lieu d'ouvrir le processus du jeu de
+  l'exterieur : c'est ce qu'il faut sous Linux / Proton.
+
+Sans le mod, tout le reste marche comme avant sous Windows : une zone verrouillee te remet simplement ou tu etais.
+Si un autre mod utilise deja `dinput8.dll` dans le dossier du jeu, le lanceur n'y touche pas et le dit.
+La connexion n'ecoute que sur ta machine et demande une cle que le mod ecrit dans ton profil a chaque lancement
+du jeu. Pour retirer le mod, supprime `dinput8.dll` du dossier du jeu.
+
+**Linux / Proton (non teste par l'auteur)** : mets `dinput8.dll` dans le dossier du jeu et regle les options de
+lancement Steam sur `WINEDLLOVERRIDES="dinput8=n,b" %command%`. Lance ensuite le client Archipelago en natif. Le
+client cherche la cle du mod dans le prefixe Proton du jeu, sous les dossiers Steam habituels ; si ta bibliotheque
+est ailleurs, donne le fichier avec `NIER_AP_MOD_TOKEN_FILE`
+(`.../compatdata/524220/pfx/drive_c/users/steamuser/AppData/Local/NierAutomataAP/mod_token`).
+
 ## Jouer
 1. Lance le jeu et commence une **nouvelle partie** (une par seed).
 2. Lance le client et connecte-toi. Les sauvegardes sont copiees dans `%LOCALAPPDATA%\NierAutomataAP\backups`.
@@ -65,7 +85,8 @@ Chaque check porte le nom de son lieu : un indice dit donc ou aller.
   leur **Pass** : Desert, Parc d'attractions, Village de Pascal et Foret (avec le chateau) ; avec `all`, aussi la
   Ville inondee et l'Usine abandonnee (ces deux-la se jouent apres le chapitre 7, quand les quetes annexes sont
   fermees : y attendre laisse peu a faire). Y entrer
-  sans le Pass te remet quelques metres en arriere, comme un mur invisible, avec "Ferme : Desert Pass" dans le
+  sans le Pass te remet quelques metres en arriere, comme un mur invisible (avec le mod : un panneau en travers
+  de l'entree nomme le Pass et t'arrete, voir *Installation*), avec "Ferme : Desert Pass" dans le
   journal du jeu. L'histoire passe par ces zones dans l'ordre, donc elle attend le Pass. Seules les zones jouees
   avant ton objectif ont un Pass (deux avec les reglages par defaut : Desert et Parc). Le prologue n'est jamais
   verrouille. La Ville copiee n'a pas de Pass (le jeu t'y place, on n'y entre pas a pied). Avec cette option les
@@ -144,6 +165,13 @@ Sans ca, un check sous terre se confond avec ce qui est en surface au meme endro
 - Les pieges Self-Destruct et E-Drug ont ete essayes a pied avec 2B, en combat de boss (les deux
   marchent), en sequence de vol et pendant un piratage de 9S (l'E-Drug s'y affiche ; le Self-Destruct attend
   le retour a pied, et les objets recus apres lui attendent avec lui).
+- Panneaux de zone (mod) : avec une partie generee, un serveur et le vrai client, a chacune des six entrees : le
+  panneau est dessine en travers du passage et arrete le personnage pousse a 10 m/s (bien plus vite que la
+  course), et celui de l'Usine a disparu quand son Pass est arrive du serveur. Le personnage etait deplace par
+  les outils de test, pas a la manette. Le panneau est dessine par-dessus l'image finie : il se voit a travers
+  ce qui est devant lui ; il s'efface au-dela de 60 m. Un bond de plus de 6 m en une image le franchit : le mur
+  du client reste la pour ce cas. Le mod ne sert qu'un programme a la fois (le client). Linux / Proton : non
+  teste par l'auteur.
 - Zones verrouillees : essayees en jeu a l'entree de chacune des six zones (le mur tient sur des essais repetes,
   et le Desert s'ouvre des que son Pass arrive du serveur). Si tu te connectes alors que tu es deja dans une zone
   fermee, le client te laisse la. Aucune partie complete n'a encore ete jouee avec les verrous.
@@ -179,5 +207,8 @@ Sans ca, un check sous terre se confond avec ce qui est en surface au meme endro
 
 ## Developpement
 - Tests : `python -m pytest`
-- Build : `python build.py` (apworld) ; lanceur : `python launcher/build_exe.py`
+- Build : `python build.py` (apworld) ; mod : `python mod/build_mod.py` (demande `zig`) ; lanceur :
+  `python launcher/build_exe.py` (construit et embarque les deux)
+- Sources du mod et protocole de sa socket : `mod/nier_ap_mod.c`, `mod/overlay.c` ; cote client :
+  `nier_automata/game/modlink.py`
 - Outils de retro-ingenierie dans `tools/` (sondes memoire, points d'arret materiels, lecture CPK/BXM/MCD).

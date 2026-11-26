@@ -31,7 +31,7 @@
 #include <string.h>
 #include "overlay.h"
 
-#define MOD_VERSION 4
+#define MOD_VERSION 5
 #define DEFAULT_PORT 38291
 #define MAX_IO (16 * 1024 * 1024)
 
@@ -94,10 +94,17 @@ static void serve(SOCKET s) {
     HANDLE self = GetCurrentProcess();
     uint8_t got[sizeof token], diff = 0;
     char *buf;
-    DWORD wait = 3000;
-    size_t i;
+    DWORD wait = 500, start = GetTickCount();
+    size_t i, have = 0;
+    /* la cle doit arriver en entier en 3 secondes au total : une connexion muette ne bloque pas le mod plus */
     setsockopt(s, SOL_SOCKET, SO_RCVTIMEO, (const char *)&wait, sizeof wait);
-    if (!recv_all(s, got, sizeof got)) return;
+    while (have < sizeof got) {
+        int r;
+        if (GetTickCount() - start > 3000) return;
+        r = recv(s, (char *)got + have, (int)(sizeof got - have), 0);
+        if (r > 0) have += (size_t)r;
+        else if (r == 0 || WSAGetLastError() != WSAETIMEDOUT) return;
+    }
     for (i = 0; i < sizeof token; i++) diff |= got[i] ^ token[i];      /* comparaison a temps constant */
     if (diff) return;
     wait = 0;
@@ -193,8 +200,6 @@ static DWORD WINAPI server_thread(LPVOID unused) {
     int port = DEFAULT_PORT, yes = 1;
     (void)unused;
     if (GetEnvironmentVariableA("NIER_AP_MOD_PORT", env, sizeof env) > 0 && atoi(env) > 0) port = atoi(env);
-    token_ready = make_token();
-    if (!token_ready) return 0;                        /* pas de cle : on n'ouvre rien */
     if (WSAStartup(MAKEWORD(2, 2), &w)) return 0;
     ls = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
     if (ls == INVALID_SOCKET) return 0;
@@ -205,6 +210,10 @@ static DWORD WINAPI server_thread(LPVOID unused) {
     a.sin_port = htons((u_short)port);
     a.sin_addr.s_addr = htonl(INADDR_LOOPBACK);        /* jamais ouvert au reseau */
     if (bind(ls, (struct sockaddr *)&a, sizeof a) || listen(ls, 2)) { closesocket(ls); return 0; }
+    /* La cle n'est ecrite qu'une fois le port obtenu : si un autre programme occupe le port, aucune nouvelle cle
+       n'existe et celle du lancement precedent ne lui sert a rien. */
+    token_ready = make_token();
+    if (!token_ready) { closesocket(ls); return 0; }   /* pas de cle : on n'ecoute pas */
     for (;;) {
         SOCKET s = accept(ls, NULL, NULL);
         if (s == INVALID_SOCKET) { Sleep(200); continue; }
