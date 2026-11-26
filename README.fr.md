@@ -162,11 +162,12 @@ Sans ca, un check sous terre se confond avec ce qui est en surface au meme endro
 - Nouveaux pieges (Level Up, Teleport, System Failure: Evade / Double Jump) : chacun envoye par un serveur au
   vrai client et mesure en jeu (niveaux +10, retour de 78 m a la position d'il y a 20 secondes, les deux
   mouvements bloques 20 secondes puis liberes).
-- Fins gag : les fins W (mourir dans le prologue), U (autodestruction dans le Bunker) et M (quitter le Village
-  de Pascal pendant son attaque) ont ete jouees avec le vrai client : le jeu passe sur sa phase
-  "Ending_<lettre>" et le check part. Les 18 autres ont le meme nom de phase dans les donnees du jeu, mais les
-  outils de test n'ont pas reussi a les declencher (il leur faut une situation d'histoire que le saut de chapitre
-  ne met pas en place) : elles ne sont pas prouvees.
+- Fins gag : les 21 (F a Z) ont ete atteintes en jeu avec le vrai client et un serveur : le jeu passe sur sa
+  phase "Ending_<lettre>", le client la voit et le check part. Elles ont ete atteintes en sautant au bon
+  chapitre, pas en jouant une partie entiere jusque-la. Quatre ont demande un humain aux commandes (I, N, Y, Z),
+  et pour N et Y l'etat de l'histoire a ete pose a la main avant (disposition du village, quete precedente
+  d'Emil, toutes les armes au niveau 4). Non teste : atteindre chacune dans une partie normale depuis une
+  sauvegarde neuve.
 - Checks de poisson : le check part quand le poisson entre dans l'inventaire (essaye en donnant une carpe avec la
   fonction de don du jeu). Une vraie prise n'a pas ete reussie par le robot de test.
 - Titres des mails : ouvrir un point d'acces ~10 s la premiere fois apres chaque lancement du jeu.

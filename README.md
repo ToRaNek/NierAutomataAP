@@ -155,10 +155,11 @@ this, an underground check looks the same as whatever is above it on the surface
 - New traps (Level Up, Teleport, System Failure: Evade / Double Jump): each one sent by a server to the real
   client and measured in game (levels +10, 78 m back to the position of 20 seconds before, both moves locked for
   20 seconds then released).
-- Gag endings: endings W (die in the prologue), U (self-destruct in the Bunker) and M (leave Pascal's Village
-  during its attack) were played with the real client: the game goes to its "Ending_<letter>" phase and the check
-  is sent. The 18 others use the same phase name in the game data, but could not be triggered by the test tools
-  (they need a story situation the chapter jump does not set up), so they are not proven.
+- Gag endings: all 21 (F to Z) were reached in game with the real client and a server: the game goes to its
+  "Ending_<letter>" phase, the client sees it and the check is sent. They were reached by jumping to the right
+  chapter, not by playing a whole run up to them. Four needed a human at the controls (I, N, Y, Z), and for N
+  and Y the story state was set by hand first (village layout, Emil's previous quest, all weapons at level 4).
+  What was not tested: reaching each one in a normal playthrough from a fresh save.
 - Fish checks: the check is sent when the fish enters the inventory (tested by giving a Carp with the game's own
   give function). A real catch was not achieved by the test robot.
 - Mail titles: open an access point for ~10 s the first time after each game launch.
