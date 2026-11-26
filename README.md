@@ -14,9 +14,12 @@ Archipelago Launcher -> *NieR:Automata Client*.
 
 **The mod (`dinput8.dll`, optional on Windows)**: a small file placed next to `NieRAutomata.exe`. The launcher
 copies it there by itself (it looks for the game in your Steam libraries; `--game="folder"` to tell it where,
-`--no-mod` to skip it). By hand: copy `dinput8.dll` from the Releases into the game folder. It does two things:
+`--no-mod` to skip it). By hand: copy `dinput8.dll` from the Releases into the game folder. It does three things:
 - it draws a striped sign with the name of the missing Pass across the entrance of every locked area, and stops
   you there (see *Area locks*);
+- it shows the Archipelago messages itself, in colour, at the bottom left of the screen and apart from the game's
+  own pickup feed: yellow for a check you made, green for an item for you, blue for an item you send to someone
+  else. They are no longer cut to 17 characters;
 - it lets the client talk to the game through a local connection instead of opening the game's process from
   outside, which is what is needed on Linux / Proton.
 

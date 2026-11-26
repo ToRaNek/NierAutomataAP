@@ -18,9 +18,12 @@ avoir le `.apworld`. Modele de reglages : `NieR Automata.yaml`.
 **Le mod (`dinput8.dll`, facultatif sous Windows)** : un petit fichier pose a cote de `NieRAutomata.exe`. Le
 lanceur l'y copie tout seul (il cherche le jeu dans tes bibliotheques Steam ; `--game="dossier"` pour lui dire ou,
 `--no-mod` pour ne pas l'installer). A la main : copie `dinput8.dll` des Releases dans le dossier du jeu. Il fait
-deux choses :
+trois choses :
 - il dessine un panneau raye avec le nom du Pass manquant en travers de l'entree de chaque zone verrouillee, et
   t'y arrete (voir *Zones verrouillees*) ;
+- il affiche lui-meme les messages Archipelago, en couleur, en bas a gauche de l'ecran et a part du fil de
+  ramassage du jeu : jaune pour un check que tu as fait, vert pour un objet pour toi, bleu pour un objet que tu
+  envoies a quelqu'un d'autre. Ils ne sont plus coupes a 17 caracteres ;
 - il permet au client de parler au jeu par une connexion locale au lieu d'ouvrir le processus du jeu de
   l'exterieur : c'est ce qu'il faut sous Linux / Proton.
 
