@@ -182,7 +182,8 @@ static DWORD WINAPI server_thread(LPVOID unused) {
     if (WSAStartup(MAKEWORD(2, 2), &w)) return 0;
     ls = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
     if (ls == INVALID_SOCKET) return 0;
-    setsockopt(ls, SOL_SOCKET, SO_REUSEADDR, (const char *)&yes, sizeof yes);
+    /* port reserve : un autre programme ne peut pas s'y installer a notre place pour recevoir la cle */
+    setsockopt(ls, SOL_SOCKET, SO_EXCLUSIVEADDRUSE, (const char *)&yes, sizeof yes);
     memset(&a, 0, sizeof a);
     a.sin_family = AF_INET;
     a.sin_port = htons((u_short)port);
