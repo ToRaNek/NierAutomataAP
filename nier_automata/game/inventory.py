@@ -112,39 +112,39 @@ def weapon_table(mem: Memory, start: int, count: int = WEAPON_SLOTS) -> SlotTabl
 
 # Programmes de Pod possedes : 31 emplacements {i32 identifiant (-1 = vide), i32 1} (trouve par comparaison
 # memoire avant/apres le don d'un programme, v1.04).
+# Le jeu ne regarde que QUELLE CASE est remplie : la case k est le k-ieme programme de sa liste, quel que soit
+# l'identifiant ecrit dedans (verifie en jeu : 2024 et 2006 ecrits dans les cases 1 et 2 s'affichaient "R020:
+# Mirage" et "R030: Hammer" ; les cases 1 a 11 remplies d'un identifiant bidon donnaient Mirage ... Repair, et le
+# compteur "Pod Programs" du menu suit le nombre de cases remplies parmi les 17 premieres).
 POD_PROGRAMS_RVA = 0x148E680
 POD_PROGRAM_SLOTS = 31
+# identifiant du programme de chaque case (ordre de la table du jeu, docs/research/pod_programs.json)
+POD_PROGRAM_ORDER = (2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2015, 2019, 2021, 2022,
+                     2024)
 
 
 def read_pod_programs(mem) -> set:
+    """Programmes que le jeu affiche comme possedes : ceux dont la case est remplie."""
     import struct
-    raw = mem.read(mem.base + POD_PROGRAMS_RVA, POD_PROGRAM_SLOTS * 8)
-    ids = struct.unpack(f"<{POD_PROGRAM_SLOTS * 2}i", raw)[::2]
-    return {i for i in ids if 2000 < i < 2100}
+    raw = mem.read(mem.base + POD_PROGRAMS_RVA, len(POD_PROGRAM_ORDER) * 8)
+    ids = struct.unpack(f"<{len(POD_PROGRAM_ORDER) * 2}i", raw)[::2]
+    return {POD_PROGRAM_ORDER[i] for i, cur in enumerate(ids) if cur != -1}
 
 
 def add_pod_program(mem, program_id: int) -> bool:
-    """Ajoute un programme dans le premier emplacement libre, sans le message du jeu. False si table pleine."""
+    """Donne un programme en remplissant SA case, sans le message du jeu. False si le programme est inconnu."""
     import struct
-    base = mem.base + POD_PROGRAMS_RVA
-    ids = struct.unpack(f"<{POD_PROGRAM_SLOTS * 2}i", mem.read(base, POD_PROGRAM_SLOTS * 8))[::2]
-    if program_id in ids:
-        return True
-    for i, cur in enumerate(ids):
-        if cur == -1:
-            mem.write(base + i * 8, struct.pack("<2i", program_id, 1))
-            return True
-    return False
+    if program_id not in POD_PROGRAM_ORDER:
+        return False
+    addr = mem.base + POD_PROGRAMS_RVA + POD_PROGRAM_ORDER.index(program_id) * 8
+    if struct.unpack("<i", mem.read(addr, 4))[0] == -1:
+        mem.write(addr, struct.pack("<2i", program_id, 1))
+    return True
 
 
 def remove_pod_program(mem, program_id: int) -> bool:
-    """Retire un programme et garde la liste sans trou (le jeu la remplit du debut)."""
+    """Retire un programme en vidant sa case ; les autres ne bougent pas."""
     import struct
-    base = mem.base + POD_PROGRAMS_RVA
-    ids = list(struct.unpack(f"<{POD_PROGRAM_SLOTS * 2}i", mem.read(base, POD_PROGRAM_SLOTS * 8))[::2])
-    if program_id not in ids:
-        return True
-    kept = [i for i in ids if i not in (program_id, -1)]
-    kept += [-1] * (POD_PROGRAM_SLOTS - len(kept))
-    mem.write(base, b"".join(struct.pack("<2i", i, 1) for i in kept))
+    if program_id in POD_PROGRAM_ORDER:
+        mem.write(mem.base + POD_PROGRAMS_RVA + POD_PROGRAM_ORDER.index(program_id) * 8, struct.pack("<2i", -1, 1))
     return True

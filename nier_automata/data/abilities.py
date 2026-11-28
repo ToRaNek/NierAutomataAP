@@ -21,8 +21,15 @@ ABILITY_PATCHES: dict[str, tuple[CodePatch, ...]] = {
         # 2e chemin : mov eax,[rbx+0x14A8] ; cmp eax, 2 ; jge
         CodePatch(0x47E74F, b"\x02", b"\x01"),
     ),
-    # jne (esquive aerienne deja utilisee) -> jmp : l'esquive aerienne est toujours ignoree (teste en jeu)
-    "Air Dash": (CodePatch(0x47E483, bytes.fromhex("0f8562020000"), bytes.fromhex("e96302000090")),),
+    # Bloc d'origine (0x47E47D) : "esquive aerienne deja utilisee ? -> rien ; au sol ([rbx+0x14A4] != 0) ? -> esquive ;
+    # sinon marquer l'esquive aerienne utilisee, puis esquive".
+    # Blocage : "en l'air ([rbx+0x14A4] == 0) ? -> rien ; sinon esquive". L'esquive au sol reste donc possible.
+    # L'ancien blocage (jne -> jmp en 0x47E483) coupait aussi l'esquive au sol : signale par un testeur et mesure
+    # en jeu (action 0x12 absente au sol comme en l'air). [rbx+0x14A4] releve en jeu : 1 au sol, 0 pendant un saut.
+    "Air Dash": (CodePatch(
+        0x47E47D,
+        bytes.fromhex("3983980a0100" "0f8562020000" "3983a4140000" "750a" "c783980a010001000000"),
+        bytes.fromhex("3983a4140000" "0f8462020000" "eb10" + "90" * 16)),),
     # Debut du bloc setState(0x12 = esquive) -> jmp vers "aucune action" (xor eax,eax).
     # Teste en jeu : bloque l'esquive au sol, en l'air et le sprint.
     "Evade": (CodePatch(0x47E6BB, bytes.fromhex("488b"), bytes.fromhex("eb2e")),),

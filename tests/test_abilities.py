@@ -16,9 +16,8 @@ def mem_with_originals():
 
 def test_patches_verified_in_game_v104():
     assert (DJ.rva, DJ.original, DJ.locked) == (0x47E357, b"\x02", b"\x01")
-    assert AD.rva == 0x47E483
-    assert AD.original == bytes.fromhex("0f8562020000")
-    assert AD.locked == bytes.fromhex("e96302000090")
+    assert AD.rva == 0x47E47D and len(AD.original) == 30
+    assert AD.original[6:12] == bytes.fromhex("0f8562020000")         # l'ancien point de blocage, dans le bloc
 
 
 def test_locks_abilities_not_received():
@@ -26,7 +25,7 @@ def test_locks_abilities_not_received():
     AbilityLock(m, randomized={"Double Jump", "Air Dash"}).sync(received=set())
     assert m.read(m.base + DJ.rva, 1) == DJ.locked
     assert m.read(m.base + DJ2.rva, 1) == DJ2.locked
-    assert m.read(m.base + AD.rva, 6) == AD.locked
+    assert m.read(m.base + AD.rva, len(AD.original)) == AD.locked
 
 
 def test_unlocks_when_received():
@@ -35,7 +34,7 @@ def test_unlocks_when_received():
     lock.sync(received=set())
     lock.sync(received={"Double Jump"})
     assert m.read(m.base + DJ.rva, 1) == DJ.original
-    assert m.read(m.base + AD.rva, 6) == AD.locked
+    assert m.read(m.base + AD.rva, len(AD.original)) == AD.locked
 
 
 def test_not_randomized_never_touched():
@@ -48,7 +47,7 @@ def test_unexpected_bytes_not_overwritten():
     m = mem_with_originals()
     m.write(m.base + AD.rva, b"\xcc" * 6)  # autre version / autre mod : ne pas ecrire
     AbilityLock(m, randomized={"Air Dash"}).sync(received=set())
-    assert m.read(m.base + AD.rva, 6) == b"\xcc" * 6
+    assert m.read(m.base + AD.rva, len(AD.original)) == b"\xcc" * 6
 
 
 def test_unlock_all_restores_originals():
@@ -57,7 +56,7 @@ def test_unlock_all_restores_originals():
     lock.sync(received=set())
     lock.unlock_all()
     assert m.read(m.base + DJ.rva, 1) == DJ.original
-    assert m.read(m.base + AD.rva, 6) == AD.original
+    assert m.read(m.base + AD.rva, len(AD.original)) == AD.original
 
 
 def test_evade_patch_verified_in_game_v104():
@@ -120,7 +119,7 @@ def test_nothing_locked_when_not_allowed():
     lock.sync(received=set())                          # bloque
     lock.sync(received=set(), allowed=False)           # prologue / vaisseau : tout se debloque
     assert m.read(m.base + DJ.rva, 1) == DJ.original
-    assert m.read(m.base + AD.rva, 6) == AD.original
+    assert m.read(m.base + AD.rva, len(AD.original)) == AD.original
 
 
 def test_system_failure_trap_locks_then_restores():
@@ -148,3 +147,17 @@ def test_jam_timer():
     assert j.active(now=110.0) == {"Pod Fire"}
     j.start("Pod Fire", 20, now=110.0)                       # un 2e piege prolonge
     assert j.active(now=125.0) == {"Pod Fire"} and j.active(now=131.0) == set()
+
+
+def test_air_dash_patch_keeps_the_ground_dash():
+    # un testeur : "the air dash block is also blocking the ground dash". Le blocage teste maintenant le drapeau
+    # "au sol" [rbx+0x14A4] : en l'air -> aucune action (0x47E6EB), au sol -> suite normale (0x47E49B).
+    from nier_automata.data.abilities import ABILITY_PATCHES
+    (p,) = ABILITY_PATCHES["Air Dash"]
+    assert p.rva == 0x47E47D and len(p.original) == len(p.locked) == 30
+    assert p.locked[:6] == bytes.fromhex("3983a4140000")                         # cmp [rbx+0x14A4], eax
+    je = p.rva + 6
+    assert p.locked[6:8] == b"\x0f\x84" and je + 6 + int.from_bytes(p.locked[8:12], "little") == 0x47E6EB
+    jmp = p.rva + 12
+    assert p.locked[12] == 0xEB and jmp + 2 + p.locked[13] == 0x47E49B           # saute le reste du bloc
+    assert set(p.locked[14:]) == {0x90}

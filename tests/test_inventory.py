@@ -100,37 +100,49 @@ def test_weapon_goes_to_its_dedicated_slot():
     assert w.find(0x42E).index == 7
 
 
-def test_owned_pod_programs_read_from_the_game_table():
+def _pod_table(*filled):
+    """Table du jeu avec ces cases remplies : {case: identifiant ecrit}."""
     import struct
-    from nier_automata.game.inventory import POD_PROGRAM_SLOTS, read_pod_programs
+    from nier_automata.game.inventory import POD_PROGRAM_SLOTS
+    cells = dict(filled[0]) if filled else {}
+    return b"".join(struct.pack("<2i", cells.get(i, -1), 1) for i in range(POD_PROGRAM_SLOTS))
+
+
+def test_owned_pod_programs_are_the_filled_slots_whatever_is_written_in_them():
+    # vu en jeu : le menu montre le programme de la CASE remplie (case 1 = Mirage, 2 = Hammer...), pas celui dont
+    # l'identifiant est ecrit dedans. Un testeur a recu Scanner et M Shield et voyait Mirage et Hammer.
+    from nier_automata.game.inventory import read_pod_programs
     from nier_automata.game.memory import FakeMemory
     m = FakeMemory()
-    raw = struct.pack("<4i", 2001, 1, 2003, 1) + struct.pack("<2i", -1, 1) * (POD_PROGRAM_SLOTS - 2)
-    m.write(m.base + 0x148E680, raw)
-    assert read_pod_programs(m) == {2001, 2003}
+    m.write(m.base + 0x148E680, _pod_table({0: 2001, 1: 2024, 2: 2006}))
+    assert read_pod_programs(m) == {2001, 2002, 2003}           # Laser, Mirage, Hammer : ce que le jeu affiche
+    m.write(m.base + 0x148E680, _pod_table({0: 2001, 5: 2006, 16: 2024, 23: 2024}))
+    assert read_pod_programs(m) == {2001, 2006, 2024}           # la case 23 n'est pas un programme
 
 
-def test_pod_program_added_silently_in_first_free_slot():
+def test_pod_program_is_written_in_its_own_slot():
     # le message du jeu bloque l'ecran jusqu'a un appui, un par programme : ecriture directe a la place
     import struct
-    from nier_automata.game.inventory import POD_PROGRAM_SLOTS, add_pod_program, read_pod_programs
+    from nier_automata.game.inventory import POD_PROGRAM_ORDER, add_pod_program, read_pod_programs
     from nier_automata.game.memory import FakeMemory
+    assert len(POD_PROGRAM_ORDER) == 17 and POD_PROGRAM_ORDER[0] == 2001 and POD_PROGRAM_ORDER[16] == 2024
     m = FakeMemory()
-    m.write(m.base + 0x148E680, struct.pack("<2i", 2001, 1) + struct.pack("<2i", -1, 1) * (POD_PROGRAM_SLOTS - 1))
-    assert add_pod_program(m, 2009) and read_pod_programs(m) == {2001, 2009}
-    assert struct.unpack("<4i", m.read(m.base + 0x148E680, 16)) == (2001, 1, 2009, 1)
-    assert add_pod_program(m, 2009) and read_pod_programs(m) == {2001, 2009}      # deja possede : rien
-    m.write(m.base + 0x148E680, struct.pack("<2i", 2001, 1) * POD_PROGRAM_SLOTS)
-    assert not add_pod_program(m, 2010)                                            # table pleine
+    m.write(m.base + 0x148E680, _pod_table({0: 2001}))
+    assert add_pod_program(m, 2024) and add_pod_program(m, 2006)             # Scanner, M Shield
+    assert read_pod_programs(m) == {2001, 2006, 2024}
+    assert struct.unpack("<2i", m.read(m.base + 0x148E680 + 16 * 8, 8)) == (2024, 1)
+    assert struct.unpack("<2i", m.read(m.base + 0x148E680 + 5 * 8, 8)) == (2006, 1)
+    assert struct.unpack("<2i", m.read(m.base + 0x148E680 + 1 * 8, 8)) == (-1, 1)     # Mirage toujours absent
+    assert add_pod_program(m, 2006) and read_pod_programs(m) == {2001, 2006, 2024}    # deja possede : rien
+    assert not add_pod_program(m, 2099)                                               # programme inconnu
 
 
-def test_pod_program_removed_and_list_kept_compact():
+def test_pod_program_removed_from_its_slot_only():
     import struct
-    from nier_automata.game.inventory import POD_PROGRAM_SLOTS, read_pod_programs, remove_pod_program
+    from nier_automata.game.inventory import read_pod_programs, remove_pod_program
     from nier_automata.game.memory import FakeMemory
     m = FakeMemory()
-    m.write(m.base + 0x148E680, struct.pack("<6i", 2001, 1, 2009, 1, 2003, 1)
-            + struct.pack("<2i", -1, 1) * (POD_PROGRAM_SLOTS - 3))
+    m.write(m.base + 0x148E680, _pod_table({0: 2001, 8: 2009, 2: 2003}))
     assert remove_pod_program(m, 2009) and read_pod_programs(m) == {2001, 2003}
-    assert struct.unpack("<6i", m.read(m.base + 0x148E680, 24)) == (2001, 1, 2003, 1, -1, 1)
+    assert struct.unpack("<2i", m.read(m.base + 0x148E680 + 2 * 8, 8)) == (2003, 1)   # les autres ne bougent pas
     assert remove_pod_program(m, 2009)                    # deja absent
