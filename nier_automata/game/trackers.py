@@ -31,8 +31,10 @@ class WeaponTracker:
             return [], None
         weapon = confirmed[0]
         self._pending.discard(weapon)
-        if weapon in self.state.found_weapon_ids or self.state.weapons_found >= self.max_found:
-            return [weapon], None
+        if weapon in self.state.found_weapon_ids:
+            return [weapon], None          # deja changee en check : reprise (rachat, rechargement)
+        if self.state.weapons_found >= self.max_found:
+            return [], None                # plus de check d'arme a donner : le joueur garde l'arme
         self.state.found_weapon_ids.add(weapon)
         self.state.weapons_found += 1
         return [weapon], self.state.weapons_found

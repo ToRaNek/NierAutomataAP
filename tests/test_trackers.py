@@ -36,12 +36,22 @@ def test_reinjected_weapon_after_reload_not_counted():
     assert s.weapons_found == 2
 
 
-def test_counter_capped_at_max_found():
+def test_weapon_found_past_the_last_weapon_check_is_kept():
+    # un testeur : "Dignite vertueuse" ramassee, ni dans l'inventaire ni en check. Tous les checks d'armes etaient
+    # deja faits : l'arme etait reprise pour rien. Elle reste maintenant au joueur.
     s = st(weapons_found=2)
     t = WeaponTracker(s, max_found=2)
+    t.scan({0x5BE})
+    assert t.scan({0x5BE}) == ([], None)
+    assert t.scan({0x5BE}) == ([], None)
+    assert s.weapons_found == 2 and 0x5BE not in s.found_weapon_ids
+
+
+def test_weapon_already_turned_into_a_check_is_still_taken_back():
+    s = st(weapons_found=2, found_weapon_ids={0x41A})
+    t = WeaponTracker(s, max_found=2)
     t.scan({0x41A})
-    assert t.scan({0x41A}) == ([0x41A], None)
-    assert s.weapons_found == 2
+    assert t.scan({0x41A}) == ([0x41A], None)          # rachetee / retrouvee : le check est deja donne
 
 
 PHASES = [("Story: Engels", "00_60_A_RobotM_Pro"), ("Story: Ending A", "58_AB_BossArea_Fall")]

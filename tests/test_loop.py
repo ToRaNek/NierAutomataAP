@@ -416,3 +416,25 @@ def test_no_route_lock_without_the_option():
 def test_shared_phases_never_lock():
     s, tr = setup(locked_scope(), linked=True, chapters=set(range(6)))
     assert tick(FakeGame(phase=CITY), s, [], tr).locked_route == ""          # "_AB_" : route A
+
+
+def test_chapter_of_a_locked_area_waits_for_its_pass():
+    # un testeur : sans le Park Pass, monter l'echelle du parc validait "Story A 04-01: Amusement Park" (le jeu
+    # change d'etape sur l'echelle, avant que la zone soit signalee)
+    PARK = "70_AB_Amusement_Park"
+    sc = scope(goal=db.GOAL_ENDING_A)
+    sc.area_passes = frozenset({"Park Pass", "Desert Pass"})
+    s, tr = setup(sc)
+    i = db.match_chapter(PARK, "A")
+    assert db.CHAPTERS[i]["region"] == "A04"
+    assert LOCS[story_location(i)] not in tick(FakeGame(phase=PARK), s, [], tr).locations
+    assert i not in s.chapters
+    r = tick(FakeGame(phase=PARK), s, ["Park Pass"], tr)
+    assert LOCS[story_location(i)] in r.locations
+
+
+def test_chapter_checks_unchanged_without_area_locks():
+    PARK = "70_AB_Amusement_Park"
+    s, tr = setup(scope(goal=db.GOAL_ENDING_A))
+    i = db.match_chapter(PARK, "A")
+    assert LOCS[story_location(i)] in tick(FakeGame(phase=PARK), s, [], tr).locations

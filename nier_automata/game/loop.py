@@ -13,6 +13,7 @@ from ..data.tables import (fish_location, access_point_location, chest_location,
                            location_name_to_id, pickup_location, quest_location, story_location, weapon_location)
 from ..data.weapons import STARTING_WEAPONS, WEAPONS
 from .state import ClientState
+from ..data.areas import pass_for_region
 from .trackers import ChestTracker, ItemTracker, LevelTracker, StoryTracker, WeaponTracker
 
 _LOCS = location_name_to_id()
@@ -181,7 +182,16 @@ def tick(game, state: ClientState, received: list[str], trackers: Trackers) -> T
         i = db.match_chapter(phase, db.next_route(state.route, phase), phase_id)
         if i is not None and i not in state.chapters and chapterlocks.locked(i, chapter_keys, received):
             result.locked_chapter = i
-    if not result.locked_route and result.locked_chapter < 0:    # verrou : ni chapitre valide ni changement de route
+    # zone fermee par un Pass : son chapitre attend le Pass (le jeu change d'etape avant de signaler la zone, par
+    # exemple sur l'echelle du parc : le check partait sans le Pass, signale par un testeur)
+    waits_pass = False
+    passes = getattr(scope, "area_passes", None)
+    if passes:
+        i = db.match_chapter(phase, db.next_route(state.route, phase), phase_id)
+        if i is not None and i not in state.chapters:
+            need = pass_for_region(db.CHAPTERS[i]["region"])
+            waits_pass = need in passes and need not in received
+    if not result.locked_route and result.locked_chapter < 0 and not waits_pass:   # verrou : rien n'est valide
         trackers.story.check(phase, phase_id)
 
     # 5 bis. ravitaillement a l'entree des passages durs (une fois)

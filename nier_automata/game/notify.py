@@ -83,8 +83,23 @@ NOTE_MOD_VERSION = 7
 NOTE_LIMIT = 60
 NOTE_MS = 7000
 NOTE_COLORS = {"check": 0xFFD34D, "mine": 0x7CE38B, "other": 0x6FB6FF, "trap": 0xFF6B6B}   # jaune, vert, bleu, rouge
+NOTE_COLORS["chat"] = 0xF2F2F2                                              # blanc : message d'un joueur
+CHAT_MARK = "\x01"            # debut du prefixe d'un message de joueur (non imprimable : jamais affiche)
+CHAT_MAX_LINES = 3
 JAM_START_PREFIX = "SYSTEM FAILURE: "
 JAM_END_PREFIX = "Restored: "
+
+
+def chat_notes(name: str, message: str) -> list:
+    """Message d'un joueur -> lignes a afficher (au plus CHAT_MAX_LINES, NOTE_LIMIT caracteres chacune).
+    Les commandes ("!hint ...") ne sont pas affichees."""
+    import textwrap
+    message = " ".join(str(message).split())
+    if not message or message.startswith("!"):
+        return []
+    prefix = f"{name}: "[:24]
+    lines = textwrap.wrap(message, max(10, NOTE_LIMIT - len(prefix)))[:CHAT_MAX_LINES]
+    return [(CHAT_MARK + prefix, line) for line in lines]
 
 
 def jam_notes(events) -> list:
@@ -96,6 +111,8 @@ def jam_notes(events) -> list:
 def note_kind(prefix: str, lang: str = "en") -> str:
     """"check" (un check que j'ai fait), "mine" (un objet pour moi) ou "other" (un objet pour quelqu'un d'autre)."""
     from .i18n import t
+    if prefix.startswith(CHAT_MARK):
+        return "chat"
     if prefix == JAM_START_PREFIX:
         return "trap"
     if prefix == JAM_END_PREFIX:

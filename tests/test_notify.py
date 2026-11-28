@@ -96,7 +96,7 @@ def test_note_kind_gives_the_colour_family():
     assert n.note_kind("For you: ", "en") == "mine" and n.note_kind("Pour toi : ", "fr") == "mine"
     assert n.note_kind("From Bob: ", "en") == "mine" and n.note_kind("De Bob : ", "fr") == "mine"
     assert n.note_kind("For Bob: ", "en") == "other" and n.note_kind("Pour Bob : ", "fr") == "other"
-    assert len(set(n.NOTE_COLORS.values())) == 4            # + rouge : panne de systeme
+    assert len(set(n.NOTE_COLORS.values())) == 5            # + rouge (panne de systeme), blanc (chat)
 
 
 def test_notes_through_the_mod_are_not_cut_to_17_characters():
@@ -137,3 +137,13 @@ def test_system_failure_notes_have_their_own_colour():
     assert notify.note_kind(notify.JAM_END_PREFIX) == "mine"
     assert notify.jam_notes([("start", "Evade", 20), ("end", "Pod Fire", 0)]) == [
         (notify.JAM_START_PREFIX, "Evade (20 s)"), (notify.JAM_END_PREFIX, "Pod Fire")]
+
+
+def test_chat_messages_become_white_notes_cut_in_lines():
+    # un testeur : "est-il possible que le mod affiche les messages envoyes par les joueurs ?"
+    from nier_automata.game import notify as n
+    assert n.chat_notes("Bob", "hello") == [(n.CHAT_MARK + "Bob: ", "hello")]
+    assert n.note_kind(n.CHAT_MARK + "Bob: ") == "chat" and "chat" in n.NOTE_COLORS
+    long = n.chat_notes("Bob", "word " * 40)
+    assert len(long) == n.CHAT_MAX_LINES and all(len(p.replace(n.CHAT_MARK, "") + t) <= n.NOTE_LIMIT for p, t in long)
+    assert n.chat_notes("Bob", "!hint Sword") == [] and n.chat_notes("Bob", "   ") == []

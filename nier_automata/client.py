@@ -97,6 +97,14 @@ class NierContext(CommonContext):
                         logger.info("Hint for %s: %s -> %s", hint[1], hint[0], hint[2])
             except Exception as e:
                 filelog.info("hint ignored: %r", e)
+        if cmd == "PrintJSON" and args.get("type") in ("Chat", "ServerChat") and self.slot is not None:
+            try:      # messages des autres joueurs, a l'ecran (avec le mod seulement : couleur et longueur)
+                who = args.get("slot")
+                if who != self.slot and notify.mod_can_note(self.nier.mem):
+                    name = self.player_names.get(who, "?") if who is not None else "Server"
+                    self.notes.extend(notify.chat_notes(name, args.get("message", "")))
+            except Exception as e:
+                filelog.info("chat note ignored: %r", e)
         if cmd == "PrintJSON" and args.get("type") in ("ItemSend", "ItemCheat") and self.slot is not None:
             try:
                 it = args["item"]
@@ -135,6 +143,7 @@ class NierContext(CommonContext):
             self.nier.lethal_traps = bool(sd.get("lethal_traps", False))
             self.nier.enemy_trap_basic = sd.get("enemy_trap_enemies", "basic") != "random"
             self.area_lock = AreaLock(sd.get("area_passes", []))
+            self.scope.area_passes = frozenset(sd.get("area_passes", []))     # chapitres des zones fermees
             self.ap_items_on = bool(self.scope.pickups)
             self.ap_contents = {}
             self.ap_flags = {}
