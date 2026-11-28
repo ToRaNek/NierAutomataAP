@@ -262,3 +262,28 @@ def test_price_written_for_every_route(monkeypatch):
     shop.set_price(Mem(), {}, "item_uq_podSkin1", 300)
     # prix lu par le jeu : [fiche + 0x98 + 8 * route] (route A, B, C)
     assert sorted(o for o, _ in writes) == [0x98, 0xA0, 0xA8]
+
+
+def test_hide_plan_takes_found_weapons_off_every_shop():
+    # un testeur : Beastbane et Beastlord achetes (check envoye, arme retiree) restaient en vente
+    smith = [("shop_RC_Smith", [("weapon_beastbain", "11"), ("weapon_beastlord", "11"), ("weapon_ancient_overload", "11")]),
+             ("shop_TEST_Smith", [("weapon_beastbain", "11"), ("item_rec_S", "00")])]
+    raw = make_bxm(SHOPS + smith)
+    out = apply(raw, shop.hide_plan(raw, {"weapon_beastbain"}))
+    assert items_of(out, "shop_RC_Smith") == [("weapon_beastbain", "00"), ("weapon_beastlord", "11"),
+                                              ("weapon_ancient_overload", "11")]
+    assert items_of(out, "shop_TEST_Smith")[0] == ("weapon_beastbain", "00")
+    assert items_of(out, "shop_RC_Grocery") == SHOPS[0][1]
+    assert shop.hide_plan(raw, set()) == []
+
+
+def test_hide_plan_without_a_zero_value_changes_nothing():
+    raw = make_bxm([("shop_RC_Smith", [("weapon_beastbain", "11")])])       # aucune valeur "0" dans la table
+    assert shop.hide_plan(raw, {"weapon_beastbain"}) == []
+
+
+def test_weapon_shop_names_cover_every_weapon():
+    from nier_automata.data.weapons import WEAPONS, WEAPON_SHOP_NAMES
+    assert set(WEAPON_SHOP_NAMES.values()) == set(WEAPONS.values())
+    assert WEAPON_SHOP_NAMES["weapon_beastbain"] == WEAPONS["Beastbane"]
+    assert WEAPON_SHOP_NAMES["weapon_beastlord"] == WEAPONS["Beastlord"]

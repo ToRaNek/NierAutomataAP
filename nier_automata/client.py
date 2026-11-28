@@ -16,6 +16,7 @@ from NetUtils import ClientStatus
 
 from .data import worlddb as db
 from .data.phases import MENU_PHASES, abilities_allowed
+from .data.weapons import WEAPON_SHOP_NAMES
 from .game import ap_items as apit
 from .game import notify
 from .data.tables import SHOP_PLACES_ORDER, SHOP_REGION, location_name_to_id, shop_location
@@ -614,7 +615,8 @@ async def ap_items_step(ctx: NierContext):
 
 async def shop_step(ctx: NierContext) -> list[int]:
     """AP Items en tete des magasins ; un porteur par emplacement ; achat -> check (porteur retire)."""
-    if not getattr(ctx, "shop_checks", 0):
+    found = set(ctx.state.found_weapon_ids) if ctx.state is not None else set()
+    if not getattr(ctx, "shop_checks", 0) and not found:
         return []
     from pathlib import Path
     mem = ctx.nier.mem
@@ -632,9 +634,11 @@ async def shop_step(ctx: NierContext) -> list[int]:
     active = {p: (shopm.active_slots(p, ctx.shop_checks, done, lambda p, k: LOC_IDS[shop_location(p, k)])
                   if SHOP_REGION[p] in ctx.scope.regions else [])
               for p in SHOP_PLACES_ORDER}
-    key = repr(active)
+    # armes dont le check est fait : le client les a retirees, le jeu les revendrait pour rien
+    hidden = sorted(n for n, i in WEAPON_SHOP_NAMES.items() if i in found)
+    key = repr((active, hidden))
     if key != ctx.shop_applied:
-        await asyncio.to_thread(ctx.shop.apply, active)
+        await asyncio.to_thread(ctx.shop.apply, active, hidden)
         ctx.shop_applied = key
     texts = {}
     for place, k in slots:

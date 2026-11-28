@@ -98,6 +98,29 @@ def _victims(names: list[str], count: int, carriers: list[str]) -> list[int]:
     return out
 
 
+def hide_plan(raw: bytes, hidden: Iterable[str]) -> list[tuple[int, int]]:
+    """Ecritures (offset, u16) qui retirent ces objets de la vente dans TOUS les magasins (State_k -> "0").
+    Sert aux armes dont le check est deja fait : le client les retire de l'inventaire, donc le jeu les
+    reproposait a l'achat, pour rien (signale par un testeur : Beastbane et Beastlord rachetables)."""
+    b = _Bxm(raw)
+    hidden = set(hidden)
+    writes: list[tuple[int, int]] = []
+    if not hidden:
+        return writes
+    for sh in b.children(0):
+        for c in b.children(sh):
+            if b.name(c) != "Item":
+                continue
+            for it in b.children(c):
+                if b.name(it) not in hidden:
+                    continue
+                for st in b.children(it):
+                    zero = b.pair(b.name(st), "0")
+                    if zero is not None and zero != b.nodes[st][3]:
+                        writes.append((16 + st * 8 + 6, zero))
+    return writes
+
+
 def plan(raw: bytes, carriers_by_shop: dict[str, list[str]]) -> list[tuple[int, int]]:
     """Ecritures (offset, u16) pour mettre en tete de chaque magasin ses porteurs (dans l'ordre), toujours
     en vente. Les autres objets gardent leur ordre ; les victimes sont d'abord les bonus de stats."""
@@ -296,7 +319,7 @@ class ShopSession:
         self.described: dict[int, str] = {}
         self.ok = True
 
-    def apply(self, active: dict[str, list[int]]) -> None:
+    def apply(self, active: dict[str, list[int]], hidden: Iterable[str] = ()) -> None:
         if self.mem.read(self.addr, 16) != self.orig[:16]:
             self.ok = False   # table liberee ou rechargee ailleurs : on n'ecrit plus (session refaite au besoin)
             return
@@ -306,7 +329,7 @@ class ShopSession:
                 by_place.setdefault(place, []).append(CARRIER_NAME[cid])
         per_shop = {shop: by_place.get(place, []) for place, shops in SHOP_PLACES.items() for shop in shops}
         b = bytearray(self.base)
-        for off, val in plan(self.base, per_shop):
+        for off, val in hide_plan(self.base, hidden) + plan(self.base, per_shop):   # les porteurs ont le dernier mot
             struct.pack_into(">H", b, off, val)
         self.mem.write(self.addr, bytes(b))
 
