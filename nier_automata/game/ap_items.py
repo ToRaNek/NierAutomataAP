@@ -208,6 +208,17 @@ def find_marked_objects(mem) -> dict:
     k.VirtualQueryEx.argtypes = [wintypes.HANDLE, ctypes.c_void_p, ctypes.POINTER(_MBI), ctypes.c_size_t]
     k.VirtualQueryEx.restype = ctypes.c_size_t
     vt = mem.base + SET_ITEM_VTABLE_RVA
+    fast = getattr(mem, "scan", None)                # mod recent : il cherche lui-meme, sans rapatrier la memoire
+    hits = fast(struct.pack("<Q", vt), 8) if fast is not None else None
+    if hits is not None:
+        found = {}
+        for o in hits:
+            try:
+                if struct.unpack("<I", mem.read(o + CONTENT_OFFSET, 4))[0] == MARKER_FLAG | PICKUP_CARRIER:
+                    found[o] = struct.unpack("<3f", mem.read(o + 0x50, 12))
+            except OSError:
+                pass
+        return found
     out, addr = {}, 0
     while addr < 0x7FFFFFFFFFFF:
         mbi = _MBI()
@@ -216,12 +227,16 @@ def find_marked_objects(mem) -> dict:
         base, size = mbi.BaseAddress or 0, mbi.RegionSize
         if mbi.State == 0x1000 and mbi.Protect in (0x04, 0x40) and size < 0x40000000 and size % 8 == 0:
             try:
-                arr = memoryview(mem.read(base, size)).cast("Q")
-                for i, v in enumerate(arr):
-                    if v == vt:
-                        o = base + i * 8
-                        if struct.unpack("<I", mem.read(o + CONTENT_OFFSET, 4))[0] == MARKER_FLAG | PICKUP_CARRIER:
-                            out[o] = struct.unpack("<3f", mem.read(o + 0x50, 12))
+                # recherche par bytes.find : la boucle Python sur chaque mot de 8 octets prenait 18 s (37 s par le
+                # mod) a chaque demarrage, pendant lesquelles le client ne posait ni ne detectait rien
+                data, needle, i = mem.read(base, size), struct.pack("<Q", vt), 0
+                while True:
+                    i = data.find(needle, i)
+                    if i < 0:
+                        break
+                    if i % 8 == 0 and i + CONTENT_OFFSET + 4 <= len(data)                             and struct.unpack_from("<I", data, i + CONTENT_OFFSET)[0] == MARKER_FLAG | PICKUP_CARRIER:
+                        out[base + i] = struct.unpack_from("<3f", data, i + 0x50)
+                    i += 8 - i % 8
             except OSError:
                 pass
         addr = base + size
@@ -319,31 +334,18 @@ def install(mem) -> bool:
 
 def rename_marker(mem) -> int:
     """Remplace le nom UTF-16 de l'objet marqueur par "AP Item" (message de ramassage)."""
-    import ctypes
-    from .spawner import _MBI
-    from ctypes import wintypes
+    from .notify import _scan
     pat = AP_MARKER_NAME.encode("utf-16-le")
     new = ("AP Item".encode("utf-16-le") + b"\0\0").ljust(len(pat), b"\0")
-    k = mem._k
-    k.VirtualQueryEx.argtypes = [wintypes.HANDLE, ctypes.c_void_p, ctypes.POINTER(_MBI), ctypes.c_size_t]
-    k.VirtualQueryEx.restype = ctypes.c_size_t
-    n, addr = 0, 0
-    while addr < 0x7FFFFFFFFFFF:
-        mbi = _MBI()
-        if not k.VirtualQueryEx(mem.handle, ctypes.c_void_p(addr), ctypes.byref(mbi), ctypes.sizeof(mbi)):
-            break
-        base, size = mbi.BaseAddress or 0, mbi.RegionSize
-        if mbi.State == 0x1000 and mbi.Protect in (0x04, 0x40) and size < 0x40000000:
-            try:
-                data = mem.read(base, size)
-                i = data.find(pat)
-                while i != -1:
-                    if data[i + len(pat):i + len(pat) + 2] == b"\0\0":
-                        mem.write(base + i, new); n += 1
-                    i = data.find(pat, i + 1)
-            except OSError:
-                pass
-        addr = base + size
+    # par la recherche commune : avec le mod recent elle se fait dans le jeu (0,5 s) ; la lecture de toute la
+    # memoire faite ici prenait 20 s au demarrage du client
+    n = 0
+    for a in _scan(mem, [pat + b"\0\0"])[pat + b"\0\0"]:
+        try:
+            mem.write(a, new)
+            n += 1
+        except OSError:
+            pass
     return n
 
 

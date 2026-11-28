@@ -155,6 +155,27 @@ def _scan(mem, patterns: list[bytes]) -> dict[bytes, list[int]]:
     from ctypes import wintypes
     from .spawner import _MBI
     out: dict[bytes, list[int]] = {p: [] for p in patterns}
+    SCAN_STATS[0] += 1
+    import time as _time
+    _t0 = _time.monotonic()
+    try:
+        return _scan_regions(mem, patterns, out)
+    finally:
+        SCAN_STATS[1] += _time.monotonic() - _t0
+
+
+SCAN_STATS = [0, 0.0]          # nombre de recherches en memoire et secondes passees (diagnostic du demarrage)
+
+
+def _scan_regions(mem, patterns, out):
+    fast = getattr(mem, "scan", None)          # mod recent : il cherche lui-meme (0,5 s au lieu de 16 s)
+    if fast is not None:
+        found = {p: fast(p) for p in patterns}
+        if all(v is not None for v in found.values()):
+            return found
+    import ctypes
+    from ctypes import wintypes
+    from .spawner import _MBI
     k = mem._k
     k.VirtualQueryEx.argtypes = [wintypes.HANDLE, ctypes.c_void_p, ctypes.POINTER(_MBI), ctypes.c_size_t]
     k.VirtualQueryEx.restype = ctypes.c_size_t

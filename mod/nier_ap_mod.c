@@ -21,6 +21,9 @@
               6 floats x1 y z1 x2 z2 hauteur + 64 octets de texte) -> u8 ok       (nombre = 0 : plus de murs)
     10 NOTE   u32 couleur 0xRRGGBB, u32 duree_ms, 160 octets de texte UTF-8 -> u8 ok   (message a l'ecran)
      9 WALLSTATE                          -> i32 : 1 murs dessines, 0 pas encore, -1 echec de l'affichage
+    11 SCAN   u16 taille (1..1024), u16 alignement, u32 maximum (<= 4096), motif -> u32 nombre, nombre x u64
+              (recherche du motif dans les regions lecture/ecriture du jeu, faite ici : le client n'a plus a
+              rapatrier 2 Go par la socket a chaque recherche, ce qui prenait 16 s et gelait son demarrage)
 
    Compilation : python mod/build_mod.py   (zig cc, cible x86_64-windows-gnu) */
 #define WIN32_LEAN_AND_MEAN
@@ -32,7 +35,7 @@
 #include <string.h>
 #include "overlay.h"
 
-#define MOD_VERSION 7
+#define MOD_VERSION 8
 #define DEFAULT_PORT 38291
 #define MAX_IO (16 * 1024 * 1024)
 
@@ -89,6 +92,45 @@ static int make_token(void) {
     WriteFile(f, token, sizeof token, &put, NULL);
     CloseHandle(f);
     return put == sizeof token;
+}
+
+#define SCAN_MAX_PATTERN 1024
+#define SCAN_MAX_RESULTS 4096
+
+/* Adresses ou le motif apparait dans les regions lecture/ecriture engagees (memes regions que la recherche du
+   client). Les regions de notre tampon de lecture et de notre pile sont sautees : elles contiennent le motif. */
+static uint32_t scan_memory(HANDLE self, char *buf, const uint8_t *pat, uint32_t len, uint32_t align,
+                            uint64_t *out, uint32_t max) {
+    MEMORY_BASIC_INFORMATION mbi, own;
+    uint64_t addr = 0, skip_buf = 0, skip_stack = 0;
+    uint32_t n = 0;
+    if (VirtualQuery(buf, &own, sizeof own)) skip_buf = (uint64_t)own.AllocationBase;
+    if (VirtualQuery(pat, &own, sizeof own)) skip_stack = (uint64_t)own.AllocationBase;
+    while (n < max && addr < 0x7FFFFFFF0000ULL && VirtualQuery((void *)addr, &mbi, sizeof mbi)) {
+        uint64_t base = (uint64_t)mbi.BaseAddress, size = (uint64_t)mbi.RegionSize, off = 0;
+        uint64_t owner = (uint64_t)mbi.AllocationBase;
+        if (!size) break;
+        if (mbi.State == MEM_COMMIT && (mbi.Protect == PAGE_READWRITE || mbi.Protect == PAGE_EXECUTE_READWRITE)
+                && size < 0x40000000ULL && owner != skip_buf && owner != skip_stack) {
+            while (off < size && n < max) {
+                uint64_t want = size - off, i = 0;
+                SIZE_T got = 0;
+                if (want > MAX_IO) want = MAX_IO;
+                if (!ReadProcessMemory(self, (void *)(base + off), buf, (SIZE_T)want, &got) || got < len) break;
+                while (i + len <= got && n < max) {
+                    const uint8_t *p = (const uint8_t *)memchr(buf + i, pat[0], (size_t)(got - len + 1 - i));
+                    if (!p) break;
+                    i = (uint64_t)(p - (const uint8_t *)buf);
+                    if (!memcmp(p, pat, len) && (base + off + i) % align == 0) out[n++] = base + off + i;
+                    i++;
+                }
+                if (got < want || off + want >= size) break;
+                off += want - (len - 1);               /* chevauchement : motif a cheval sur deux morceaux */
+            }
+        }
+        addr = base + size;
+    }
+    return n;
 }
 
 static void serve(SOCKET s) {
@@ -193,6 +235,20 @@ static void serve(SOCKET s) {
             q.text[sizeof q.text - 1] = 0;
             overlay_note(q.text, q.rgb, q.ms);
             if (!send_all(s, &ok, 1)) break;
+        } else if (op == 11) {
+            struct { uint16_t len, align; uint32_t max; } __attribute__((packed)) q;
+            uint8_t pat[SCAN_MAX_PATTERN];
+            uint64_t *found;
+            uint32_t count;
+            int sent;
+            if (!recv_all(s, &q, sizeof q) || !q.len || q.len > sizeof pat || !q.max || q.max > SCAN_MAX_RESULTS) break;
+            if (!recv_all(s, pat, q.len)) break;
+            found = (uint64_t *)malloc(sizeof(uint64_t) * q.max);
+            if (!found) break;
+            count = scan_memory(self, buf, pat, q.len, q.align ? q.align : 1, found, q.max);
+            sent = send_all(s, &count, 4) && (!count || send_all(s, found, (int)(count * 8)));
+            free(found);
+            if (!sent) break;
         } else {
             break;                                     /* operation inconnue : on ferme */
         }

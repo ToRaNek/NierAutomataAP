@@ -20,6 +20,7 @@ class FakeMod:
         self.mem = FakeMemory(size=0x200000, base=BASE)
         self.calls, self.allocs, self.freed, self.next_alloc = [], [], [], BASE + 0x100000
         self.call_result, self.call_ok = 42, 1
+        self.version, self.scans = 2, []
         self.ls = socket.socket()
         self.ls.bind(("127.0.0.1", 0))
         self.ls.listen(2)
@@ -44,7 +45,7 @@ class FakeMod:
         while True:
             op = rx(1)[0]
             if op == ml.OP_INFO:
-                s.sendall(struct.pack("<IIQ", 2, 4242, BASE))
+                s.sendall(struct.pack("<IIQ", self.version, 4242, BASE))
             elif op == ml.OP_READ:
                 addr, n = struct.unpack("<QI", rx(12))
                 if BASE <= addr and addr + n <= BASE + 0x200000:
@@ -62,7 +63,10 @@ class FakeMod:
             elif op == ml.OP_QUERY:
                 addr = struct.unpack("<Q", rx(8))[0]
                 ok = BASE <= addr < BASE + 0x200000
-                s.sendall(struct.pack("<BQQII", ok, BASE, 0x200000, 0x1000, 0x04))
+                if addr == 0:                             # debut d'un parcours : region libre jusqu'au jeu
+                    s.sendall(struct.pack("<BQQII", 1, 0, BASE, 0x10000, 0x01))
+                else:
+                    s.sendall(struct.pack("<BQQII", ok, BASE, 0x200000, 0x1000, 0x04))
             elif op == ml.OP_ALLOC:
                 at, size, protect = struct.unpack("<QII", rx(16))
                 out = at or self.next_alloc
@@ -72,6 +76,19 @@ class FakeMod:
             elif op == ml.OP_FREE:
                 self.freed.append(struct.unpack("<Q", rx(8))[0])
                 s.sendall(b"\x01")
+            elif op == ml.OP_SCAN:
+                n, align, cap = struct.unpack("<HHI", rx(8))
+                pat = rx(n)
+                self.scans.append(pat)
+                raw, hits, i = self.mem.read(BASE, 0x200000), [], 0
+                while len(hits) < cap:
+                    i = raw.find(pat, i)
+                    if i < 0:
+                        break
+                    if (BASE + i) % align == 0:
+                        hits.append(BASE + i)
+                    i += 1
+                s.sendall(struct.pack(f"<I{len(hits)}Q", len(hits), *hits))
             elif op == ml.OP_CALL:
                 q = struct.unpack("<Q5QI", rx(52))
                 self.calls.append(q)
@@ -176,3 +193,49 @@ def test_big_reads_are_split(link, monkeypatch):
     assert len(data) == 0x5000 and data[0x2FFE:0x3002] == b"abcd"
     mem.write(BASE + 0x8000, bytes(range(256)) * 40)      # 0x2800 octets : trois morceaux
     assert mod.mem.read(BASE + 0x8000, 0x2800) == bytes(range(256)) * 40
+
+
+def _link(version):
+    mod = FakeMod()
+    mod.version = version
+    mem = ml.ModMemory.attach(port=mod.port, token=TOKEN)
+    assert mem is not None and mem.mod_version == version
+    return mod, mem
+
+
+def test_recent_mod_searches_memory_itself():
+    # vu en jeu : chaque recherche rapatriait 1,9 Go par la socket (16 s), 5 fois au demarrage du client, qui ne
+    # posait aucun AP Item et ne detectait rien pendant ce temps (signale par un testeur : AP Items absents)
+    from nier_automata.game import notify
+    mod, mem = _link(ml.SCAN_MOD_VERSION)
+    try:
+        mem.write(BASE + 0x1000, b"NEEDLE!!")
+        mem.write(BASE + 0x2001, b"NEEDLE!!")                          # adresse impaire : ecartee (alignement 2)
+        mem.write(BASE + 0x3000, b"NEEDLE!!")
+        assert notify._scan(mem, [b"NEEDLE!!"]) == {b"NEEDLE!!": [BASE + 0x1000, BASE + 0x3000]}
+        assert mod.scans == [b"NEEDLE!!"]
+    finally:
+        mem.close()
+
+
+def test_old_mod_still_reads_the_memory_to_search():
+    from nier_automata.game import notify
+    mod, mem = _link(7)
+    try:
+        mem.write(BASE + 0x1000, b"NEEDLE!!")
+        assert mem.scan(b"NEEDLE!!") is None
+        assert notify._scan(mem, [b"NEEDLE!!"]) == {b"NEEDLE!!": [BASE + 0x1000]}
+        assert mod.scans == []
+    finally:
+        mem.close()
+
+
+def test_search_with_too_many_results_falls_back_to_the_full_read():
+    from nier_automata.game import notify
+    mod, mem = _link(ml.SCAN_MOD_VERSION)
+    try:
+        mem.write(BASE, b"AB" * (ml.SCAN_MAX_RESULTS + 10))
+        assert mem.scan(b"AB") is None
+        assert len(notify._scan(mem, [b"AB"])[b"AB"]) == ml.SCAN_MAX_RESULTS + 10
+    finally:
+        mem.close()

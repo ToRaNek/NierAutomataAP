@@ -22,6 +22,9 @@ DEFAULT_PORT = 38291
 TOKEN_SIZE = 16
 CHUNK = 8 * 1024 * 1024            # taille maximale d'une lecture ou ecriture (le mod accepte 16 Mo)
 OP_INFO, OP_READ, OP_WRITE, OP_QUERY, OP_ALLOC, OP_FREE, OP_CALL = 1, 2, 3, 4, 5, 6, 7
+OP_SCAN = 11
+SCAN_MOD_VERSION = 8        # premiere version du mod qui cherche elle-meme dans la memoire
+SCAN_MAX_PATTERN, SCAN_MAX_RESULTS = 1024, 4096
 WAIT_OBJECT_0, WAIT_TIMEOUT = 0, 0x102
 STEAM_APP_ID = "524220"
 
@@ -173,6 +176,24 @@ class ModMemory:
             except OSError:
                 self._drop()
                 raise
+
+    def scan(self, pattern: bytes, align: int = 2) -> Optional[list]:
+        """Adresses du motif dans les regions lecture/ecriture du jeu, cherchees par le mod lui-meme. None si ce
+        mod ne sait pas le faire, si le motif est trop long ou s'il y a trop de resultats : l'appelant refait
+        alors la recherche lente (lecture de toute la memoire)."""
+        if self.mod_version < SCAN_MOD_VERSION or not 0 < len(pattern) <= SCAN_MAX_PATTERN:
+            return None
+        with self._lock:
+            if self._s is None:
+                raise OSError("mod link closed")
+            try:
+                self._s.sendall(struct.pack("<BHHI", OP_SCAN, len(pattern), align, SCAN_MAX_RESULTS) + pattern)
+                n = struct.unpack("<I", _recv(self._s, 4))[0]
+                data = _recv(self._s, n * 8) if n else b""
+            except OSError:
+                self._drop()
+                raise
+        return None if n >= SCAN_MAX_RESULTS else list(struct.unpack(f"<{n}Q", data))
 
     def read(self, addr: int, size: int) -> bytes:
         """Les grandes lectures (une region de plusieurs centaines de Mo) passent par morceaux : le mod refuse

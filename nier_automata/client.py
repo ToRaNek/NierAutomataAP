@@ -255,7 +255,11 @@ async def game_loop(ctx: NierContext):
     while not ctx.exit_event.is_set():
         await asyncio.sleep(0.5)
         try:
+            import time as _t
+            _t0 = _t.monotonic()
             await game_iteration(ctx)
+            if _t.monotonic() - _t0 > 3.0:
+                filelog.info("slow game iteration: %.1f s", _t.monotonic() - _t0)
         except Exception as e:  # la boucle ne doit jamais mourir
             logger.warning("Error during game tick (%s), retrying...", e)
 
@@ -587,6 +591,7 @@ async def ap_items_step(ctx: NierContext):
         ctx.spots.mark_spawned(i)
         if obj:
             ctx.ap_tracked[obj] = i
+        filelog.info("AP Item placed: %s (%s)", db.PICKUPS[i]["name"], "ok" if obj else "FAILED")
 
     def pos_of(o):
         if not apit.object_alive(mem, o):
@@ -723,7 +728,12 @@ async def game_iteration(ctx: NierContext):
     bought: list[int] = []
     for step in (ground_step, ap_items_step, shop_step):
         try:
+            import time as _t
+            _t0 = _t.monotonic()
             out = await step(ctx)
+            if _t.monotonic() - _t0 > 2.0:
+                filelog.info("slow step %s: %.1f s (memory searches so far: %d, %.1f s)", step.__name__,
+                             _t.monotonic() - _t0, notify.SCAN_STATS[0], notify.SCAN_STATS[1])
             if step is shop_step and out:
                 bought = out
         except Exception as e:  # etape optionnelle : on continue
