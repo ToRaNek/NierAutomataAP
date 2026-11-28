@@ -25,16 +25,39 @@ def funds_after_trap(funds: int, percent: int) -> int:
 
 
 class Jams:
-    """Pannes de systeme en cours : capacite -> instant de fin (horloge monotone)."""
+    """Pannes de systeme en cours : capacite -> secondes de JEU restantes. Le temps ne s'ecoule pas quand le jeu
+    est en pause ou dans un menu (sinon il suffisait d'attendre dans le menu pause : signale par un testeur)."""
 
     def __init__(self):
-        self.until: dict[str, float] = {}
+        self.left: dict[str, float] = {}
+        self._last = None
+        self._events: list = []
+
+    def _tick(self, now: float, running: bool) -> None:
+        dt = 0.0 if self._last is None else max(0.0, now - self._last)
+        self._last = now
+        if not running:
+            return
+        for a in list(self.left):
+            self.left[a] -= dt
+            if self.left[a] <= 0:
+                del self.left[a]
+                self._events.append(("end", a, 0))
 
     def start(self, ability: str, seconds: float, now: float) -> None:
-        self.until[ability] = max(self.until.get(ability, 0.0), now + seconds)
+        self._tick(now, True)
+        if ability not in self.left:
+            self._events.append(("start", ability, seconds))
+        self.left[ability] = max(self.left.get(ability, 0.0), seconds)
 
-    def active(self, now: float) -> set:
-        return {a for a, t in self.until.items() if t > now}
+    def active(self, now: float, running: bool = True) -> set:
+        self._tick(now, running)
+        return set(self.left)
+
+    def pop_events(self) -> list:
+        """[("start", capacite, secondes) | ("end", capacite, 0)] depuis le dernier appel."""
+        out, self._events = self._events, []
+        return out
 
 
 class CutsceneHold:

@@ -286,9 +286,20 @@ class NierGame:
         except OSError:
             pass
 
+    def game_running(self) -> bool:
+        """Le jeu tourne : monde charge et aucun menu ouvert (menu pause compris)."""
+        try:
+            loaded, = struct.unpack("<I", self.mem.read(self.mem.base + self.WORLD_LOADED_RVA, 4))
+            menu, = struct.unpack("<I", self.mem.read(self.mem.base + self.MENU_RVA, 4))
+            return loaded != 0 and menu == 1
+        except (OSError, AttributeError):
+            return False
+
     def jammed(self) -> set:
         import time
-        return self.jams.active(time.monotonic())
+        if not self.jams.left:
+            return self.jams.active(time.monotonic())
+        return self.jams.active(time.monotonic(), self.game_running())
 
     def owned_programs(self) -> set:
         from .inventory import read_pod_programs

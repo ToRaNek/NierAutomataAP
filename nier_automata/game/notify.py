@@ -82,12 +82,24 @@ OP_NOTE = 10
 NOTE_MOD_VERSION = 7
 NOTE_LIMIT = 60
 NOTE_MS = 7000
-NOTE_COLORS = {"check": 0xFFD34D, "mine": 0x7CE38B, "other": 0x6FB6FF}     # jaune, vert, bleu
+NOTE_COLORS = {"check": 0xFFD34D, "mine": 0x7CE38B, "other": 0x6FB6FF, "trap": 0xFF6B6B}   # jaune, vert, bleu, rouge
+JAM_START_PREFIX = "SYSTEM FAILURE: "
+JAM_END_PREFIX = "Restored: "
+
+
+def jam_notes(events) -> list:
+    """Messages a l'ecran pour le debut et la fin d'une panne de systeme (traps.Jams.pop_events)."""
+    return [(JAM_START_PREFIX, f"{a} ({int(s)} s)") if kind == "start" else (JAM_END_PREFIX, a)
+            for kind, a, s in events]
 
 
 def note_kind(prefix: str, lang: str = "en") -> str:
     """"check" (un check que j'ai fait), "mine" (un objet pour moi) ou "other" (un objet pour quelqu'un d'autre)."""
     from .i18n import t
+    if prefix == JAM_START_PREFIX:
+        return "trap"
+    if prefix == JAM_END_PREFIX:
+        return "mine"
     if prefix == t(lang, "check"):
         return "check"
     if prefix == t(lang, "for_you") or prefix.split(" ", 1)[0] in _RECV_WORDS:

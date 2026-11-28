@@ -308,6 +308,7 @@ async def ability_loop(ctx: NierContext):
             if ctx.state is None or ctx.nier.mem is None:
                 continue
             jammed = ctx.nier.jammed()
+            ctx.notes.extend(notify.jam_notes(ctx.nier.jams.pop_events()))
             if not ctx.randomized_abilities and not jammed and ctx.ability_lock is None:
                 continue
             if ctx.ability_lock is None or ctx.ability_lock.mem is not ctx.nier.mem:

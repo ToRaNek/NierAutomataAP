@@ -96,7 +96,7 @@ def test_note_kind_gives_the_colour_family():
     assert n.note_kind("For you: ", "en") == "mine" and n.note_kind("Pour toi : ", "fr") == "mine"
     assert n.note_kind("From Bob: ", "en") == "mine" and n.note_kind("De Bob : ", "fr") == "mine"
     assert n.note_kind("For Bob: ", "en") == "other" and n.note_kind("Pour Bob : ", "fr") == "other"
-    assert len(set(n.NOTE_COLORS.values())) == 3
+    assert len(set(n.NOTE_COLORS.values())) == 4            # + rouge : panne de systeme
 
 
 def test_notes_through_the_mod_are_not_cut_to_17_characters():
@@ -129,3 +129,11 @@ def test_send_note_packs_colour_duration_and_utf8_text():
     assert m.sent[0][9:].rstrip(b"\0").decode("utf-8") == "Pour Zoé : Épée"        # saut de ligne retire
     n.send_note(m, "é" * 200, 0, 1)
     assert m.sent[1][9:].rstrip(b"\0").decode("utf-8") == "é" * 79                  # coupe sans casser un caractere
+
+
+def test_system_failure_notes_have_their_own_colour():
+    from nier_automata.game import notify
+    assert notify.note_kind(notify.JAM_START_PREFIX) == "trap" and "trap" in notify.NOTE_COLORS
+    assert notify.note_kind(notify.JAM_END_PREFIX) == "mine"
+    assert notify.jam_notes([("start", "Evade", 20), ("end", "Pod Fire", 0)]) == [
+        (notify.JAM_START_PREFIX, "Evade (20 s)"), (notify.JAM_END_PREFIX, "Pod Fire")]

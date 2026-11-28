@@ -162,3 +162,27 @@ def test_air_dash_patch_keeps_the_ground_dash():
     jmp = p.rva + 12
     assert p.locked[12] == 0xEB and jmp + 2 + p.locked[13] == 0x47E49B           # saute le reste du bloc
     assert set(p.locked[14:]) == {0x90}
+
+
+def test_jam_timer_does_not_run_while_the_game_is_paused():
+    # un testeur : "trap times can be stalled in the pause menu" (20 s dans le menu et la panne etait finie)
+    from nier_automata.game.traps import Jams
+    j = Jams()
+    j.start("Evade", 20, now=100.0)
+    assert j.active(now=105.0) == {"Evade"}                          # 15 s restantes
+    assert j.active(now=160.0, running=False) == {"Evade"}           # 55 s de menu : rien ne s'ecoule
+    assert j.active(now=170.0) == {"Evade"}                          # 10 s de jeu : 5 s restantes
+    assert j.active(now=176.0) == set()
+
+
+def test_jam_events_say_when_a_failure_starts_and_ends():
+    # un testeur : "no visual feedback" ; le client affiche ces evenements a l'ecran
+    from nier_automata.game.traps import Jams
+    j = Jams()
+    j.start("Evade", 20, now=0.0)
+    j.start("Evade", 20, now=1.0)                                    # prolonge : pas un 2e message de debut
+    assert j.pop_events() == [("start", "Evade", 20)] and j.pop_events() == []
+    j.active(now=10.0)
+    assert j.pop_events() == []
+    j.active(now=30.0)
+    assert j.pop_events() == [("end", "Evade", 0)]
