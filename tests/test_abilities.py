@@ -45,9 +45,10 @@ def test_not_randomized_never_touched():
 
 def test_unexpected_bytes_not_overwritten():
     m = mem_with_originals()
-    m.write(m.base + AD.rva, b"\xcc" * 6)  # autre version / autre mod : ne pas ecrire
+    odd = b"\xcc" * 6 + AD.original[6:]       # octets inattendus : autre version / autre mod, ne pas ecrire
+    m.write(m.base + AD.rva, odd)
     AbilityLock(m, randomized={"Air Dash"}).sync(received=set())
-    assert m.read(m.base + AD.rva, len(AD.original)) == b"\xcc" * 6
+    assert m.read(m.base + AD.rva, len(AD.original)) == odd
 
 
 def test_unlock_all_restores_originals():
