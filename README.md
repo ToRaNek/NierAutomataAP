@@ -19,7 +19,10 @@ copies it there by itself (it looks for the game in your Steam libraries; `--gam
   you there (see *Area locks*);
 - it shows the Archipelago messages itself, in colour, at the bottom left of the screen and apart from the game's
   own pickup feed: yellow for a check you made, green for an item for you, blue for an item you send to someone
-  else. They are no longer cut to 17 characters;
+  else, white for a chat message from another player, red when a System Failure trap starts. They are no
+  longer cut to 17 characters;
+- it searches the game's memory for the client, so the client is ready about 5 seconds after it finds the
+  game instead of 2 minutes (during which no AP Item was placed and no check was detected);
 - it lets the client talk to the game through a local connection instead of opening the game's process from
   outside, which is what is needed on Linux / Proton.
 
@@ -51,7 +54,8 @@ Everything is named after where it is, so a hint tells you where to go.
 - **Access Point: Desert: Camp**: first activation of each access point.
 - **Shop <place> #k**: "AP Item" entries at the top of the shops (Resistance Camp, Pascal's Village,
   Forest Castle); the description says what's inside and for whom.
-- **Level n**, **Weapon Found #n**: levels reached, weapons found (removed from the inventory).
+- **Level n**, **Weapon Found #n**: levels reached, weapons found (removed from the inventory, and no longer
+  sold by the shops). Once every Weapon Found check is done, the weapons you find are yours to keep.
 - **Pod Program Found #n**: Pod programs obtained in the game itself (shop, quest, pickup); like weapons they
   are taken back, you keep the ones the multiworld sends (`pod_program_checks`, 0 = leave them alone).
 - **Ending A / B / C / D**: each main ending reached before the goal (`ending_checks`). The goal ending is
@@ -198,6 +202,8 @@ dash, ground evade, pod fire, attacks...), recovery items and boosts, money, and
 - **Teleport Trap**: you are put back where you were 20 seconds ago (never further than 150 m; waits while you
   are flying or hacking).
 - **System Failure: Evade / Double Jump**: that move stops answering for 20 seconds.
+- The 20 seconds of a System Failure only count while you play: they do not run in the pause menu. With the
+  mod, a red message says when it starts and a green one when it ends.
 
 Traps that use the game's own effects wait while a menu or a loading screen is up. Every trap except the Money
 Trap waits for the end of a cutscene (5 minutes at most). Short scripted camera moves that are not real

@@ -23,7 +23,10 @@ trois choses :
   t'y arrete (voir *Zones verrouillees*) ;
 - il affiche lui-meme les messages Archipelago, en couleur, en bas a gauche de l'ecran et a part du fil de
   ramassage du jeu : jaune pour un check que tu as fait, vert pour un objet pour toi, bleu pour un objet que tu
-  envoies a quelqu'un d'autre. Ils ne sont plus coupes a 17 caracteres ;
+  envoies a quelqu'un d'autre, blanc pour un message de discussion d'un autre joueur, rouge quand un piege
+  System Failure commence. Ils ne sont plus coupes a 17 caracteres ;
+- il cherche dans la memoire du jeu a la place du client : le client est pret environ 5 secondes apres avoir
+  trouve le jeu au lieu de 2 minutes (pendant lesquelles aucun AP Item n'etait pose ni aucun check detecte) ;
 - il permet au client de parler au jeu par une connexion locale au lieu d'ouvrir le processus du jeu de
   l'exterieur : c'est ce qu'il faut sous Linux / Proton.
 
@@ -54,7 +57,8 @@ Chaque check porte le nom de son lieu : un indice dit donc ou aller.
 - **Access Point: Desert: Camp** : premiere activation de chaque point d'acces.
 - **Shop <lieu> #k** : "AP Item" vendus en tete des magasins (Camp de la Resistance, Village de Pascal,
   Chateau de la foret) ; la description dit ce qu'il contient et pour qui.
-- **Level n**, **Weapon Found #n** : niveaux atteints, armes trouvees (retirees de l'inventaire).
+- **Level n**, **Weapon Found #n** : niveaux atteints, armes trouvees (retirees de l'inventaire, et plus
+  vendues par les magasins). Une fois tous les checks Weapon Found faits, tu gardes les armes que tu trouves.
 - **Pod Program Found #n** : programmes de Pod obtenus dans le jeu lui-meme (magasin, quete, ramassage) ;
   comme les armes ils sont repris, on garde ceux envoyes par le multimonde (`pod_program_checks`, 0 = ne
   pas y toucher).
@@ -205,6 +209,8 @@ aerien, esquive au sol, tir du Pod, attaques...), soins et bonus, argent, et pie
 - **Teleport Trap** : tu es remis la ou tu etais il y a 20 secondes (jamais a plus de 150 m ; attend si tu voles
   ou si tu pirates).
 - **System Failure: Evade / Double Jump** : ce mouvement ne repond plus pendant 20 secondes.
+- Les 20 secondes d'un System Failure ne comptent que pendant le jeu : elles ne s'ecoulent pas dans le menu
+  pause. Avec le mod, un message rouge dit quand il commence et un vert quand il finit.
 
 Les pieges qui utilisent les effets du jeu attendent tant qu'un menu ou un chargement est a l'ecran. Tous les
 pieges sauf le Money Trap attendent la fin d'une cinematique (5 minutes au plus). Les courts mouvements de
